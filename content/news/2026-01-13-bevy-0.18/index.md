@@ -1,9 +1,7 @@
 +++
 title = "Bevy 0.18"
-date = 2026-01-12 
+date = 2026-01-13
 [extra]
-public_draft = 2320
-status = 'hidden'
 show_image = true
 image = "toroban.jpg"
 image_subtitle = "Toroban: an infinitely wrapping puzzle game built in Bevy. Out now!"
@@ -18,7 +16,15 @@ To update an existing Bevy App or Plugin to **Bevy 0.18**, check out our [0.17 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- **X:** X
+- **Atmosphere Occlusion and PBR Shading**: The procedural atmosphere now affects how light reaches objects in scenes!
+- **Generalized Atmospheric Scattering Media**: The procedural atmosphere can now be customized, enabling arbitrary atmosphere types: desert skies, foggy coastlines, non-earth-like planets, etc.
+- **Solari Improvements**: Bevy's experimental real-time raytraced renderer has received a _ton_ of new features and improvements.
+- **PBR Shading Fixes**: Some long-standing issues in Bevy's PBR material have been fixed, providing noticeable quality improvements.
+- **Font Variations**: Bevy now supports variable weight fonts, text strikethroughs, underlines, and OpenType font features.
+- **Automatic Directional Navigation**: Bevy UI elements can now opt in to automatic directional navigation, making it easy to navigate UIs with gamepads and keyboards.
+- **Fullscreen Materials**: A new high level material type that makes it easy to define fullscreen post-processing shaders.
+- **Cargo Feature Collections**: Bevy now has high-level scenario-driven Cargo features for things like 2D, 3D, and UI, making it easy to only compile the pieces of the engine your app needs.
+- **First Party Camera Controllers**: Bevy now has built-in basic "fly" cameras and "pan" cameras. 
 
 <!-- more -->
 
@@ -58,7 +64,6 @@ fn setup_camera(
     mut commands: Commands,
     mut media: ResMut<Assets<ScatteringMedium>>,
 ) {
-    // Also feel free to use `ScatteringMedium::earthlike()`!
     let medium = media.add(ScatteringMedium::new(
         256,
         256,
@@ -132,9 +137,45 @@ Bevy's materials have sometimes been described as "overly glossy" or "overly bri
 There were two core issues:
 
 1. Point/area lights had an overly bright specular component.
-2. For our initial PBR shader, we chose to do "roughness dependent fresnel", as [defined here](https://bruop.github.io/ibl/). This generally did not behave the way we wanted it to, so we switched to the more direct approach ... using the "typical" fresnel term directly.
+2. Our "environment map light" shader was doing "roughness dependent fresnel", as [defined here](https://bruop.github.io/ibl/). This generally did not behave the way we wanted it to, so we switched to the more direct approach ... using the "typical" fresnel term directly.
 
 For more comparison images, see the two linked PRs above. We can all rest easy now. Fresnel cannot hurt us anymore.
+
+## Fullscreen Material
+
+{{ heading_metadata(authors=["@IceSentry"] prs=[20414]) }}
+
+In previous versions of Bevy, the only way to define custom fullscreen effects was to define a new low-level render feature. This approach is maximally flexible, but it also sets the complexity bar overly high for common use cases.
+
+To resolve this, we introduced a new high level [`FullscreenMaterial`] trait and [`FullscreenMaterialPlugin`] that let you easily run a fullscreen shader and specify the order it will run relative to other render passes in the engine.
+
+```rust
+impl FullscreenMaterial for ChromaticAberration {
+    fn fragment_shader() -> ShaderRef {
+        "chromatic_aberration.wgsl".into()
+    }
+
+    // The Render Graph edges that determine when the material will run
+    fn node_edges() -> Vec<InternedRenderLabel> {
+        vec![
+            // This material run after 3D tonemapping
+            Node3d::Tonemapping.intern(),
+            // This is the FullscreenMaterial's label
+            Self::node_label().intern(),
+            // This material will run before the end of the main 3D post processing pass
+            Node3d::EndMainPassPostProcessing.intern(),
+        ]
+    }
+}
+```
+
+Check out our new [`fullscreen_material`] example for a complete illustration of a "chromatic aberration" fullscreen material:
+
+![fullscreen material](fullscreen_material.jpg)
+
+[`FullscreenMaterial`]: https://docs.rs/bevy/0.18.0/bevy/core_pipeline/fullscreen_material/trait.FullscreenMaterial.html
+[`FullscreenMaterialPlugin`]: https://docs.rs/bevy/0.18.0/bevy/core_pipeline/fullscreen_material/struct.FullscreenMaterialPlugin.html
+[`fullscreen_material`]: https://github.com/bevyengine/bevy/blob/release-0.18.0/examples/shader_advanced/fullscreen_material.rs
 
 ## More Standard Widgets
 
@@ -206,13 +247,11 @@ red vs. blue, and so on.
 
 [`ColorPlane`]: https://docs.rs/bevy/0.18.0/bevy/feathers/controls/enum.ColorPlane.html
 
-## First-party camera controllers
+## First-Party Camera Controllers
 
 {{ heading_metadata(authors=["@alice-i-cecile", "@syszery"] prs=[20215, 21450, 21520]) }}
 
-To understand a scene, you must look at it through the lens of a camera: explore it, and interact with it.
-Because this is such a fundamental operation, game devs have developed a rich collection of tools
-called "camera controllers" for manipulating them.
+To understand and interact with a scene, you must look at it through the lens of a camera. But there are many ways to control a camera!
 
 Getting camera controllers feeling _right_ is both tricky and essential: they have a serious
 impact on both the feeling of your game and the usability of your software.
@@ -222,9 +261,9 @@ camera controllers require deep customization and endless twiddling.
 However, Bevy as a game engine needs its _own_ camera controllers:
 allowing users to quickly and easily explore scenes during development (rather than gameplay).
 
-To that end, we've created [`bevy_camera_controller`]: giving us a place to store, share and refine the camera controllers
+To that end, we've created [`bevy_camera_controller`]: giving us a place to store, share, and refine the camera controllers
 that we need for easy development, and yes, an eventual Bevy Editor.
-We're kicking it off with a couple of camera controllers, detailed below.
+We're kicking it off with a couple of camera controllers, detailed below. These are unlikely to be useful for _normal_ game logic, but they are great for debugging and building tooling. Their code can also be copied and used as a baseline for game-specific camera logic!
 
 [`bevy_camera_controller`]: https://docs.rs/bevy/0.18.0/bevy/camera_controller/index.html
 
@@ -265,27 +304,11 @@ for large-scale or high-resolution 2D scenes.
 [`PanCamera`]: https://docs.rs/bevy/0.18.0/bevy/camera_controller/pan_camera/struct.PanCamera.html
 [`PanCameraPlugin`]: https://docs.rs/bevy/0.18.0/bevy/camera_controller/pan_camera/struct.PanCameraPlugin.html
 
-### Using `bevy_camera_controller` in your own projects
-
-The provided camera controllers are designed to be functional, pleasant debug and dev tools:
-add the correct plugin and camera component and you're good to go!
-
-They can also be useful for prototyping, giving you a quick-and-dirty camera controller
-as you get your game off the ground.
-
-However, they are deliberately _not_ architected to give you the level of extensibility and customization
-needed to make a production-grade camera controller for games.
-Customizatibility comes with a real cost in terms of user experience and maintainability,
-and because each project only ever needs one or two distinct camera controllers, exposing more knobs and levers is often a questionable design.
-Instead, consider vendoring (read: copy-pasting the source code) the camera controller you want to extend
-into your project and rewriting the quite-approachable logic to meet your needs,
-or looking for [ecosystem camera crates](https://bevy.org/assets/#camera) that correspond to the genre you're building in.
-
 ## Automatic Directional Navigation
 
 {{ heading_metadata(authors=["@jbuehler23"] prs=[21668, 22340]) }}
 
-Bevy now supports **automatic directional navigation** for UI elements! With a bit of global setup, 
+Bevy now supports **automatic directional navigation** for UI elements! With a bit of global setup,
 all of your UI elements can now be navigated between using gamepads or arrow keys.
 No more tedious manual wiring of navigation connections for your menus and UI screens.
 
@@ -349,50 +372,6 @@ Automatic navigation respects manually-defined edges. If you want to override sp
 you can still use `DirectionalNavigationMap::add_edge()` or `add_symmetrical_edge()`, and those connections will take precedence over the auto-generated ones.
 You may also call `auto_generate_navigation_edges()` directly, if you have multiple UI layers (though may not be widely used)
 
-## Fullscreen Material
-
-{{ heading_metadata(authors=["@IceSentry"] prs=[20414]) }}
-
-Users often want to run a fullscreen shader but currently the only to do this is to copy the custom_post_processing example which is very verbose and contains a lot of low level details. We introduced a new [`FullscreenMaterial`] trait and [`FullscreenMaterialPlugin`] that let you easily run a fullscreen shader and specify in which order it will run relative to other render passes in the engine.
-
-[`FullscreenMaterial`]: https://docs.rs/bevy/0.18.0/bevy/core_pipeline/fullscreen_material/trait.FullscreenMaterial.html
-[`FullscreenMaterialPlugin`]: https://docs.rs/bevy/0.18.0/bevy/core_pipeline/fullscreen_material/struct.FullscreenMaterialPlugin.html
-
-## Row-wise data access
-
-{{ heading_metadata(authors=["@hymm"] prs=[21780]) }}
-
-When working with an ECS, the most natural (and efficient) way to access data is to read and modify the same components
-across multiple entities in a batch, using queries in a way that's analogous to extracting columns from a database.
-But from time-to-time, users want to consider an entity in its entirety, peering across the entire row.
-
-This approach is much more similar to the traditional "game object" model that users may be familiar with in other game engines,
-and can be particularly useful when implementing complex, non-performance-critical logic like writing a character controller.
-It also tends to mesh better with other languages and external tools, making it a tempting design for scripting, modding and integration work. 
-
-In theory, doing so should be fairly straightforward, if a bit slow:
-we're dividing access to our world into slices across a different axis, but still being careful to avoid forbidden aliasing.
-[Initial attempts at implementing this] ran into some difficulty though,
-with subtle soundness problems detected during code review.
-
-As a result, we previously introduced unsafe methods for this: `get_components_mut_unchecked`.
-These methods are relatively fast (look mom no checks!), but unsafe is frightening and cumbersome to work with,
-particularly for an API that's designed for convenience and often most attractive to newcomers.
-
-In Bevy 0.18, we're finally introducing safe equivalents, in the form of [`EntityMut::get_components_mut`] and [`EntityWorldMut::get_components_mut`].
-These methods allow you to access multiple mutable or imutable references to the components on a single entity.
-To ensure that we don't hand out multiple mutable references to the same data, these APIs use quadratic time complexity (over the number of components accessed)
-runtime checks, safely erroring if illegal access was requested.
-
-Quadratic time complexity is bad news, but in many cases, the list of components requested is very small:
-two, three or even ten distinct components are not terrible to check outside of a hot loop.
-However, some applications (such as scripting interfaces) may still be best suited to using the unsafe API,
-relying on other methods to ensure soundness with a lower performance cost.
-
-[Initial attempts at implementing this]: (https://github.com/bevyengine/bevy/pull/13375)
-[`EntityMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityMut.html#method.get_components_mut_unchecked
-[`EntityWorldMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityWorldMut.html#method.get_components_mut_unchecked
-
 ## Cargo Feature Collections
 
 {{ heading_metadata(authors=["@cart"] prs=[21472]) }}
@@ -433,7 +412,7 @@ Someone building a custom 2D renderer now just needs to remove `2d_bevy_render` 
 
 Developers can now define their own high-level cargo feature profiles from these mid-level pieces, making it _much_ easier to define the subset of Bevy you want to build into your app.
 
-## Font variations
+## Font Variations
 
 {{ heading_metadata(authors=["@ickshonpe", "@hansler"] prs=[19020, 21555, 21559, 22038]) }}
 
@@ -446,10 +425,10 @@ Developers can now define their own high-level cargo feature profiles from these
 [`Strikethrough`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.Strikethrough.html
 [`Underline`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.Underline.html
 [`Text`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.Text.html
-[`Text2d]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.Text2d.html
-[`TextSection`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.TextSection.html
 [`StrikethroughColor`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.StrikethroughColor.html
 [`UnderlineColor`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.UnderlineColor.html
+[`Text2d`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.Text2d.html
+[`TextSpan`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.TextSpan.html
 
 ### Font Weights
 
@@ -502,7 +481,7 @@ Note that OpenType font features are only available for `.otf` fonts that suppor
 [OpenType font features]: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Fonts/OpenType_fonts
 [`FontFeatures`]: https://docs.rs/bevy/0.18.0/bevy/text/struct.FontFeatures.html
 
-## Per text-section picking
+## Pick-able Text Sections
 
 {{ heading_metadata(authors=["@ickshonpe"] prs=[22047]) }}
 
@@ -511,6 +490,48 @@ and can be given observers to respond to user interaction.
 
 This functionality is useful when creating hyperlink-like behavior,
 and allows users to create mouse-over tooltips for specific keywords in their games.
+
+## Safe Mutable Access To Multiple Arbitrary Components
+
+{{ heading_metadata(authors=["@hymm"] prs=[21780]) }}
+
+When working with an ECS, the most efficient way to access data is to query the same components across multiple entities in a batch:
+
+```rust
+for (mut a, mut b) in &mut query {
+    /* logic here */
+}
+```
+
+But in some scenarios, users want to access multiple _arbitrary_ components for _specific_ entities:
+
+```rust
+let (mut a, mut b) = entity.get_components_mut::<(&mut A, &mut B)>()?;
+```
+
+This approach is similar to the traditional "game object" model that users may be familiar with in other game engines,
+and can be particularly useful when implementing complex, non-performance-critical logic. It also tends to mesh better with other languages and external tools, making it a tempting design for scripting, modding and integration work.
+
+In theory, this style of access is fairly straightforward: access the components and ensure we don't break Rust's mutable aliasing rules. [Initial attempts at implementing this] ran into some difficulty though, with subtle soundness problems detected during code review. As a result, we previously introduced unsafe methods for this: `get_components_mut_unchecked`. These methods are relatively fast due to the skipped aliasing checks, but unsafe is frightening and cumbersome to work with, particularly for an API that's designed for convenience and often most attractive to newcomers.
+
+In **Bevy 0.18**, we're finally introducing safe equivalents, in the form of [`EntityMut::get_components_mut`] and [`EntityWorldMut::get_components_mut`]:
+
+```rust
+let (mut a, mut b) = entity.get_components_mut::<(&mut A, &mut B)>()?;
+```
+
+These methods allow you to access multiple mutable or imutable references to the components on a single entity.
+To ensure that we don't hand out multiple mutable references to the same data, these APIs use quadratic time complexity (over the number of components accessed)
+runtime checks, safely erroring if illegal access was requested.
+
+Quadratic time complexity is bad news, but in many cases, the list of components requested is very small:
+two, three or even ten distinct components are not terrible to check outside of a hot loop.
+However, some applications (such as scripting interfaces) may still be best suited to using the unsafe API,
+relying on other methods to ensure soundness with a lower performance cost.
+
+[Initial attempts at implementing this]: https://github.com/bevyengine/bevy/pull/13375
+[`EntityMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityMut.html#method.get_components_mut_unchecked
+[`EntityWorldMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityWorldMut.html#method.get_components_mut_unchecked
 
 ## glTF Extensions
 
@@ -574,7 +595,7 @@ Any third party software that writes component data into a glTF file can use Ske
 [`Transform`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.Transform.html
 [`Scene`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.Scene.html
 
-## Short-type-path asset processors
+## Short-Type-Path Asset Processors
 
 {{ heading_metadata(authors=["@andriyDev"] prs=[21339]) }}
 
@@ -617,7 +638,7 @@ manipulate, we now also support using the "short type path" of the asset. This w
 )
 ```
 
-## Easy Marketing Material
+## Easy Screenshot and Video Recording
 
 {{ heading_metadata(authors=["@mockersf"] prs=[21235, 21237]) }}
 
@@ -637,7 +658,7 @@ To enable it, toggle the `screenrecording` feature in the `bevy_dev_tools` crate
 
 [`EasyScreenshotPlugin`]: https://docs.rs/bevy/0.18.0/bevy/dev_tools/struct.EasyScreenshotPlugin.html
 [`EasyScreenRecordPlugin`]: https://dev-docs.bevy.org/bevy/dev_tools/struct.EasyScreenRecordPlugin.html
-[`RecordScreen]: https://dev-docs.bevy.org/bevy/dev_tools/enum.RecordScreen.html
+[`RecordScreen`]: https://dev-docs.bevy.org/bevy/dev_tools/enum.RecordScreen.html
 
 ## Remove Systems from Schedules
 
@@ -668,7 +689,7 @@ app.remove_systems_in_set(MySet, ScheduleCleanupPolicy::RemoveSetAndSystems);
 [`remove_systems_in_set`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.App.html#method.remove_systems_in_set
 [run conditions]: https://docs.rs/bevy/0.18.0/bevy/prelude/trait.SystemCondition.html
 
-## UI nodes that ignore parent scroll position.
+## UI Nodes Can Ignore Parent Scroll Position
 
 {{ heading_metadata(authors=["@PPakalns"] prs=[21648]) }}
 
@@ -677,9 +698,9 @@ We've added the [`IgnoreScroll`] component, which controls whether a UI element 
 This can be used to achieve basic sticky row and column headers in scrollable UI layouts. See the [`scroll` example] for a demonstration!
 
 [`scroll` example]: https://github.com/bevyengine/bevy/blob/latest/examples/ui/scroll.rs
-[`IgnoreScroll`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.IgnoreScroll.html 
+[`IgnoreScroll`]: https://docs.rs/bevy/0.18.0/bevy/prelude/struct.IgnoreScroll.html
 
-## Interpolation for colors and layout
+## Interpolation for Colors and Layout
 
 {{ heading_metadata(authors=["@viridia"] prs=[21633]) }}
 
@@ -708,38 +729,23 @@ which can fail if the control points are not in the same units / color space.
 [`Color`]: https://docs.rs/bevy/0.18.0/bevy/color/enum.Color.html
 [`TryStableInterpolate`]: https://docs.rs/bevy/0.18.0/bevy/math/trait.TryStableInterpolate.html
 
-## The `AssetReader` trait can now (optionally) support seeking any direction.
+## Seekable Asset Readers
 
 {{ heading_metadata(authors=["@andriyDev", "@cart"] prs=[22182]) }}
 
-_TODO: This release note is not up to date with the changes in [#22182](https://github.com/bevyengine/bevy/pull/22182)._
-
-In Bevy 0.15, we replaced the `AsyncSeek` super trait on `Reader` with `AsyncSeekForward`. This
+In **Bevy 0.15**, we replaced the `AsyncSeek` super trait on `Reader` with `AsyncSeekForward`. This
 allowed our `Reader` trait to apply to more cases (e.g., it could allow cases like an HTTP request,
 which may not support seeking backwards). However, it also meant that we could no longer use seeking
 fully where it was available.
 
-To resolve this issue, we now allow `AssetLoader`s to provide a `ReaderRequiredFeatures` to the
-`AssetReader`. The `AssetReader` can then choose how to handle those required features. For example,
-it can return an error to indicate that the feature is not supported, or it can choose to use a
-different `Reader` implementation to fallback in order to continue to support the feature.
+In **Bevy 0.18**, we've made our `Reader` trait upgrade-able to `SeekableReader`, in cases where the asset source supports it.
 
-This allowed us to bring back the "requirement" the `Reader: AsyncSeek`, but with a more relaxed
-policy: the `Reader` may choose to avoid supporting certain features (corresponding to fields in
-`ReaderRequiredFeatures`).
+```rust
+let seekable_reader = reader.seekable()?;
+seekable_reader.seek(SeekFrom::Start(10)).await?;
+```
 
-Our general recommendation is that if your `Reader` implementation does not support a feature, make
-your `AssetReader` just return an error for that feature. Usually, an `AssetLoader` can implement a
-fallback itself (e.g., reading all the data into memory and then loading from that), and loaders can
-be selected using `.meta` files (allowing for fine-grained opt-in in these cases). However if there
-is some reasonable implementation you can provide (even if not optimal), feel free to provide one!
-
-## What's Next?
-
-The features above may be great, but what else does Bevy have in flight?
-Peering deep into the mists of time (predictions are _extra_ hard when your team is almost all volunteers!), we can see some exciting work taking shape:
-
-- **X:** X
+This enables an `AssetLoader` that needs seeking to either fail, or select a suitable fallback behavior for its use case (such as reading into a `Vec`, which is seekable).
 
 {{ support_bevy() }}
 
