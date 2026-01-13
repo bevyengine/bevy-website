@@ -10,7 +10,7 @@ image_subtitle = "Toroban: an infinitely wrapping puzzle game built in Bevy. Out
 image_subtitle_link = "https://store.steampowered.com/app/1961850/Toroban/"
 +++
 
-Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.18** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **174** contributors, **659** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.18** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
