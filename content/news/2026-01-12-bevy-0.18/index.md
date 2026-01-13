@@ -114,6 +114,28 @@ Solari - Bevy's forward-looking realtime raytraced renderer - has seen many impr
 
 For the full list of details, check out the author's [full blog post](https://jms55.github.io/posts/2025-12-27-solari-bevy-0-18).
 
+## PBR Shading Fixes
+
+{{ heading_metadata(authors=["@aevyrie"] prs=[22372, 22454]) }}
+
+Bevy's PBR material aims to provide a standardized and predictable physical shading model. We landed our initial PBR shader about _four years_ ago. It has generally served us well, and it has improved substantially over time, but it had a couple of quirks that definitely felt ... off at times.
+
+Bevy's materials have sometimes been described as "overly glossy" or "overly bright", and people who knew a bit more about shaders often blamed someone named Fresnel. Fortunately, we've _finally_ isolated the core problems and fixed them. The results should hopefully speak for themselves!
+
+{{ compare_slider(
+    left_title="Before Fixes",
+    left_image="render_before.jpg",
+    right_title="After Fixes",
+    right_image="render_after.jpg"
+) }}
+
+There were two core issues:
+
+1. Point/area lights had an overly bright specular component.
+2. For our initial PBR shader, we chose to do "roughness dependent fresnel", as [defined here](https://bruop.github.io/ibl/). This generally did not behave the way we wanted it to, so we switched to the more direct approach ... using the "typical" fresnel term directly.
+
+For more comparison images, see the two linked PRs above. We can all rest easy now. Fresnel cannot hurt us anymore.
+
 ## More Standard Widgets
 
 {{ heading_metadata(authors=["@viridia", "@PPakalns"] prs=[21636, 21743, 21294]) }}
