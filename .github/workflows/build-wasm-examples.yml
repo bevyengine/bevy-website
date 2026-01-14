@@ -16,7 +16,7 @@ on:
 
 
 env:
-  PER_PAGE: 50
+  PER_PAGE: 30
 
 jobs:
   prepare-pages:
