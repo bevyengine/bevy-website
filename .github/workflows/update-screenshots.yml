@@ -64,6 +64,7 @@ jobs:
           cargo install oxipng --version ^9.1.1
 
       - name: Take Screenshots
+        continue-on-error: true
         run: |
           xvfb-run cargo run -p example-showcase -- --page ${{ matrix.page }} --per-page ${{ env.PER_PAGE }} run --screenshot-frame 400 --fixed-frame-time 0.0125 --auto-stop-frame --in-ci
 
