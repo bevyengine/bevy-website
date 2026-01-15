@@ -530,8 +530,8 @@ However, some applications (such as scripting interfaces) may still be best suit
 relying on other methods to ensure soundness with a lower performance cost.
 
 [Initial attempts at implementing this]: https://github.com/bevyengine/bevy/pull/13375
-[`EntityMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityMut.html#method.get_components_mut_unchecked
-[`EntityWorldMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityWorldMut.html#method.get_components_mut_unchecked
+[`EntityMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityMut.html#method.get_components_mut
+[`EntityWorldMut::get_components_mut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityWorldMut.html#method.get_components_mut
 
 ## glTF Extensions
 
