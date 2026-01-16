@@ -90,8 +90,7 @@ If you're new to Bevy, here's the workflow we use:
 
 If you end up adding a new official Bevy crate to the `bevy` repository:
 
-1. Add the new crate to the [tools/publish.sh](https://github.com/bevyengine/bevy/blob/main/tools/publish.sh) file.
-2. Check if a new cargo feature was added, update [docs/cargo_features.md](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md) as needed.
+1. Check if a new cargo feature was added, update [docs/cargo_features.md](https://github.com/bevyengine/bevy/blob/main/docs/cargo_features.md) as needed.
 
 When contributing, please:
 
