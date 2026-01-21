@@ -10,6 +10,7 @@ content/community/people/
 content/community/donate/
 static/assets/examples/
 static/processed_images/
+static/assets/donor_logos/
 
 # Tools
 target/
