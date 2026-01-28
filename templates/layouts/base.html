@@ -83,8 +83,13 @@
     <meta property="og:title" content="{{ page_title }}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://bevy.org{{ path }}" />
+    {% if page.extra.image %}
+    <meta property="og:image"
+          content="{{ "https://bevy.org" ~ current_path ~ page.extra.image }}" />
+    {% else %}
     <meta property="og:image"
           content="https://bevy.org/assets/bevy_logo_fill.png" />
+    {% endif %}
     <meta property="og:description"
           content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
     <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
