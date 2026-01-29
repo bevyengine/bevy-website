@@ -92,9 +92,9 @@
     {% endif %}
     <meta property="og:description"
       {% if page.description %}
-        content = "{{ page.description }}"
+        content="{{ page.description }}"
       {% elif page.content %}
-        content = "{{ page.content | striptags | truncate(length=150) }}"
+        content="{{ page.content | striptags | truncate(length=150) }}"
       {% else %}
         content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" 
       {% endif %}
