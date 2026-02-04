@@ -1,66 +1,78 @@
 {% extends "layouts/base.html" %}
 {% block content %}
-  <div class="example">
-    <div class="example__header">
-      {% set total_ancestors = page.ancestors | length %}
-      {% set parent_idx = total_ancestors - 1 %}
-      {% set category = get_section(path=page.ancestors | nth(n=parent_idx)) %}
-      <h2 class="example__title">{{ category.title }} / {{ page.title }}</h2>
+<div class="example">
+  <div class="example__header">
+    {% set total_ancestors = page.ancestors | length %}
+    {% set parent_idx = total_ancestors - 1 %}
+    {% set category = get_section(path=page.ancestors | nth(n=parent_idx)) %}
+    <h2 class="example__title">{{ category.title }} / {{ page.title }}</h2>
       <a class="example__back" href="{% block examples_url %}{% endblock examples_url %}"><i class="icon icon--chevron-left"></i> Back to examples</a>
       <a class="example__github"
           href="https://github.com/bevyengine/bevy/blob/latest/{{ page.extra.github_code_path }}">
-        <i class="icon icon--github"></i> View in GitHub
-      </a>
-    </div>
-    <div class="example__canvas bevy-instance">
-      <noscript>
-        <aside class="example__callout media-content callout callout--plain callout--warning">
-          Examples require JavaScript to be enabled. Please enable JavaScript to run examples.
-        </aside>
-      </noscript>
-      <div class="bevy-instance__progress-status" data-progress-status>
-        <div class="bevy-instance__progress-file" data-progress-file></div>
-        <div class="bevy-instance__progress-track">
-          <div class="bevy-instance__progress-bar" data-progress-bar></div>
-        </div>
-      </div>
-      <canvas class="bevy-instance__canvas" id="bevy" width="1280" height="720"></canvas>
-      <aside class="example__callout media-content callout callout--plain callout--{% block callout_modifier %}{% endblock callout_modifier %}">
-        {% block callout %}{% endblock callout %}
-      </aside>
-    </div>
-    {% if page.content %}
-      <div class="example__explanation media-content">
-        {{ page.content | safe }}
-      </div>
-    {% endif %}
-    <div class="example__code-tabs tabs">
-      {% set filename = page.extra.code_path | split(pat="/") | last %}
-      <input class="tabs__radio" name="tabs" tabindex="1" type="radio" id="tab0" checked="checked">
-      <label class="tabs__label" for="tab0"><code>{{ filename }}</code></label>
-      <div class="tabs__panel" tabindex="1">
-        <div class="example__code media-content">
-          {% set code = load_data(path=page.extra.code_path) %}
-          {% set code_md = "```rust" ~ newline ~ code ~ "```" %}
-          {{ code_md | markdown(inline=true) | safe }}
-        </div>
-      </div>
-      
-      {% for shader in page.extra.shader_code_paths %}
-        <input class="tabs__radio" tabindex="1" name="tabs" type="radio" id="tab{{ loop.index }}">
-        <label class="tabs__label" for="tab{{ loop.index }}"><code>{{ shader }}</code></label>
-        <div class="tabs__panel" tabindex="1">
-          <div class="example__code media-content">
-            {% set code = load_data(path="static/assets/examples/" ~ shader) %}
-            {% set code_md = "```wgsl" ~ newline ~ code ~ "```" %}
-            {{ code_md | markdown(inline=true) | safe }}
-          </div>
-        </div>
-      {% endfor %}
-    </div>
+      <i class="icon icon--github"></i> View in GitHub
+    </a>
   </div>
-  <script type="module">
-    {#
+  <div class="example__canvas bevy-instance">
+    <noscript>
+      <aside class="example__callout media-content callout callout--plain callout--warning">
+        Examples require JavaScript to be enabled. Please enable JavaScript to run examples.
+      </aside>
+    </noscript>
+    <div class="bevy-instance__progress-status" data-progress-status>
+      <div class="bevy-instance__progress-file" data-progress-file></div>
+      <div class="bevy-instance__progress-track">
+        <div class="bevy-instance__progress-bar" data-progress-bar></div>
+      </div>
+    </div>
+    <canvas class="bevy-instance__canvas" id="bevy" width="1280" height="720"></canvas>
+      <aside class="example__callout media-content callout callout--plain callout--{% block callout_modifier %}{% endblock callout_modifier %}">
+      {% block callout %}{% endblock callout %}
+    </aside>
+    {% if page.extra.required_features %}
+    <aside class="callout callout--warning">
+      <h3 class="warning">Feature flag required</h3>
+      <p>
+        The code in this example requires {% if page.extra.required_features | length > 1
+        %}these feature flags{% else %}this feature flag{% endif %} to be enabled in order to function:
+        {% for feature in page.extra.required_features %}
+        <code>"{{ feature }}"</code>{% if not loop.last %}, {% endif %}
+        {%- endfor %}.
+      </p>
+    </aside>
+    {% endif %}
+  </div>
+  {% if page.content %}
+  <div class="example__explanation media-content">
+    {{ page.content | safe }}
+  </div>
+  {% endif %}
+  <div class="example__code-tabs tabs">
+    {% set filename = page.extra.code_path | split(pat="/") | last %}
+    <input class="tabs__radio" name="tabs" tabindex="1" type="radio" id="tab0" checked="checked">
+    <label class="tabs__label" for="tab0"><code>{{ filename }}</code></label>
+    <div class="tabs__panel" tabindex="1">
+      <div class="example__code media-content">
+        {% set code = load_data(path=page.extra.code_path) %}
+        {% set code_md = "```rust" ~ newline ~ code ~ "```" %}
+        {{ code_md | markdown(inline=true) | safe }}
+      </div>
+    </div>
+
+    {% for shader in page.extra.shader_code_paths %}
+    <input class="tabs__radio" tabindex="1" name="tabs" type="radio" id="tab{{ loop.index }}">
+    <label class="tabs__label" for="tab{{ loop.index }}"><code>{{ shader }}</code></label>
+    <div class="tabs__panel" tabindex="1">
+      <div class="example__code media-content">
+        {% set code = load_data(path="static/assets/examples/" ~ shader) %}
+        {% set code_md = "```wgsl" ~ newline ~ code ~ "```" %}
+        {{ code_md | markdown(inline=true) | safe }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<script type="module">
+  {#
       // Hi curious user!
       // This approach to add loading feedback on web is a big HACK. Please review `generate_wasm_examples.sh`
       // to see the patches we're applying to the JS file to accept a custom `fetch`. This is a temporary
@@ -68,71 +80,71 @@
       // https://github.com/bevyengine/bevy-website/pull/355
     #}
 
-    import { progressiveFetch } from '/tools.js';
-    import '/restart-audio-context.js'
-    import init from '{% block wasm_base_url %}{% endblock wasm_base_url %}/{{ category.title }}/{{ page.extra.technical_name }}/wasm_example.js'
+  import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from '{% block wasm_base_url %}{% endblock wasm_base_url %}/{{ category.title }}/{{ page.extra.technical_name }}/wasm_example.js'
 
-    const canvasEl = document.getElementById('bevy');
+  const canvasEl = document.getElementById('bevy');
 
-    let once = false;
-    const observer_callback = (_mutations, _observer) => {
-      if (!once) {
-        // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
-        canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
-        once = true;
-      }
-    };
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
 
-    const observer = new MutationObserver(observer_callback);
+  const observer = new MutationObserver(observer_callback);
 
-    const config = { attributeFilter: ['width', 'height'] };
+  const config = { attributeFilter: ['width', 'height'] };
 
-    observer.observe(canvasEl, config);
+  observer.observe(canvasEl, config);
 
-    const progressStatusEl = document.querySelector('[data-progress-status]');
-    const progressFileEl = document.querySelector('[data-progress-file]');
-    const progressBarEl = document.querySelector('[data-progress-bar]');
-    let hideProgressTimeoutId;
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
 
-    async function loadingBarFetch(resource) {
-      return progressiveFetch(resource, {
-        start: ({ filename }) => {
-          progressStatusEl.style.display = 'block';
-          progressFileEl.textContent = filename;
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
 
-          if (hideProgressTimeoutId) {
-            clearTimeout(hideProgressTimeoutId);
-          }
-        },
-        update: ({ isIndeterminate, loadedPercent }) => {
-          progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
-          progressBarEl.style.width = loadedPercent + '%';
-        },
-        finish: () => {
-          {#
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        {#
             // This is a little hack to avoid progress-bar flashing between assets. The thing
             // is that we don't know how many assets are going to load, so we don't know which
             // one is the last one. If a new asset starts loading within 50ms, then this timeout
             // is cleared and the progress element stays visible, avoiding the flashing.
             // The downside is that the progress bar shows for a brief moment once the wasm starts.
           #}
-          hideProgressTimeoutId = setTimeout(() => {
-            progressStatusEl.style.display = 'none';
-          }, 50);
-        }
-      })
-    }
-    window.bevyLoadingBarFetch = loadingBarFetch;
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
 
-    {#
+  {#
       // The following .catch() is a simple filter to remove an exception thrown by winit in
       // its normal control flow. This exception will always be thrown and is not an error.
       // Details here: https://github.com/rust-windowing/winit/blob/master/src/platform_impl/web/event_loop/mod.rs
     #}
-    init().catch((error) => {
-      if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
-        throw error;
-      }
-    });
-  </script>
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });
+</script>
 {% endblock content %}
