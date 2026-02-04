@@ -79,7 +79,7 @@ commands.trigger(custom_message);
 
 ## Event Triggers & Observers
 
-Every Event requires a [`Trigger`], represented by default with the `On<Event>` syntax. It's best to think of a Trigger as the call which activates the Event, hence why we use `On`: our code will run `On` our `<Event>`.
+Every `Event` requires a [`Trigger`], represented by default with the `On<Event>` syntax. It's best to think of a Trigger as the call which activates the Event, hence why we use `On`: our code will run `On` our `<Event>`.
 
 Events are triggered for [`Observers`], special entities which are created specifically to watch for the specified event. If a Trigger is the Event's activation call, then the Observers are the ones who listen for the activation call and run their code in response.
 
