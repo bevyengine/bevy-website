@@ -8,13 +8,13 @@ status = 'hidden'
 
 <!-- TBW -->
 
-While Systems are great for running logic at scheduled updates, many features need to be reactive, not scheduled. Picking up an item, performing an attack, or even hovering the mouse over an object are all actions that wouldn't work very well if they *had* to run on every schedule update. Instead of a System, we can use **Events** to activate some logic or functionality at a specific time or in response to something occurring.
+While Systems are great for running logic at scheduled updates, many features need to be reactive, not scheduled. Picking up an item, performing an attack, or even hovering the cursor over an object are all actions that wouldn't work very well if they *had* to run on every schedule update. Instead of a System, we can use **Events** to activate some logic or functionality at a specific time or in response to something occurring.
 
 There are three required parts when using an Event: a **Trigger**, an **Observer**, and the `Event` itself.
 
 - A **Trigger** is the condition that will determine when an `Event` will happen in the `World`.
 - The Entities that will react to our `Event` are known as **Observers**. These Entities "observe" the `World` and will run some functionality in response to our `Event`.
-- Finally, the `Event` is a Rust type that implements the `Event` trait.
+- Finally, the `Event` is a Rust type that implements the [`Event`] trait.
 
 A basic use of an `Event` would something like this:
 
@@ -27,7 +27,7 @@ struct Speak {
 }
 ```
 
-2. Add an [`Observer`] to the World that will watch for our event:
+2. Add an [`Observer`] to the `World` that will watch for our event:
 
 ```rust
 // To add the observer immediately:
@@ -79,11 +79,50 @@ commands.trigger(custom_message);
 [`Event`]: https://docs.rs/bevy/latest/bevy/prelude/trait.Event.html
 [`Observer`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Observer.html
 
+## Event Observers
+
+Once we have defined our `Event`, we need to create an [`Observer`] that will do something when our `Event` gets triggered. This can be as straightforward as calling the `add_observer` method on [`World`] or [`Commands`], but this is not the only way to make an `Observer`.
+
+At its core, `Observer` is a [`Component`] that is added to an `Entity`. When we run `World::add_observer`, all that's actually happening is telling `World` to spawn a new `Entity` with an `Observer` component. Within that `Observer` component, we specify what `Event` we want the `Entity` to react to and what should happen when the `Event` happens. As we'll see later on with `EntityEvent`, this can be very handy for when we have an `Observer` that should only run when targeting a *specific* `Entity`.
+
+```rust
+// `world` creates a new `Entity` with an `Observer` component, watching for a `Speak` event.
+world.add_observer(|speak: On<Speak>| {
+    // When `Speak` is triggered, print out the message to the console.
+    println!("{}", speak.message); 
+});
+```
+
+### Observer Systems
+
+As you've seen by now, an `Observer` will run some functionality when the `Event` it is observing is triggered. We're able to do this because `Observer` has the ability to run a special kind of `System` called an `ObserverSystem`. The first parameter in an `ObserverSystem` must be `On`, which provides access to the observed `Event`, however we are also able to access more data from `World`.
+
+```rust
+world.add_observer(|event: On<DespawnEnemyUnits>, commands: Commands, enemy_units: Query<Entity, With<Enemy>>|{
+    for enemy in &enemy_units {
+        commands.get_entity(enemy).despawn();
+    }
+})
+```
+
+In the above example, we've created an `Observer` that will run its `ObserverSystem` when a `DespawnEnemyUnits` event is triggered. Additionally, we've accessed `Commands` and `Query` as parameters to gain access to the data we need. Within the `ObserverSystem`, we use a `for` loop to despawn every `Enemy` entity that is given in the `enemy_units` query.
+
+It is also worth noting that we can trigger an `Event` within an `ObserverSystem`. Instead of triggering immediately (as is the case when using `World::trigger`), triggering an `Event` inside an `Observer` with `Commands::trigger` will run the newly triggered `ObserverSystem` at the end of the `Command` queue. Once all of the other `Observer` commands that are currently in the queue are ran, then the new `ObserverSystem` will be run. Be aware that these events are evaluated *recursively*, and will exit once there are no more events left.
+
+```rust
+// When Event `A` is triggered, it in turn will trigger Event `B`.
+world.add_observer(|event: On<A>, mut commands: Commands| {
+    commands.trigger(B);
+});
+```
+
+[`Component`]: https://docs.rs/bevy/latest/bevy/prelude/trait.Component.html
+
 ## Event Triggers
 
 Every `Event` requires a [`Trigger`], represented by default with the `On<Event>` syntax. It's best to think of a `Trigger` as the call which activates the `Event`, hence why we use `On`: our code will run `On` our `<Event>`.
 
-A [`Trigger`] can be called by accessing [`World`] (via [`World::trigger`]) to run the `Event` immediately, or by using [`Commands`] (via [`Commands::trigger`]) to add the `Event` to the Command Queue.
+A [`Trigger`] can be called by accessing `World` (via [`World::trigger`]) to run the `Event` immediately, or by using `Commands` (via [`Commands::trigger`]) to add the `Event` to the `Command` Queue.
 
 ```rust
 // An event that deals damage to the player.
@@ -131,7 +170,7 @@ As we mentioned above, a `Trigger` can also be used to pass values from the `Eve
 
 ## Entity Events
 
-Up until now, Events have been utilized in a *global* context, meaning that observers will run their code without taking any specific entities into account.
+Up until now, events have been utilized in a *global* context, meaning that observers will run their code without taking any specific entities into account.
 
 What if we do have some unique functionality that we want to run on certain entities? We can achieve this by modifying our `Event` types to implement [`EntityEvent`] rather than [`Event`]:
 
@@ -149,7 +188,7 @@ struct Explode {
 }
 ```
 
-With [`EntityEvent`], we are selecting a single `Entity` that will respond to our event. To determine the selected `Entity`, we need to provide the `EventEntity` with an `entity_target` field. By default, `event_target` will be set to the value inside an `entity` field in a struct (if it exists). Otherwise we can manually specify the `event_target` by using the `#[event_target]` field attribute.
+With [`EntityEvent`], we are selecting a single `Entity` that will be the target of our event. To determine the selected `Entity`, we need to provide the `EventEntity` with an `entity_target` field. By default, `event_target` will be set to the value inside an `entity` field in a struct (if it exists). Otherwise we can manually specify the `event_target` by using the `#[event_target]` field attribute.
 
 ```rust
 // A simple EntityEvent:
@@ -177,22 +216,25 @@ struct Explode(#[event_target] Entity, i32, f32); // Using #[event_target] insid
 
 ```
 
-Just as with a global [`Event`], [`EntityEvent`] also needs a [`Trigger`]. Thankfully, we trigger an `EntityEvent` the same way we trigger a regular [`Event`]:
+Just as with a global [`Event`], [`EntityEvent`] also needs a [`Trigger`]. We trigger an `EntityEvent` the same way we trigger a regular `Event`, however this time we make sure to specify our `event_target` entity (along with any other fields on the `EntityEvent`):
 
 ```rust
-world.trigger(Explode(some_entity, 4, 2.5));
 // Trigger an Explode `EntityEvent`, passing in a tuple consisting of 
 // an Entity (`some_entity`), an i32 (`4`), and a f32 (`2.5`).
+world.trigger(Explode(some_entity, 4, 2.5));
 ```
 
-However, [`EntityEvent`] does differ from [`Event`] when it comes to using an observer. To make an Entity observe an [`EntityEvent`], we have to select the `Entity` with [`World::entity_mut`] and then add the observer with [`EntityCommands::observe`]:
+However, [`EntityEvent`] does differ from [`Event`] when it comes to using an observer. To create an `Observer` for an `EntityEvent`, we have to select the target `Entity` with [`World::entity_mut`] and then create the `Observer` via [`EntityCommands::observe`]:
 
 ```rust
-/// This observer will only run for Explode events triggered for `some_entity`
+// This observer will only run for Explode events triggered for `some_entity`
 world.entity_mut(some_entity).observe(|explode: On<Explode>| {});
+
+// Alternatively, `Commands::get_entity` also works.
+commands.get_entity(some_entity).observe(|explode: On<Explode>| {});
 ```
 
-It is worth noting that an [`EntityEvent`] is still an [`Event`]; we can still set global observers to watch for an [`EntityEvent`]:
+An `EntityEvent` is still an `Event` though; we can create global observers that will run non-entity-specific code when an `EntityEvent` is triggered:
 
 ```rust
 world.add_observer(|explode: On<Explode>| {}); // Global observer that will run when the Explode event is triggered.
@@ -224,7 +266,7 @@ world.add_observer(|mut click: On<Click>| {
 });
 ```
 
-Likewise, if we have an [`EntityEvent`] that an `Observer` is observing, we can explicitly disable propagation:
+Likewise, if we have an [`EntityEvent`] that a global `Observer` is observing, we can explicitly disable propagation:
 
 ```rust
 // Disable event propagation on an observer.
