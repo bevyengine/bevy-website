@@ -231,7 +231,7 @@ However, [`EntityEvent`] does differ from [`Event`] when it comes to using an ob
 world.entity_mut(some_entity).observe(|explode: On<Explode>| {});
 
 // Alternatively, `Commands::get_entity` also works.
-commands.get_entity(some_entity).observe(|explode: On<Explode>| {});
+commands.entity(some_entity).observe(|explode: On<Explode>| {});
 ```
 
 An `EntityEvent` is still an `Event` though; we can create global observers that will run non-entity-specific code when an `EntityEvent` is triggered:
