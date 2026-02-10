@@ -88,5 +88,5 @@ The SMEs staffing a Goal should be listed in the Goal's description.
 6. A Github Project Workflow picks up the `C-Goal` issue and adds it to the **Project Goals** board in the Proposed state.
 7. The **Project Lead** and **SMEs** discuss how to handle the Goal: Deny, Inactive (Approved), or Postpone. Approval is contingent on an **SME** agreeing to staff it, and put energy into helping the Working Group bring it to completion.
 8. If the Goal is Inactive (Approved), and there is enough commitment and support from the community to form a **Working Group**, it moves into the Active (Approved) state.
-9. The **Project Lead** adjusts the priorities of the Goals (expressed via Project Board order), based on the needs of the project.
+9. The **Project Lead** adjusts the priorities of the Goals (expressed via the [Project Goals Board](https://github.com/orgs/bevyengine/projects/23/views/1) order), based on the needs of the project.
 10. When a Goal is completed, the issue is closed out. A GitHub Project Workflow moves it into the Done status.
