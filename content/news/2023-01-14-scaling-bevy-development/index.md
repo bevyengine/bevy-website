@@ -34,7 +34,7 @@ If two SMEs within a given subject area approve a "controversial" PR, a maintain
 
 As Project Lead, I can still merge controversial PRs. Consider 2 SME approvals as equivalent to a Project Lead approval. As a last line of defense for cohesion, the Project Lead maintains final say on changes. While I will by default defer to the SMEs, if they approve a PR that I firmly believe is the wrong direction for Bevy, I will still block or revert the change. Preserving consistent vision and quality is critically important to me. But I intend to bias toward trust and consensus as much as possible.
 
-It is the job of SMEs to strive for consensus amongst themselves, the wider Bevy community, and Project Leads. They can merge controversial changes without me, but they still must do their best to anticipate my reaction to those changes (and discuss the changes with me ahead of time when that feels relevant). Likewise, I will try to establish consensus with SMEs and the wider community before making changes myself.
+It is the job of SMEs to strive for consensus amongst themselves, the wider Bevy community, and the Project Lead. They can merge controversial changes without me, but they still must do their best to anticipate my reaction to those changes (and discuss the changes with me ahead of time when that feels relevant). Likewise, I will try to establish consensus with SMEs and the wider community before making changes myself.
 
 We are rolling out SMEs slowly so we can tweak the process over time and avoid changing too much too quickly. We've largely started with subject areas that have the most activity and the clearest subject matter experts. Join me in welcoming our initial set of SMEs!
 

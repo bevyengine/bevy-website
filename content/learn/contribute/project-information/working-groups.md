@@ -2,56 +2,56 @@
 title = "Working Groups"
 insert_anchor_links = "right"
 [extra]
-weight = 1
+weight = 5
 +++
 
-Working groups are temporary community initiatives devoted to particularly complex, large, or important tasks. This might include:
+Working Groups are temporary community initiatives devoted to accomplishing a [**Goal**](/learn/contribute/project-information/project-goals/) (a complex, large, or important task). This might include:
 
-- Undertaking a major refactor.
-- Adding an unusually complex new feature.
-- Upstreaming an ecosystem crate.
-- Preparing for a new release.
-- Bootstrapping new major documentation efforts.
+- Adding an unusually complex new feature
+- Undertaking a major refactor
+- Upstreaming an ecosystem crate
+- Bootstrapping new major documentation efforts
+- Preparing for a new release
 
 As you can see, these aren't purely for programming tasks!
-Much of the difficulty, work, and controversy involved in maintaining a major game engine centers around mundane or social tasks.
-Coordinating the efforts for those tasks can be just as important as coordinating the addition of a fancy new feature!
 
 {% callout(type="info") %}
-You can read more about how to find, and join, active working groups in the [How You Can Help](@/learn/contribute/helping-out/how-you-can-help.md) section.
+You can read more about how to find, and join, active Working Groups in the [How You Can Help](@/learn/contribute/helping-out/how-you-can-help.md) section.
 {% end %}
 
 ## Ground Rules
 
-When participating in a working group, here are a few things to keep in mind:
+When participating in a Working Group, here are a few things to keep in mind:
 
-- No one is in charge in a working group; the founders of a working group do not own it.
+- Generally, no one is "in charge" of the Working Group; the founders of a Working Group do not own it. The SMEs (Subject Matter Experts) that have agreed to "staff" the **Goal** _can_ describe what they would like, and are responsible for providing prescriptive technical direction.
 - These are social spaces where anyone is invited and can drop in to chat.
 - Working groups are "hop-in hop-out". No commitments, minimal crunch, everyone contributes what they can when they can.
-- The decisions made in working groups should be uncontroversial among the group, commonly agreed upon by all major stakeholders, before going to the Subject Matter Experts. 
+- The decisions made in Working Groups should be uncontroversial among the group, commonly agreed upon by all major stakeholders, before going to the Subject Matter Experts.
 - Communication among the group is great, since a group of people who are clued-in to the design process will let you sail through our review process easier than you would otherwise.
 
 ## Life-Cycle of a Working Group
 
-Working groups move through three loose phases:
+Working groups move through the following phases:
 
-1. An initial proposal.
-2. A period of design and approval.
-3. And finally the bulk of the implementation work.
-
-These phases are intended to be lightweight, and are sometimes little more than a formality.
+1. A [**Goal**](/learn/contribute/project-information/project-goals/) is proposed.
+2. Project Leadership (SMEs and the Project Lead) approves the [**Goal**](/learn/contribute/project-information/project-goals/), and one or more SME agrees to "staff" it.
+3. A Working Group is formed and the [**Goal**]((/learn/contribute/project-information/project-goals/)) becomes "active".
+4. The Working Group comes up with design proposal(s) / prototypes, in collaboration with the ["staffing SME(s)"](/learn/contribute/project-information/project-goals/)
+5. The design is approved by Project Leadership.
+6. The design is implemented by the Working Group, in collaboration with the "staffing SME(s)".
+7. The implementation is reviewed and approved.
 
 ## Make A Proposal
 
-Anyone is welcome to start a working group, all you need to do is get some friends together and submit a proposal:
+Anyone is welcome to propose a [**Goal**](/learn/contribute/project-information/project-goals/) / Working Group, all you need to do is get some friends together and submit a proposal:
 
-1. Decide what the working group is going to focus on. This should be tightly focused and achievable!
-2. Gather at least 3 people including yourself who are willing to be in the working group.
-3. Ping the `@Maintainer` role on Discord in [#engine-dev](https://discord.com/channels/691052431525675048/692572690833473578) announcing your mutual intent and a one or two sentence description of your plans.
+1. Decide what the **Goal** of the Working Group will be. This should be tightly focused and achievable!
+2. Gather at least 3 people including yourself who are willing to be in the Working Group.
+3. Ping the appropriate `@SME-AREA` (ex: `@SME-Rendering`) role on Discord (and/or the `@Maintainer` role if you can't find the right SME role) in [#engine-dev](https://discord.com/channels/691052431525675048/692572690833473578) announcing your mutual intent and a one or two sentence description of your plans.
 
-The Maintainers will briefly evaluate the proposal in consultation with the relevant SMEs and give you a thumbs up or down on whether this is something Bevy can and wants to explore right now.
+The SMEs, Maintainers, and Project Lead will briefly evaluate the proposal and give you a thumbs up or down on whether this is something Bevy can and wants to explore right now.
 You don't need a concrete plan at this stage, just a sensible argument for both "why is this something that could be useful to Bevy" and "why there aren't any serious barriers in implementing this in the near future".
-If they're in favor, a Maintainer will create a forum channel for you and you're off to the races.
+If they're in favor, the **SMEs** will create a **Goal** on GitHub, a Maintainer will create a forum channel for you, and you're off to the races.
 
 ## Write A Design Doc
 
@@ -67,10 +67,10 @@ With a sign-off in hand, post the design doc to [GitHub Discussions](https://git
 Post PRs that you need reviews on in your group's forum thread, ask for advice, and share the load.
 Controversial PRs are still `X-Controversial`, but with a sign-off-in-principle, things should go more smoothly.
 
-If work peters out and the initiative dies, Maintainers can wind down working groups (in consultation with SMEs and the working group itself).
+If work peters out and the initiative dies, Maintainers can wind down Working Groups (in consultation with SMEs and the Working Group itself).
 This is normal and expected— projects fail for all sorts of reasons!
-However, it's important to both keep the number of working groups relatively small and ensure they're active, since
+However, it's important to both keep the number of Working Groups relatively small and ensure they're active, since
 they serve a vital role in onboarding new contributors.
 
-Once your implementation work laid out in your initial design doc is complete, it's time to wind down the working group.
+Once your implementation work laid out in your initial design doc is complete, it's time to wind down the Working Group.
 Feel free to make another one though to tackle the next step in your grand vision!

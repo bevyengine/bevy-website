@@ -30,7 +30,7 @@ Maintainers abide by the rules described in the section on [Reviewing Pull Reque
 We choose new Maintainers carefully, and only after they have proven themselves in the Bevy community. Maintainers must have a proven track record of the following:
 
 1. **A strong understanding of the Bevy Project as a whole**: our vision, our development process, and our community
-2. **Solid technical skills and code contributions across most engine areas**: Maintainers must be able to evaluate the scope of pull requests, provide complete code reviews, ensure the appropriate people have signed off on a PR, and decide if changes align with our vision for Bevy. This can only be done if Maintainers are technical experts, both generically across engine subject areas, and more specifically in the Bevy codebase.
+2. **Solid technical skills and code contributions across most engine areas**: Maintainers must be able to evaluate the scope of pull requests, provide complete code reviews, ensure the appropriate people have signed off on a PR, and decide if changes align with our vision for Bevy. This can only be done if Maintainers are technical experts, both generically across engine [Areas](/learn/contribute/project-information/areas/), and more specifically in the Bevy codebase.
 3. **Great social skills**: Maintainers regularly deal with, and resolve, "community issues", and serve as moderators on Discord. They must always present a professional and friendly face. They are representatives of the project and their actions directly reflect our goals and values. Working with them should not be painful.
 4. **Thorough reviews of other peoples' PRs**: Maintainers are the last line of defense when protecting project vision and code quality. They are also often the first people new contributors interact with. They must have a history of leaving thorough and helpful code reviews.
 5. **Ethical and trustworthy behavior**: Maintainers are granted significant administrative permissions and serve as the board members of the Bevy Foundation. They must be trustworthy and professional.
@@ -40,14 +40,21 @@ To make it easy to reach consensus, hold a high quality bar, and synchronize vis
 If you are interested in a Maintainer role and believe you meet these criteria, reach out to the Project Lead or one of our Maintainers. One month after every Bevy release Maintainers and the Project Lead will evaluate the need for new roles, review candidates, and vote. Bringing in a new Maintainer requires unanimous support from the Project Lead and all Maintainers.
 
 {% callout(type="info") %}
-Check out the [Bevy People](https://bevy.org/community/people/#the-bevy-organization) page for the current list of Maintainers.
+Check out the [Bevy People](/community/people/#the-bevy-organization) page for the current list of Maintainers.
 {% end %}
 
 ## Subject Matter Expert (SME)
 
-Subject Matter Experts are members of the Bevy Organization that have proven themselves to be experts in a given development area (Rendering, Assets, ECS, UI, etc), and have a solid understanding of the Bevy Organization's vision for that area. They are great people to reach out to if you have questions about a given area of Bevy.
+Subject Matter Experts are members of the Bevy Organization that have proven themselves to be experts in a given development [Area](/learn/contribute/project-information/areas/) (Rendering, Assets, ECS, UI, etc), and have a solid understanding of the Bevy Organization's vision for that area. They are great people to reach out to if you have questions about a given area of Bevy.
 
-SME approvals count as "votes" on controversial PRs (provided the PR is in their "subject area"). This includes [RFCs](https://github.com/bevyengine/rfcs) and working groups design documents. If a controversial PR has two votes from Subject Matter Experts in that PR's area, it can be merged without Project Lead approval. If a SME creates a PR in their subject area, this does count as a vote. 
+SMEs are responsible for:
+
+- Reviewing / approving / voting on controversial PRs and designs
+- Proposing and voting on [Bevy Project Goals](/learn/contribute/project-information/goals)
+- Managing their [Area Project Board](/learn/contribute/project-information/areas)
+- Being a point of contact for contributors interested in an Area
+
+SME approvals count as "votes" on controversial PRs (provided the PR is in their "subject area"). This includes [RFCs](https://github.com/bevyengine/rfcs) and working groups design documents. If a controversial PR has two votes from Subject Matter Experts in that PR's area, it can be merged without Project Lead approval. If a SME creates a PR in their subject area, this does count as a vote.
 
 However, the Project Lead has the right to revert changes merged this way, so it is each SME's responsibility to ensure they have synced up with the Project Lead's vision. Additionally, when approving a design, consensus between SMEs and the Project Lead (and ideally most of the wider Bevy community) is heavily encouraged. Merging without consensus risks fractured project vision and/or ping-ponging between designs. The "larger" the impact of a design, the more critical it is to establish consensus.
 
