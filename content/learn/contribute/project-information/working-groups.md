@@ -35,7 +35,7 @@ Working groups move through the following phases:
 
 1. A [**Goal**](/learn/contribute/project-information/project-goals/) is proposed.
 2. Project Leadership (SMEs and the Project Lead) approves the [**Goal**](/learn/contribute/project-information/project-goals/), and one or more SME agrees to "staff" it.
-3. A Working Group is formed and the [**Goal**]((/learn/contribute/project-information/project-goals/)) becomes "active".
+3. A Working Group is formed and the [**Goal**](/learn/contribute/project-information/project-goals/) becomes "active".
 4. The Working Group comes up with design proposal(s) / prototypes, in collaboration with the ["staffing SME(s)"](/learn/contribute/project-information/project-goals/)
 5. The design is approved by Project Leadership.
 6. The design is implemented by the Working Group, in collaboration with the "staffing SME(s)".
