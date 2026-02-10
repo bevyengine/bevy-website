@@ -52,7 +52,7 @@ Goals can have a variety of "states", which are expressed as "statuses" on the [
   - **Goals** enter this state when they are created by an SME, Maintainer, or Project Lead
   - The SMEs and Project Lead discuss what state to transition the Goal to. Ideally **Goals** do not stay in the Proposed state for long.
 - **Postponed**: We might want to do this later, but we don't have the bandwidth or inclination to invest in it now.
-- **Blocked (Approved)**: We want to do this, one or more SME has agreed to "staff" it, and the Project Lead has approved it, but other work is blocking it
+- **Blocked (Approved)**: We want to do this, one or more SME has agreed to "staff" it once unblocked, and the Project Lead has approved it, but other work is required first
   - **Goals** that are blocked on other **Goals** or issues should include a "blocked by" relationship on GitHub.
 - **Inactive (Approved)**: We want to do this, one or more **SME** has agreed to staff it, the **Project Lead** has approved it, but there is no active **Working Group**.
 - **Active (Approved)**:  A **Working Group** is actively working toward this, with one or more active **SME** staffing it.
