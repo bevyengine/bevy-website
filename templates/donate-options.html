@@ -14,6 +14,8 @@
                 <th>Name in Credits</th>
                 <th>Link in Credits</th>
                 <th>Logo in Credits</th>
+                <th>Name and Link in Project's Readme</th>
+                <th>Logo in Project's Readme</th>
             </tr>
         </thead>
         <tbody>
@@ -50,12 +52,24 @@
                         Yes
                     {% endif %}
                 </td>
+                <td>
+                    {% if tier.reward_readme_link %}
+                        Yes
+                    {% endif %}
+                </td>
+                <td>
+                    {% if tier.reward_readme_logo %}
+                        Yes
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
             <tr>
                 <td><b>Custom</b></td>
                 <td><a href="https://www.every.org/bevy-foundation?suggestedAmounts=10%2C25%2C50%2C100%2C250&theme_color=6a8fb3&designation=Custom&utm_campaign=donate-link#/donate">every.org</a></td>
                 <td>Not supported right now</td>
+                <td>See tiers</td>
+                <td>See tiers</td>
                 <td>See tiers</td>
                 <td>See tiers</td>
                 <td>See tiers</td>
