@@ -7,7 +7,7 @@ weight = 3
 
 An **Area** is a "design space", such as Rendering, Assets, and Scenes. Technical work being done in Bevy almost always belongs to one or more **Area**.
 
-An **Area** is [governed](/learn/contribute/project-information/bevy-organization/) by **SMEs** (Subject Matter Experts) and the **Project Lead**.
+An **Area** is [governed](/learn/contribute/project-information/bevy-organization/) by **SMEs** (Subject Matter Experts) and the **Project Lead**. Some **Areas** are not foundational enough or active enough to merit **SMEs**. In these cases, the **Project Lead** governs the **Area**.
 
 On GitHub, Issues and Pull Requests in a given **Area** are labeled with the `A-AREA-HERE` label (`A-Rendering`, `A-Assets`, etc).
 
