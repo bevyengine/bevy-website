@@ -91,7 +91,14 @@
           content="https://bevy.org/assets/bevy_logo_fill.png" />
     {% endif %}
     <meta property="og:description"
-          content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+      {% if page.description %}
+        content="{{ page.description }}"
+      {% elif page.content %}
+        content="{{ page.content | striptags | truncate(length=150) }}"
+      {% else %}
+        content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" 
+      {% endif %}
+    />
     <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
     <link rel="stylesheet" href="/site.css" />
     <link href="/atom.xml" rel="alternate" type="application/atom+xml" />
