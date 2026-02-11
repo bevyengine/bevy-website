@@ -65,7 +65,7 @@ Goals can have a variety of "states", which are expressed as "statuses" on the [
 
 Goals can be "staffed" by one or more [SME](/learn/contribute/project-information/bevy-organization). Staffing a Goal means:
 
-1. The SME believes the Goal should completed
+1. The SME believes the Goal should be completed
 2. The SME is willing to spend time guiding a Working Group as they design and implement the Goal
 3. The SME believes they have the competency required to be a good technical shepherd of the Goal
 
