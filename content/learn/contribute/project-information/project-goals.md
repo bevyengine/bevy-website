@@ -69,7 +69,7 @@ Goals can be "staffed" by one or more [SME](/learn/contribute/project-informatio
 2. The SME is willing to spend time guiding a Working Group as they design and implement the Goal
 3. The SME believes they have the competency required to be a good technical shepherd of the Goal
 
-The SME's job is to shepherd the Working Group in the right direction. "Staffing SMEs" provide definitive answers to questions about the Working Group's direction. They generally have the final say on design and implementation proposals, prior to the final reviews by the other SMEs / Project Lead. Staffing SMEs are welcome (and encouraged) to help draft designs and implementations, but this is not _required_. In _all_ cases they are responsible for ensuring that the Working Group moves in the correct direction.
+A "staffing" SME's job is to shepherd the Working Group in the right direction. They generally have the final say on design and implementation proposals, prior to the final reviews by the other SMEs / Project Lead. Staffing SMEs are welcome (and encouraged) to help draft designs and implementations, but this is not _required_. In _all_ cases they are responsible for ensuring that the Working Group moves in the correct direction.
 
 If a "staffing SME" can no longer dedicate the time necessary to vet the outputs of a Working Group, they should inform the relevant members of Bevy Leadership, who will then decide the best way to move forward (ex: Keeping moving forward if there are still enough staffing SMEs, find a new SME to staff the Goal, or Postpone the Goal).
 
