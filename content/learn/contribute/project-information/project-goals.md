@@ -18,7 +18,8 @@ Goals are tracked on the [Project Goals Board](https://github.com/orgs/bevyengin
 - Goals are expressed as [Issues with the `C-Goal` label](https://github.com/bevyengine/bevy/issues?q=is%3Aissue%20label%3AC-Goal) in the main [Bevy GitHub Repo](https://github.com/bevyengine/bevy/).
 - Goals can be large, but they need a defined completion criteria.
 - Goals can have "sub-Goals", which are expressed as "sub-issues" on GitHub
-  - For something large like a "Bevy Editor" Goal, consider breaking it into smaller pieces (ex: Editor UI Widgets, Core Editor App Framework, Scene Editor, Editor Inspector, etc). The pieces should _still_ be Goal-like ... avoid dictating implementation details. Also avoid trying to plan out large "goal trees" in advance. "Expand" the tree lazily, as the need arises and you understand more.
+  - For something large like a "Bevy Editor" Goal, consider breaking it into smaller pieces (ex: Editor UI Widgets, Core Editor App Framework, Scene Editor, Editor Inspector, etc). The pieces should _still_ be Goal-like ... avoid dictating implementation details.
+  - Avoid trying to plan out large "sub-goal trees" in advance. "Expand" the tree lazily, as the need arises and you understand more. Generally only do this _after_ a **Goal** has been Postponed or Approved.
   - It is critical to define completion criteria for larger Goals with sub-Goals, to avoid Goals that live forever. A Goal is _not_ an **Area**.
 - Goals can organically change over time. If we learn something new and it makes sense to break up a Goal into multiple Goals, add sub-Goals, or reframe the Goal ... do it!
 - Goals inherently require _collaboration_ to bring them to completion. They are never the work of a single individual. At the very least, there is someone coming up with a design / implementation, and one or more **SME** verifying the design / implementation.
@@ -90,3 +91,30 @@ The SMEs staffing a Goal should be listed in the Goal's description.
 8. If the Goal is Inactive (Approved), and there is enough commitment and support from the community to form a **Working Group**, it moves into the Active (Approved) state.
 9. The **Project Lead** adjusts the priorities of the Goals (expressed via the [Project Goals Board](https://github.com/orgs/bevyengine/projects/23/views/1) order), based on the needs of the project.
 10. When a Goal is completed, the issue is closed out. A GitHub Project Workflow moves it into the Done status.
+
+## Goal Issue Template
+
+Only SMEs and Maintainers should create new Goals! If that is you, copy this template when creating a new Goal. We put this template here, rather than adding it as a GitHub issue template, because we don't want normal users creating Goals.
+
+1. Name the Goal. See the "What is a Goal?" section above for naming conventions.
+2. Add the `C-Goal` and `X-Needs-SME` labels.
+3. Paste in the markdown template below.
+4. Fill in the template.
+
+```md
+## Goal Description
+
+In roughly one paragraph, describe from a high level _what_ this Goal is. Provide just enough to describe to the public and contributors _what_ the bounds of the Goal are. Leave the "why" and "how" to the future **Design Documents**. Avoid dictating implementation or design details whenever possible.
+
+## Goal Information
+
+This is a potential [Bevy Project Goal](https://bevy.org/learn/contribute/project-information/project-goals/). Its state on the [Project Goals Board](https://github.com/orgs/bevyengine/projects/23/views/1) determines if it is Proposed, Postponed, Blocked (Approved), Inactive (Approved), Active (Approved), Completed, or Declined.
+
+- **Staffing SMEs**: Not yet staffed
+- **Working Group Link**: Working Group not yet formed
+- **Design Documents**: Design documents not yet written
+```
+
+- If / when a Goal is approved and SMEs agree to "staff" the Goal, add them to the **Staffing SMEs** list.
+- If / when a Goal becomes "active" and a Working Group is formed, fill in the **Working Group Link** with the Working Group thread on the Bevy Discord.
+- If / when design documents are authored by the Working Group, link to them in the **Design Documents**.
