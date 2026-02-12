@@ -19,6 +19,17 @@ Each **Area Project** is instantiated from the standardized [Area Project Templa
 
 As much as possible, we drive the "views" in these projects with query-able data such as GitHub labels, rather than defining new Area Project-specific states (which we reserve for SME triaging).
 
+These are the current Area Projects:
+
+- [Animation](https://github.com/orgs/bevyengine/projects/28)
+- [Assets](https://github.com/orgs/bevyengine/projects/34)
+- [Audio](https://github.com/orgs/bevyengine/projects/33)
+- [ECS](https://github.com/orgs/bevyengine/projects/27)
+- [Input](https://github.com/orgs/bevyengine/projects/29)
+- [Reflection](https://github.com/orgs/bevyengine/projects/31)
+- [Rendering](https://github.com/orgs/bevyengine/projects/26)
+- [UI](https://github.com/orgs/bevyengine/projects/32)
+
 ### SME Triaging
 
 Issues and PRs added to the Area Project have the following states:
