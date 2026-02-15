@@ -1,0 +1,75 @@
+[[links]]
+title = "GitHub"
+subtitle = "bevyengine"
+url = "https://github.com/bevyengine/bevy"
+image = "/assets/github-mark-white.svg"
+image_alt = "GitHub logo"
+description = "Interact with Bevy's source code, report issues, and suggest changes"
+show_in_footer = true
+
+[[links]]
+title = "Bevy People"
+url = "/community/people/"
+image = "/assets/people.svg"
+image_alt = "People image"
+description = "Members of The Bevy Organization and the Bevy Community"
+
+[[links]]
+title = "Bevy Q&A"
+subtitle = "bevyengine"
+url = "https://github.com/bevyengine/bevy/discussions/categories/q-a"
+image = "/assets/q_and_a.svg"
+image_alt = "Q and A logo"
+description = "The go-to place to ask Bevy questions and get Bevy answers"
+
+[[links]]
+title = "Bevy Assets"
+url = "/assets/"
+image = "/assets/bevy_icon_dark.svg"
+image_alt = "Bevy logo"
+description = "List of community projects in Bevy, including plugins, games, books, and tutorials."
+
+[[links]]
+title = "Discord"
+subtitle = "Bevy Engine"
+url = "https://discord.gg/bevy"
+image = "/assets/discord.svg"
+image_alt = "Discord logo"
+description = "A community to discuss Bevy, Rust, and game development"
+show_in_footer = true
+
+[[links]]
+title = "Bluesky"
+subtitle = "bevy.bsky.social"
+url = "https://bsky.app/profile/bevy.org"
+image = "/assets/bluesky.svg"
+image_alt = "Bluesky logo"
+description = "Quick updates and shared Bevy content from the community"
+show_in_footer = true
+
+[[links]]
+title = "Mastodon"
+subtitle = "bevy"
+url = "https://mastodon.social/@bevy"
+image = "/assets/mastodon-logo-purple.svg"
+image_alt = "Mastodon logo"
+description = "News, boosted community creations and chatter on the short-form Fediverse network."
+show_in_footer = true
+
+[[links]]
+title = "Reddit"
+subtitle = "/r/bevy"
+url = "https://www.reddit.com/r/bevy/"
+image = "/assets/reddit.svg"
+image_alt = "Reddit logo"
+description = "Stay up to date on Bevy news, share your games or plugins, and discuss Bevy."
+show_in_footer = true
+
+[[links]]
+title = "itch.io"
+subtitle = "bevy"
+url = "https://itch.io/games/tag-bevy"
+image = "/assets/itchio-textless.svg"
+image_alt = "itch.io logo"
+description = 'Games tagged with "bevy" on itch.io.'
+show_in_footer = true
