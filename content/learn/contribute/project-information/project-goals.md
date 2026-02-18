@@ -24,7 +24,7 @@ Goals are tracked on the [Project Goals Board](https://github.com/orgs/bevyengin
 - Goals can organically change over time. If we learn something new and it makes sense to break up a Goal into multiple Goals, add sub-Goals, or reframe the Goal ... do it!
 - Goals inherently require _collaboration_ to bring them to completion. They are never the work of a single individual. At the very least, there is someone coming up with a design / implementation, and one or more **SME** verifying the design / implementation.
 - Goals are inherently `X-Needs-SME`, so they should be given that label.
-- Anything that needs a Goal, but doesn't currently have one should be labeled with `C-Needs-Goal`.
+- Anything that needs a Goal, but doesn't currently have one should be labeled with `S-Needs-Goal`.
 - Goals are typically created by **SMEs** or **Maintainers**.
   - However, trusted contributors may create Goals after discussion with at least one **SME** or **Maintainer**.
   - Goals created without following this process will be deleted without consideration, and a warning will be issued.
@@ -32,7 +32,7 @@ Goals are tracked on the [Project Goals Board](https://github.com/orgs/bevyengin
 
 ## When does an Issue or PR need a Goal?
 
-- In general, `C-Needs-Goal` is a measure of investment, risk, and publicity. If SMEs cannot resolve the work with a very short time investment and low risk, or the work is an ongoing thing, it almost certainly needs a Goal. If it has significant implications for public reception or has significant public interest, it needs a Goal.
+- In general, `S-Needs-Goal` is a measure of investment, risk, and publicity. If SMEs cannot resolve the work with a very short time investment and low risk, or the work is an ongoing thing, it almost certainly needs a Goal. If it has significant implications for public reception or has significant public interest, it needs a Goal.
 - When in doubt, it probably needs a Goal
 - Is the work a part of a larger whole? If yes, that "whole" probably needs a Goal
 - Does the work require a long iterative development process? If yes, it probably needs a Goal
@@ -87,7 +87,7 @@ The SMEs staffing a Goal should be listed in the Goal's description.
     - By default this issue is not a Goal, but **SMEs**, **Maintainers**, and the **Project Lead** can skip to step (5) and create proposed Goal issues directly.
 2. The Triage Team assigns it to an **Area**
 3. A [Github Project Workflow](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-built-in-automations) adds it to the **Area Project**
-4. **SMEs** identify that the issue needs a goal and apply the `C-Needs-Goal` label
+4. **SMEs** identify that the issue needs a goal and apply the `S-Needs-Goal` label
 5. **SMEs** discuss the framing of the Goal and create a new issue with the `C-Goal` label.
 6. A Github Project Workflow picks up the `C-Goal` issue and adds it to the **Project Goals** board in the Proposed state.
 7. The **Project Lead** and **SMEs** discuss how to handle the Goal: Deny, Inactive (Approved), or Postpone. Approval is contingent on an **SME** agreeing to staff it, and put energy into helping the Working Group bring it to completion.

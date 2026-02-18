@@ -47,7 +47,7 @@ struct Args {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Gets all merged PRs with the `C-Breaking-Change` label or with a `Migration Guide` section in the body
+    /// Gets all merged PRs with the `M-Migration-Guide` label or with a `Migration Guide` section in the body
     /// * For each PR generate a file with the migration guide and a frontmatter with metadata about the PR.
     ///   This parses the markdown and generates valid makrdown that should pass markdownlint rules.
     #[command(verbatim_doc_comment)]
@@ -56,7 +56,7 @@ enum Commands {
         #[arg(short, long)]
         overwrite_existing: bool,
     },
-    /// Generates release notes for all PRs merged with the `C-Needs-Release-Note` label.
+    /// Generates release notes for all PRs merged with the `M-Release-Note` label.
     ///
     /// This will also open an issue for each PR that doesn't have a release note.
     /// While duplicate issues will not be opened, be sure to use the `--local` flag
