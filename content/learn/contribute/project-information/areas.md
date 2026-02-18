@@ -43,7 +43,7 @@ Issues and PRs added to the Area Project have the following states:
   - Is this a duplicate? If so, close it as such and link to the existing issue.
   - Is this an immediate, pressing concern? If so, label it with `P-High`.
   - Is this "controversial"? Does it need an SME vote to resolve it? If so, add the `X-Needs-SME` label.
-  - Does this need a [**Goal**](/learn/contribute/project-information/project-goals)? If so, either create the **Goal** or add the `C-Needs-Goal` label. For existing / new **Goals**, comment with a link to the **Goal** to make a bi-directional connection between the two. If the issue is redundant with the **Goal**, close it.
+  - Does this need a [**Goal**](/learn/contribute/project-information/project-goals)? If so, either create the **Goal** or add the `S-Needs-Goal` label. For existing / new **Goals**, comment with a link to the **Goal** to make a bi-directional connection between the two. If the issue is redundant with the **Goal**, close it.
   - Switch the state to **SME Triaged**, either by clicking the state and changing it via the dropdown, or by dragging the issue into the **SME Triaged** group.
   - Do a quick "vibes based" priority ordering by dragging the triaged item relative to other triaged items. This isn't an exact science, just make sure that important things aren't buried deep.
 - **Done**: The Issue or PR was closed. This state is set automatically ... don't do it manually!
