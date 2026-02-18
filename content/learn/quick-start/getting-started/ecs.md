@@ -67,7 +67,7 @@ We can then add people to our [`World`] using a "startup system". Startup system
 
 {{file_code_block(file="quick-start/getting_started_v3.rs", anchor="add_people_system")}}
 
-Now register the startup system like this:
+Now register the startup system. Note that you can pass more than one system into an `add_systems` call by using a tuple!
 
 {{file_code_block(file="quick-start/getting_started_v3.rs", anchor="app_main")}}
 
@@ -84,7 +84,7 @@ The parameters we pass into a "system function" define what data the system runs
 
 You can interpret the [`Query`] above as: "iterate over every `Name` component for entities that also have a `Person` component".
 
-Now we just register the system in our `App`. Note that you can pass more than one system into an `add_systems` call by using a tuple!
+Now we just register the system in our `App`.
 
 [`Query`]: <https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html>
 
