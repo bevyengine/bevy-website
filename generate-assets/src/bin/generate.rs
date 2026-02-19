@@ -128,6 +128,7 @@ struct FrontMatterAssetExtra {
     licenses: Option<Vec<String>>,
     bevy_versions: Option<Vec<String>>,
     nsfw: Option<bool>,
+    stars: Option<u32>,
 }
 
 impl From<&Asset> for FrontMatterAsset {
@@ -142,6 +143,7 @@ impl From<&Asset> for FrontMatterAsset {
                 licenses: asset.licenses.clone(),
                 bevy_versions: asset.bevy_versions.clone(),
                 nsfw: asset.nsfw,
+                stars: asset.stars,
             },
         }
     }

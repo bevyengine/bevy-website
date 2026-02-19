@@ -29,6 +29,7 @@ pub struct Asset {
     pub licenses: Option<Vec<String>>,
     pub bevy_versions: Option<Vec<String>>,
     pub nsfw: Option<bool>,
+    pub stars: Option<u32>,
 
     // this field is not read from the toml file
     #[serde(skip)]
@@ -236,7 +237,10 @@ fn get_extra_metadata(
         Some("crates.io") => {
             if let Some(ref mut statement) = metadata_source.get_metadata_from_cratesio_statement {
                 let crate_name = segments[1];
-                Some(get_metadata_from_crates_db(crate_name, statement)?)
+                let metadata = get_metadata_from_crates_db(crate_name, statement)?;
+                // TODO: Fetch the repo link from crates.io and get the stars from there
+                // TODO: Fetch downloads from crates.io
+                Some((metadata.0, metadata.1, None))
             } else {
                 None
             }
@@ -271,9 +275,11 @@ fn get_extra_metadata(
         _ => bail!("Unknown host: {}", asset.link),
     };
 
-    if let Some((license, version)) = metadata {
+    // If we get more metadata fields, would it make more sense to make it a struct?
+    if let Some((license, version, stars)) = metadata {
         asset.set_license(license);
         asset.set_bevy_version(version);
+        asset.stars = stars;
     }
 
     Ok(())
@@ -313,6 +319,7 @@ fn merge_version(version1: Option<String>, version2: Option<String>) -> Option<S
 /// Gets metadata from a Github project.
 ///
 /// This algorithm, in order:
+/// - fetches the star count from github by fetching the repository info,
 /// - tries to get metadata from the root `Cargo.toml` file,
 /// - if the license is missing, search the license of the project on Github,
 /// - if metadata is missing, search all `Cargo.toml` files, then tries to get metadata
@@ -331,7 +338,17 @@ fn get_metadata_from_github(
     username: &str,
     repository_name: &str,
     bevy_crates: &Option<Vec<String>>,
-) -> anyhow::Result<(Option<String>, Option<String>)> {
+) -> anyhow::Result<(Option<String>, Option<String>, Option<u32>)> {
+    let stars = {
+        match client.get_stars(username, repository_name) {
+            Ok(stars) => Some(stars),
+            Err(err) => {
+                println!("Error getting stars from github: {err:#}");
+                None
+            }
+        }
+    };
+
     let result = get_metadata_from_github_manifest(
         client,
         username,
@@ -357,7 +374,7 @@ fn get_metadata_from_github(
             Ok(cargo_files) => cargo_files,
             Err(err) => {
                 println!("Error fetching cargo files from github: {err:#}");
-                return Ok((license, version));
+                return Ok((license, version, stars));
             }
         };
 
@@ -386,7 +403,7 @@ fn get_metadata_from_github(
                 }
                 Err(err) => {
                     println!("Error getting metadata from other cargo file from github: {err}");
-                    return Ok((license, version));
+                    return Ok((license, version, stars));
                 }
             }
 
@@ -394,7 +411,7 @@ fn get_metadata_from_github(
         }
     }
 
-    Ok((license, version))
+    Ok((license, version, stars))
 }
 
 /// Gets metadata from a `Cargo.toml` file in a Github project.
@@ -419,12 +436,12 @@ fn get_metadata_from_github_manifest(
 
 /// Gets metadata from a Gitlab project.
 ///
-/// This algorithm only looks into the root `Cargo.toml` file.
+/// This algorithm looks into the root `Cargo.toml` file and fetches the project info in order to get the star count
 fn get_metadata_from_gitlab(
     client: &GitlabClient,
     repository_name: &str,
     bevy_crates: &Option<Vec<String>>,
-) -> anyhow::Result<(Option<String>, Option<String>)> {
+) -> anyhow::Result<(Option<String>, Option<String>, Option<u32>)> {
     let search_result = client.search_project_by_name(repository_name)?;
 
     let repo = search_result
@@ -436,9 +453,21 @@ fn get_metadata_from_gitlab(
         .context("Failed to get Cargo.toml from gitlab")?;
 
     let cargo_manifest = toml::from_str::<cargo_toml::Manifest>(&content)?;
+
+    let stars = {
+        match client.get_stars(repo.id) {
+            Ok(stars) => Some(stars),
+            Err(err) => {
+                println!("Error getting stars from gitlab: {err:#}");
+                None
+            }
+        }
+    };
+
     Ok((
         get_license(&cargo_manifest),
         get_bevy_version_from_manifest(&cargo_manifest, bevy_crates),
+        stars,
     ))
 }
 
