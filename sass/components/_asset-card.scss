@@ -10,6 +10,7 @@ $asset-card-padding: 0.4rem;
     "desc"
     "tags";
   color: var(--asset-card-text-color);
+  height: 100%;
 
   &__banner {
     grid-area: banner;
@@ -62,7 +63,7 @@ $asset-card-padding: 0.4rem;
     padding: $asset-card-padding;
     font-size: 1rem;
     overflow: ellipsis;
-    height: 4.2rem;
+    max-height: 4.2rem;
   }
 
   &__small_description {
@@ -81,9 +82,8 @@ $asset-card-padding: 0.4rem;
   &__tags {
     grid-area: tags;
     display: grid;
-    grid-template-areas: "versions licenses";
+    grid-template-areas: "versions right";
     padding: $asset-card-padding;
-    height: 2.2rem;
   }
 
   &__tag-icon {
@@ -99,12 +99,7 @@ $asset-card-padding: 0.4rem;
 
   &__bevy-versions {
     grid-area: versions;
-  }
-
-  &__licenses {
-    grid-area: licenses;
-    margin-left: auto;
-    order: 2;
+    align-self: end;
   }
 
   &__tag-list {
@@ -122,5 +117,15 @@ $asset-card-padding: 0.4rem;
     font-size: 0.85em;
     color: var(--asset-card-tag-text-color);
     background: var(--asset-card-tag-bg-color);
+  }
+
+  &__tag-right {
+    display: flex;
+    align-items: end;
+    flex-direction: column;
+    width: fit-content;
+    margin-left: auto;
+    grid-area: right;
+    gap: 0.2em;
   }
 }
