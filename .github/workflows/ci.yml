@@ -56,6 +56,68 @@ jobs:
 
       - name: Check clippy
         run: cargo clippy --all-targets -- -Dwarnings
+        
+  light-mode-accessibility-linting:
+      runs-on: ubuntu-latest
+      needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets]
+
+      steps:
+      - uses: actions/checkout@v4
+
+      - name: Install NPM
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Google Chrome
+        uses: browser-actions/setup-chrome@v2
+        id: setup-chrome
+      - run: chrome --version
+      
+      - name: Install Zola
+        uses: taiki-e/install-action@v2
+        with:
+          tool: zola@0.18.0
+
+      - name: Install Pa11y-CI and Wait-on
+        run: |
+          npm install pa11y-ci wait-on
+      - name: Run Pa11y-CI
+        run: |
+          zola serve &
+          npx wait-on http://127.0.0.1:1111
+          npx pa11y-ci --config .pa11yci-light --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
+
+  dark-mode-accessibility-linting:
+      runs-on: ubuntu-latest
+      needs: [generate-errors, generate-wasm-examples, generate-community, generate-assets]
+
+      steps:
+      - uses: actions/checkout@v4
+
+      - name: Install NPM
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Google Chrome
+        uses: browser-actions/setup-chrome@v2
+        id: setup-chrome
+      - run: chrome --version
+
+      - name: Install Zola
+        uses: taiki-e/install-action@v2
+        with:
+          tool: zola@0.18.0
+
+      - name: Install Pa11y-CI and Wait-on
+        run: |
+          npm install pa11y-ci wait-on
+      - name: Run Pa11y-CI
+        run: |
+          zola serve &
+          npx wait-on http://127.0.0.1:1111
+          npx pa11y-ci --config .pa11yci-dark --sitemap http://127.0.0.1:1111/sitemap.xml --sitemap-exclude 'faq'
 
   test-crates:
     runs-on: ubuntu-latest

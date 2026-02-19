@@ -1197,4 +1197,4 @@ If any of this sounds interesting to you, I encourage you to check out [Bevy on 
 
 I want Bevy to become a vibrant developer community ... thats actually why I chose the name! A Bevy is a group of birds, just like we are a group of game developers. Join the Bevy!
 
-<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 2.0rem" class="invertable"/>
+<img src="/assets/bevy_logo_dark.svg" alt="The Bevy logo" style="height: 4.0rem; margin-top: 2.0rem" class="invertable"/>
