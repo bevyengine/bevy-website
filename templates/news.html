@@ -10,7 +10,7 @@
             {% if page.extra.image %}
               {% set image_parent = page.path | replace(from="_index.md", to="") %}
               <img class="link-card__img"
-                    src="{{ image_macros::resize_image(path=image_parent ~ page.extra.image, width=580, height=326) }}"
+                    src="{{ image_macros::resize_image(path=image_parent ~ page.extra.image, width=277, height=156) }}"
                     loading="lazy"
                     alt="An image representing the article" />
             {% else %}
