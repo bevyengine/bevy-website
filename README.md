@@ -21,3 +21,5 @@ A local server should start and you should be able to access a local version of 
 ### Assets, Errors, and Examples pages
 
 These pages need to be generated in a separate step by running the shell scripts in the `generate-assets`, `generate-errors`, and `generate-wasm-examples` directories. On Windows, you can use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) or [git bash](https://gitforwindows.org/).
+
+By default, the examples will load the same pre-built Wasm binaries also used for https://bevy.org/examples. If you want to build examples locally instead, for example to include debug info, have a look at `generate-wasm-examples/build_wasm_examples_debug.sh`. After its finished, you can start zola with `zola --config config.local.toml serve` to use the locally built examples.
