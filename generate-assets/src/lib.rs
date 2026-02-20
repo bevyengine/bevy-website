@@ -3,6 +3,7 @@ use cratesio_dbdump_csvtab::rusqlite;
 use cratesio_dbdump_csvtab::CratesIODumpLoader;
 use github_client::GithubClient;
 use gitlab_client::GitlabClient;
+use regex::Regex;
 use serde::Deserialize;
 use std::cmp::Ordering;
 use std::{fs, path::PathBuf, str::FromStr};
@@ -94,7 +95,7 @@ impl AssetNode {
 }
 
 #[derive(Default)]
-/// Where to find metadata (bevy version and license) for assets.
+/// Where to find metadata (bevy version and license) and stars for assets.
 pub struct MetadataSource<'a> {
     /// Connection to the crates.io database sqlite dump.
     pub crates_io_db: Option<&'a CratesIoDb>,
@@ -112,7 +113,7 @@ pub struct MetadataSource<'a> {
     /// Prepared statement to retrieve the repository link from crates.io.
     ///
     /// Initialized with [`get_repo_from_cratesio_statement`] at the beginning
-    /// of the algorithm, used by [`get_stars_from_crates_db_repo_link`] for each asset.
+    /// of the algorithm, used by [`get_repo_stars_from_crates_db`] for each asset.
     pub get_repo_from_cratesio_statement: Option<rusqlite::Statement<'a>>,
 }
 
@@ -220,6 +221,10 @@ fn visit_dirs(
                 eprintln!("ERROR: {err:?}");
             }
 
+            if let Err(err) = get_stars(&mut asset, metadata_source) {
+                eprintln!("Failed to get stars for {}: {err:?}", asset.name);
+            }
+
             section.content.push(AssetNode::Asset(asset));
         }
     }
@@ -227,7 +232,7 @@ fn visit_dirs(
     Ok(())
 }
 
-/// Tries to get bevy supported version and license information from various external sources.
+/// Tries to get bevy supported version, license information from various external sources.
 fn get_extra_metadata(
     asset: &mut Asset,
     metadata_source: &mut MetadataSource,
@@ -245,20 +250,7 @@ fn get_extra_metadata(
             if let Some(ref mut statement) = metadata_source.get_metadata_from_cratesio_statement {
                 let crate_name = segments[1];
                 let metadata = get_metadata_from_crates_db(crate_name, statement)?;
-                let stars = {
-                    get_stars_from_crates_db_repo_link(
-                        crate_name,
-                        // We should be okay to unwrap here, since `get_repo_from_cratesio_statement` should succeed if `get_stars_from_crates_db_repo_link` does.
-                        metadata_source
-                            .get_repo_from_cratesio_statement
-                            .as_mut()
-                            .expect("repo statement is `None`"),
-                        metadata_source.github_client,
-                        metadata_source.gitlab_client,
-                    )
-                    .unwrap_or_default()
-                };
-                Some((metadata.0, metadata.1, stars))
+                Some(metadata)
             } else {
                 None
             }
@@ -293,11 +285,9 @@ fn get_extra_metadata(
         _ => bail!("Unknown host: {}", asset.link),
     };
 
-    // If we get more metadata fields, would it make more sense to make it a struct?
-    if let Some((license, version, stars)) = metadata {
+    if let Some((license, version)) = metadata {
         asset.set_license(license);
         asset.set_bevy_version(version);
-        asset.stars = stars;
     }
 
     Ok(())
@@ -337,7 +327,6 @@ fn merge_version(version1: Option<String>, version2: Option<String>) -> Option<S
 /// Gets metadata from a Github project.
 ///
 /// This algorithm, in order:
-/// - fetches the star count from github by fetching the repository info,
 /// - tries to get metadata from the root `Cargo.toml` file,
 /// - if the license is missing, search the license of the project on Github,
 /// - if metadata is missing, search all `Cargo.toml` files, then tries to get metadata
@@ -356,17 +345,7 @@ fn get_metadata_from_github(
     username: &str,
     repository_name: &str,
     bevy_crates: &Option<Vec<String>>,
-) -> anyhow::Result<(Option<String>, Option<String>, Option<u32>)> {
-    let stars = {
-        match client.get_stars(username, repository_name) {
-            Ok(stars) => Some(stars),
-            Err(err) => {
-                println!("Error getting stars from github: {err:#}");
-                None
-            }
-        }
-    };
-
+) -> anyhow::Result<(Option<String>, Option<String>)> {
     let result = get_metadata_from_github_manifest(
         client,
         username,
@@ -392,7 +371,7 @@ fn get_metadata_from_github(
             Ok(cargo_files) => cargo_files,
             Err(err) => {
                 println!("Error fetching cargo files from github: {err:#}");
-                return Ok((license, version, stars));
+                return Ok((license, version));
             }
         };
 
@@ -421,7 +400,7 @@ fn get_metadata_from_github(
                 }
                 Err(err) => {
                     println!("Error getting metadata from other cargo file from github: {err}");
-                    return Ok((license, version, stars));
+                    return Ok((license, version));
                 }
             }
 
@@ -429,7 +408,7 @@ fn get_metadata_from_github(
         }
     }
 
-    Ok((license, version, stars))
+    Ok((license, version))
 }
 
 /// Gets metadata from a `Cargo.toml` file in a Github project.
@@ -454,12 +433,12 @@ fn get_metadata_from_github_manifest(
 
 /// Gets metadata from a Gitlab project.
 ///
-/// This algorithm looks into the root `Cargo.toml` file and fetches the project info in order to get the star count
+/// This algorithm only looks into the root `Cargo.toml` file
 fn get_metadata_from_gitlab(
     client: &GitlabClient,
     repository_name: &str,
     bevy_crates: &Option<Vec<String>>,
-) -> anyhow::Result<(Option<String>, Option<String>, Option<u32>)> {
+) -> anyhow::Result<(Option<String>, Option<String>)> {
     let search_result = client.search_project_by_name(repository_name)?;
 
     let repo = search_result
@@ -472,20 +451,9 @@ fn get_metadata_from_gitlab(
 
     let cargo_manifest = toml::from_str::<cargo_toml::Manifest>(&content)?;
 
-    let stars = {
-        match client.get_stars(repo.id) {
-            Ok(stars) => Some(stars),
-            Err(err) => {
-                println!("Error getting stars from gitlab: {err:#}");
-                None
-            }
-        }
-    };
-
     Ok((
         get_license(&cargo_manifest),
         get_bevy_version_from_manifest(&cargo_manifest, bevy_crates),
-        stars,
     ))
 }
 
@@ -701,54 +669,111 @@ fn get_metadata_from_crates_db_by_name(
     }
 }
 
+/// Gets the star count for an asset from the linked GitHub or GitLab repository, or the repository linked on the crates.io page
+fn get_stars(asset: &mut Asset, source: &mut MetadataSource) -> anyhow::Result<()> {
+    let url = Url::parse(&asset.link)?;
+    let url_stars = get_stars_from_url(url, source);
+    if let Ok(stars) = url_stars {
+        asset.stars = Some(stars);
+        return Ok(());
+    };
+
+    if let Some(crate_name) = &asset.crate_name {
+        let Some(repo_statement) = &mut source.get_repo_from_cratesio_statement else {
+            bail!("Can't get stars from crates.io repository - no get repo from crates.io statement provided");
+        };
+
+        asset.stars = Some(get_repo_stars_from_crates_db(
+            crate_name,
+            repo_statement,
+            source.github_client,
+            source.gitlab_client,
+        )?);
+        Ok(())
+    } else {
+        // Return `url_stars`s error
+        url_stars.map(|_| ())
+    }
+}
+
+/// Gets the star count from a url and [`MetadataSource`]
+fn get_stars_from_url(url: Url, metadata_source: &mut MetadataSource) -> anyhow::Result<u32> {
+    let segments = url.path_segments().map(|c| c.collect::<Vec<_>>()).unwrap();
+
+    let stars = match url.host_str() {
+        Some("crates.io") => {
+            let Some(ref mut statement) = metadata_source.get_repo_from_cratesio_statement else {
+                bail!("Can't get stars from crates.io repository - no get repo from crates.io statement provided");
+            };
+
+            let crate_name = segments[1];
+
+            get_repo_stars_from_crates_db(
+                crate_name,
+                statement,
+                metadata_source.github_client,
+                metadata_source.gitlab_client,
+            )
+            .unwrap_or_default()
+        }
+        Some("github.com") | Some("gitlab.com") => get_stars_from_repo_url(
+            metadata_source.github_client,
+            metadata_source.gitlab_client,
+            url,
+        )?,
+        Some(_) => bail!("Unknown host: {url}"),
+        None => bail!("No host"),
+    };
+
+    Ok(stars)
+}
+
 /// Gets the stars of a crate from the crates.io database dump.
 ///
 /// If the crate is not found, retries with `-` instead of `_`
-fn get_stars_from_crates_db_repo_link(
+fn get_repo_stars_from_crates_db(
     crate_name: &str,
     repo_statement: &mut rusqlite::Statement<'_>,
     github_client: Option<&GithubClient>,
     gitlab_client: Option<&GitlabClient>,
-) -> anyhow::Result<Option<u32>> {
-    let url = get_repo_link_from_crates_db(crate_name, repo_statement)?;
+) -> anyhow::Result<u32> {
+    let url = get_repo_url_from_crates_db(crate_name, repo_statement)?;
 
-    let Some(url) = url else {
-        return Ok(None);
-    };
+    get_stars_from_repo_url(github_client, gitlab_client, url)
+}
 
+/// Gets the star count from a url to a repository
+fn get_stars_from_repo_url(
+    github_client: Option<&GithubClient>,
+    gitlab_client: Option<&GitlabClient>,
+    url: Url,
+) -> anyhow::Result<u32> {
     let stars = match url.host_str() {
         Some("github.com") => {
-            if let Some(client) = github_client {
-                match client
-                    .get_stars_from_repo_link(url.path().trim_matches('/').trim_end_matches(".git"))
-                {
-                    Ok(stars) => Some(stars),
-                    Err(err) => {
-                        println!("Failed to get stars from github repo: {err}");
-                        None
-                    }
-                }
-            } else {
-                None
-            }
+            let Some(client) = github_client else {
+                bail!("Can't get stars from GitHub - no GitHub client");
+            };
+            let mut path = url.path().trim_matches('/').trim_end_matches(".git");
+
+            let replaced = Regex::new(r#"(.*)\/tree\/.*"#)
+                .unwrap()
+                .replace(path, r#"$1"#);
+
+            path = replaced.as_ref();
+
+            client.get_stars_from_repo_link(path)?
         }
         Some("gitlab.com") => {
-            if let Some(client) = gitlab_client {
-                let path = url.path();
-                let path = path.trim_matches('/').replace("/", "%2F");
-                // `gitlab.com/api/v4/projects/me/project` 404s, but `gitlab.com/api/v4/project/me%2Fproject` doesn't.
-                match client.get_stars_from_url(&path) {
-                    Ok(stars) => Some(stars),
-                    Err(err) => {
-                        println!("Failed to get stars from gitlab repo: {err}");
-                        None
-                    }
-                }
-            } else {
-                None
-            }
+            let Some(client) = gitlab_client else {
+                bail!("Can't get stars from GitLab - no GitLab client")
+            };
+
+            // `gitlab.com/api/v4/projects/me/project` 404s, but `gitlab.com/api/v4/project/me%2Fproject` doesn't.
+            let path = url.path().trim_matches('/').replace("/", "%2F");
+            client.get_stars_from_url(&path)?
         }
-        _ => None,
+        Some(_) => bail!("Unknown repository host: {url}"),
+        _ => bail!("No repository host"),
     };
 
     Ok(stars)
@@ -757,18 +782,25 @@ fn get_stars_from_crates_db_repo_link(
 /// Gets the repository link of a crate from the crates.io database dump.
 ///
 /// If the crate is not found, retries with `-` instead of `_`
-fn get_repo_link_from_crates_db(
+fn get_repo_url_from_crates_db(
     crate_name: &str,
     statement: &mut rusqlite::Statement<'_>,
-) -> anyhow::Result<Option<Url>> {
-    if let Ok(link) = get_repo_link_from_crates_db_by_name(crate_name, statement) {
-        Ok(link)
-    } else if let Ok(link) =
-        get_repo_link_from_crates_db_by_name(&crate_name.replace('_', "-"), statement)
-    {
+) -> anyhow::Result<Url> {
+    let link: anyhow::Result<Option<Url>> =
+        if let Ok(link) = get_repo_link_from_crates_db_by_name(crate_name, statement) {
+            Ok(link)
+        } else if let Ok(link) =
+            get_repo_link_from_crates_db_by_name(&crate_name.replace('_', "-"), statement)
+        {
+            Ok(link)
+        } else {
+            bail!("Failed to get repository link from crates.io db for {crate_name}")
+        };
+
+    if let Some(link) = link? {
         Ok(link)
     } else {
-        bail!("Failed to get repo from crates.io db for {crate_name}")
+        bail!("No repository link on crates.io");
     }
 }
 
