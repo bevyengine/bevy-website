@@ -62,6 +62,7 @@ fn main() -> anyhow::Result<()> {
 /// Sort the assets in the section so that:
 /// - Assets that have been manually assigned an order in `bevy-assets` are first
 /// - Assets that are semver compatible with Bevy are next
+/// - Assets that have more stars are first
 /// - If all else is equal, sort randomly
 fn sort_section(nodes: &mut [AssetNode], latest_bevy_version: &semver::Version) {
     for node in nodes.iter_mut() {
@@ -74,18 +75,26 @@ fn sort_section(nodes: &mut [AssetNode], latest_bevy_version: &semver::Version) 
     for node in nodes {
         let is_semver_compat = node_semver_compat_with(node, latest_bevy_version);
 
-        let existing_order = match node {
-            AssetNode::Asset(asset) => asset.order.unwrap_or(usize::MAX),
+        let (existing_order, stars) = match node {
+            AssetNode::Asset(asset) => {
+                (asset.order.unwrap_or(usize::MAX), asset.stars.unwrap_or(0))
+            }
             _ => continue,
         };
 
         let random: u32 = rand::random();
-        to_sort.push((node, existing_order, !is_semver_compat, random));
+        to_sort.push((
+            node,
+            existing_order,
+            !is_semver_compat,
+            -(stars as i32),
+            random,
+        ));
     }
 
-    to_sort.sort_by_key(|sorts| (sorts.1, sorts.2, sorts.3));
+    to_sort.sort_by_key(|sorts| (sorts.1, sorts.2, sorts.3, sorts.4));
 
-    for (i, (node, _, _, _)) in to_sort.into_iter().enumerate() {
+    for (i, (node, ..)) in to_sort.into_iter().enumerate() {
         let AssetNode::Asset(asset) = node else {
             continue;
         };
