@@ -88,9 +88,18 @@ impl GitlabClient {
     /// Note that this requests the whole project info
     /// So if any more fields from it are needed, this method may be modified as to not make unnecessary requests
     pub fn get_stars(&self, id: usize) -> anyhow::Result<u32> {
+        let url = id.to_string();
+        self.get_stars_from_url(&url)
+    }
+
+    /// Gets the star count of a gitlab project from the url
+    ///
+    /// Note that this requests the whole project info
+    /// So if any more fields from it are needed, this method may be modified as to not make unnecessary requests
+    pub fn get_stars_from_url(&self, url: &str) -> anyhow::Result<u32> {
         let response: GitlabStarsResponse = self
             .agent
-            .get(&format!("{BASE_URL}/{id}"))
+            .get(&format!("{BASE_URL}/{url}"))
             .set("Accept", "application/json")
             // .set("Authorization", &format!("Bearer {}", self.token))
             .call()?

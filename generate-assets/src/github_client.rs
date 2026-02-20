@@ -107,9 +107,17 @@ impl GithubClient {
     /// Note that this method requests the whole repository info
     /// If any other fields from it are needed, this method may be modified as to not make unnecessary requests
     pub fn get_stars(&self, username: &str, repository_name: &str) -> anyhow::Result<u32> {
+        self.get_stars_from_repo_link(&format!("{username}/{repository_name}"))
+    }
+
+    /// Gets the star count from a github repo link
+    ///
+    /// Note that this method requests the whole repository info
+    /// If any other fields from it are needed, this method may be modified as to not make unnecessary requests
+    pub fn get_stars_from_repo_link(&self, link: &str) -> anyhow::Result<u32> {
         let response: GithubStarsResponse = self
             .agent
-            .get(&format!("{BASE_URL}/repos/{username}/{repository_name}"))
+            .get(&format!("{BASE_URL}/repos/{link}"))
             .set("Accept", "application/json")
             .set("Authorization", &format!("Bearer {}", self.token))
             .call()?

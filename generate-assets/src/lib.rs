@@ -109,6 +109,11 @@ pub struct MetadataSource<'a> {
     /// Initialized with [`get_metadata_from_cratesio_statement`] at the beginning
     /// of the algorithm, used by [`get_metadata_from_cratesio`] for each asset.
     pub get_metadata_from_cratesio_statement: Option<rusqlite::Statement<'a>>,
+    /// Prepared statement to retrieve the repository link from crates.io.
+    ///
+    /// Initialized with [`get_repo_from_cratesio_statement`] at the beginning
+    /// of the algorithm, used by [`get_stars_from_crates_db_repo_link`] for each asset.
+    pub get_repo_from_cratesio_statement: Option<rusqlite::Statement<'a>>,
 }
 
 /// Entry point the algorithm to find [`Asset`] files inside [`Section`] folders,
@@ -140,6 +145,8 @@ pub fn parse_assets(
         };
         metadata_source.get_metadata_from_cratesio_statement =
             Some(get_metadata_from_cratesio_statement(db, bevy_crates_ids)?);
+        metadata_source.get_repo_from_cratesio_statement =
+            Some(get_repo_from_cratesio_statement(db)?);
     }
 
     visit_dirs(
@@ -238,9 +245,20 @@ fn get_extra_metadata(
             if let Some(ref mut statement) = metadata_source.get_metadata_from_cratesio_statement {
                 let crate_name = segments[1];
                 let metadata = get_metadata_from_crates_db(crate_name, statement)?;
-                // TODO: Fetch the repo link from crates.io and get the stars from there
-                // TODO: Fetch downloads from crates.io
-                Some((metadata.0, metadata.1, None))
+                let stars = {
+                    get_stars_from_crates_db_repo_link(
+                        crate_name,
+                        // We should be okay to unwrap here, since `get_repo_from_cratesio_statement` should succeed if `get_stars_from_crates_db_repo_link` does.
+                        metadata_source
+                            .get_repo_from_cratesio_statement
+                            .as_mut()
+                            .expect("repo statement is `None`"),
+                        metadata_source.github_client,
+                        metadata_source.gitlab_client,
+                    )
+                    .unwrap_or_default()
+                };
+                Some((metadata.0, metadata.1, stars))
             } else {
                 None
             }
@@ -618,7 +636,7 @@ pub fn prepare_crates_db() -> anyhow::Result<CratesIoDb> {
     let db = CratesIODumpLoader::default()
         .tables(&["crates", "dependencies", "versions"])
         .preload(true)
-        .update()?
+        // .update()?
         .open_db()?;
 
     db.execute_batch(
@@ -674,6 +692,93 @@ fn get_metadata_from_crates_db_by_name(
     } else {
         bail!("Not found in crates.io db: {crate_name}")
     }
+}
+
+/// Gets the stars of a crate from the crates.io database dump.
+///
+/// If the crate is not found, retries with `-` instead of `_`
+fn get_stars_from_crates_db_repo_link(
+    crate_name: &str,
+    repo_statement: &mut rusqlite::Statement<'_>,
+    github_client: Option<&GithubClient>,
+    gitlab_client: Option<&GitlabClient>,
+) -> anyhow::Result<Option<u32>> {
+    let url = get_repo_link_from_crates_db(crate_name, repo_statement)?;
+
+    let Some(url) = url else {
+        return Ok(None);
+    };
+
+    let stars = match url.host_str() {
+        Some("github.com") => {
+            if let Some(client) = github_client {
+                match client
+                    .get_stars_from_repo_link(url.path().trim_matches('/').trim_end_matches(".git"))
+                {
+                    Ok(stars) => Some(stars),
+                    Err(err) => {
+                        println!("Failed to get stars from github repo: {err}");
+                        None
+                    }
+                }
+            } else {
+                None
+            }
+        }
+        Some("gitlab.com") => {
+            if let Some(client) = gitlab_client {
+                let path = url.path();
+                let path = path.trim_matches('/').replace("/", "%2F");
+                // `gitlab.com/api/v4/projects/me/project` 404s, but `gitlab.com/api/v4/project/me%2Fproject` doesn't.
+                match client.get_stars_from_url(&path) {
+                    Ok(stars) => Some(stars),
+                    Err(err) => {
+                        println!("Failed to get stars from gitlab repo: {err}");
+                        None
+                    }
+                }
+            } else {
+                None
+            }
+        }
+        _ => None,
+    };
+
+    Ok(stars)
+}
+
+/// Gets the repository link of a crate from the crates.io database dump.
+///
+/// If the crate is not found, retries with `-` instead of `_`
+fn get_repo_link_from_crates_db(
+    crate_name: &str,
+    statement: &mut rusqlite::Statement<'_>,
+) -> anyhow::Result<Option<Url>> {
+    if let Ok(link) = get_repo_link_from_crates_db_by_name(crate_name, statement) {
+        Ok(link)
+    } else if let Ok(link) =
+        get_repo_link_from_crates_db_by_name(&crate_name.replace('_', "-"), statement)
+    {
+        Ok(link)
+    } else {
+        bail!("Failed to get repo from crates.io db for {crate_name}")
+    }
+}
+
+/// Gets the repository link of a crate from the crates.io database dump by the exact name.
+fn get_repo_link_from_crates_db_by_name(
+    name: &str,
+    statement: &mut rusqlite::Statement<'_>,
+) -> anyhow::Result<Option<Url>> {
+    let row = statement.query_row([name], |row| Ok(row.get_unwrap::<_, Option<String>>(0)))?;
+    let Some(row) = row else {
+        return Ok(None);
+    };
+    if row.is_empty() {
+        return Ok(None);
+    }
+
+    Ok(Some(Url::parse(&row)?))
 }
 
 /// Gets at list of the official bevy crates from the crates.io database dump,
@@ -747,6 +852,21 @@ pub fn get_latest_bevy_version(db: &CratesIoDb) -> anyhow::Result<semver::Versio
         .into_iter()
         .max()
         .context("Failed to retrieve Bevy versions from crates.io db")
+}
+
+/// Get a prepared statement to get the repository link from the crates.io database dump.
+///
+/// Later used by [`get_stars_from_crates_db_repo_link`]
+fn get_repo_from_cratesio_statement(
+    db: &rusqlite::Connection,
+) -> Result<rusqlite::Statement<'_>, rusqlite::Error> {
+    db.prepare(
+        "\
+        SELECT repository \
+            FROM crates \
+                WHERE name = ? \
+        ",
+    )
 }
 
 /// Get a prepared statement to get license and version for a crate from the

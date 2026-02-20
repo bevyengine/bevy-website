@@ -84,6 +84,7 @@ $asset-card-padding: 0.4rem;
     display: grid;
     grid-template-areas: "versions right";
     padding: $asset-card-padding;
+    align-items: end;
   }
 
   &__tag-icon {
@@ -99,7 +100,6 @@ $asset-card-padding: 0.4rem;
 
   &__bevy-versions {
     grid-area: versions;
-    align-self: end;
   }
 
   &__tag-list {
