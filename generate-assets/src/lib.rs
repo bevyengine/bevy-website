@@ -232,7 +232,7 @@ fn visit_dirs(
     Ok(())
 }
 
-/// Tries to get bevy supported version, license information from various external sources.
+/// Tries to get bevy supported version and license information from various external sources.
 fn get_extra_metadata(
     asset: &mut Asset,
     metadata_source: &mut MetadataSource,
@@ -433,7 +433,7 @@ fn get_metadata_from_github_manifest(
 
 /// Gets metadata from a Gitlab project.
 ///
-/// This algorithm only looks into the root `Cargo.toml` file
+/// This algorithm only looks into the root `Cargo.toml` file.
 fn get_metadata_from_gitlab(
     client: &GitlabClient,
     repository_name: &str,
@@ -761,7 +761,7 @@ fn get_stars_from_repo_url(
 
             path = replaced.as_ref();
 
-            client.get_stars_from_repo_link(path)?
+            client.get_stars_from_url(path)?
         }
         Some("gitlab.com") => {
             let Some(client) = gitlab_client else {
@@ -787,14 +787,14 @@ fn get_repo_url_from_crates_db(
     statement: &mut rusqlite::Statement<'_>,
 ) -> anyhow::Result<Url> {
     let link: anyhow::Result<Option<Url>> =
-        if let Ok(link) = get_repo_link_from_crates_db_by_name(crate_name, statement) {
+        if let Ok(link) = get_repo_url_from_crates_db_by_name(crate_name, statement) {
             Ok(link)
         } else if let Ok(link) =
-            get_repo_link_from_crates_db_by_name(&crate_name.replace('_', "-"), statement)
+            get_repo_url_from_crates_db_by_name(&crate_name.replace('_', "-"), statement)
         {
             Ok(link)
         } else {
-            bail!("Failed to get repository link from crates.io db for {crate_name}")
+            bail!("Failed to get repository link from crates.io db");
         };
 
     if let Some(link) = link? {
@@ -805,7 +805,7 @@ fn get_repo_url_from_crates_db(
 }
 
 /// Gets the repository link of a crate from the crates.io database dump by the exact name.
-fn get_repo_link_from_crates_db_by_name(
+fn get_repo_url_from_crates_db_by_name(
     name: &str,
     statement: &mut rusqlite::Statement<'_>,
 ) -> anyhow::Result<Option<Url>> {
@@ -895,7 +895,7 @@ pub fn get_latest_bevy_version(db: &CratesIoDb) -> anyhow::Result<semver::Versio
 
 /// Get a prepared statement to get the repository link from the crates.io database dump.
 ///
-/// Later used by [`get_stars_from_crates_db_repo_link`]
+/// Later used by [`get_repo_stars_from_crates_db`]
 fn get_repo_from_cratesio_statement(
     db: &rusqlite::Connection,
 ) -> Result<rusqlite::Statement<'_>, rusqlite::Error> {
