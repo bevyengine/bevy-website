@@ -620,7 +620,7 @@ fn get_bevy_manifest_dependency_version(dep: &cargo_toml::Dependency) -> Option<
 }
 
 /// Downloads the crates.io database dump and open a connection to the db.
-pub fn prepare_crates_db() -> anyhow::Result<CratesIoDb> {
+pub fn prepare_crates_db(should_update: bool) -> anyhow::Result<CratesIoDb> {
     let cache_dir = {
         let mut current_dir = std::env::current_dir()?;
         current_dir.push("data");
@@ -633,11 +633,18 @@ pub fn prepare_crates_db() -> anyhow::Result<CratesIoDb> {
         println!("Downloading crates.io data dump");
     }
 
-    let db = CratesIODumpLoader::default()
+    let mut db = CratesIODumpLoader::default();
+    let mut db = db
         .tables(&["crates", "dependencies", "versions"])
-        .preload(true)
-        // .update()?
-        .open_db()?;
+        .preload(true);
+
+    if should_update {
+        db = db.update()?;
+    } else {
+        println!("Skipping `db.update()`");
+    }
+
+    let db = db.open_db()?;
 
     db.execute_batch(
         "\

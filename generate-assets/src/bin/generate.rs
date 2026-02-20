@@ -14,8 +14,9 @@ fn main() -> anyhow::Result<()> {
 
     let asset_dir = std::env::args().nth(1).unwrap();
     let content_dir = std::env::args().nth(2).unwrap();
+    let no_update = std::env::args().nth(3) == Some(String::from("--no-update"));
 
-    let db = prepare_crates_db()?;
+    let db = prepare_crates_db(!no_update)?;
 
     let github_client = {
         // This should be configured in CI, but it's not mandatory if running locally
