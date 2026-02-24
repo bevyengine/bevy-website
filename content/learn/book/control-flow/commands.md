@@ -43,7 +43,7 @@ commands.run_schedule(schedule);
 - Triggering Observers
 
 ```rust
-// Trigger an `event` Event for all Observers watching `event`.
+// Trigger the `event` Event for all Observers watching for events of a matching type.
 commands.trigger(event); 
 ```
 
