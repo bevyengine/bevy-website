@@ -51,11 +51,15 @@ To use `Commands` in your systems, it is easiest to pass it in as a system param
 
 ```rust
 fn my_system(mut commands: Commands) {
-    // Some functionality that modifies the World!
+    // Add a new Resource to track scores with implicit values.
+    commands.insert_resource(Scoreboard{
+        current_score: 0,
+        high_score: 0,
+    });
 }
 ```
 
-While Bevy offers a number of different pre-defined `Commands` to use, it also offers the [`queue`] method to make changes that aren't provided by the default `Commands`. To use `queue`, we create a closure that mutably accesses the `World` and then define what code we want to run.
+While Bevy offers a number of different pre-defined `Commands` to use, it also offers the [`queue`] method to make changes that aren't provided by the default `Commands`. `queue` gives us mutable access to the `World`, which we can use however we want. The most straightforward approach is to construct our modifications within the method itself (like we do below), however we can go one step further and create custom commands by implementing the `Command` trait on a custom struct, or even extend the `Commands` struct with custom traits and methods. We'll go more into this aspect further down the page in [Custom Commands].
 
 ```rust
 // A custom Resource
@@ -74,10 +78,11 @@ fn add_twenty_five_to_counter_system(mut commands: Commands) {
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Commands.html
 [`Command`]: https://docs.rs/bevy/latest/bevy/prelude/trait.Command.html
 [`queue`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Commands.html#method.queue
+[Custom Commands]: /learn/book/control-flow/commands#custom-commands
 
 ## When Do Commands Take Effect?
 
-`Commands` allow users to queue up changes as part of systems, deferring the work until later to avoid disrupting both system parallelism and data-oriented access of components. Specifically, `Commands` are applied whenever a [`Schedule`] is completed. Ordinarily, this will occur multiple times during and after each frame. As a result, systems will always see the effects of `Commands` queued by systems in other schedules.
+`Commands` allow users to queue up changes as part of systems, deferring the work until later to avoid disrupting both system parallelism and data-oriented access of `Components`. Specifically, by default `Commands` are applied whenever a [`Schedule`] is completed. Ordinarily, this will occur multiple times during and after each frame. As a result, systems will always see the effects of `Commands` queued by systems in other schedules.
 
 ```rust
 // An Event we want to trigger.
@@ -103,7 +108,9 @@ fn update_system(mut commands: Commands) {
 
 In the above example, we have two systems: `insert_observer_system` running in the `Startup` schedule and `update_system` running in the `Update` schedule. Since the `Startup` schedule only runs once, the `add_observer()` command is only ran when our applications is launched. However the `trigger()` command is run everytime the `Update` schedule finishes, meaning that a `trigger()` command is sent to the queue and ran every time `Update` completes.
 
-In addition, if a system with `Commands` is ordered before another system, that system will always see the effects of the `Commands` in the first system. Bevy ensures this occurs by dynamically inserting synchronization points, during which all `Commands` are applied. Each system can hold their own copy of `Commands` in their local system state. When `Commands` are applied, these queues are evaluated as in the same order that the systems were run. Within each system, the `Commands` are applied in a first-in-first-out order.
+We mentioned above that by default `Commands` are applied at the *end* of a `Schedule`. While correct, what is really happening is that all of the `Commands` we queue are placed into a special `System` known as [`ApplyDeferred`]. This system will run at the end of every `Schedule` that has a system which uses `Commands` as a `SystemParameter`. Since `ApplyDeferred` is ran after all of systems in a given schedule, all of the changes made by the `ApplyDeferred` system are able to be seen by the systems in other schedules.
+
+In addition, if a system accessing `Commands` is ordered before another system also accessing `Commands` in the same `Schedule`, that system will always see the effects of the `Commands` in the first system. Bevy ensures this occurs by dynamically inserting synchronization points, during which all `Commands` are applied. Each system can hold their own copy of `Commands` in their local system state. When `Commands` are applied, these queues are evaluated as in the same order that the systems were run. Within each system, the `Commands` are applied in a first-in-first-out order.
 
 ```rust
 // Add our Systems in the same Schedule, but placed in a specific order.
@@ -131,6 +138,7 @@ fn remove_the_component(mut commands: Commands, mut player: Single<Entity, With<
 ```
 
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Schedule.html
+[`ApplyDeferred`]: https://docs.rs/bevy/0.18.0/bevy/ecs/prelude/struct.ApplyDeferred.html
 
 ## Entity Commands
 
