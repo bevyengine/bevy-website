@@ -8,6 +8,6 @@ fn hello_world() {
 
 // ANCHOR: app_main
 fn main() {
-    App::new().add_systems(Update, hello_world).run();
+    App::new().add_systems(Startup, hello_world).run();
 }
 // ANCHOR_END: app_main

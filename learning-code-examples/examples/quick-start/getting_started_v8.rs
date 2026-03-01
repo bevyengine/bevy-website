@@ -36,8 +36,8 @@ pub struct HelloPlugin;
 // ANCHOR: hello_plugin_implementation
 impl Plugin for HelloPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, add_people);
-        app.add_systems(Update, (hello_world, (update_people, greet_people).chain()));
+        app.add_systems(Startup, (hello_world, add_people));
+        app.add_systems(Update, (update_people, greet_people).chain());
     }
 }
 
