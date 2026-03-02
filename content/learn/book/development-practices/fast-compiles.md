@@ -135,3 +135,24 @@ rustflags = [
 "-Zshare-generics=y",
 ]
 ```
+
+## sccache
+
+[sccache](https://github.com/mozilla/sccache) is a compiler cache that wraps `rustc` to cache compiled artifacts.
+
+In a standard local workflow, `sccache` provides little benefit. Its value becomes apparent when your workflow involves building your project across multiple target directories or frequently toggling feature flags. 
+
+This is particularly true when building inside container environments like Docker or Podman. By configuring `sccache` and mounting a shared cache directory into your containers, you can reuse compiled artifacts and significantly cut down on build times.
+
+To enable `sccache`, install it and update your Cargo configuration.
+
+1. Install `sccache`:
+   ```sh
+   cargo install sccache
+   ```
+
+2. Enable `sccache` in your global or project `.cargo/config.toml`:
+   ```toml
+   [build]
+   rustc-wrapper = "sccache"
+   ```
