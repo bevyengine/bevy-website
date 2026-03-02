@@ -52,7 +52,7 @@ When making a release, the Maintainers follow these checklists:
 6. Bump version number for all crates, using the "Release" workflow.
    1. Change the commit message to be nicer.
 7. Create tag on GitHub.
-8. Edit GitHub Release. Add links to the `Release announcement` and `Migration Guide`.
+8. Edit [GitHub Release]. Add links to the `Release announcement` and `Migration Guide`.
 9. Bump `latest` tag to most recent release.
     - `git tag -d latest && git push origin :refs/tags/latest && git tag -f latest && git push origin --tags`
 10. Run the [`update-screenshots` workflow] to update screenshots. *This will block blog post releases (and take ~40 minutes) so do it early*.
@@ -108,7 +108,7 @@ Once all merge conflicts are resolved, double check that everything works, addin
 1. Bump version number for all crates, using [the Update Command] locally, with `patch` for the new version.
     - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.Y`
 2. Create tag on GitHub.
-3. Edit GitHub Release. Add link to the comparison between this patch and the previous version.
+3. Edit [GitHub Release]. Add link to the comparison between this patch and the previous version.
 4. Bump `latest` tag to most recent release.
     - `git tag -d latest && git push origin :refs/tags/latest && git tag -f latest && git push origin --tags`
 5. Run the [`update-screenshots` workflow] to update screenshots.
@@ -160,7 +160,7 @@ done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeC
 4. Bump version number for all crates, using [the Update Command] locally, with `rc` for the new version.
     - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.0-rc.Y`
 5. Create tag on GitHub.
-6. Edit GitHub Release. Add link to the comparison between this release candidate (rc) and the previous version.
+6. Edit [GitHub Release]. Add link to the comparison between this release candidate (rc) and the previous version.
 
 #### RC Release
 
@@ -192,3 +192,4 @@ cargo release <patch|rc> --workspace --no-publish --execute --no-tag --no-confir
 [`update-screenshots` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/update-screenshots.yml
 [`build-wasm-examples` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/build-wasm-examples.yml
 [the Update Command]: https://bevy.org/learn/contribute/project-information/release-process/#update-command
+[Github Release]: https://github.com/bevyengine/bevy/releases
