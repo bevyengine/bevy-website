@@ -120,7 +120,7 @@ world.add_observer(|event: On<A>, mut commands: Commands| {
 
 ## Event Triggers
 
-Every `Event` requires a [`Trigger`], represented by default with the `On<Event>` syntax. It's best to think of a `Trigger` as the call which activates the `Event`, hence why we use `On`: our code will run `On` our `<Event>`.
+Every `Event` requires a [`Trigger`], represented by default with the `On<Event>` syntax. It's best to think of a `Trigger` as the call which activates the `Event`, hence why we use `On`: our code will run `On` our `Event`.
 
 A [`Trigger`] can be called by accessing `World` (via [`World::trigger`]) to run the `Event` immediately, or by using `Commands` (via [`Commands::trigger`]) to add the `Event` to the `Command` Queue.
 
@@ -133,7 +133,7 @@ struct PlayerDamage {
 }
 
 fn setup(mut commands: Commands) {
-    // Add an observer that watches for the player damage event, and subtracts the player's health by the damage amount.
+    // Add an observer that watches for a PlayerDamage event, and subtracts the player's health by the damage amount.
     commands.add_observer(|damage_event: On<PlayerDamage>, player: Single<(Entity, &mut Health), With<Player>>| {
         // Print out the values passed in when PlayerDamage is triggered.
         println!("{} damage dealt to {}", damage_event.amount, damage_event.taken_by);
@@ -188,7 +188,7 @@ struct Explode {
 }
 ```
 
-With [`EntityEvent`], we are selecting a single `Entity` that will be the target of our event. To determine the selected `Entity`, we need to provide the `EventEntity` with an `entity_target` field. By default, `event_target` will be set to the value inside an `entity` field in a struct (if it exists). Otherwise we can manually specify the `event_target` by using the `#[event_target]` field attribute.
+With [`EntityEvent`], we are selecting a single `Entity` that will be the target of our event. To determine the selected `Entity`, we need to provide the `EventEntity` with an `event_target` entity. By default, `event_target` will be set to the value inside an `entity` field in a struct (if it exists). Otherwise we can manually specify the `event_target` by using the `#[event_target]` field attribute.
 
 ```rust
 // A simple EntityEvent:
@@ -248,9 +248,9 @@ world.entity_mut(some_entity).observe(|explode: On<Explode| {}); // Entity obser
 
 ### EntityEvent Propagation
 
-Since [`EntityEvent`] is triggered for individual entities themselves and not for all independent observer entities, we can leverage any [Relations] present on an `Entity` when an [`EntityEvent`] is activated. This is known as Propagation, or "Event Bubbling", and allows an [`EntityEvent`] to traverse a hierarchy chain while triggering on each `Entity` in that hierarchy chain.
+Since [`EntityEvent`] is triggered for individual entities themselves and not for all independent observer entities, we can leverage any [Relations] present on an `Entity` when an `EntityEvent` is activated. This is known as Propagation, or "Event Bubbling", and allows an `EntityEvent` to traverse a hierarchy chain while triggering on each `Entity` in that hierarchy chain.
 
-Propagation has to be explicitly enabled on an [`EntityEvent`], and any `Observer` has to opt-in. This is done by setting the `#[entity_event(propagate)]` attribute on an [`EntityEvent`] and also by allowing the desired `Observer` to allow propagation:
+Propagation has to be explicitly enabled on an `EntityEvent`, and any `Observer` has to opt-in. This is done by setting the `#[entity_event(propagate)]` attribute on an `EntityEvent` and also by allowing the desired `Observer` to allow propagation:
 
 ```rust
 // Set the `entity_event(propagate)` attribute.
@@ -266,7 +266,7 @@ world.add_observer(|mut click: On<Click>| {
 });
 ```
 
-Likewise, if we have an [`EntityEvent`] that a global `Observer` is observing, we can explicitly disable propagation:
+Likewise, if we have an `EntityEvent` that a global `Observer` is observing, we can explicitly disable propagation:
 
 ```rust
 // Disable event propagation on an observer.
@@ -286,7 +286,7 @@ struct Click {
 }
 ```
 
-By default, [`EntityEvent`] propagation will follow the [`ChildOf`] relation, starting at the original entity ("child") that the [`EntityEvent`] was triggered on and then repeatedly triggering on the `Entity` that is contained within the [`ChildOf`] component ("parent"). However, we can also specify a custom traversal implementation that will propagate along a custom relation.
+By default, `EntityEvent` propagation will follow the [`ChildOf`] relation, starting at the original entity ("child") that the [`EntityEvent`] was triggered on and then repeatedly triggering on the `Entity` that is contained within the `ChildOf` component ("parent"). However, we can also specify a custom traversal implementation that will propagate along a custom relation.
 
 ```rust
 // "ChildOf" equivalent. 

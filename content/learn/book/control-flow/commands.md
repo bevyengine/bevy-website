@@ -47,7 +47,7 @@ commands.run_schedule(schedule);
 commands.trigger(event); 
 ```
 
-To use `Commands` in your systems, it is easiest to pass it in as a system parameter. This ensures that every system that needs access to `Commands` gets it and that all `Commands` that are called are placed into the `Command` queue.
+To use `Commands` in your systems, it is easiest to pass it in as a system parameter. This ensures that every system that needs access to `Commands` gets it and that all of the `Commands` that are called are placed into the `Command` queue.
 
 ```rust
 fn my_system(mut commands: Commands) {
@@ -59,7 +59,7 @@ fn my_system(mut commands: Commands) {
 }
 ```
 
-While Bevy offers a number of different pre-defined `Commands` to use, it also offers the [`queue`] method to make changes that aren't provided by the default `Commands`. `queue` gives us mutable access to the `World`, which we can use however we want. The most straightforward approach is to construct our modifications within the method itself (like we do below), however we can go one step further and create custom commands by implementing the `Command` trait on a custom struct, or even extend the `Commands` struct with custom traits and methods. We'll go more into this aspect further down the page in [Custom Commands].
+While Bevy offers a number of different pre-defined `Commands` to use, it also offers the [`queue`] method to make changes that aren't provided by default. `queue` gives us mutable access to the `World`, which we can use however we want. The most straightforward approach is to construct our modifications within the method itself, as can be seen in the example below. You can also go one step further and create *custom* commands by implementing the `Command` trait on a struct you create, or even extend the `Commands` struct with traits and methods that you define and implement yourself. We'll go more into this aspect further down the page in [Custom Commands].
 
 ```rust
 // A custom Resource
@@ -106,11 +106,11 @@ fn update_system(mut commands: Commands) {
 }
 ```
 
-In the above example, we have two systems: `insert_observer_system` running in the `Startup` schedule and `update_system` running in the `Update` schedule. Since the `Startup` schedule only runs once, the `add_observer()` command is only ran when our applications is launched. However the `trigger()` command is run everytime the `Update` schedule finishes, meaning that a `trigger()` command is sent to the queue and ran every time `Update` completes.
+In the above example, we have two systems: `insert_observer_system` running in the `Startup` schedule, and `update_system` running in the `Update` schedule. Since the `Startup` schedule only runs once, the `add_observer()` command is only ran when our application is launched. However a `trigger()` command is queued everytime the `Update` schedule runs, meaning that a `trigger()` command is ran every time the `Update` schedule completes.
 
-We mentioned above that by default `Commands` are applied at the *end* of a `Schedule`. While correct, what is really happening is that all of the `Commands` we queue are placed into a special `System` known as [`ApplyDeferred`]. This system will run at the end of every `Schedule` that has a system which uses `Commands` as a `SystemParameter`. Since `ApplyDeferred` is ran after all of systems in a given schedule, all of the changes made by the `ApplyDeferred` system are able to be seen by the systems in other schedules.
+We mentioned above that by default `Commands` are applied at the *end* of a `Schedule`. While correct, what really happens is that all of the `Commands` we queue are placed into a special `System` known as [`ApplyDeferred`]. This system will run at the end of every `Schedule` that has a system which uses `Commands` as a `SystemParameter`. Since `ApplyDeferred` is ran after all of systems in a given schedule, all of the changes made by the `ApplyDeferred` system are able to be seen by the systems in other schedules.
 
-In addition, if a system accessing `Commands` is ordered before another system also accessing `Commands` in the same `Schedule`, that system will always see the effects of the `Commands` in the first system. Bevy ensures this occurs by dynamically inserting synchronization points, during which all `Commands` are applied. Each system can hold their own copy of `Commands` in their local system state. When `Commands` are applied, these queues are evaluated as in the same order that the systems were run. Within each system, the `Commands` are applied in a first-in-first-out order.
+In addition, if a system accessing `Commands` is ordered before another system also accessing `Commands` in the same `Schedule`, the second system will always see the effects of `Commands` run in the first system. Bevy ensures this occurs by dynamically inserting synchronization points, during which all `Commands` are applied. Each system can hold their own copy of `Commands` in their local system state. When `Commands` are applied, these queues are evaluated as in the same order that the systems were run. Within each system, the `Commands` are applied in a first-in-first-out order.
 
 ```rust
 // Add our Systems in the same Schedule, but placed in a specific order.
@@ -118,7 +118,7 @@ app.add_systems(
     Update, (
         add_the_component, 
         remove_the_component.after(add_the_component)
-        // `after` specifies that the `remove_the_component` System 
+        // `after` specifies that the `remove_the_component` system 
         // will only run after `add_the_component` has completed.
     )
 );
@@ -142,7 +142,7 @@ fn remove_the_component(mut commands: Commands, mut player: Single<Entity, With<
 
 ## Entity Commands
 
-Apart from making changes to the `World`, `Commands` are also used when making structural changes to `Entities`. When applying changes to a single entity, the [`Commands`] type is transformed into [`EntityCommands`] via [`Commands::entity`]. While the `Command` trait can have arbitrary effect on the `World`, the [`EntityCommand`] trait is designed to modify a single entity.
+Apart from making changes to the `World`, `Commands` are also used when making structural changes to `Entities`. When applying changes to a single entity, the [`Commands`] type is transformed into [`EntityCommands`] via [`Commands::entity`]. While the `Command` trait can have arbitrary effects on the `World`, the [`EntityCommand`] trait is designed to modify a single entity.
 
 ```rust
 // Marker Component for a Player.
@@ -171,10 +171,10 @@ Like `Commands`, `EntityCommands` aren't run immediately. This means that it is 
 
 ## Parallel Commands
 
-We stated above that `World` can only be mutably accessed by one system at a time, and while that is still true, that doesn't mean that we can't access and make *multiple* changes at the same time. As long as the changes we want to make are reliant on each other, we can use [`ParallelCommands`] to achieve this. A great example of this can be seen when dealing with `Queries`. Specifically, we can use [`Query::par_iter_mut`] along with `ParallelCommands` and it's method [`command_scope`] to perform structural changes to each `Entity` in a given `Query`.
+We stated above that `World` can only be mutably accessed by one system at a time, and while that is still true, that doesn't mean that we can't access and make *multiple* changes at the same time. As long as the changes we want to make are not reliant on each other, we can use [`ParallelCommands`] to achieve this. A great example of this can be seen when dealing with `Queries`. Specifically, we can use [`Query::par_iter_mut`] along with `ParallelCommands` and it's method [`command_scope`] to perform structural changes to each `Entity` in a given `Query`.
 
 ```rust
-// A marker Component that an Entity is going very fast.
+// A marker Component that indicates an Entity is going very fast.
 #[derive(Component)]
 struct SuperSpeed;
 
