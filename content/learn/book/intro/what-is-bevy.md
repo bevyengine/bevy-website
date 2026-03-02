@@ -45,7 +45,7 @@ We love Bevy, but it's not the right tool for every project. You should not use 
   - Unlike other game engines, gameplay logic is written in the same language (and style!) as engine logic
   - That said, it is possible. Bevy and Rust make sure that users have the tools needed to integrate Lua, Python and more
   - Take a look at [Bevy Assets](https://bevyengine.org/assets) to see the options that the community have provided
-- You want to ship to consoles: Rust, and therefore Bevy, is currently not supported on Sony, Nintendo, or Microsoft consoles
+- You want to ship to consoles: Rust, and therefore Bevy, is currently not supported on Sony or Nintendo consoles. Steam Deck support however is simple, and shipping to modern Xbox consoles should be possible.
 
 ## Bevy beyond games
 
