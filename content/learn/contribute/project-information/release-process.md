@@ -103,7 +103,7 @@ while read -r commit number title <&3; do
 done 3< <(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeCommit.oid) \(.number) \(.title)"')
 ```
 
-Once all merge conflicts are resolved:
+Once all merge conflicts are resolved, double check that everything works, adding an extra commit to fix it if needed. Then:
 
 1. Bump version number for all crates, using [the Update Command] locally, with `patch` for the new version.
     - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.Y`
