@@ -6,7 +6,7 @@ weight = 4
 status = 'hidden'
 +++
 
-If ECS is the first three letters, then **Resources, Queries, and Commands** are the next three.
+If entities, components and systems are the first three concepts, then **Resources**, **Queries**, and **Commands** are the next three.
 These concepts are core to Bevy's ECS (so much so that they're used in the previous section!), but they aren't inherent to the architecture.
 
 ## Resources
@@ -23,7 +23,7 @@ struct Score {
 }
 ```
 
-They're accessed and updated in systems, similar to entities and components:
+Resources can be accessed and updated in systems, similar to the components on entities:
 
 ```rs
 fn update_score(mut score: ResMut<Score>) {
@@ -36,15 +36,32 @@ fn update_score(mut score: ResMut<Score>) {
 
 Queries are used to fetch data from the ECS, either in read only mode (like a [`&`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#references-and-borrowing)), or in mutable access mode (like a [`&mut`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#mutable-references)).
 When writing a query, you provide a set of components, and Bevy will fetch all entities that have every requested component.
-(The entities fetched may also have other components, but those are ignored if the query does not ask for them.)
+The entities fetched may also have other components, but only the matching component types will be returned to read or write.
 
-Any ECS system can make queries by adding the appropriate argument to the function signature:
+Any ECS system can make queries by adding the appropriate `Query`-typed argument to the function signature:
 
 ```rs
-fn my_system(mut query: Query<(&Color, &mut Location)>) {
-    for (color, mut location) in query.iter_mut() {
-        if color == Color::Red {
-            location += 1;
+#[derive(Component)]
+struct Poison{
+    stacks: u32
+};
+
+#[derive(Component)]
+struct Life {
+    current: u32,
+    max: u32,
+}
+
+fn apply_poison(mut query: Query<&Poison, &mut Life>){
+    for (poison, mut life) in query.iter_mut(){
+        life.current.saturating_sub(poison.stacks);
+    }
+}
+
+fn tick_down_poison(mut query: Query<&mut Poison>){
+    for poison in query.iter_mut(){
+        if poison.stacks > 0 {
+            poison.stacks -= 1;
         }
     }
 }
@@ -67,13 +84,13 @@ Going back to our database analogy, a query is a lot like a [SQL `SELECT` statem
 {% end %}
 
 Queries have a lot more functionality than what's shown here.
-You can also request optional components for `OR` semantics, add query filters, and much more!
+You can request optional components, fetch the `Entity` associated with each item, add query filters, and much more!
 Queries are covered in more detail in the [Queries](../../storing-data/queries) chapter.
 
 ## Commands
 
-Commands are a very flexible structure that allows for arbitrary changes to the ECS.
-They are mostly used for write operations, such as spawning entities (as we saw in the previous section).
+Commands allow for arbitrary, deferred changes to the ECS `World`.
+They are mostly used for complex write operations, such as spawning entities (as we saw in the previous chapter).
 Any system can access the command queue by adding a `mut commands: Commands` to the function signature:
 
 ```rs
@@ -85,6 +102,6 @@ fn spawn_entities(mut commands: Commands) {
 }
 ```
 
-Commands can do nearly anything to the ECS that you can imagine, including running queries!
-You can also write custom commands to extend the ECS however you might need to.
-They are talked about in more detail in the [Commands](../../control-flow/commands) chapter.
+A wide range of built-in commands are provided, 
+but you can also write custom commands to queue up any ECS logic you might desire.
+You can read about these in more detail in the [Commands](../../control-flow/commands) chapter.

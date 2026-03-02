@@ -6,7 +6,9 @@ weight = 3
 status = 'hidden'
 +++
 
-The core concept in Bevy is the [ECS architecture](https://en.wikipedia.org/wiki/Entity_component_system), which stands for **Entity, Component, System**. It is a way of organizing the data of a program, and controlling how that data is accessed and updated. ECS has been utilized in a number of commercial game engines, and has been increasing in popularity in the last several decades.
+Bevy's architecture centers around its [ECS](https://en.wikipedia.org/wiki/Entity_component_system): E for **Entity**, C for **Component** and S for **System**. ECS is a high-performance way of organizing the data of a program, and controlling how that data is accessed and updated.
+ECS has been utilized in a number of commercial game engines, and has been increasing in popularity in the last several decades.
+Bevy however is relatively unique in how widely it uses these patterns: ECS in Bevy is used *everywhere*, not just for performance-critical code.
 
 There are two main mental models for how to think about ECS:
 
@@ -14,8 +16,7 @@ There are two main mental models for how to think about ECS:
 - The **database model:** similar to an in-memory SQL database or spreadsheet.
 
 We'll reference both conceptual models throughout this chapter.
-
-So, what does each letter mean?
+For now, let's dig into each of these core elements.
 
 ## The E: Entities
 
@@ -35,7 +36,7 @@ An Entity, by itself, is just an identifier; it does not store any data within i
 In the "in-memory database" model, entities are the row keys in our database, with each entity getting its own row and unique identifier.
 
 While entities are conceptually similar to Objects in object-oriented engines, they are distinctly different bececause they **do not store any behavior**.
-This is handled by [systems](#the-s-systems).
+Instead, behavior is controlled by [systems](#the-s-systems).
 
 {% callout(type="note") %}
 **Note on terminology**: Sometimes, using the word "entity" on its own can be ambiguous. Does it mean the row/id/primary key or does it mean the game object/thing it represents with all its data? In Bevy, entity ids are modeled in the `Entity` type. As a result, `Entity` typically refers to the id, and a lowercase "entity" typically refers to the game object.
@@ -85,12 +86,12 @@ fn spawn_entities(mut commands: Commands) {
 }
 ```
 
-Entities are usually spawned using [Commands](../intro/the-next-three-letters#commands), which will be covered in the next section.
+Entities are usually spawned using [Commands](../control-flow/commands), which queue up complex work to be done later.
 
 ## The S: Systems
 
 Systems interact with and update the data in the ECS.
-By default, each system is run each frame, in a loop (specifically, in a [Schedule](../../the-game-loop/schedules)).
+By default, each system is run each frame, in a loop (specifically, in a [Schedule](../the-game-loop/schedules)).
 In Bevy, systems are "just Rust functions".
 These can fetch data from the ECS, make updates, call external APIs, and anything else that a function can do.
 
@@ -109,7 +110,7 @@ Bevy systems use a technique called [dependency injection](https://en.wikipedia.
 Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are _disjoint_ and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
 {% end %}
 
-Systems usually access Entities and their components via [Queries](../intro/the-next-three-letters#queries), which will be covered in the next section.
+Systems usually access entities and their components via [Queries](../intro/the-next-three-letters#queries), which will be covered in the next section.
 
 ## Why ECS?
 
@@ -117,7 +118,7 @@ At this point, you may be wondering: why bother with all of this machinery and t
 What's wrong with a good-old-fashioned game loop?
 Aren't game object models simpler?
 
-We won't deny it: these approaches work, and people have and can build great games with them.
+We won't deny it: these approaches work, and people can and have built great games with them.
 But we think that by focusing on ECS as the heart of an engine (rather than a tacked on feature),
 you can:
 
@@ -141,7 +142,7 @@ you need a lot more than just entities, components, and systems.
 Even if you're a veteran game programmer, there will be a learning curve
 as you explore new approaches and master new tools.
 
-But start simple, and add in new patterns as you encounter the problems they're solving.
+But start simple, and add in new concepts as you encounter the problems they're solving.
 With a bit of persistence, you'll be flying in no time!
 
 [data locality]: https://en.wikipedia.org/wiki/Locality_of_reference
