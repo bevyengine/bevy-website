@@ -6,15 +6,16 @@ weight = 5
 status = 'hidden'
 +++
 
-The last core concepts are higher level: **Apps** and **Worlds**
+The last core concepts every Bevy needs to understand are used to organize our data.
+The **World** stores our ECS data, while an **App** stores a `World` and controls the outer loop for how our game actually runs.
 
 ## The World
 
-Everything we've talked about so far (entities, components, systems, resources, queries, and commands) exist within the context of a world.
 The world contains all the data that's in your game or application.
+Everything we've talked about so far is either data that is *stored* in a `World` (entities, components, resources)
+or operations that are *evaluated on* a `World` (systems, queries, commands).
 In the database model, the world *is* the database.
 
-Entities, components, and resources are stored inside the world, and systems, queries, and commands are executed *on* a world.
 It is possible to have multiple worlds, and it's also possible to run a world completely headlessly, but the most common case by far is to run a single world inside of a single **app**.
 
 ## The App
@@ -33,7 +34,8 @@ fn main() {
 
 In most cases, your world will be contained within your app.
 The app is responsible for scheduling and executing your systems, and passing the data in and out of them appropriately.
-It also handles other app-level config, like windowing settings.
+
+Apps can be used to combine code that's been broken down into modular, reusable pieces, called [plugins](../modular-architecture/plugins).
 
 ## Off you go now
 
