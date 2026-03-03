@@ -6,7 +6,7 @@ weight = 4
 status = 'hidden'
 +++
 
-If entities, components and systems are the first three concepts, then **Resources**, **Queries**, and **Commands** are the next three.
+If Entities, Components and Systems are the first three concepts, then **Resources**, **Queries**, and **Commands** are the next three.
 These concepts are core to Bevy's ECS (so much so that they're used in the previous section!), but they aren't inherent to the architecture.
 
 ## Resources

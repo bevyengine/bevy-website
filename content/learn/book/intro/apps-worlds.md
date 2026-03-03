@@ -6,7 +6,7 @@ weight = 5
 status = 'hidden'
 +++
 
-The last core concepts every Bevy needs to understand are used to organize our data.
+The last core concepts every Bevy user needs to understand are used to organize our data.
 The **World** stores our ECS data, while an **App** stores a `World` and controls the outer loop for how our game actually runs.
 
 ## The World

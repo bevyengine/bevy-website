@@ -7,7 +7,7 @@ status = 'hidden'
 +++
 
 Bevy's architecture centers around its [ECS](https://en.wikipedia.org/wiki/Entity_component_system): E for **Entity**, C for **Component** and S for **System**. ECS is a high-performance way of organizing the data of a program, and controlling how that data is accessed and updated.
-ECS has been utilized in a number of commercial game engines, and has been increasing in popularity in the last several decades.
+ECS has been utilized in a number of commercial game engines, and has been increasing in popularity over the last couple of decades.
 Bevy however is relatively unique in how widely it uses these patterns: ECS in Bevy is used *everywhere*, not just for performance-critical code.
 
 There are two main mental models for how to think about ECS:
@@ -91,7 +91,7 @@ Entities are usually spawned using [Commands](../control-flow/commands), which q
 ## The S: Systems
 
 Systems interact with and update the data in the ECS.
-By default, each system is run each frame, in a loop (specifically, in a [Schedule](../the-game-loop/schedules)).
+Each system is ran every frame by default, and repeats in a loop (specifically, in a [Schedule](../the-game-loop/schedules)).
 In Bevy, systems are "just Rust functions".
 These can fetch data from the ECS, make updates, call external APIs, and anything else that a function can do.
 
@@ -110,7 +110,7 @@ Bevy systems use a technique called [dependency injection](https://en.wikipedia.
 Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are _disjoint_ and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
 {% end %}
 
-Systems usually access entities and their components via [Queries](../intro/the-next-three-letters#queries), which will be covered in the next section.
+Systems usually access entities and their components via [Queries](../intro/the-next-three-letters#queries), which will be covered in the next chapter.
 
 ## Why ECS?
 
