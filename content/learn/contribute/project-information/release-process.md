@@ -52,7 +52,7 @@ When making a release, the Maintainers follow these checklists:
 6. Bump version number for all crates, using the "Release" workflow.
    1. Change the commit message to be nicer.
 7. Create tag on GitHub.
-8. Edit GitHub Release. Add links to the `Release announcement` and `Migration Guide`.
+8. Edit [GitHub Release]. Add links to the `Release announcement` and `Migration Guide`.
 9. Bump `latest` tag to most recent release.
     - `git tag -d latest && git push origin :refs/tags/latest && git tag -f latest && git push origin --tags`
 10. Run the [`update-screenshots` workflow] to update screenshots. *This will block blog post releases (and take ~40 minutes) so do it early*.
@@ -80,7 +80,10 @@ When making a release, the Maintainers follow these checklists:
 
 1. Check appropriate milestone.
 2. Close the milestone, open the next one if anything remains and transfer them.
-3. Create a new branch `release-0.X.Y` from the `latest` tag, and cherry pick all PRs from the milestone to the new branch
+3. Create a new branch `release-0.X.Y` from the `latest` tag, and cherry pick all PRs from the milestone to the new branch by running the following `bash` shell script.
+
+To do so, create a `cherrypick_release.sh` file in your `bevy` project, and ensure that it can be executed using `chmod +x release_cherrypick.sh`. Copy-paste the snippet below, then update the `version` variable to the correct tag. Run the script using `./cherrypick_releases.sh`. You may need to resolve merge conflicts; think carefully about whether or not a PR actually needs to be backported before doing so.
+
 ```sh
 version="0.X.Y"
 
@@ -97,16 +100,19 @@ while read -r commit number title <&3; do
       echo "please resolve conflict then press enter"
       read
     fi
-done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeCommit.oid) \(.number) \(.title)"')
+done 3< <(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeCommit.oid) \(.number) \(.title)"')
 ```
-4. Bump version number for all crates, using [the Update Command] locally, with `patch` for the new version.
+
+Once all merge conflicts are resolved, double check that everything works. Go back and fix the commit responsible for a merge to correct any issues. Then:
+
+1. Bump version number for all crates, using [the Update Command] locally, with `patch` for the new version.
     - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.Y`
-5. Create tag on GitHub.
-6. Edit GitHub Release. Add link to the comparison between this patch and the previous version.
-7. Bump `latest` tag to most recent release.
+2. Create tag on GitHub.
+3. Edit [GitHub Release]. Add link to the comparison between this patch and the previous version.
+4. Bump `latest` tag to most recent release.
     - `git tag -d latest && git push origin :refs/tags/latest && git tag -f latest && git push origin --tags`
-8. Run the [`update-screenshots` workflow] to update screenshots.
-9. Run this [`build-wasm-examples` workflow] to update Wasm examples.
+5. Run the [`update-screenshots` workflow] to update screenshots.
+6. Run this [`build-wasm-examples` workflow] to update Wasm examples.
 
 #### Patch Release
 
@@ -154,7 +160,7 @@ done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeC
 4. Bump version number for all crates, using [the Update Command] locally, with `rc` for the new version.
     - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.0-rc.Y`
 5. Create tag on GitHub.
-6. Edit GitHub Release. Add link to the comparison between this release candidate (rc) and the previous version.
+6. Edit [GitHub Release]. Add link to the comparison between this release candidate (rc) and the previous version.
 
 #### RC Release
 
@@ -186,3 +192,4 @@ cargo release <patch|rc> --workspace --no-publish --execute --no-tag --no-confir
 [`update-screenshots` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/update-screenshots.yml
 [`build-wasm-examples` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/build-wasm-examples.yml
 [the Update Command]: https://bevy.org/learn/contribute/project-information/release-process/#update-command
+[Github Release]: https://github.com/bevyengine/bevy/releases
