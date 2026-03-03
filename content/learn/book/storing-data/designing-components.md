@@ -108,3 +108,106 @@ the required components programmatically by manually implementing the `Component
 [`DerefMut`]: https://doc.rust-lang.org/std/ops/trait.DerefMut.html
 [newtypes]: https://doc.rust-lang.org/rust-by-example/generics/new_types.html
 
+## Reusable logic for components
+
+You may have heard that, in ECS, components are "just data", and cannot or should not store logic.
+Generally this is sound advice: performing logic in systems based on component presence/absence and values
+is fast and tends to lead to flexible game design that can create interesting emergent behavior.
+
+But, like all advice, there are limits to its validity.
+Being able to perform common or complex operations on data in a consistent way is the basis of a good abstraction.
+Define these operations once, use everywhere, and then when you inevitably want to revise it, you only need to update it once.
+
+There are a number of tools available here, listed in order of increasing complexity.
+In most cases, simple traits and methods suffice, but it's helpful to be aware of more powerful tools.
+
+### Methods and traits for `Component` types
+
+Components are just structs (or enums, or tuple structs)!
+Like any Rust type, you can define methods for these types, and implement traits for them.
+
+```rust
+#[derive(Component)]
+pub struct Life {
+  current: u32,
+  max: u32,
+}
+
+impl Life {
+  fn set(&mut self, new: u32) {
+    self.current = if new > self.max {
+      self.max
+    } else {
+      new
+    }
+  }
+}
+
+impl Sub<u32> for Life {
+  type Output = Life;
+
+  fn sub(self, rhs: u32) -> Self::Output {
+    self.current = self.current.saturating_sub(rhs)
+  }
+}
+```
+
+Keeping fields private can be very useful to ensure that key invariants
+(like the fact that current life must be at most max life) are upheld.
+
+### Storing functions inside of components
+
+Sometimes, you want to be able to store arbitrarily complex, one-off logic on your components.
+While this will be relatively slow (oof my cache locality) and hard to debug, it can be a lot easier to manage
+than wrangling hundreds of marker components when working with UI or script-like behavior.
+
+The core pattern here is to store an owned [trait object](https://doc.rust-lang.org/reference/types/trait-object.html) inside of your component, usually in a `Box`.
+
+The simplest example of this is to store a `Box<dyn Command>`:
+
+```rust
+#[derive(Component)]
+struct ClickableProp {
+  on_click: Box<dyn Command + Clone>
+}
+
+// This is an observer!
+// We're listening to picking events here!
+fn handle_clickable_props(trigger: On<Pointer<Click>>, query: Query<&ClickableProp>, mut commands: Commands){
+  let Ok(clickable_prop) = query.get(trigger.entity()) else {
+    return;
+  };
+
+  commands.queue(clickable_prop.on_click)
+}
+```
+
+This can be repeated with other traits: `Event` and `Message` are quite powerful if you want to hook into existing logic.
+
+Storing [one-shot systems](../control-flow/systems.md) can be even more expressive.
+See the [callbacks example](TODO, see https://github.com/bevyengine/bevy/pull/23197) for a demonstration of this pattern.
+
+If you benchmarks show that you need to make this pattern more performant, you can consider swapping to [function pointers](https://doc.rust-lang.org/std/primitive.fn.html), at the cost of some flexibility (no methods, cannot capture).
+
+### Accessing data beyond the component
+
+As your logic grows in complexity, you may find yourself repeatedly needing to access data from multiple entities,
+components or even resources simultaneously.
+For example, you might find that you need to update a tilemap index while revising tile data,
+animate a goblin by mutating both its weapon and the root entity,
+or checking if an ability can be used by checking available mana, cooldowns and range to the target.
+
+Duplicating this complex logic can be both error-prone and tedious!
+While this should prompt you to ask "can / should we combine this data into a single component",
+that's not always feasible (sometimes for reasons outside of your control).
+
+We can abstract complex ECS lookups like this by creating our own custom `QueryData`, `QueryFilter`
+and `SystemParam` types, using the provided derive macros.
+`QueryData` and `QueryFilter` are useful when the data is in separate components on the same entity and is quite composable (you can always add more terms to your `Query`!),
+while `SystemParam` is best reserved for when you need to access distinct entities, resources, commands, messages or other forms of data in the same logic.
+
+While simply defining these types can save boilerplate and reduce error,
+they become dramatically more powerful when we implement methods on them,
+which automatically incorporate data across disparate sources into a single atomic operation.
+When working with custom `QueryData` types, you should be aware that you can implement methods on
+the generated (and doc-hidden) `QueryData::Item` types, allowing you to define operations for a single element of your complex queries.
