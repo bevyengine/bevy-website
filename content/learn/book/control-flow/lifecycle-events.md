@@ -8,7 +8,7 @@ status = 'hidden'
 
 <!-- TBW -->
 
-In the previous chapter we learned about `Events` and how they allow us to run code in the `World` or on a specific `Entity` in response to a trigger condition. We can extend this concept by using **Lifecycle Events** to run code in response to altering a `Component` within an `Entity`. Lifecycle events are still `Events`, but specifically they are `EntityEvents` meaning that they will have an `entity` field which holds the `Entity` being targeted.
+In the previous chapter we learned about `Events` and how they allow us to run code in the `World` or on a specific `Entity` in response to a trigger condition. We can extend this concept by using **Lifecycle Events** to run code in response to altering a `Component` within an `Entity`. Lifecycle events are still `Events`, but specifically they are `EntityEvents` meaning that they will have an `event_target` which determines the `Entity` being targeted.
 
 Within Bevy we currently have access to five distinct lifecycle events: `Add`, `Insert`, `Replace`, `Remove`, and `Despawn`. We can split these into two categories: lifecycle events that trigger when a `Component` is *added* to an `Entity`, and lifecycle events that trigger when a `Component` is *removed* from an `Entity`.
 
@@ -47,7 +47,7 @@ world.register_component_hooks::<MyComponent>().on_add(|add| {
 });
 ```
 
-This method allows us to enable the `ComponentHook` within a system at any point. It's especially helpful if we only need to add a `ComponentHook` to a `Component` after a certain point in time or under certain conditions. However, if we know that any time a `Component` is modified we want to run a `ComponentHook`, then we can do so with the `component` attribute:
+This method allows us to enable the `ComponentHook` within a system at any point. It's especially helpful if we only need to add a `ComponentHook` to a `Component` after a certain point in time or under certain conditions. However, if we know that every time a `Component` is modified we want to run a `ComponentHook`, then we can use the `component` attribute:
 
 ```rust
 // Create a ComponentHook with an attribute:
@@ -56,7 +56,7 @@ This method allows us to enable the `ComponentHook` within a system at any point
 pub struct MyComponent;
 
 // Function that will run when `MyComponent` is added to an Entity.
-fn hook_function(component_hook: HookContext) {
+fn hook_function(world: DeferredWorld, component_hook: HookContext) {
     println!("MyComponent added to {}", component_hook.entity);
 }
 ```
@@ -71,8 +71,8 @@ By deriving the `component` attribute on `MyComponent` and pointing to the funct
 pub struct MyComponent;
 
 // One function is provided for both `on_add` and `on_remove` to use with the value they both provide.
-fn hook_closure(action: &'static str) -> impl Fn(HookContext) {
-    move |ctx| {
+fn hook_closure(action: &'static str) -> impl Fn(DeferredWorld, HookContext) {
+    move |_world, ctx| {
         // Prints out the string slice passed in to the closure along 
         // with the Entity that the ComponentHook is triggered on.
         println!("{action} on {}", ctx.entity);
@@ -91,7 +91,7 @@ pub struct MyComponent;
 impl MyComponent {
     // Instead of a separate function, we implement an `on_remove` method to run our 
     // code in response to `MyComponent` being removed.
-    fn on_remove(context: HookContext) {
+    fn on_remove(world: DeferredWorld, context: HookContext) {
         println!("MyComponent was removed from {}", context.entity);
     }
 }
@@ -102,13 +102,11 @@ impl MyComponent {
 
 ## Lifecycle Observers
 
-We can also use regular `Observers` to react to lifecycle events. Like we mentioned above, lifecycle events are `EntityEvents` which means they will carry an `entity` field. However, we don't have to specify an `event_target` field like we do with regular `EntityEvents`. Instead, by including the target `Component` inside of the `Trigger` we are telling the `Observer` to run whenever our target `Component` is altered on any `Entity`. When this happens, the `event_target` of the `EntityEvent` is filled by the `Entity` being altered with the target `Component`.
+We can also use regular `Observers` to react to lifecycle events. Like we mentioned above, lifecycle events are `EntityEvents` which means they will carry an `event_target` identifying what `Entity` is being targeted. However, we don't have to specify it like we do with regular `EntityEvents`. Instead, by including the target `Component` inside of the `Trigger` we are telling the `Observer` to run whenever our target `Component` is altered on any `Entity`. When this happens, the `event_target` of the `EntityEvent` is filled by the `Entity` with the target `Component` being altered.
 
 ```rust
 #[derive(Component)]
 pub struct MyComponent;
-
-// Using Observers:
 
 // This observer will trigger whenever `MyComponent` is added to any Entity. 
 world.add_observer(|add: On<Add, MyComponent>| {
@@ -128,8 +126,9 @@ Consider the following use case. We want to spawn an `Entity` with a `PlayerName
 struct PlayerName(pub String);
 
 // Then we add an Observer that will watch for `PlayerName` being added.
-commands.add_observer(|print_name: On<Add, PlayerName>| {
-    println!("Spawned: {}", print_name.components[0].0);
+commands.add_observer(|print_name: On<Add, PlayerName>, player_query: <&PlayerName>| {
+    let new_name = player_query.get(print_name.entity).unwrap().0;
+    println!("Spawned: {}", new_name);
 });
 
 commands.spawn((
@@ -151,8 +150,10 @@ Note that we have to explicitly add the `Observer` before we could print out the
 struct PlayerName(pub String);
 
 // Whenever a `PlayerName` component is added to an Entity, this function will trigger.
-fn print_player_name(player_name: HookContext) {
-    println!("Spawned: {}", player_name.0);
+fn print_player_name(mut world: DeferredWorld, player_name: HookContext) {
+    // Retrieve the PlayerName component on the ComponentHook entity.
+    let new_name = world.get::<PlayerName>(player_name.entity).unwrap().0;
+    println!("Spawned: {}", new_name);
 }
 
 // Now we can spawn in our Entity with the `PlayerName` without needing an Observer.
@@ -171,8 +172,10 @@ Alternatively, we can use the [`World::register_component_hook`] method to accom
 struct PlayerName(pub String);
 
 // Tell the `World` to run this code whenever a `PlayerName` component is added to an Entity.
-world.register_component_hooks::<PlayerName>().on_add(|context| {
-    println!("Spawned: {}", context.0);
+world.register_component_hooks::<PlayerName>().on_add(|mut world, context| {
+    // Find the PlayerName component on the ComponentHook entity.
+    let new_name = world.get::<PlayerName>(context.entity).unwrap().0;
+    println!("Spawned: {}", new_name);
 });
 ```
 
@@ -231,14 +234,14 @@ pub struct PlayerConnection{
 }
 
 // This function will run when a PlayerConnection component is added to an Entity for the first time.
-fn player_new_connection(new_player: HookContext) {
+fn player_new_connection(world: DeferredWorld, new_player: HookContext) {
     // Some functionality that will run when a new Player connects to the match for the 
     // first time.
 }
 
 // This function will run when a PlayerConnection component is inserted into an Entity, 
 // even if it already existed.
-fn player_reconnect(reconnection: HookContext) {
+fn player_reconnect(world: DeferredWorld, reconnection: HookContext) {
     // Some functionality that will run when an existing Player reconnects to the match.
 }
 
