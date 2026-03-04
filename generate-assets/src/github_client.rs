@@ -15,6 +15,12 @@ struct GithubLicenseResponse {
 }
 
 #[derive(Deserialize)]
+struct GithubStarsResponse {
+    #[serde(rename = "stargazers_count")]
+    stars: u32,
+}
+
+#[derive(Deserialize)]
 struct GithubLicenseLicense {
     spdx_id: String,
 }
@@ -94,6 +100,22 @@ impl GithubClient {
         } else {
             bail!("No spdx license assertion")
         }
+    }
+
+    /// Gets the star count from a github repo link
+    ///
+    /// Note that this method requests the whole repository info
+    /// If any other fields from it are needed, this method may be modified as to not make unnecessary requests
+    pub fn get_stars_from_url(&self, link: &str) -> anyhow::Result<u32> {
+        let response: GithubStarsResponse = self
+            .agent
+            .get(&format!("{BASE_URL}/repos/{link}"))
+            .set("Accept", "application/json")
+            .set("Authorization", &format!("Bearer {}", self.token))
+            .call()?
+            .into_json()?;
+
+        Ok(response.stars)
     }
 
     /// Search file by name
