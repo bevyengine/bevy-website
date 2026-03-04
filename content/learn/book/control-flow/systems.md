@@ -25,7 +25,7 @@ across multiple systems in parallel at the same time.
 
 Systems in Bevy are any Rust function where every argument implements the [`SystemParam`].
 The full list can be seen in the API docs linked (and you can create your own!),
-but the most common are [`Query`], [`Res`], [`ResMut`], [`EventReader`], [`EventWriter`], [`Local`] and [`Commands`].
+but the most common are [`Query`], [`Res`], [`ResMut`], [`MessageReader`], [`MessageWriter`], [`Local`] and [`Commands`].
 
 The requested data is automatically fetched from the [`World`] when the system is run,
 locking out access to the underlying data to avoid violating the rules of the borrow checker.

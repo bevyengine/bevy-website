@@ -18,7 +18,7 @@ However, from time to time, you might want to:
 
 Bevy itself uses `Local` system params in two prominent places:
 
-1. As part of the [`EventReader`] abstraction, keeping track of which events each system has read.
+1. As part of the [`MessageReader`] abstraction, keeping track of which events each system has read.
 2. In run conditions like [`on_timer`], to track how much time has run.
 
 ## Starting values
@@ -45,7 +45,7 @@ fn increment_local_system_data(mut local: Local<Option<NoGoodDefaultValue>>){
 }
 ```
 
-[`Local<T>`]: https://docs.rs/bevy/0.16.0/bevy/ecs/system/struct.Local.html
+[`Local<T>`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Local.html
 [resource]: [./resources.md]
-[`EventReader`]: https://docs.rs/bevy/latest/bevy/ecs/event/struct.EventReader.html
+[`MessageReader`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageReader.html
 [`on_timer`]: https://docs.rs/bevy/latest/bevy/time/common_conditions/fn.on_timer.html
