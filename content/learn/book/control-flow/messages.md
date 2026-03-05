@@ -181,8 +181,9 @@ fn read_scoreboard_update(
 ```
 
 Finally, we can add our systems into their respective schedules.
-Keep in mind that the system which will update our `ScoreboardUpdate` messages is going to be run in the `First` schedule, which is the first schedule ran on every new frame.
-As a result we'll want to schedule `read_scoreboard_update` *before* `write_scoreboard_update`.
+Keep in mind that the system which updates our `ScoreboardUpdate` message resource is going to be ran in the `First` schedule, which is the first thing ran on every new frame.
+As a result we'll want to schedule `read_scoreboard_update` *before* `write_scoreboard_update`, but after the `First` schedule completes.
+The `PreUpdate` schedule fits nicely for `read_scoreboard_update`, running before `Update` and well before `PostUpdate` which is where we'll place `write_scoreboard_update`.
 This prevents multiple `ScoreboardUpdate` messages being read at once and allows our gameplay systems to run with a freshly updated `Scoreboard` resource.
 
 ```rust
@@ -206,12 +207,53 @@ However, you should now be able to see one way that `Messages` can be used and h
 
 ## Altering Messages
 
+We can do more than just write and read messages though. One of the best aspects of messages is that they're able to be *mutated* after we've already written them. [`MessageMutator`] gives you access to read and alter messages of a specific type. We can use it by declaring it as a system parameter in the same way that we use `MessageWriter` and `MessageReader`.
 
+```rust
+// Custom message type.
+#[derive(Message, Debug)]
+pub struct MyMessage(pub u32); 
+
+// A system which reads and mutates all MyMessage messages.
+fn my_system(mut mutator: MessageMutator<MyMessage>) {
+    for message in mutator.read() {
+        message.0 += 1;
+        println!("received message: {:?}", message);
+    }
+}
+```
+
+One thing to note is that `MessageMutator` does not run in parallel.
+This is because `MessageMutator` mutably accesses the `Messages<M>` resource that contains all of the messages of a given type.
+The same applies for `MessageWriter` as well.
+Systems accessing either will run only sequentially with each other.
+On the other hand, `MessageReader` *can* be accessed by multiple systems concurrently if they only access `MessageReader`.
+Although these systems still cannot run concurrently with systems accessing `MessageMutator` or `MessageWriter`.
+
+Ultimately `MessageWriter`, `MessageReader`, and `MessageMutator` are all accessing the `Messages<M>` resource for a given `Message` type.
+If you find that there is some functionality that these three system parameters cannot perform, you always have the option of accessing the `Messages<M>` resource itself using 1Res1 or `ResMut`. Simply access it as a system parameter like you would any other `Resource`.
+
+```rust
+// Custom message type.
+#[derive(Message, Debug)]
+pub struct MyMessage(pub u32); 
+
+fn message_resource(mut messages: ResMut<Messages<MyMessage>>) {
+    // Drain all of the messages out of the resource, 
+    // and remove any message with a value of 2.
+    let filtered_messages = messages.drain().filter(|message| message.0 != 2);
+    
+    // Add the filtered messages back into the resource.
+    messages.write_batch(filtered_messages);
+}
+```
+
+[`MessageMutator`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageMutator.html
 
 ## Messages Vs Events
 
 At a glance it might seem like `Messages` and [`Events`] contain overlapping functionality, but they have some key distinctions.
-`Messages` are not processed immediately, instead they are usually only processed once per frame.
+`Messages` are not processed immediately, instead they are only processed at a specified moment.
 This gives us some breathing room when compared to `Events` and `Observers` which will run immediately in reaction to being triggered.
 Additionally, `Messages` have to be periodically polled for, typically as part of a specific `Schedule` that runs at various fixed points.
 `Events` on the other hand are executed sequentially either immediately if triggered by `World` or at the end of the `Schedule` if triggered with `Commands`.
