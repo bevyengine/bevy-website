@@ -90,10 +90,8 @@ fn toggle_pause(mut time: ResMut<Time<Virtual>>) {
 #[derive(Event)]
 struct SetGameSpeed(f32);
 
-fn set_game_speed(mut time: ResMut<Time<Virtual>>, events: EventReader<SetGameSpeed>) {
-    if let Some(new_speed) = events.iter().last() {
-        time.set_relative_speed(new_speed.0);
-    }
+fn set_game_speed(new_speed: On<SetGameSpeed>, mut time: ResMut<Time<Virtual>>) {
+    time.set_relative_speed(new_speed.0);
 }
 ```
 
