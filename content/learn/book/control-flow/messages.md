@@ -8,9 +8,17 @@ status = 'hidden'
 
 <!-- TBW -->
 
-What do we do when we want to communicate between systems, but we don't need to immediately react to those communications? We use **Messages**! [`Messages`] offer a communication channel between one or more systems. They can be created and read from using system parameters and are stored in the [`Messages<M>`] resource. 
+When designing your Bevy applications, you might encounter situations where `Events` are evaluated *too* quickly.
+Or, maybe you don't need to *immediately* perform some logic that an `Observer` will watch for.
+There might even be some repeated functionality that you'll want to *defer* and accumulate before eventually processing.
+These are the situations where **Messages** are the preferred tool.
+[`Messages`] offer a communication channel for accumulating and efficiently processing many similar actions.
+They can be created and read from using system parameters and are stored in a [`Messages<M>`] resource. 
 
-You can use `Messages` for a variety of different functionalities. Some messages might re-occur over a longer period of time, like continuously applying damage effects or regularly updating a leaderboard. Others can be short-lived, such as checking for whether a player can interact with an object or if a UI element should appear. The key concept to remember is that a `Message` is best used for logic that can be *deferred* rather than requiring immediate action.
+You can use `Messages` for a variety of different functionalities.
+Some messages might re-occur over a longer period of time, like continuously applying damage effects or regularly updating a leaderboard.
+Others can be short-lived, such as checking for whether a player can interact with an object or if a UI element should appear.
+The key concept to remember is that a `Message` is best used for logic that can be *deferred* rather than requiring immediate action.
 
 To start using messages, our first steps are to derive the `Message` trait on a struct and then add the [`MessageWriter`] and [`MessageReader`] system parameters to some systems.
 
@@ -33,9 +41,12 @@ fn read_messages(mut reader: MessageReader<Greeting>) {
 }
 ```
 
-Then we have to tell our application to begin handling `Greeting` messages. While we already derived the `Message` trait on `Greeting`, our application still needs some additional setup to get everything running. 
+Then we have to tell our application to begin handling `Greeting` messages.
+While we already derived the `Message` trait on `Greeting`, our application still needs some additional setup to get everything running. 
 
-If we want the application to automatically handle all of our `Message` types, we can use the [`App::add_message<M>`] method. This automatically inserts a `Messages<M>` queue resource for the `M` message type we specify (`Greeting` in the above example) and schedules a [`message_update_system`] in the [`First`] schedule. `message_update_system` will call the [`Messages::update`] method for all `Message` types we've registered in the `World`.
+If we want the application to automatically handle all of our `Message` types, we can use the [`App::add_message<M>`] method.
+This automatically inserts a `Messages<M>` queue resource for the `M` message type we specify (`Greeting` in the above example) and schedules a [`message_update_system`] in the [`First`] schedule.
+`message_update_system` will call the [`Messages::update`] method for all `Message` types we've registered in the `World`.
 
 ```rust
 fn main() {
@@ -51,7 +62,8 @@ fn main() {
 }
 ```
 
-If you would prefer to implement `Message` handling yourself, you are free to omit `App::add_message` and handle all of the functionality manually. Setting up `Message` handling manually follows the same process used by `App::add_message<M>`, however we are able to choose when `Messages::update` gets called.
+If you would prefer to implement `Message` handling yourself, you are free to omit `App::add_message` and handle all of the functionality manually.
+Setting up `Message` handling manually follows the same process used by `App::add_message<M>`, however we are able to choose when `Messages::update` gets called.
 
 ```rust
 // Our message type.
@@ -92,12 +104,17 @@ fn main() {
 
 ## Reading & Writing Messages
 
-Messages function based on *writing* them in response to something happening and *reading* them to perform some functionality as a result. Lets work through an example to showcase how and why messages should be used in your application. To do this we'll be creating a very basic scoreboard update mechanic for a king-of-the-hill style gamemode. Before we jump into the code, lets assess our objectives for the scoreboard update:
+Messages function based on *writing* them in response to something happening and *reading* them at a later point to perform some functionality.
+Lets work through an example to showcase how and why messages should be used in your application. 
+To do this we'll be creating a very basic scoreboard update mechanic for a king-of-the-hill style gamemode. 
+Before we jump into the code, lets assess our objectives for the scoreboard update:
 
 - Update each player's score based on if they control the hill.
 - End the game when a player's score reaches 500.
 
-For simplicity's sake, let's assume that we've already set up the systems that will tell us which player controls the hill and a mechanism to end the game once a player's score reaches 500. We can start by defining our `Message`, which in this case is called `ScoreboardUpdate` and contains a tuple tracking the player (`Entity`) and the update value (`i32`). We'll initialize and update it with `App::add_message` to keep things simple.
+For simplicity's sake, let's assume that we've already set up the systems that will tell us which player controls the hill and a mechanism to end the game once a player's score reaches 500. 
+We can start by defining our `Message`, which in this case is called `ScoreboardUpdate` and contains a tuple tracking the player (`Entity`) and the update value (`i32`).
+We'll initialize and update it with `App::add_message` to keep things simple.
 
 ```rust
 // Our ScoreboardUpdate message which will tell our ScoreboardUpdate to update the score
@@ -115,7 +132,10 @@ fn main() {
 
 ```
 
-Now lets *write* our message which will update the scoreboard. We'll do this by creating a `Single` query for the hill objective that our players are fighting for control of. Specifically we'll be looking for the player `Entity` value stored in a `CurrentHillKing` component, which is apart of an `Entity` with a `HillObjective` marker component. Once we have our player `Entity`, we'll write a new `ScoreboardUpdate` message containing the player and the value to update their score by (5 in our case).
+Now lets *write* our message which will update the scoreboard.
+We'll do this by creating a `Single` query for the hill objective that our players are fighting for control of.
+Specifically we'll be looking for the player `Entity` value stored in a `CurrentHillKing` component, which is apart of an `Entity` with a `HillObjective` marker component.
+Once we have our player `Entity`, we'll write a new `ScoreboardUpdate` message containing the player and the value to update their score by (5 in our case).
 
 ```rust
 // A system that will create a ScoreboardUpdate message.
@@ -134,7 +154,9 @@ fn write_scoreboard_update(
 }
 ```
 
-Next, we need a system to *read* our message and do something with the values we pass in. With our example, since `ScoreboardUpdate` contains a player `Entity` and a score `i32` value we'll access a `Scoreboard` resource and call a method to update the scores contained within. Additionally, we can check to see if any player's score is above 500, which is our condition for the match ending.
+Next, we need a system to *read* our message and do something with the values we pass in.
+With our example, since `ScoreboardUpdate` contains a player `Entity` and a score `i32` value we'll access a `Scoreboard` resource and call a method to update the scores contained within.
+Additionally, we can check to see if any player's score is above 500, which is our condition for the match ending.
 
 ```rust
 // A system that will read all of the ScoreboardUpdate messages and
@@ -158,15 +180,18 @@ fn read_scoreboard_update(
 }
 ```
 
-Finally, we can add our systems into their respective schedules. Keep in mind that the system which will update our `ScoreboardUpdate` messages is going to be run in the `First` schedule, which is the first schedule ran on every new frame. As a result we'll want to schedule `read_scoreboard_update` *before* `write_scoreboard_update`. This prevents multiple `ScoreboardUpdate` messages being read at once and allows our gameplay systems to run with a freshly updated `Scoreboard` resource.
+Finally, we can add our systems into their respective schedules.
+Keep in mind that the system which will update our `ScoreboardUpdate` messages is going to be run in the `First` schedule, which is the first schedule ran on every new frame.
+As a result we'll want to schedule `read_scoreboard_update` *before* `write_scoreboard_update`.
+This prevents multiple `ScoreboardUpdate` messages being read at once and allows our gameplay systems to run with a freshly updated `Scoreboard` resource.
 
 ```rust
-
 fn main() {
     App::new()
         .add_plugins(king_of_the_hill_plugin)
         .add_message::<ScoreboardUpdate>()
-        // The `First` schedule runs before PreUpdate, which allows our messages to be updated.
+        // The `First` schedule runs before PreUpdate, which allows our messages to be 
+        // updated.
         .add_systems(PreUpdate, read_scoreboard_update)
         // Once all of our gameplay systems ran in Update, then we can accurately write
         // a new ScoreboardUpdate message, which will be updated in the next frame.
@@ -175,7 +200,9 @@ fn main() {
 }
 ```
 
-In reality, this setup is too simple to be used without further modifications. For example, because all of our schedules are run *every frame*, it wouldn't be practical to update an actual scoreboard like this. However, you should now be able to see how `Messages` can be used and how they are executed.
+In reality, this setup is too simple to be used without further modifications.
+For example, because all of our schedules are run *every frame*, it wouldn't be practical to update an actual scoreboard like this.
+However, you should now be able to see one way that `Messages` can be used and how they need to be arranged so that they will work as you intend them to.
 
 ## Altering Messages
 
@@ -183,21 +210,17 @@ In reality, this setup is too simple to be used without further modifications. F
 
 ## Messages Vs Events
 
-At a glance it might seem like `Messages` and [`Events`] contain overlapping functionality, but they have some key distinctions. `Messages` are not processed immediately, instead they are usually only processed once per frame. This gives us some breathing room when compared to `Events` and `Observers` which will run immediately in reaction to being triggered.  Additionally, `Messages` have to be periodically polled for, typically as part of a specific `Schedule` that runs at various fixed points. `Events` on the other hand are executed sequentially either immediately if triggered by `World` or at the end of the `Schedule` if triggered with `Commands`.
+At a glance it might seem like `Messages` and [`Events`] contain overlapping functionality, but they have some key distinctions.
+`Messages` are not processed immediately, instead they are usually only processed once per frame.
+This gives us some breathing room when compared to `Events` and `Observers` which will run immediately in reaction to being triggered.
+Additionally, `Messages` have to be periodically polled for, typically as part of a specific `Schedule` that runs at various fixed points.
+`Events` on the other hand are executed sequentially either immediately if triggered by `World` or at the end of the `Schedule` if triggered with `Commands`.
 
-While it might be tempting to always use `Events` and `Observers` to immediately update your application, `Messages` can be more efficient than using `Events` in the right contexts. Processing a large number of `Messages` in a single batch is one such case. This is because a single `Message` can be *read* by multiple systems in parallel (although *writing* is still sequential). Add in the fact that `Messages` are read at a predictable fixed point and we can start to see that unless we *need* to immediately react to something occuring in our application, using `Messages` is usually preferred.
+While it might be tempting to always use `Events` and `Observers` to immediately update your application, `Messages` can be more efficient than using `Events` in the right contexts.
+Processing a large number of `Messages` in a single batch is one such case.
+This is because a single `Message` can be *read* by multiple systems in parallel (although *writing* is still sequential).
+Add in the fact that `Messages` are read at a predictable fixed point and we can start to see that unless we *need* to immediately react to something occuring in our application, using `Messages` is usually preferred.
 
 [`Events`]: https://docs.rs/bevy/latest/bevy/prelude/trait.Event.html
-
-### Using Messages *With* Events
-
-Bevy implements `Message` for a number of actions that are also `Events`, including [`GamepadEvent`] and other input events, [`AssetEvent`] when loading assets, and even [`AppExit`] when the application closes. These allow you to add some deferred functionality in a `Message` while also using an `Event` to perform more immediate actions.
-
-[`GamepadEvent`]: https://docs.rs/bevy/latest/bevy/input/gamepad/enum.GamepadEvent.html
-[`AssetEvent`]: https://docs.rs/bevy/latest/bevy/prelude/enum.AssetEvent.html
-[`AppExit`]: https://docs.rs/bevy/latest/bevy/prelude/enum.AppExit.html
-
-
-
 
 ## Message Lifespan
