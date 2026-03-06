@@ -6,10 +6,9 @@ weight = 2
 status = 'hidden'
 +++
 
-Simply understanding the basic operations of components isn't enough to immediately understand how to
-model that elaborate game idea in real, functioning code.
-Getting the core data model correct makes it much easier to write and revise flexible, fast and correct code.
-In Bevy, this usually means what data goes on which components.
+In previous chapters, you've been introduced to the basic mechanics of how to work with components.
+But if you want to build complex projects, you should think carefully about how you model your domain as data.
+In Bevy, this usually means deciding what data goes on which components.  
 
 This chapter covers some high-level guidance for what you should consider when designing your components,
 and additional tools that are helpful when considering this organization.
@@ -19,8 +18,8 @@ and additional tools that are helpful when considering this organization.
 Over time, the Bevy community has converged on a few standard pieces of advice for how to structure and define component data:
 
 - Try to keep your components relatively small
-  - Common functionality can be handled by putting it on a shared [Required Component], discussed below
-  - Small modular systems based on common behavior work well
+  - Common functionality can be handled by putting it on a shared "required component", discussed below
+  - Then, create small modular systems based on common behavior
   - Reducing the amount of data stored improves cache performance and system-parallelism
   - Group properties together within a single component if you need to maintain invariants (such as current life is always less than or equal to max life)
   - Additionally, group properties together within a single component if you need methods that operate across several pieces of data (e.g. computing the distance between two points)
@@ -47,8 +46,8 @@ Over time, the Bevy community has converged on a few standard pieces of advice f
 
 In the previous chapter, we saw how simple components can be composed to form complex
 entities. Often times, a given component will need certain other components in order to do anything
-useful. Drawing from the example in the previous section, it probably doesn't make much sense to
-mark an entity as a `Combatant` if it doesn't also have `Life`.
+useful. 
+As an example, it probably doesn't make much sense to mark an entity as a `Combatant` if it doesn't also have `Life`.
 
 To help prevent errors of omission, and to simplify the task of spawning, Bevy lets you declare
 that a given component depends on the presence of another component:
@@ -80,28 +79,15 @@ struct Life(u8);
 struct Combatant;
 ```
 
-This means that every `Combatant` will get 10 `Life` by default. But what if we want to give the
-combatant a different amount of life? That's OK! You see, the "required" clause only sets a
-default. You can override the default by specifically including a `Life` component, either
-as part of the initial bundle while spawning, or inserted at a later point.
-
-Alternatively, you can use `=` to assign an initial value to the component:
-
-```rust,hide_lines=1
-# use bevy::ecs::prelude::*;
-#[derive(Component)]
-struct Life(u8);
-
-#[derive(Component)]
-#[require(Life = initial_health())]
-struct Combatant;
-```
+This means that every `Combatant` will get 10 `Life` by default.
+But this is just a default: that can be overridden by explicitly including a `Life` component, either
+as part of the initial bundle while spawning, or by insertion at a later point.
 
 The `require` macro is the easiest way to declare required components, but you can also define
 the required components programmatically by manually implementing the `Component` trait.
+Check the `Component` trait documentation for up-to-date guidance.
 
 
-[Required Component]: ../required-components
 [`Add`]: https://doc.rust-lang.org/std/ops/trait.Add.html
 [`Display`]: https://doc.rust-lang.org/std/path/struct.Display.html
 [`Deref`]: https://doc.rust-lang.org/std/ops/trait.Deref.html
@@ -112,13 +98,13 @@ the required components programmatically by manually implementing the `Component
 
 You may have heard that, in ECS, components are "just data", and cannot or should not store logic.
 Generally this is sound advice: performing logic in systems based on component presence/absence and values
-is fast and tends to lead to flexible game design that can create interesting emergent behavior.
+is fast and can lead to flexible game design that creates interesting emergent behavior.
 
 But, like all advice, there are limits to its validity.
 Being able to perform common or complex operations on data in a consistent way is the basis of a good abstraction.
 Define these operations once, use everywhere, and then when you inevitably want to revise it, you only need to update it once.
 
-There are a number of tools available here, listed in order of increasing complexity.
+There are a number of tools available to help you reuse component-related logic, listed in order of increasing complexity.
 In most cases, simple traits and methods suffice, but it's helpful to be aware of more powerful tools.
 
 ### Methods and traits for `Component` types
@@ -152,14 +138,18 @@ impl Sub<u32> for Life {
 }
 ```
 
-Keeping fields private can be very useful to ensure that key invariants
-(like the fact that current life must be at most max life) are upheld.
+Keeping fields private can be very useful to ensure that key invariants are upheld.
+In the above example, we use this to ensure that the *current* life value cannot exceed the *max* life value.  
+
 
 ### Storing functions inside of components
 
-Sometimes, you want to be able to store arbitrarily complex, one-off logic on your components.
-While this will be relatively slow (oof my cache locality) and hard to debug, it can be a lot easier to manage
-than wrangling hundreds of marker components when working with UI or script-like behavior.
+Occasionally you might want to store arbitrarily complex, one-off logic on your components.
+This usually comes up in the context of UI or script-like behavior,
+where you want each instance of a similar object to perform easily-customized behavior
+in response to some cue, like a button being pressed or the player interacting with an object.
+While the patterns described here will be relatively slow (due to poor cache locality) and hard to debug,
+this pattern can be easier to work with than approaches which rely on a huge number of marker components.
 
 The core pattern here is to store an owned [trait object](https://doc.rust-lang.org/reference/types/trait-object.html) inside of your component, usually in a `Box`.
 
@@ -185,9 +175,9 @@ fn handle_clickable_props(trigger: On<Pointer<Click>>, query: Query<&ClickablePr
 This can be repeated with other traits: `Event` and `Message` are quite powerful if you want to hook into existing logic.
 
 Storing [one-shot systems](../control-flow/systems.md) can be even more expressive.
-See the [callbacks example](TODO, see https://github.com/bevyengine/bevy/pull/23197) for a demonstration of this pattern.
+See the [callbacks example](https://github.com/bevyengine/bevy/blob/latest/examples/ecs/callbacks.rs) for a demonstration of this pattern.
 
-If you benchmarks show that you need to make this pattern more performant, you can consider swapping to [function pointers](https://doc.rust-lang.org/std/primitive.fn.html), at the cost of some flexibility (no methods, cannot capture).
+If your benchmarks show that you need to make this pattern more performant, you can consider swapping to [function pointers](https://doc.rust-lang.org/std/primitive.fn.html), at the cost of some flexibility (no trait methods, cannot capture the environment during creation).
 
 ### Accessing data beyond the component
 
@@ -195,13 +185,13 @@ As your logic grows in complexity, you may find yourself repeatedly needing to a
 components or even resources simultaneously.
 For example, you might find that you need to update a tilemap index while revising tile data,
 animate a goblin by mutating both its weapon and the root entity,
-or checking if an ability can be used by checking available mana, cooldowns and range to the target.
+or checking if an ability can be used by examining available mana, cooldowns and range to the target.
 
 Duplicating this complex logic can be both error-prone and tedious!
-While this should prompt you to ask "can / should we combine this data into a single component",
-that's not always feasible (sometimes for reasons outside of your control).
+Your first thought should be to ask "Can we combine this data into a single component",  
+but that's not always feasible (sometimes for reasons outside of your control).
 
-We can abstract complex ECS lookups like this by creating our own custom `QueryData`, `QueryFilter`
+One solution is to abstract complex ECS lookups like this by creating our own custom `QueryData`, `QueryFilter`
 and `SystemParam` types, using the provided derive macros.
 `QueryData` and `QueryFilter` are useful when the data is in separate components on the same entity and is quite composable (you can always add more terms to your `Query`!),
 while `SystemParam` is best reserved for when you need to access distinct entities, resources, commands, messages or other forms of data in the same logic.
