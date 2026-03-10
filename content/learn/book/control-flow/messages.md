@@ -226,12 +226,12 @@ fn my_system(mut mutator: MessageMutator<MyMessage>) {
 One thing to note is that `MessageMutator` does not run in parallel.
 This is because `MessageMutator` mutably accesses the `Messages<M>` resource that contains all of the messages of a given type.
 The same applies for `MessageWriter` as well.
-Systems accessing either will run only sequentially with each other.
+Systems accessing either will only run sequentially with each other.
 On the other hand, `MessageReader` *can* be accessed by multiple systems concurrently if they only access `MessageReader`.
 Although these systems still cannot run concurrently with systems accessing `MessageMutator` or `MessageWriter`.
 
 Ultimately `MessageWriter`, `MessageReader`, and `MessageMutator` are all accessing the `Messages<M>` resource for a given `Message` type.
-If you find that there is some functionality that these three system parameters cannot perform, you always have the option of accessing the `Messages<M>` resource itself using 1Res1 or `ResMut`. Simply access it as a system parameter like you would any other `Resource`.
+If you find that there is some functionality that these three system parameters cannot perform with their supplied methods, you always have the option of accessing the `Messages<M>` resource itself using `Res` or `ResMut`. Simply access it as a system parameter like you would any other `Resource`.
 
 ```rust
 // Custom message type.
@@ -253,15 +253,42 @@ fn message_resource(mut messages: ResMut<Messages<MyMessage>>) {
 ## Messages Vs Events
 
 At a glance it might seem like `Messages` and [`Events`] contain overlapping functionality, but they have some key distinctions.
-`Messages` are not processed immediately, instead they are only processed at a specified moment.
-This gives us some breathing room when compared to `Events` and `Observers` which will run immediately in reaction to being triggered.
-Additionally, `Messages` have to be periodically polled for, typically as part of a specific `Schedule` that runs at various fixed points.
-`Events` on the other hand are executed sequentially either immediately if triggered by `World` or at the end of the `Schedule` if triggered with `Commands`.
+`Messages` are not processed immediately, instead they are only processed at a specific moment each frame.
+We can write and read messages at any point, but we can only access the updated values once the relevant `Messages<M>` resource has been updated.
 
-While it might be tempting to always use `Events` and `Observers` to immediately update your application, `Messages` can be more efficient than using `Events` in the right contexts.
-Processing a large number of `Messages` in a single batch is one such case.
-This is because a single `Message` can be *read* by multiple systems in parallel (although *writing* is still sequential).
-Add in the fact that `Messages` are read at a predictable fixed point and we can start to see that unless we *need* to immediately react to something occuring in our application, using `Messages` is usually preferred.
+This gives us some breathing room when compared to `Events` and `Observers`.
+`Events` are executed sequentially either immediately if triggered by `World` or at the end of the `Schedule` if triggered with `Commands`.
+If we trigger multiple `Events` within a frame, all of those events will be evaluated within that frame.
+
+With this in mind, lets look at a scenario where `Messages` can be more efficient than using `Events`.
+
+```rust
+#[derive(Message, Debug)]
+pub struct TickDamage {
+    entity: Entity,
+    damage: i32,
+}
+
+fn deal_tick_damage(mut tick_damage_reader: MessageReader<TickDamage>, mut health_query: Query<&mut Health>) {
+    for tick_damage in tick_damage_reader.par_read() {
+        if let Some(mut health) = health_query.get_mut(tick_damage.entity) {
+            health.value -= tick_damage.damage;
+        }
+    }
+    tick_damage_reader.clear();
+}
+```
+
+In the above example, we have a `TickDamage` message that tracks an `Entity` and a damage amount (`i32`).
+Throughout our schedules we can use a `MessageWriter` to accumulate `TickDamage` messages.
+When `Messages<TickDamage>` gets updated, we can then apply all of the `TickDamage` messages at once, benefitting from the parallel access that `MessageReader` gives us.
+
+Reproducing the same behavior using `Events` would involve several more steps.
+First we would have to first track all of our `Entities` separately, since we only want to apply `TickDamage` to our `Entities` at a single point.
+Then we would have to queue each `Event` to be evaluated sequentially. 
+As the number of `Entities` we're applying `TickDamage` to grows larger and larger, the more time it will take to execute those `Events`.
+
+By using `Messages`, we avoid the headache of making sure `Entities` are tracked separately and gain stability by avoiding sequential `Event` execution. 
 
 [`Events`]: https://docs.rs/bevy/latest/bevy/prelude/trait.Event.html
 
