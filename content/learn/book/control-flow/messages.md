@@ -13,7 +13,7 @@ Or, maybe you don't need to *immediately* perform some logic that an `Observer` 
 There might even be some repeated functionality that you'll want to *defer* and accumulate before eventually processing.
 These are the situations where **Messages** are the preferred tool.
 [`Messages`] offer a communication channel for accumulating and efficiently processing many similar actions.
-They can be created and read from using system parameters and are stored in a [`Messages<M>`] resource. 
+They can be created and read from using system parameters and are stored in a [`Messages<M>`] resource.
 
 You can use `Messages` for a variety of different functionalities.
 Some messages might re-occur over a longer period of time, like continuously applying damage effects or regularly updating a leaderboard.
@@ -42,7 +42,7 @@ fn read_messages(mut reader: MessageReader<Greeting>) {
 ```
 
 Then we have to tell our application to begin handling `Greeting` messages.
-While we already derived the `Message` trait on `Greeting`, our application still needs some additional setup to get everything running. 
+While we already derived the `Message` trait on `Greeting`, our application still needs some additional setup to get everything running.
 
 If we want the application to automatically handle all of our `Message` types, we can use the [`App::add_message<M>`] method.
 This automatically inserts a `Messages<M>` queue resource for the `M` message type we specify (`Greeting` in the above example) and schedules a [`message_update_system`] in the [`First`] schedule.
@@ -105,14 +105,14 @@ fn main() {
 ## Reading & Writing Messages
 
 Messages function based on *writing* them in response to something happening and *reading* them at a later point to perform some functionality.
-Lets work through an example to showcase how and why messages should be used in your application. 
-To do this we'll be creating a very basic scoreboard update mechanic for a king-of-the-hill style gamemode. 
+Lets work through an example to showcase how and why messages should be used in your application.
+To do this we'll be creating a very basic scoreboard update mechanic for a king-of-the-hill style gamemode.
 Before we jump into the code, lets assess our objectives for the scoreboard update:
 
 - Update each player's score based on if they control the hill.
 - End the game when a player's score reaches 500.
 
-For simplicity's sake, let's assume that we've already set up the systems that will tell us which player controls the hill and a mechanism to end the game once a player's score reaches 500. 
+For simplicity's sake, let's assume that we've already set up the systems that will tell us which player controls the hill and a mechanism to end the game once a player's score reaches 500.
 We can start by defining our `Message`, which in this case is called `ScoreboardUpdate` and contains a tuple tracking the player (`Entity`) and the update value (`i32`).
 We'll initialize and update it with `App::add_message` to keep things simple.
 
@@ -284,12 +284,117 @@ Throughout our schedules we can use a `MessageWriter` to accumulate `TickDamage`
 When `Messages<TickDamage>` gets updated, we can then apply all of the `TickDamage` messages at once, benefitting from the parallel access that `MessageReader` gives us.
 
 Reproducing the same behavior using `Events` would involve several more steps.
-First we would have to first track all of our `Entities` separately, since we only want to apply `TickDamage` to our `Entities` at a single point.
-Then we would have to queue each `Event` to be evaluated sequentially. 
-As the number of `Entities` we're applying `TickDamage` to grows larger and larger, the more time it will take to execute those `Events`.
+First we would have to first track all of our entities separately, since we only want to apply `TickDamage` to our entities at a single point.
+Then we would have to queue each `Event` to be evaluated sequentially.
+As the number of entities we're applying `TickDamage` to grows larger and larger, the more time it will take to execute those `Events`.
 
-By using `Messages`, we avoid the headache of making sure `Entities` are tracked separately and gain stability by avoiding sequential `Event` execution. 
+By using messages, we avoid the headache of making sure entities are tracked separately and gain stability by avoiding sequential `Event` execution.
 
 [`Events`]: https://docs.rs/bevy/latest/bevy/prelude/trait.Event.html
 
 ## Message Lifespan
+
+We've mentioned that one of the benefits of using messages is that we can *defer* processing them until a later point.
+This might raise several questions. How long do messages exist for? Can we defer processing them indefinitely? When are messages dropped or deleted?
+
+The short answer is that every `Message` stored in a `Messages<M>` resource is accessible for up to two `Messages::update` method calls.
+
+- You can access a `Message` after it is created, before a `Messages::update` is called.
+- The initial `Messages` are then moved into a different section of memory (but still accessible) after the first `Messages::update` is called.
+- After a second `Messages::update` is called, the initial set of `Messages` is dropped by the application.
+
+This is a variation of a double buffer strategy.
+New messages are placed into a buffer, and are made available for systems to read.
+Whenever the `Messages::update` method is called, that buffer is swapped with a second buffer.
+Messages are dropped after a second `Messages::update` is called, clearing the buffer and freeing up memory to be used for a new set of messages.
+If `Messages::update` is never called, these buffers will continue to grow in size, and can cause performance issues for your application.
+
+### Messages in FixedUpdate
+
+Using `App:add_message<M>()` to register your `Message` will run `Messages::update` *every frame*.
+Like we mentioned at the top, this is because the `message_update_system` is placed in the `First` schedule, meaning it will be the first thing updated every frame.
+However we aren't locked into this behaviour.
+If we instead want our `Messages` to be updated within the [`FixedUpdate`] schedule rather than being frame-dependent, we can do so by several means.
+
+The first would be to manually place `message_update_system` in the `FixedUpdate` schedule (or some other schedule within the [`FixedMain`] set).
+
+```rust
+fn main() {
+    App::new()
+        // The message_update_system will update all Messages 
+        // registered in your application.
+        .add_systems(FixedUpdate, message_update_system);
+}
+```
+
+However, this is indiscriminant and will update *every* `Message` type in your application.
+Instead, it's likely that you'll want more fine-grained control over which `Messages` update in `FixedUpdate` versus those that update every frame.
+We'll have to access each individual `Messages<M>` resource to accomplish this.
+
+```rust
+// This Message will update in the FixedUpdate schedule (every update).
+#[derive(Message, Debug)]
+pub struct TickDamage {
+    entity: Entity,
+    damage: i32,
+}
+
+// This message will update in the Update schedule (every frame).
+#[derive(Message, Debug)]
+pub struct WarnTickDamage {
+    entity: Entity,
+}
+
+// This system will update the Message<TickDamage> resource.
+fn deal_tick_damage_update(mut tick_damage_messages: ResMut<Messages<TickDamage>>) {
+    tick_damage_messages.update();
+}
+
+// This system will read from the Message<TickDamage> resource 
+// and apply damage to entities.
+fn deal_tick_damage(mut tick_damage_reader: MessageReader<TickDamage>, mut health_query: Query<&mut Health>) {
+    for tick_damage in tick_damage_reader.par_read() {
+        if let Some(mut health) = health_query.get_mut(tick_damage.entity) {
+            health.value -= tick_damage.damage;
+        }
+    }
+    tick_damage_reader.clear();
+}
+
+// This system will update the Message<WarnTickDamage> resource.
+fn warn_tick_damage_update(mut warn_messages: ResMut<Messages<WarnTickDamage>>) {
+    warn_message.update();
+}
+
+// This system will read from the Message<WarnTickDamage> resource 
+// and print a warning message.
+fn warn_tick_damage(warn_tick_damage_reader: MessageReader<WarnTickDamage>) {
+    for message in warn_tick_damage_reader.par_read() {
+        println!("{} will take Tick Damage!", message.entity);
+    }
+}
+
+// This system will add the Message<TickDamage> and Message<WarnTickDamage> 
+// resources to the world.
+fn add_messages(mut commands: Commands) {
+    let warn_message = Messages::<WarnTickDamage>::default();
+    let tick_damage_message = Messages::<TickDamage>::default();
+    
+    commands.insert_resource(warn_message);
+    commands.insert_resource(tick_damage_message);
+}
+
+fn main() {
+    App::new()
+        .add_systems(Startup, add_messages)
+        // Manually update TickDamage messages in the FixedUpdate schedule.
+        .add_systems(FixedUpdate, (deal_tick_damage_update, deal_tick_damage).chain())
+        // Manually update WarnTickDamage messages in the Update schedule.
+        .add_systems(Update, (warn_tick_damage_update, warn_tick_damage).chain());
+}
+```
+
+By placing `warn_tick_damage_update` in `Update`, it gets ran every frame. In contrast, `deal_tick_damage_update` is placed in `FixedUpdate`, meaning that it will run at a consistent interval instead of every frame.
+
+[`FixedUpdate`]: https://docs.rs/bevy/latest/bevy/prelude/struct.FixedUpdate.html
+[`FixedMain`]: https://docs.rs/bevy/latest/bevy/app/struct.FixedMain.html
