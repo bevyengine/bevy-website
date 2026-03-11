@@ -52,15 +52,15 @@ Goals are tracked on the [Project Goals Board](https://github.com/orgs/bevyengin
 
 Goals can have a variety of "states", which are expressed as "statuses" on the [Project Goals Board](https://github.com/orgs/bevyengine/projects/23/views/1).
 
-- **Proposed**: One or more **SME** or **Maintainer** thinks this Goal is worth considering
-  - Goals enter this state when they are created by an SME, Maintainer, or Project Lead
+- **Proposed**: One or more **SME**, **Maintainer**, or trusted contributor thinks this Goal is worth considering
+  - Goals enter this state when they are created
   - The SMEs and Project Lead discuss what state to transition the Goal to. Ideally Goals do not stay in the Proposed state for long.
 - **Postponed**: We might want to do this later, but we don't have the bandwidth or inclination to invest in it now.
-- **Blocked (Approved)**: We want to do this, one or more SME has agreed to "staff" it once unblocked, and the Project Lead has approved it, but other work is required first
+- **Blocked (Approved)**: We want to do this, one or more SME has agreed to "staff" it once unblocked, and the **Project Lead** and **SME**s have approved it, but other work is required first
   - Goals that are blocked on other Goals or issues should include a "blocked by" relationship on GitHub.
-- **Inactive (Approved)**: We want to do this, one or more **SME** has agreed to staff it, the **Project Lead** has approved it, but there is no active **Working Group**
-  - This is essentially the list of Goals Bevy Leadership really wants to work on now / is willing to support, but without anyone actively working on them. Interested contributors are highly encouraged to help form a Working Group for these Goals.
-- **Active (Approved)**:  A **Working Group** is actively working toward this, with one or more active **SME** staffing it.
+- **Inactive (Approved)**: We want to do this, the **Project Lead** and **SME**s have approved it, but there is no **SME** staffing it and no active **Working Group**
+  - This is essentially the list of Goals Bevy Leadership really wants to work on now / is willing to support, but without anyone actively working on them. Interested contributors are highly encouraged to help form a Working Group for these Goals and advocate for an **SME** to staff it.
+- **Active (Approved)**:  A **Working Group** is actively working toward this, with one or more **SME** staffing it.
 - **Done**: The goal's issue has been closed. This actually has two "sub states" (which are _not_ expressed as Project Board Statuses, as GitHub issues already encode the relevant information):
   - **Declined**: Closed as "not planned"
   - **Completed**: Closed as "completed"
@@ -90,8 +90,8 @@ The SMEs staffing a Goal should be listed in the Goal's description.
 4. **SMEs** identify that the issue needs a goal and apply the `S-Needs-Goal` label
 5. **SMEs** discuss the framing of the Goal and create a new issue with the `C-Goal` label.
 6. A Github Project Workflow picks up the `C-Goal` issue and adds it to the **Project Goals** board in the Proposed state.
-7. The **Project Lead** and **SMEs** discuss how to handle the Goal: Deny, Inactive (Approved), or Postpone. Approval is contingent on an **SME** agreeing to staff it, and put energy into helping the Working Group bring it to completion.
-8. If the Goal is Inactive (Approved), and there is enough commitment and support from the community to form a **Working Group**, it moves into the Active (Approved) state.
+7. The **Project Lead** and **SMEs** discuss how to handle the Goal: Deny, Inactive (Approved), or Postpone.
+8. If the Goal is Inactive (Approved), an SME has agreed to "staff" it, and there is enough commitment and support from the community to form a **Working Group**, it moves into the Active (Approved) state.
 9. The **Project Lead** adjusts the priorities of the Goals (expressed via the [Project Goals Board](https://github.com/orgs/bevyengine/projects/23/views/1) order), based on the needs of the project.
 10. When a Goal is completed, the issue is closed out. A GitHub Project Workflow moves it into the Done status.
 
