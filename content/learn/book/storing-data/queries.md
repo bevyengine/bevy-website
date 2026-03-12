@@ -166,6 +166,7 @@ which has advice on how to fix and avoid this problem.
 
 [mutable aliasing]: https://doc.rust-lang.org/rust-by-example/scope/borrow/alias.html
 [`Access`]: https://dev-docs.bevy.org/bevy/ecs/query/struct.Access.html
+[B0002]: https://bevy.org/learn/errors/b0002/
 {% end %}
 
 By changing our [`QueryData`] terms from `&Life` to `&mut Life`, we change the type of [query item] returned,
@@ -182,7 +183,6 @@ it's helpful to know that [`Changed`] and [`Added`] are both query filters.
 [`Mut<Life>`]: https://dev-docs.bevy.org/bevy/ecs/change_detection/struct.Mut.html
 [smart pointer]: https://doc.rust-lang.org/book/ch15-00-smart-pointers.html
 [change detection]: ../control-flow/change-detection.md
-[B0002]: https://bevy.org/learn/errors/b0002/
 [`Changed`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html
 [`Added`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Added.html
 
