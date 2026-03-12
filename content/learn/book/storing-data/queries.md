@@ -42,7 +42,7 @@ wrapping them with parentheses.
 [dependency injection]: https://en.wikipedia.org/wiki/Dependency_injection
 ["unit type"]: https://doc.rust-lang.org/core/primitive.unit.html
 [tuple]: https://doc.rust-lang.org/rust-by-example/primitives/tuples.html
-[`Query<D, F>`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
+[`Query<D, F>`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html
 [`QueryData`]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.QueryData.html
 [`QueryFilter`]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.QueryFilter.html
 [`WorldQuery`]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.WorldQuery.html
