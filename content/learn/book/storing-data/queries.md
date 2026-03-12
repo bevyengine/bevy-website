@@ -16,7 +16,7 @@ We introduced queries briefly in our [introduction](../intro/) to Bevy: if you'r
 
 ## Anatomy of a query
 
-To understand how queries work in a bit more detail, let's take a look at the anatomy of a [`Query`].
+To understand how queries work in a bit more detail, let's take a look at the anatomy of a `Query`.
 The [`Query<D, F>`] type has two [generic type parameters]: `D`, which must implement the [`QueryData`] trait,
 and `F`, which must implement the [`QueryFilter`] trait.
 
@@ -39,7 +39,13 @@ we can combine [`QueryData`] or [`QueryFilter`] types by putting them inside of 
 wrapping them with parentheses.
 
 [generic type parameters]: (https://doc.rust-lang.org/book/ch10-01-syntax.html)
+[dependency injection]: https://en.wikipedia.org/wiki/Dependency_injection
 ["unit type"]: https://doc.rust-lang.org/core/primitive.unit.html
+[tuple]: https://doc.rust-lang.org/rust-by-example/primitives/tuples.html
+[`Query<D, F>`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
+[`QueryData`]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.QueryData.html
+[`QueryFilter`]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.QueryFilter.html
+[`WorldQuery`]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.WorldQuery.html
 
 ### Accessing multiple components at once
 
@@ -49,7 +55,7 @@ As shown above, we can grab a list of all entities with the `Life` component wit
 But what if we wanted to see the `Life` and `Mana` of our entities at the same time?
 
 We need to somehow communicate that the `D` generic of our `Query` should cover both `&Life` and `&Mana`.
-Bevy uses [tuples] as the syntax for this, wrapping all of the types that we want to combine in parentheses.
+Bevy uses tuples as the syntax for this, wrapping all of the types that we want to combine in parentheses.
 `&Life` becomes `(&Life, &Mana)`, which we slot into the `D` generic to become `Query<(&Life, &Mana)>`.
 
 We can iterate over this query like so:
@@ -93,14 +99,13 @@ This means "get me the energy component of all entities that have a life compone
 
 Combining multiple terms in your queries like this should be the first tool you reach for when trying to implement more complex logic in Bevy.
 
-[tuples]: https://doc.rust-lang.org/rust-by-example/primitives/tuples.html
 [variadic generics]: https://poignardazur.github.io/2025/06/07/report-on-variadics-rustweek/
 
 ### Optional Components
 
-Sometimes, you want to swap from the default "and" logic, where all of the components must be present, to "or" logic, where any of the components can be present. To do so, you can use `Option` and a few special types:
+Sometimes, you want to swap from the default "and" logic, where all of the components must be present, to "or" logic, where any of the components can be present. To do so, you can use [`Option`] and a few special types:
 
-- `Query<Option<&Life>>`, for an [`Option`] that contains the component value if present and nothing if it is absent
+- `Query<Option<&Life>>`, for an `Option` that contains the component value if present and nothing if it is absent
 - `Query<AnyOf<(&Life, &Mana)>>` which acts as a wrapper for multiple `Option` `QueryData` types
 - `Query<Has<Life>>`, which contains `true` if the component is present, and `false` if the component is absent
 - `Query<(), Or<(With<Life>, With<Mana>)>>`, which combines query filters via an `Or` relationship
@@ -109,7 +114,7 @@ Sometimes, you want to swap from the default "and" logic, where all of the compo
 As you can see, Bevy's type-driven querying can be quite expressive and elaborate!
 Don't worry, though: most of your queries will be quite simple, requesting a few pieces of data with a simple filter.
 
-[dependency injection]: https://en.wikipedia.org/wiki/Dependency_injection
+[`Option`]: https://doc.rust-lang.org/core/option/enum.Option.html
 
 ## Mutable and immutable query data
 
@@ -159,6 +164,8 @@ You can avoid this by ensuring that your access is provably disjoint: `Without` 
 If you run into this, you'll be pointed to the [B0002] error page,
 which has advice on how to fix and avoid this problem.
 
+[mutable aliasing]: https://doc.rust-lang.org/rust-by-example/scope/borrow/alias.html
+[`Access`]: https://dev-docs.bevy.org/bevy/ecs/query/struct.Access.html
 {% end %}
 
 By changing our [`QueryData`] terms from `&Life` to `&mut Life`, we change the type of [query item] returned,
@@ -175,9 +182,9 @@ it's helpful to know that [`Changed`] and [`Added`] are both query filters.
 [`Mut<Life>`]: https://dev-docs.bevy.org/bevy/ecs/change_detection/struct.Mut.html
 [smart pointer]: https://doc.rust-lang.org/book/ch15-00-smart-pointers.html
 [change detection]: ../control-flow/change-detection.md
-[mutable aliasing]: https://doc.rust-lang.org/rust-by-example/scope/borrow/alias.html
-[`Access`]: https://dev-docs.bevy.org/bevy/ecs/query/struct.Access.html
 [B0002]: https://bevy.org/learn/errors/b0002/
+[`Changed`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html
+[`Added`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Added.html
 
 ## Accessing data on specific entities
 
@@ -239,6 +246,9 @@ fn despawn_all_enemies(enemies: Query<Entity, With<Enemy>>, mut commands: Comman
 
 [hooks]: ../control-flow/hooks.md
 [relations]: ./relations.md
+[`Query::get`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get
+[`Query::get_mut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get_mut
+[`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 
 ## Working with singleton entities
 
@@ -247,7 +257,7 @@ This might be a player, the sun, or something more abstract like your camera.
 
 While you could iterate over a query of length one, this can be confusing to read and feel a bit silly.
 To make working with these patterns more comfortable, Bevy provides two tools:
-`Query::single` and the `Single` system param.
+[`Query::single`] and the [`Single`] system param.
 Let's try writing the same simple system in each of the three ways.
 
 ```rust,hide_lines=1-2
@@ -291,13 +301,16 @@ fn kill_player_when_dead_query_single(player: Single<(Entity, &Life), With<Playe
 }
 ```
 
-[`Query::single`] returns a [`QuerySingleError`], allowing you to check if zero, one, or more than one matching entities were found.
+`Query::single` returns a [`QuerySingleError`], allowing you to check if zero, one, or more than one matching entities were found.
 
 For more discussion on [`Single`] and how it works, please see the [error handling] chapter.
 Similarly, see the [resources] chapter of this book for a discussion on the choice between using a singleton entity or a resource.
 
 [error handling]: ../control-flow/error-handling.md
 [resources]: ./resources.md
+[`Query::single`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.single
+[`QuerySingleError`]: https://docs.rs/bevy/latest/bevy/ecs/query/enum.QuerySingleError.html
+[`Single`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Single.html
 
 ## Accessing multiple items from the same query
 
@@ -309,10 +322,13 @@ After all, it can't tell from the type signature that you're not accessing the s
 
 To help with this, Bevy offers two particularly helpful methods on [`Query`]:
 
-- [`Query::get_multiple_mut`]: fetch multiple entities by their [`Entity`] ids, which must be unique.
+- [`Query::get_many_mut`]: fetch multiple entities by their [`Entity`] ids, which must be unique.
   - Helpful for things like collisions.
 - [`Query::iter_combinations_mut`]: iterate over all pairs, triples or so on of query items.
   - Great for gravity simulations!
+
+[`Query::get_many_mut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get_many_mut
+[`Query::iter_combinations_mut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.iter_combinations_mut
 
 ## Disabling entities
 
@@ -322,7 +338,7 @@ it won't stop any gameplay effects.
 
 Bevy offers a [`Disabled`] component, which works by hiding entities with this component from
 queries unless the [`Disabled`] component is explicitly permitted,
-such as via [`With`], [`Has`] or [`Allows`].
+such as via [`With`], [`Has`] or [`Allow`].
 
 Under the hood, this acts as a [default query filter],
 adding an overridable filter to each query.
@@ -330,6 +346,11 @@ You can even add your own disabling components,
 which can be helpful if you want to assign a specific meaning for *why* entities are disabled.
 
 [default query filter]: https://docs.rs/bevy/latest/bevy/ecs/entity_disabling/struct.DefaultQueryFilters.html
+[`Visibility`]: https://docs.rs/bevy/latest/bevy/camera/visibility/enum.Visibility.html
+[`Disabled`]: https://docs.rs/bevy/latest/bevy/ecs/entity_disabling/struct.Disabled.html
+[`With`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.With.html
+[`Has`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Has.html
+[`Allow`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Allow.html
 
 ## Working with complex queries
 
@@ -357,3 +378,4 @@ Bevy offers three good tools for this, each with their own niche:
 
 [`clippy`'s `type_complexity` lint]: https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
 [type aliases]: https://doc.rust-lang.org/reference/items/type-aliases.html
+[`SystemParam`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html
