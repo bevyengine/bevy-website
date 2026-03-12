@@ -114,6 +114,11 @@ More subjectively, they should also:
 - have clear and helpful documentation and examples, ideally at the crate, module and API level
 - offer the basic functionality expected by users trying to do the thing the crate was made to do
 - have a pleasant API that feels Bevy-idiomatic
+   - makes use of existing ECS primitives where possible: entities, components, resources, events...
+   - prefers simple patterns and avoids new abstractions
+   - defaults to relatively public internals
+   - uses enums and new-types to encode intent, rather than relying on argument names
+   - minimizes use of macros
 - present a solid foundation to build on, by making good architectural decisions
 
 In-depth evaluations of these factors are *incredibly* valuable, even from rank-and-file contributors.
