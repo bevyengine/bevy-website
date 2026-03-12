@@ -73,7 +73,7 @@ deliberation that would be taken to build this functionality from scratch.
 
 Is this a tiny helper crate? Just submit a PR, giving credit!
 A huge project with foundational implications?
-Please make a [Goal](./project-goals.md) and form a [Working Group](./working-groups.md) to keep track of everything.
+Please propose a [Goal](./project-goals.md) and form a [Working Group](./working-groups.md) to keep track of everything.
 Somewhere in between? Talk it over with the relevant experts, then make a PR!
 
 Before you propose upstreaming work, please check in with the author to ask if they're okay with the plan.
