@@ -23,7 +23,7 @@ Like with any feature we might add to Bevy, the most important things to conside
 While maintainers will ultimately make the final call on merging code,
 it can be helpful to reflect on these tradeoffs when making or evaluating proposals to upstream something.
 
-Wen thinking about "should we upstream this crate?" in particular, there are both good and bad arguments to both upstream and not upstream, creating a two-by-two matrix of arguments to consider.
+When thinking about "should we upstream this crate?" in particular, there are both good and bad arguments to both upstream and not upstream, creating a two-by-two matrix of arguments to consider.
 The most obvious quadrant is "good reasons to upstream", which includes:
 
 - this work is widely useful to most Bevy users
