@@ -35,7 +35,13 @@ The most obvious quadrant is "good reasons to upstream", which includes:
 However, there are also "bad reasons to upstream", which on their own are not compelling:
 
 - this crate is popular (good reasons may exist, but this is not a factor on its own)
+- Bevy has no existing solution for this problem
+  - the scope of a game engine is large, but not infinite
+  - each feature must justify its value relative to the maintenance/compile time/binary size costs
+  - Bevy is intentionally very extensible: allowing users to 
 - the crate author(s) needs help with maintenance
+  - when this happens to crates which are essential to the ecosystem function, we should try and find a solution
+  - upstreaming is not the only possible solution: adding maintainers or creating alternatives is also possible
 - someone important made this crate and thinks it's neat
 - a commercial user or sponsor of Bevy wants us to upstream it
 
@@ -154,3 +160,11 @@ There are effectively two strategies, and both can be valid:
 
 The all-at-once strategy works best for monolithic, mature projects (e.g. an entire physics engine),
 while the one-bite-at-a-time approach is a good fit for experimental prototypes that should be refined through critical PR review.
+
+In some cases, most of the value of upstreaming can be achieved by incorporating only a fairly minimal core.
+Shared, relatively unopinionated primitives can serve an important role,
+supporting ecosystem interoperability and user portability
+at a lower maintenance cost, and leave space for multiple competing solutions to meet distinct needs.
+
+This approach can even be used to good effect when Bevy *does* want to upstream a complete end-to-end solution.
+The modularity benefits still apply, and by splitting the work into "shared primitives" and "first-party solution using those primitives" upstreaming can occur in a more gradual, reviewable way.
