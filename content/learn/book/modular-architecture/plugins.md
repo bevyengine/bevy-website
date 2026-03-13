@@ -17,7 +17,7 @@ to make your subsystem function.
 Once all of this setup is complete, a plugin's job is done:
 vanishing into thin air as the systems and resources it added live on to carry out its job.
 
-At its heart, the `Plugin` trait is extremely simple.
+At its heart, the [`Plugin`] trait is extremely simple.
 It looks a little something like this:
 
 ```rust
@@ -73,6 +73,8 @@ The choice is mostly stylistic: the "fn plugin" style is a bit terser,
 but the "struct plugin" style is easier to change if you find that your plugin needs
 extra features in the future.
 
+[`Plugin`]: https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html
+
 ## Configuring plugins
 
 As alluded to above, you can use the `&self` argument in [`Plugin::build`] to change
@@ -94,6 +96,8 @@ A relatively common example of this is allowing the user
 to configure which schedule your plugins' systems should be added to.
 In that case, using a struct with fields as your `Plugin` type
 is the best and only option.
+
+[`Plugin::build`]: https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html#tymethod.build
 
 ## Plugin groups
 
