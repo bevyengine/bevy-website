@@ -46,6 +46,8 @@ jobs:
 
       - name: "Build and deploy website"
         if: github.repository_owner == 'bevyengine'
+        # When updating to a newer version, remember to also update it
+        # in the contribution guide & readme
         uses: shalzz/zola-deploy-action@v0.19.2
         env:
           PAGES_BRANCH: gh-pages
