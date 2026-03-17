@@ -9,26 +9,39 @@ status = 'hidden'
 **Systems** are the primary way that Bevy applications interact with the [`World`].
 When you need to perform regularly scheduled logic, a [`System`] will usually be the best tool for the job.
 As the third pillar of the ECS model, systems give us the power to operate over a large number of similar entities in an efficient way.
-Since components of a given type are laid out beside each other in memory, we get good [cache locality] when operating on them in a batched fashion.
+When we create entities with similar components, those components are laid out beside each other in memory.
+This gives us good [cache locality] when operating on them in a batched fashion.
 
 Systems in Bevy are any Rust function where every argument implements the [`SystemParam`] trait.
 Some common parameters you'll use and see in Bevy are [`Query`], [`Res`], [`ResMut`], [`MessageReader`], [`MessageWriter`], [`Local`] and [`Commands`].
 Each of these is covered in their own chapters throughout this book, but we'll be using them here to help explain the concepts that directly tie in to systems.
 
 ```rust
-// A simple system accessing the Commands, Query, and Resource parameters.
+// A simple system accessing a Commands parameter, a Query parameter,
+// and a mutable Resource (ResMut) parameter.
 fn bevy_system(
     // Our System's System Parameters.
     mut commands: Commands,
-    query: Query<&Component>,
-    mut res: ResMut<Resource>
+    query: Query<Entity, Without<MyComponent>>,
+    mut res: ResMut<MyResource>
 ) {
     // Using our parameters in a System.
-    for item in query.iter() {
-        let new_entity = commands.spawn(BundleOfComponents).id();
-        
-        res.entity_field.push(new_entity);
+    for query_entity in query.iter() {
+        // Insert MyComponent into the Entity returned by the Query.
+        commands.entity(query_entity).insert(MyComponent);
+        // Add the Entity to our Resource.
+        res.entity_field.push(query_entity);
     }
+}
+
+// A simple Component.
+#[derive(Component)]
+struct MyComponent;
+
+// A simple Resource.
+#[derive(Resource)]
+struct MyResource {
+    pub entity_field: Vec<Entity>,
 }
 ```
 
@@ -81,7 +94,7 @@ fn access_resource(custom_resource: Res<CustomResource>) {
 ```
 
 The requested data is automatically fetched from the `World` when the system is run, locking out access to the underlying data to avoid violating the rules of the borrow checker.
-When working within a system, or when running multiple systems at once, the prime directive of Rust applies: access can be mutable or multiple, but never both at once.
+When working within a system, or when running multiple systems at once, the prime directive of Rust applies: access can be mutable *or* shared, but never both at once.
 
 ```rust
 // This system would not compile because it accesses the same Transform data 
@@ -128,16 +141,16 @@ fn main() {
 ```
 
 In the above example, we're running the `my_system` system in the [`Update`] schedule.
-`Update` is one of the standard schedules that Bevy provides, but there are many more to choose from.
-You can read more about schedules in the dedicated [Schedules chapter], and how schedules run within the application in the [Game Loop chapter], but for now you just need to know a couple things:
+`Update` is one of the *standard* schedules that Bevy provides, but there are many more to choose from.
+Each standard schedule provides access to a different point of time for a single frame, allowing you to place your systems in relation to the state of the frame.
+You can read more about schedules in the dedicated [Schedules section], but for now you just need to know a couple things:
 
 - By default, systems within a single schedule run in parallel.
 - Systems within a single schedule can also be explicitly ordered to run relative to each other.
 - Each of the standard schedules are evaluated *once per frame*.
 - There are also [`Fixed`] schedules which run at a consistent interval.
 
-[Schedules chapter]: ../the-game-loop/schedules
-[Game Loop chapter]: ../the-game-loop
+[Schedules section]: ../the-game-loop/schedules
 
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.Schedule.html
 [`App::add_system`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.add_systems
@@ -148,12 +161,17 @@ You can read more about schedules in the dedicated [Schedules chapter], and how 
 
 Systems can also be run on demand, via a "one-shot" pattern.
 This is an extremely flexible tool, allowing you to execute arbitrary logic on the world in an ergonomic way whenever you please.
-One-shot systems are particularly useful for testing, handling callbacks in UI, creating scripted events or when architecting turn-based games.
+One-shot systems are particularly useful for testing, handling callbacks in UI, creating scripted events, or when architecting turn-based games.
 
-As discussed above, systems have their own state.
+We have two means of running one-shot systems:
+- Register and invoke a system's [`SystemId`].
+- Access a System by name, caching it in a [`CachedSystemId`]. 
+
+Both means involve accessing the *state* of a particular system.
 When working with one-shot systems, entities are spawned to store this information.
-The [`Entity`] identifier for each system are stored in a [`SystemId`].
-A `SystemId` can be registered for future use by [`World::register_system`].
+The [`Entity`] identifier for each system are stored in a `SystemId` (or `CachedSystemId`).
+
+If we want to handle the `SystemId` ourselves, we have to manually register it in our application by using [`World::register_system`].
 After the system is registered, we can use [`World::run_system`] and pass in the `SystemId` value to run the system at a given point.
 
 ```rust
@@ -180,8 +198,8 @@ fn one_shot_system_with_input(In(input): In<usize>) {
 }
 ```
 
-In many cases though, simply passing in the function via [`World::run_system_cached`] is more convenient.
-This will automatically cache the system and will retrieve it based on its [`TypeId`].
+Alternatively, if we don't want to handle the `SystemId` ourselves, we can use [`World::run_system_cached`].
+This will automatically cache the system and will retrieve its `SystemId` based on its [`TypeId`].
 However this approach can be harder to abstract, and limits you to one copy of each system.
 Any internal state (such as [locals] or [change detection] information) will be shared.
 
@@ -200,6 +218,18 @@ fn one_shot_system(mut local_value: Local<usize>) {
     local_value += 1;
     println!("local_value: {}", local_value);
 }
+```
+
+Be aware that it's possible for these systems to *not* run successfully. 
+`World::run_system`, `World::run_system_with`, and `World::run_system_cached` (along with other methods for running systems) return a `Result`, although if you aren't receiving any values you might not notice any failures. 
+For example, if you attempt to run a system by id that hasn't been registered, you'll receive a `Result` carrying a [`RegisteredSystemError`] enum with a `SystemIdNotRegistered` variant.
+
+```rust
+// Use a SystemId for a system that hasn't been registered.
+let result = world.run_system(999);
+// Attempting to use the Result of the above will result 
+// in a RegisteredSystemError.
+assert_eq!(result.unwrap_err(), RegisteredSystemError::SystemIdNotRegistered(999))
 ```
 
 For convenience, [`Commands`] has a set of equivalent methods, allowing you to queue up systems from within other systems.
@@ -237,14 +267,16 @@ commands.run_schedule(FooSchedule);
 
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 [`SystemId`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.SystemId.html
+[`CachedSystemId`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.CachedSystemId.html
 [`World::register_system`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.World.html#method.register_system
 [`World::run_system`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.World.html#method.run_system
 [`World::run_system_cached`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.World.html#method.run_system_cached
 [`TypeId`]: https://doc.rust-lang.org/nightly/core/any/struct.TypeId.html
+[`RegisteredSystemError`]: https://docs.rs/bevy/latest/bevy/ecs/system/enum.RegisteredSystemError.html
 
 ## Exclusive Systems
 
-So far we've used different system parameters to safely access non-overlapping data within our `World`, but how can we safely access our `World` itself?
+So far we've used different system parameters to safely access non-overlapping data within our `World`, but how can we safely access the `World` itself?
 In order to safely mutate our `World`, we have to use **exclusive systems**.
 
 Exclusive Systems:
@@ -268,7 +300,7 @@ fn exclusive_system(mut world: &mut World) {
 
 Exclusive systems are useful for operations that require making large or unique changes to your `World`.
 Spawning large numbers of entities at once is one example of this, as there is no additional overhead incurred from *queueing* these changes like there is when using `Commands`.
-They are also extremely useful for unusually complex game logic or control flow, as any data, and can be used to immediately run one-shot systems or schedules.
+They are also extremely useful for unusually complex game logic or control flow and can be used to immediately run schedules and one-shot systems (including other exclusive systems).
 
 That said, exclusive systems are harder to schedule, both because they prevent any other system from running at the same time and because their scheduling order is ambiguous with any other systems in the same schedule. Remember that all systems in a specific `Schedule` are ran in parallel by default unless explicitly ordered.
 
@@ -281,8 +313,8 @@ The application of this is simplest to understand in the context of one-shot sys
 ```rust
 fn call_system(mut world: &mut World) {
     // Call the one-shot system with an input value of 42.
-    let system_value = world.run_system_once_with(one_shot_system_with_input, 42);
-    // After going through the one-shot system, system value will equal 44.
+    let system_value: Result<usize, _> = world.run_system_once_with(one_shot_system_with_input, 42);
+    // After going through the one-shot system, system_value will equal `Ok<44>`.
     println!("System value: {}", system_value);
 }
 
@@ -294,8 +326,9 @@ fn one_shot_system_with_input(In(input): In<usize>) -> usize {
 }
 ```
 
-If we call [`World::run_system_once_with`] we can pass in an input value, and return an output value, just like any other function.
-The output type is always inferred, but when using system input the first parameter must be [`In<T>`], where `T` is any type of input that you want to pass in.
+We can call [`World::run_system_once_with`] like we would normally, except we pass in an input value and receive an output value wrapped in a `Result`. 
+Remember, one-shot systems can potentially fail if the conditions of the system parameters weren't met.
+The type of the output is always inferred, but when using system input the first parameter must be [`In<T>`], where `T` is any type of input that you want to pass in.
 
 ### System Piping
 
