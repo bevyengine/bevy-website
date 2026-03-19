@@ -34,7 +34,7 @@ fn update_score(mut score: ResMut<Score>) {
 
 ## Queries
 
-Queries are used to fetch data from the ECS, either in read only mode (like a [`&`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#references-and-borrowing)), or in mutable access mode (like a [`&mut`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#mutable-references)).
+**Queries** are used to fetch data from the ECS, either in read only mode (like a [`&`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#references-and-borrowing)), or in mutable access mode (like a [`&mut`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#mutable-references)).
 When writing a query, you provide a set of components, and Bevy will fetch all entities that have every requested component.
 The entities fetched may also have other components, but only the matching component types will be returned to read or write.
 
@@ -89,7 +89,7 @@ Queries are covered in more detail in the [Queries](../../storing-data/queries) 
 
 ## Commands
 
-Commands allow for arbitrary, deferred changes to the ECS `World`.
+**Commands** allow for arbitrary, deferred changes to the ECS `World`.
 They are mostly used for complex write operations, such as spawning entities (as we saw in the previous chapter).
 Any system can access the command queue by adding a `mut commands: Commands` to the function signature:
 
@@ -102,6 +102,6 @@ fn spawn_entities(mut commands: Commands) {
 }
 ```
 
-A wide range of built-in commands are provided, 
+A wide range of built-in commands are provided,
 but you can also write custom commands to queue up any ECS logic you might desire.
 You can read about these in more detail in the [Commands](../../control-flow/commands) chapter.
