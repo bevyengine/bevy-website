@@ -12,8 +12,10 @@ Bevy however is relatively unique in how widely it uses these patterns: ECS in B
 
 There are two main mental models for how to think about ECS:
 
-- The **object-like model:** similar to game objects you may be familiar with from other engines.
-- The **database model:** similar to an in-memory SQL database or spreadsheet.
+- An **Object-like Model:** 
+  - This is similar to game objects you may be familiar with from other engines.
+- A **Database Model:** 
+  - This is similar to an in-memory SQL database or spreadsheet.
 
 We'll reference both conceptual models throughout this chapter.
 For now, let's dig into each of these core elements.
@@ -23,13 +25,13 @@ For now, let's dig into each of these core elements.
 **Entities are objects** in our game world.
 This might include:
 
-- The player
-- The player's inventory, buffs, or active enchantments
-- Each enemy
-- Props in the game scene
-- The camera
-- The skybox
-- Particle effect clouds
+- The player.
+- The player's inventory, buffs, or active enchantments.
+- Each enemy.
+- Props in the game scene.
+- The camera.
+- The skybox.
+- Particle effect clouds.
 
 An Entity, by itself, is just an identifier; it does not store any data within it. In order to be useful, it needs to be associated with one or more [components](#the-c-components).
 
@@ -48,7 +50,7 @@ A **component** is a modular piece of data that can be reused across entities in
 In Bevy, components are "just Rust structs" (or enums).
 
 ```rs
-/// The location of a player, creature, or object in our game
+/// The location of a player, creature, or object in our game.
 #[derive(Component)]
 struct Location {
     x: f32,
@@ -56,7 +58,7 @@ struct Location {
     z: f32,
 }
 
-/// The color of an object in our game
+/// The color of an object in our game.
 #[derive(Component)]
 enum Color {
     Red,
@@ -65,9 +67,8 @@ enum Color {
     Heliotrope,
 }
 
-/// A "marker" component for entities which represent a player
-///
-/// Since this contains no data, this is more like a tag
+/// A "marker" component for entities which represents a player.
+/// Since this contains no data, this is more like a tag.
 #[derive(Component)]
 struct Player;
 ```
@@ -122,19 +123,19 @@ We won't deny it: these approaches work, and people can and have built great gam
 But we think that by focusing on ECS as the heart of an engine (rather than a tacked on feature),
 you can:
 
-- write fast, scalable code by default
-  - most operations in games are of the form "look at each of these objects and do the same thing to them"
-  - because of better [data locality], ECS architectures are much faster at iterating during these operations
-  - no more speculative rewrites of whole subsystems: gradually optimize the hot loops
-- have engine code that looks like library code that looks like game code
-  - weird behavior? Check the source!
-  - this makes [contributing](/learn/contribute) fixes and features to Bevy much easier
-  - and it helps support a thriving, heavily interoperable [ecosystem of third-party libraries](https://bevy.org/assets/)
-- build consistent, universal abstractions on a common base of data structures
-  - shared data structures mean that improvements and bug fixes trickle down automatically
-  - use the same powerful patterns for [control flow](../control-flow/) everywhere
-  - structure your application using a uniform, flexible [modular architecture](../modular-architecture)
-  - debug and inspect every part of your game using the same [dev tools](../development-practices)
+- Write fast, scalable code by default.
+  - Most operations in games are of the form "look at each of these objects and do the same thing to them".
+  - Because of better [data locality], ECS architectures are much faster at iterating during these operations.
+  - No more speculative rewrites of whole subsystems: gradually optimize the hot loops.
+- Have engine code that looks like library code that looks like game code.
+  - Weird behavior? Check the source!
+  - This makes [contributing](/learn/contribute) fixes and features to Bevy much easier.
+  - Plus it helps support a thriving, heavily interoperable [ecosystem of third-party libraries](https://bevy.org/assets/).
+- Build consistent, universal abstractions on a common base of data structures.
+  - Shared data structures mean that improvements and bug fixes trickle down automatically.
+  - Use the same powerful patterns for [control flow](../control-flow/) everywhere.
+  - Structure your application using a uniform, flexible [modular architecture](../modular-architecture).
+  - Debug and inspect every part of your game using the same [dev tools](../development-practices).
 
 Learning to take advantage of everything a modern ECS has to offer will take time:
 if you want to be able to tackle any data modelling problem that games have to throw at you,
