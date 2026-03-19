@@ -12,7 +12,7 @@ As the third pillar of the ECS model, systems give us the power to operate over 
 When we create entities with similar components, those components are laid out beside each other in memory.
 This gives us good [cache locality] when operating on them in a batched fashion.
 
-Systems in Bevy are any Rust function where every argument implements the [`SystemParam`] trait.
+A Bevy `System` is any Rust function where every argument implements the [`SystemParam`] trait.
 Some common parameters you'll use and see in Bevy are [`Query`], [`Res`], [`ResMut`], [`MessageReader`], [`MessageWriter`], [`Local`] and [`Commands`].
 Each of these is covered in their own chapters throughout this book, but we'll be using them here to help explain the concepts that directly tie in to systems.
 
@@ -45,16 +45,29 @@ struct MyResource {
 }
 ```
 
-Bevy provides these and other parameters by default, but you can also create your own by implementing the [`SystemParam`] trait on a custom struct.
-Note that the fields on a custom struct must also implement the `SystemParam`  trait, along a couple of other restrictions as well (check the [`SystemParam`] page for more details).
+Bevy allows us to access these parameters individually by default, but we can be more ergonomic. 
+If we have several parameters we know we want to access repeatedly, we can create a custom system parameter by implementing the [`SystemParam`] trait on a custom struct.
+As long as every field on our custom struct is a system parameter, we can access the custom struct as a single system parameter.
 
 ```rust
+// Create a custom system parameter accessing a ResMut resource and a Query.
 #[derive(SystemParam)]
 pub struct CustomSystemParameter{
-    field_1: Res<'w, SomeResource>,
-    field_2: Query<'w, 's, &'static SomeComponent>,
+    field_1: ResMut<'w, MyResource>,
+    field_2: Query<'w, 's, Entity, With<MyComponent>>,
+}
+
+// Use our custom system parameter to add the Entities from our 
+// Query to the ResMut resource.
+fn access_custom_parameter(mut custom_parameter: CustomSystemParameter) {
+    for entity in custom_parameter.field_2.iter() {
+        custom_parameter.field_1.entity_field.push(entity);
+    }
 }
 ```
+
+There are some additional caveats and restrictions that come with the `SystemParam` trait, but those are beyond the scope of this section. 
+If you're interested, you can check the [`SystemParam`] page for more details.
 
 [cache locality]: https://en.wikipedia.org/wiki/Locality_of_reference
 
@@ -72,8 +85,12 @@ pub struct CustomSystemParameter{
 ## Accessing Data In Systems
 
 One of the major benefits of Bevy's system abstraction is that it easily and efficiently ["splits the borrow"] of a `World`.
-Multiple systems can access non-overlapping parts of the world at the same time.
-Systems can even run in parallel if they aren't accessing the same data with the help of schedule executors like [`MultiThreadedExecutor`].
+When a system is ran, the requested data is automatically fetched from the `World`. 
+Other systems are prevented from accessing the requested data if their access would violate the rules of the borrow checker. 
+The prime directive of Rust still applies: accessing `World` data can be mutable *or* shared, but never both at once.
+
+We can see this in action when using multiple systems.
+If two systems access non-overlapping parts of the world they can run at the same time. 
 In the example below, both systems would be able to run in parallel since they do not access the same data.
 
 ```rust
@@ -93,22 +110,55 @@ fn access_resource(custom_resource: Res<CustomResource>) {
 }
 ```
 
-The requested data is automatically fetched from the `World` when the system is run, locking out access to the underlying data to avoid violating the rules of the borrow checker.
-When working within a system, or when running multiple systems at once, the prime directive of Rust applies: access can be mutable *or* shared, but never both at once.
+If two systems do access the same data, as long as one system isn't *mutably* accessing the data then both systems could run in parallel.
+Both systems in the example below access the same data, but neither changes the data.
+These systems can run in parallel.
 
 ```rust
-// This system would not compile because it accesses the same Transform data 
-// in two queries simultaneously.
+// This System immutably accesses the Transform component. 
+fn print_player_and_enemy_locations(
+    player_query: Single<&Transform, With<Player>>,
+    enemy_query: Single<&Transform, With<Enemy>>
+) {
+    println!("Player Location: {:?}", player_query.translation);
+    println!("Enemy Location: {:?}", enemy_query.translation);
+}
+
+// While this System also immutably accesses the same Transform components,
+// meaning it can run alongside `print_player_and_enemy_locations`
+// even though they both access the same data.
+fn compare_player_and_enemy_locations(
+    player_query: Single<&Transform, With<Player>>,
+    enemy_query: Single<&Transform, With<Enemy>>,
+    target_location: Res<GoalLocation>
+) {
+    let player_distance = target_location.0 - player_query.translation;
+    let enemy_distance = target_location.0 - enemy_query.translation;
+    
+    if player_distance < enemy_distance {
+        println!("The Player is closer to the Target!");
+    } else {
+        println!("The Enemy is closer to the Target!");
+    }
+}
+```
+
+Even though we've been talking about multiple systems, single systems also have to abide by the borrow checker when accessing data.
+As an example, `Component` data cannot be accessed both mutably and immutably without using some workarounds (which you can read about in the [Queries book section]). 
+The same concept applies to resource access as well.
+
+```rust
+// This system would not compile because it accesses the 
+// Transform component data both mutably and immutably.
 fn player_and_enemy_access(
     player_query: Single<&Transform, With<Player>>,
-    same_player_query: Single<&Transform, With<Player>>,
-    enemy_query: Single<&Transform, With<Enemy>>
+    enemy_query: Single<&mut Transform, With<Enemy>>
 ) {
     ...
 }
 
-// This system would not compile because it accesses the same data both 
-// mutably and immutably.
+// This system would not compile because it accesses the same resource 
+// data both mutably and immutably.
 fn access_resource(
     custom_resource: Res<CustomResource>,
     mut mut_custom_resource: ResMut<CustomResource>
@@ -124,8 +174,7 @@ See the section on [local system state] for more details.
 ["splits the borrow"]: https://doc.rust-lang.org/nomicon/borrow-splitting.html
 
 [local system state]: ../storing-data/local-system-param
-
-[`MultiThreadedExecutor`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.MultiThreadedExecutor.html
+[Queries book section]: ../storing-data/queries
 
 ## Running Systems In Schedules
 
@@ -161,7 +210,7 @@ You can read more about schedules in the dedicated [Schedules section], but for 
 
 Systems can also be run on demand, via a "one-shot" pattern.
 This is an extremely flexible tool, allowing you to execute arbitrary logic on the world in an ergonomic way whenever you please.
-One-shot systems are particularly useful for testing, handling callbacks in UI, creating scripted events, or when architecting turn-based games.
+One-shot systems are particularly useful for testing, handling callbacks in UI, or creating scripted events.
 
 We have two means of running one-shot systems:
 - Register and invoke a system's [`SystemId`].
@@ -319,10 +368,10 @@ fn call_system(mut world: &mut World) {
 }
 
 fn one_shot_system_with_input(In(input): In<usize>) -> usize {
-    // `input` is passed into the system with an `In` generic value.
-    input += 2;
-    // This function returns a usize value, and is thus our `Out` value.
-    input
+    // `input` is passed into the system as an `In` usize value.
+    // Because this function returns a usize value, our `Out` value 
+    // is inferred to be a usize.
+    input + 2
 }
 ```
 
