@@ -28,7 +28,7 @@ Bevy is delightful! You should use Bevy if:
 - *You prefer a code-first approach to game logic:*
   - Bevy is all just plain Rust.
 - *You're making something unusual:*
-  - Whether you're making CAD software, art installations, or scientific simulations, Bevy can be extremely flexibile.
+  - Whether you're making CAD software, art installations, or scientific simulations, Bevy can be extremely flexible.
 - *You care about open source software:*
   - Read, understand, and hack your tools from top-to-bottom.
 - *You want an engine with a lively [community](/community):*

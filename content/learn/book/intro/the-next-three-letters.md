@@ -102,6 +102,6 @@ fn spawn_entities(mut commands: Commands) {
 }
 ```
 
-A wide range of built-in commands are provided, 
+A wide range of built-in commands are provided,
 but you can also write custom commands to queue up any ECS logic you might desire.
 You can read about these in more detail in the [Commands](../../control-flow/commands) chapter.

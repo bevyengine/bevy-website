@@ -12,9 +12,9 @@ Bevy however is relatively unique in how widely it uses these patterns: ECS in B
 
 There are two main mental models for how to think about ECS:
 
-- An **Object-like Model:** 
+- An **Object-like Model:**
   - This is similar to game objects you may be familiar with from other engines.
-- A **Database Model:** 
+- A **Database Model:**
   - This is similar to an in-memory SQL database or spreadsheet.
 
 We'll reference both conceptual models throughout this chapter.
@@ -108,7 +108,7 @@ fn my_system(entities: Query<&mut Location>) {
 {% callout(type="info") %}
 Bevy systems use a technique called [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to access data about the Bevy world. By declaring your function parameters wrapped in special types like [Query](../intro/the-next-three-letters#queries) or [Res](../intro/the-next-three-letters#resources), the data for those parameters will be filled in for you automagically - without you having to actually call the system.
 
-Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are _disjoint_ and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
+Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are *disjoint* and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
 {% end %}
 
 Systems usually access entities and their components via [Queries](../intro/the-next-three-letters#queries), which will be covered in the next chapter.
