@@ -19,29 +19,29 @@ Each of these is covered in their own chapters throughout this book, but we'll b
 ```rust
 // A simple system accessing a Commands parameter, a Query parameter,
 // and a mutable Resource (ResMut) parameter.
-fn bevy_system(
+fn register_players_system(
     // Our System's System Parameters.
     mut commands: Commands,
-    query: Query<Entity, Without<MyComponent>>,
-    mut res: ResMut<MyResource>
+    player_query: Query<Entity, With<ActivePlayerMarker>>,
+    mut player_resource: ResMut<PlayerListResource>
 ) {
     // Using our parameters in a System.
-    for query_entity in query.iter() {
-        // Insert MyComponent into the Entity returned by the Query.
-        commands.entity(query_entity).insert(MyComponent);
+    for player_entity in player_query.iter() {
+        // Insert a InGameMarker component into the Entity returned by the Query.
+        commands.entity(player_entity).insert(InGameMarker);
         // Add the Entity to our Resource.
         res.entity_field.push(query_entity);
     }
 }
 
-// A simple Component.
+// A simple Component to mark a Player as being in game.
 #[derive(Component)]
-struct MyComponent;
+struct InGameMarker;
 
-// A simple Resource.
+// A simple Resource to track a list of players in the current game.
 #[derive(Resource)]
-struct MyResource {
-    pub entity_field: Vec<Entity>,
+struct PlayerListResource {
+    pub player_list: Vec<Entity>,
 }
 ```
 
@@ -52,16 +52,19 @@ As long as every field on our custom struct is a system parameter, we can access
 ```rust
 // Create a custom system parameter accessing a ResMut resource and a Query.
 #[derive(SystemParam)]
-pub struct CustomSystemParameter{
-    field_1: ResMut<'w, MyResource>,
-    field_2: Query<'w, 's, Entity, With<MyComponent>>,
+pub struct PlayerSystemParameter{
+    commands: Commands<'w, 's>,
+    player_query: Query<'w, 's, Entity, With<ActivePlayerMarker>>,
+    list_of_players: ResMut<'w, PlayerListResource>,
 }
 
-// Use our custom system parameter to add the Entities from our 
-// Query to the ResMut resource.
-fn access_custom_parameter(mut custom_parameter: CustomSystemParameter) {
-    for entity in custom_parameter.field_2.iter() {
-        custom_parameter.field_1.entity_field.push(entity);
+// Use our custom system parameter to replcate the same functionality
+// as the system in the previous example.
+fn register_players_system(mut player_parameter: PlayerSystemParameter) {
+    for player_entity in player_parameter.player_query.iter() {
+        player_parameter.commands.entity(player_entity).insert(InGameMarker);
+        
+        player_parameter.list_of_players.player_list.push(entity);
     }
 }
 ```
