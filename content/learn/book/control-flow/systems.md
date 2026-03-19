@@ -45,8 +45,7 @@ struct PlayerListResource {
 }
 ```
 
-Bevy allows us to access these parameters individually by default, but we can be more ergonomic. 
-If we have several parameters we know we want to access repeatedly, we can create a custom system parameter by implementing the [`SystemParam`] trait on a custom struct.
+If we have several parameters we want to access together repeatedly, we can be more ergonomic: We can create a custom system parameter by deriving the [`SystemParam`] trait on a custom struct.
 As long as every field on our custom struct is a system parameter, we can access the custom struct as a single system parameter.
 
 ```rust
@@ -113,7 +112,7 @@ fn access_resource(custom_resource: Res<CustomResource>) {
 }
 ```
 
-If two systems do access the same data, as long as one system isn't *mutably* accessing the data then both systems could run in parallel.
+Systems can run in parallel, as long as one system isn't *mutably* accessing the same data as the other system.
 Both systems in the example below access the same data, but neither changes the data.
 These systems can run in parallel.
 
@@ -130,21 +129,20 @@ fn print_player_and_enemy_locations(
 // While this System also immutably accesses the same Transform components,
 // meaning it can run alongside `print_player_and_enemy_locations`
 // even though they both access the same data.
-fn compare_player_and_enemy_locations(
-    player_query: Single<&Transform, With<Player>>,
+fn damage_player(
+    mut player_query: Single<(&Transform, &mut Stats), With<Player>>,
     enemy_query: Single<&Transform, With<Enemy>>,
-    target_location: Res<GoalLocation>
 ) {
-    let player_distance = target_location.0 - player_query.translation;
-    let enemy_distance = target_location.0 - enemy_query.translation;
-    
-    if player_distance < enemy_distance {
-        println!("The Player is closer to the Target!");
-    } else {
-        println!("The Enemy is closer to the Target!");
+    let (player_transform, player_stats) = player_query.deref_mut();
+
+    let distance_to_player = enemy_query
+        .translation
+        .distance(player_transform.translation);
+
+    if distance_to_player < DAMAGE_RADIUS {
+        player_stats.health -= 1
     }
 }
-```
 
 Even though we've been talking about multiple systems, single systems also have to abide by the borrow checker when accessing data.
 As an example, `Component` data cannot be accessed both mutably and immutably without using some workarounds (which you can read about in the [Queries book section]). 
