@@ -37,7 +37,7 @@ However, there are also "bad reasons to upstream", which on their own are not co
 - this crate is popular (good reasons may exist, but this is not a factor on its own)
 - Bevy has no existing solution for this problem
   - the scope of a game engine is large, but not infinite
-  - each feature must justify its value relative to the maintenance/compile time/binary size costs
+  - each feature must justify its value relative to the maintenance / compile time / binary size costs
   - Bevy is intentionally very extensible: allowing users to 
 - the crate author(s) needs help with maintenance
   - when this happens to crates which are essential to the ecosystem function, we should try and find a solution
