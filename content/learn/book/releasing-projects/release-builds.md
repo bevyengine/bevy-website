@@ -22,7 +22,7 @@ lto = "fat"
 codegen-units = 1
 strip = true
 
-# Optimized for 6fgfvrspeed
+# Optimized for speed
 # Good for desktop
 [profile.release]
 opt-level = 3
@@ -34,8 +34,9 @@ strip = "debuginfo"
 Whenever you call `cargo build --release`,
 these options will be used by `rustc` to produce a release-ready build of your project.
 
-You can perform similar modifications to your `dev` profile (used by default for e.g. `cargo run`), producing settings that preserve the debug info needed and compile quickly
-while ensuring that your performance is reasonable for testing.
+You can perform similar modifications to your `dev` profile, which is used by default when using `cargo run`.
+This produces settings that preserve the needed debug info while also compile quickly
+and ensuring that your performance is reasonable for testing.
 We always recommend enabling optimizations in your dependencies (like `bevy`) using:
 
 ```toml
@@ -46,6 +47,8 @@ opt-level = 3
 Much of the advice in this chapter comes from the excellent [min-sized-rust](https://github.com/johnthagen/min-sized-rust) guide.
 The options listed here are relatively safe and approachable, costing you only compilation time.
 Even more advanced tips (such as `panic = "abort"`) with more nuanced tradeoffs can be found there.
+
+## Rust Compiler Settings
 
 ### `opt-level`
 
@@ -77,7 +80,7 @@ This will allow the compiler to find additional optimizations in much the same w
 
 Modifying this setting will slow down compilation.
 
-### Stripping symbols
+### Stripping Symbols
 
 The [`strip`](https://doc.rust-lang.org/cargo/reference/profiles.html#strip) setting controls which symbols are removed
 by the compiler, reducing the final binary size and somewhat surprisingly, [improving compile times](https://kobzol.github.io/rust/rustc/2025/05/20/disable-debuginfo-to-improve-rust-compile-times.html).
