@@ -15,6 +15,7 @@ because components of a given type are laid out beside each other in memory,
 we get good [cache locality] when operating on them in a batched fashion.
 
 [cache locality]: https://en.wikipedia.org/wiki/Locality_of_reference
+[`World`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html
 
 ## Accessing data in systems
 
@@ -39,13 +40,27 @@ track of private internal state or as scratch space.
 See the section on [`Local`] for more details.
 
 ["splits the borrow"]: https://doc.rust-lang.org/nomicon/borrow-splitting.html
+[`MultiThreadedExecutor`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.MultiThreadedExecutor.html
+[`SystemParam`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html
+[`Query`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html
+[`Res`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
+[`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html
+[`MessageReader`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageReader.html
+[`MessageWriter`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageWriter.html
+[`Local`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Local.html
+[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
+
 
 ## Running systems in schedules
 
-Normally, systems are inserted into a [`Schedule`] via [`App::add_system`].
+Normally, systems are inserted into a [`Schedule`] via [`App::add_systems`].
 Each of the standard schedules are evaluated once per frame, and systems within a single schedule run in parallel unless they are explicitly ordered relative to each other.
 
 There's a great deal of complexity and nuance here: please see the [Game Loop chapter] for a more complete treatment of the topic.
+
+[Game Loop chapter]: ../../the-game-loop
+[`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.Schedule.html
+[`App::add_systems`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.add_systems
 
 ## One-shot systems
 
@@ -63,7 +78,7 @@ In many cases though, simply passing in the function via
 [`World::run_system_cached`] is more convenient,
 causing it to be automatically cached and retrieved on the basis of its [`TypeId`].
 However, this approach can be harder to abstract, and limits you to one copy of each system.
-Any internal state (such as [locals] or [change detection] information) will be shared.
+Any internal state (such as locals or [change detection] information) will be shared.
 
 For convenience, [`Commands`] has a set of equivalent methods,
 allowing you to queue up systems from within other systems.
@@ -73,9 +88,17 @@ Note that entire [`Schedule`]s can be run on demand in much the same way,
 which can be valuable when trying to evaluate complex blocks of logic in response to specific triggers,
 or at a rate other than "once per frame".
 
+[change detection]: ../change-detection
+[`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
+[`SystemId`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.SystemId.html
+[`World::register_system`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.register_system
+[`World::run_system`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.run_system
+[`World::run_system_cached`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.run_system_cached
+[`TypeId`]: https://doc.rust-lang.org/std/any/struct.TypeId.html
+
 ## Exclusive systems
 
-In addition to ordinary [`SystemParam`], [`&mut World`] can be used as the first argument of a system to create an **exclusive system**.
+In addition to ordinary [`SystemParam`], `&mut World` can be used as the first argument of a system to create an **exclusive system**.
 Exclusive systems:
 
 - can access any data in the world
@@ -110,3 +133,8 @@ This can be repeated indefintely, but branching is not supported.
 System piping is mostly useful for composing fragments of logic in a modular, reusable way.
 
 System output is also used when returning errors from systems, as explained in the [Handling Errors] section of this chapter.
+
+[Handling Errors]: ../handling-errors
+[`System`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.System.html
+[`World::run_system_once_with`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.RunSystemOnce.html#method.run_system_once
+[`In<T>`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.In.html

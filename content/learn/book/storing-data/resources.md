@@ -29,6 +29,11 @@ If you might need multiple instances, then consider using [entities and componen
 Bevy uses resources for many of the built-in features of the engine. For example, Bevy's
 [`AssetServer`] is a resource.
 
+[entities and components]: ../entities-components
+[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
+[`AssetServer`]: https://docs.rs/bevy/latest/bevy/asset/struct.AssetServer.html
+
+
 ## Accessing Resources
 
 To access the value of a resource in a system, use [`Res`] for immutable access, and [`ResMut`] for mutable access:
@@ -69,8 +74,10 @@ App::new()
     .init_resource::<AudioSettings>();
 ```
 
-This requires that the resource implement either `Default` or [`FromWorld`]. The latter is a trait
+This requires that the resource implement either [`Default`] or [`FromWorld`]. The latter is a trait
 that lets you construct a new instance of the type using data already in the Bevy world.
+
+[`Default`]: https://doc.rust-lang.org/std/default/trait.Default.html
 
 ## Dynamic Resources
 
@@ -124,6 +131,8 @@ fn audio_settings_system(settings_res: Option<Res<AudioSettings>>) {
 }
 ```
 
+[`Res`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
+[`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html
 {% end %}
 
 ## Resources vs Singleton Entities

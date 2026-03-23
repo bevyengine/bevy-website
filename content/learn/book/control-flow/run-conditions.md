@@ -30,7 +30,7 @@ Most of these methods are not run conditions themselves:
 instead, they work by accepting a value, and then returning a function that can be used as a run condition.
 
 Run conditions can be composed: by default, chaining multiple `.run_if` calls are composed via AND logic,
-but various boolean operations are provided by the [`Condition`] trait.
+but various boolean operations are provided by the [`SystemCondition`] trait.
 
 Run conditions can also be applied to multiple systems at once, using [system sets].
 If a system set is given a run condition, it will be evaluated once per frame for that system set,
@@ -39,6 +39,10 @@ and the systems inside of it will be skipped if it returns true.
 As a result, run conditions can be useful when working with systems that you do not own:
 they can be used to configure if (or under what conditions) these systems run
 as long as the crate author has publicly exposed either the system function or a system set that contains it.
+
+[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
+[`SystemCondition`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/trait.SystemCondition.html
+[system sets]: https://docs.rs/bevy/latest/bevy/ecs/schedule/trait.SystemSet.html
 
 ## Fallible system parameters
 
@@ -66,3 +70,9 @@ We don't need to update their statistics while waiting for them to respawn,
 but we certainly don't want to panic!
 
 If you are writing your own [`SystemParam`], this behavior can be configured via the [`SystemParam::validate_param`] method.
+
+[Handling Errors]: ../handling-errors
+[`SystemParam`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html
+[`Single`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Single.html
+[`Query`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Query.html
+[`SystemParam::validate_param`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html#method.validate_param

@@ -28,6 +28,8 @@ only on when transitioning between certain states. You can create entities that 
 within particular states as well. For example, you might have a HUD (heads-up display) entity which
 only exists during "play" mode.
 
+[`States`]: https://docs.rs/bevy/latest/bevy/state/state/trait.States.html
+
 ## Defining States
 
 Let's say that we're building a retro arcade game like [Galaga](https://en.wikipedia.org/wiki/Galaga).
@@ -116,8 +118,8 @@ top-level state, while using the sub-states to control things like enemy and pla
 
 ## Switching between States
 
-You can access the current state of type `T` with the `State<T>` resource. To trigger a transition
-between states, update the `NextState<T>` resource with the state you want to transition to.
+You can access the current state of type `T` with the [`State<T>`] resource. To trigger a transition
+between states, update the [`NextState<T>`] resource with the state you want to transition to.
 
 In our example arcade game, we start in the `Intro` state. When the player indicates they are ready to
 begin, we transition to the `Playing` state. If the player clears the level, we go to the
@@ -126,6 +128,9 @@ which means we go back to the `Playing` state. We continue to alternate between 
 `LevelComplete` states until the player runs out of lives.
 
 (TBW: Example that transitions to "Playing" when a button is pressed).
+
+[`State<T>`]: https://docs.rs/bevy/latest/bevy/state/state/struct.State.html
+[`NextState<T>`]: https://docs.rs/bevy/latest/bevy/state/state/enum.NextState.html
 
 ## States and Systems
 
@@ -149,7 +154,7 @@ app.add_systems(OnEnter(GameState::Playing), start_level_sound);
 
 ## States and Entities
 
-The `StateScoped` component can be added to an entity to indicate that the entity should only
+The `DespawnOnExit` component can be added to an entity to indicate that the entity should only
 exist in a particular state. When we exit that state, the entity will automatically be despawned.
 
 For example, if we wanted to despawn all remaining enemies at the end of a level:
@@ -158,7 +163,7 @@ For example, if we wanted to despawn all remaining enemies at the end of a level
 fn spawn_enemy(mut commands: Commands) {
     commands.spawn((
         Enemy,
-        StateScoped(GameState::Playing),
+        DespawnOnExit(GameState::Playing),
     ));
 }
 ```
@@ -170,3 +175,5 @@ fn spawn_enemy(mut commands: Commands) {
 ## States and Schedules
 
 <!-- TBW -->
+
+[`DespawnOnExit`]: https://docs.rs/bevy/latest/bevy/state/state_scoped/struct.DespawnOnExit.html
