@@ -50,6 +50,7 @@ fn spawning_system(mut commands: Commands){
 ```
 
 [exclusive system]: ../../control-flow/systems/#exclusive-systems
+[`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
 ## Working With Components

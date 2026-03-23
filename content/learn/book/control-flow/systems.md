@@ -72,6 +72,7 @@ There are some additional caveats and restrictions that come with the `SystemPar
 If you're interested, you can check the [`SystemParam`] page for more details.
 
 [cache locality]: https://en.wikipedia.org/wiki/Locality_of_reference
+[`World`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html
 
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.World.html
 [`System`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/trait.System.html
@@ -173,6 +174,16 @@ This system state is used for performance optimizations (e.g. for queries), but 
 See the section on [local system state] for more details.
 
 ["splits the borrow"]: https://doc.rust-lang.org/nomicon/borrow-splitting.html
+[`MultiThreadedExecutor`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.MultiThreadedExecutor.html
+[`SystemParam`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html
+[`Query`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html
+[`Res`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
+[`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html
+[`MessageReader`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageReader.html
+[`MessageWriter`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageWriter.html
+[`Local`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Local.html
+[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
+
 
 [local system state]: ../storing-data/local-system-param
 [Queries book section]: ../storing-data/queries

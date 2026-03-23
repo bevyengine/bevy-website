@@ -201,7 +201,7 @@ fn parallel_command_system(
 
 ## Custom Commands
 
-By now you should be able to see that `Commands` are just a series of queued changes that affect some part of the `World`. Bevy provides many `Commands` methods that you can easily take advantage of, however it is also possible (and can even be simple!) to build your own **Custom Commands**. Because of their flexible nature, custom commands are a powerful tool for implementing game-specific operations. While they may not be as fast or transparent as working with `Events` or `Observers`, the arbitrary flexibility can be great for quickly evolving game logic and performing operations atomically.
+By now you should be able to see that `Commands` are just a series of queued changes that affect some part of the `World`. Bevy provides many `Commands` methods that you can easily take advantage of, however it is also possible (and can even be simple!) to build your own **Custom Commands**. Because of their flexible nature, custom commands are a powerful tool for implementing game-specific operations. While they may not be as fast or transparent as working with [`Events` and `Observers`], the arbitrary flexibility can be great for quickly evolving game logic and performing operations atomically.
 
 Writing custom commands is quite simple: create a struct and implement `Command` for it. If you want to pass in data, add fields to your struct. To send a custom command, simply call `commands.queue(CustomCommandStruct { my_data })`.
 
@@ -257,3 +257,5 @@ fn some_system(mut commands: Commands) {
     commands.add_to_counter(42);
 }
 ```
+
+[`Events` and `Observers`]: ../events

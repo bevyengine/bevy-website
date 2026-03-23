@@ -15,6 +15,9 @@ synchronizing data between two contexts.
 In this section, we'll explore how Bevy tracks changes and how you can leverage this
 feature in your game development workflow.
 
+[`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
+[`Resource`]: https://docs.rs/bevy/latest/bevy/prelude/trait.Resource.html
+
 ## Filtering
 
 You can configure queries to filter out entities unless certain components have been modified.
@@ -41,6 +44,9 @@ fn detect_changed_position(query: Query<(Entity, &Position), Changed<Position>>)
     }
 }
 ```
+
+[`Changed<T>`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html
+[`Added<T>`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Added.html
 
 Removing components works differently, see the section below.
 
@@ -85,7 +91,15 @@ Performance-wise, there's no real difference between using query filters and usi
 detection methods: The [`Added<T>`] and [`Changed<T>`] query filters cause the iterator to skip
 over entities that have not changed, but they don't reduce the number of entities that get fetched
 by the query.
+
+[`Changed<T>`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html
+[`Added<T>`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Added.html
 {% end %}
+
+[`Ref<T>`]: https://docs.rs/bevy/latest/bevy/ecs/change_detection/struct.Ref.html
+[`Mut<T>`]: https://docs.rs/bevy/latest/bevy/ecs/change_detection/struct.Mut.html
+[`.is_changed()`]: https://docs.rs/bevy/latest/bevy/ecs/change_detection/trait.DetectChanges.html#tymethod.is_changed
+[`.is_added()`]: https://docs.rs/bevy/latest/bevy/ecs/change_detection/trait.DetectChanges.html#tymethod.is_added
 
 ## Resources
 
@@ -99,6 +113,9 @@ fn detect_changed_score(score: Res<Score>) {
     }
 }
 ```
+
+[`Res<T>`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
+[`ResMut<T>`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html
 
 ## Removed Components
 
@@ -120,11 +137,16 @@ It's generally better to use an [`OnRemove`] observer or a component hook to det
 This has a number of advantages over using [`RemovedComponents`]:
 
 - You get access to the component values being removed.
-- [`RemovedComponents`] can miss component removals when used in `FixedUpdate`.
+- [`RemovedComponents`] can miss component removals when used in [`FixedUpdate`].
 
+[`RemovedComponents`]: https://docs.rs/bevy/latest/bevy/ecs/lifecycle/struct.RemovedComponents.html
+[`OnRemove`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html#adding-components-hooks
+[`FixedUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.FixedUpdate.html
 {% end %}
 
 Bevy does not provide any API for detecting when resources are removed.
+
+[`RemovedComponents`]: https://docs.rs/bevy/latest/bevy/ecs/lifecycle/struct.RemovedComponents.html
 
 ## What gets detected?
 
@@ -182,10 +204,13 @@ using [states] or [run conditions]), so you do not need to worry about "missing"
 
 {% callout(type="info") %}
 Internally, Bevy stores an "engine tick count" with every component and resource that marks the
-last time that it was updated. When a system calls [`.is_changed()`], it compares the tick count
+last time that it was updated. When a system calls `.is_changed()`, it compares the tick count
 of the component with the tick count of the last time the system was run.
 {% end %}
 
 One thing to beware of is potential 1-frame delay, if the system that is causing the change
 runs after the system that is checking for changes. You may need to pay attention to how you [run schedules]
 or use [explicit system ordering] to prevent this.
+
+[`set_if_neq()`]: https://docs.rs/bevy/latest/bevy/ecs/change_detection/trait.DetectChangesMut.html#method.set_if_neq
+[`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html

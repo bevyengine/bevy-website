@@ -131,6 +131,13 @@ Simply requesting [`Time`] in your systems will get you the correct flavor 90% o
 and fixed time in the [`FixedMain`] schedule.
 To request a specific variation, change the implicit generic in [`Time`] from `()`
 to [`Real`], [`Virtual`] or [`Fixed`].
+
+[`Time`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Time.html
+[`Main`]: https://docs.rs/bevy/latest/bevy/app/struct.Main.html
+[`FixedMain`]: https://docs.rs/bevy/latest/bevy/app/struct.FixedMain.html
+[`Real`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Real.html
+[`Virtual`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Virtual.html
+[`Fixed`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Fixed.html
 {% end %}
 
 Now that we have the required vocabulary, let's go over exactly how the fixed timestep logic works in Bevy:
@@ -154,6 +161,8 @@ Please see our [timers and cooldowns] section below for the tools available to m
 [`Time<Fixed>::timestep`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Time.html#method.timestep
 [`Main`]: https://docs.rs/bevy/latest/bevy/app/struct.Main.html
 [`FixedMain`]: https://docs.rs/bevy/latest/bevy/app/struct.FixedMain.html
+[`FixedPreUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.FixedPreUpdate.html
+[`FixedUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.FixedUpdate.html
 [`Real`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Real.html
 [`Virtual`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Virtual.html
 [`Fixed`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Fixed.html
@@ -307,7 +316,7 @@ App::new()
 ```
 
 Timers (and the `on_timer` run condition) can safely be ticked in any schedule.
-When they are in a fixed time schedule, the [`Time<Fixed>`] delta time will automatically be used instead.
+When they are in a fixed time schedule, the `Time<Fixed>` delta time will automatically be used instead.
 
 Note that systems run periodically via an `on_timer` run condition are still blocking!
 While it is tempting to use them for very heavy, infrequent tasks (like chunk updating or path finding),
