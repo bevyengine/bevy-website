@@ -5,6 +5,20 @@ insert_anchor_links = "right"
 weight = 0
 +++
 
+You cannot optimize what you cannot measure.
+
+If you want to meaningfully improve the performance of your game, library or application,
+you *must* measure it: receiving both a baseline to check if your changes worked, and a breakdown of the costs incurred.
+
+This process, known as **profiling**, is essential to any serious optimization work.
+There are always more for loops to rewrite, more allocations to avoid, more draw calls to batch.
+As a mere mortal, you will never, ever "fully optimize" any project.
+Your project's performance is fundamentally limited by the time and effort you have available for optimization.
+Only spend these scarce resources where they will have the greatest effect.
+
+There are a number of tools that work well with Bevy, described below.
+Spending the time to learn them well will pay off richly.
+
 ## CPU runtime
 
 ### Overview
@@ -178,6 +192,19 @@ When you compile with Bevy's `trace_tracy` feature, GPU spans will show up in a 
 
 > [!NOTE]
 > Unlike ECS systems, Bevy will not automatically add GPU profiling spans. You will need to add GPU timing spans yourself for any custom rendering work. See the [`RenderDiagnosticsPlugin`](https://docs.rs/bevy/latest/bevy/render/diagnostic/struct.RenderDiagnosticsPlugin.html) docs for more details.
+
+## Binary size
+
+The binary that you would actually ship to your users will be found in your `target` directory.
+For example, this might be `target/release/super_boids.exe`.
+You can see how big this is by simply examining it in your file browser.
+
+The size of the `target` directory is *not* the size of the final binary.
+This directory stores a huge amount of cached compilation results,
+speeding up recompilation at the cost of hard drive space.
+
+For fixed compiler settings, binary size is well-correlated with compile time.
+Many of the tools in the [compile time](#compile-time) section below are valuable for investigating binary size as well.
 
 ## Compile time
 
