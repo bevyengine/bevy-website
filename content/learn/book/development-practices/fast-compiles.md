@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-The previous chapters have focused on how to add and organize your code, but now we need to run it! Doing so involves running `cargo run`, which invokes the [Rust Compiler](https://doc.rust-lang.org/rustc/what-is-rustc.html) to compile and build your project. However, compile times can be quite long using the Rust Compiler's default settings. Thankfully we have several methods that can speed compile time up.
+Compile times can be quite long using the [Rust Compiler's](https://doc.rust-lang.org/rustc/what-is-rustc.html) default settings. Thankfully, we have several methods that can speed compile time up.
 
 ## Linking Optimizations
 
@@ -156,3 +156,10 @@ To enable `sccache`, install it and update your Cargo configuration.
    [build]
    rustc-wrapper = "sccache"
    ```
+
+## Removing Unused Bevy Features
+
+More code means more time to compile.
+If there are parts of Bevy (or your other dependencies) that you simply don't need,
+you can improve compilation times substantially by removing them.
+For advice on how to navigate Bevy's collection of feature flags, see [Compiling Less Code](../releasing-projects/compiling-less-code.md).

@@ -7,4 +7,4 @@ weight = 16
 +++
 
 Ready to release your Bevy project?
-This chapter offers guidance on optimizing performance and binary sizes, as well as distributing your project to end users.
+This chapter offers guidance on optimizing the performance and size of your projects and sharing your work with the community.
