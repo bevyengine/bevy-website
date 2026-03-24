@@ -6,8 +6,6 @@ weight = 9
 status = 'hidden'
 +++
 
-<!-- TBW -->
-
 While Systems are great for running logic at scheduled updates, many features need to be reactive, not scheduled. Picking up an item, performing an attack, or even hovering the cursor over an object are all actions that wouldn't work very well if they *had* to run on every schedule update. Instead of a System, we can use **Events** to activate some logic or functionality at a specific time or in response to something occurring.
 
 There are three required parts when using an Event: a **Trigger**, an **Observer**, and the `Event` itself.
