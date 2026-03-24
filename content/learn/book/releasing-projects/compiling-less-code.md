@@ -59,15 +59,15 @@ In almost every published Bevy project, you should set `default-features = false
 ## Feature Collections
 
 Bevy is a large project, with lots of different functionality and users who each have their own unique needs.
-As a result, it has *many* feature flags, and these feature flags often change quickly across versions. 
+As a result, it has *many* feature flags, and these feature flags often change quickly across versions.
 
-To make this easier to manage, Bevy offers "feature collections", which are feature flags which simply enable other features.
+To make this easier to manage, Bevy offers "feature collections", which are feature flags that simply enable other features.
 You can see the full list of features by reading `bevy`'s [Cargo.toml](https://github.com/bevyengine/bevy/blob/main/Cargo.toml).
 The most important ones are:
 
 - `2d`: For 2D games.
 - `3d`: For 3D games.
-- `ui`: Enables Bevy's built in UI solutions.
+- `ui`: Enables Bevy's built-in UI solutions.
 - `audio`: Enables Bevy's audio solution.
 - `dev`: Various tools for project development.
   - This flag should not be enabled for your released builds.
@@ -77,7 +77,7 @@ that your project will not need, all without spending a great deal of time diggi
 
 ## More Selective Feature Use
 
-Users who are particularly interested in optimizing binary size, compile times, or even runtime performance may find it useful to try and shrink the set of feature flags they're using even further.
+Users who are particularly interested in optimizing binary size, compile times, or even runtime performance may find it useful to try to shrink the set of feature flags they're using even further.
 This process can be quite time-consuming and frustrating (especially when updating Bevy versions), and we recommend only doing so if it's absolutely needed.
 You *will* have to dig into the internals regularly, and track the flow of features across multiple crates.
 
@@ -90,19 +90,19 @@ Bevy's feature flags follow a fairly complex flow:
 
 There are two viable approaches to constructing a minimal feature set:
 
-1. Set `default-features = false` when beginning a new project, and only add features when functionality that you want to use is missing or broken. 
+1. Set `default-features = false` when beginning a new project, and only add features when functionality that you want to use is missing or broken.
 2. Start with a fairly permissive set of features, construct a working project, and then pare them down. Replace feature collections with their corresponding set of features and then attempt to delete features one-at-a-time to see what breaks.
 
-Both of these can work well; approach 1 prioritizes faster compilation times throughout development, while approach 2 will be let you get off the ground more easily.
+Both of these can work well; approach 1 prioritizes faster compilation times throughout development, while approach 2 will let you get off the ground more easily.
 Again, this process is *fully* optional: you should not feel like you *have* to do this unless you have real data that it's important for your particular project.
 
 {% callout(type="info") %}
 
 Features in Rust are *additive*.
-This means, that if any of crate in your tree enables a feature,
+This means that if any crate in your tree enables a feature,
 it will be enabled for all users of the crate.
 
-Be warned that ecosystem crates, or `bevy`'s own subcrates may enable various features of subcrates.
+Be warned that ecosystem crates, or `bevy`'s own subcrates, may enable various features of subcrates.
 Simply not enabling them yourself is insufficient.
 
 You can check which features are enabled using `cargo tree -f`.
@@ -122,8 +122,7 @@ This makes it much easier to have complex dependency trees, but can pointlessly 
 The best tool to explore your dependencies in Rust is [cargo tree](https://doc.rust-lang.org/cargo/commands/cargo-tree.html).
 You can search for duplicate dependencies using `cargo tree -d`.
 
-Resolving duplicate dependencies can be quite challenging. Politely asking the upstream maintainers to bump their dependency is often 
-effective, but coordinating releases can be challenging!
+Resolving duplicate dependencies can be quite challenging. Politely asking the upstream maintainers to bump their dependency is often effective, but coordinating releases can be tricky!
 
 When resolving crate versions, all crates with the same minor version are treated as interchangeable,
 as they are (at least theoretically) [semver compatible].
@@ -137,7 +136,8 @@ As described in the Cargo Book's chapter on [Overriding Dependencies], you can s
 [patch.crates-io]
 rand = "0.8.5"
 ```
-This process is not without its problems though. Compilation errors or subtle bugs are very possible,
+
+This process is not without its problems, though. Compilation errors or subtle bugs are very possible,
 as your dependencies have not been built or tested with a different major version of that crate in mind.
 
 If this is critically important to your project, you may want to consider [maintaining your own forks](#maintaining-your-own-forks),
@@ -172,5 +172,5 @@ bevy = { path = "../bevy" }
 For large or sophisticated teams, you may prefer to use an [alternate crate registry],
 allowing you to coordinate the versions of crates you are using across multiple projects.
 
-[alternate registry]: https://doc.rust-lang.org/cargo/reference/registries.html
+[alternate crate registry]: https://doc.rust-lang.org/cargo/reference/registries.html
 

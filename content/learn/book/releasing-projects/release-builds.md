@@ -35,7 +35,7 @@ Whenever you call `cargo build --release`,
 these options will be used by `rustc` to produce a release-ready build of your project.
 
 You can perform similar modifications to your `dev` profile, which is used by default when using `cargo run`.
-This produces settings that preserve the needed debug info while also compile quickly
+This produces settings that preserve the needed debug info while also compiling quickly
 and ensuring that your performance is reasonable for testing.
 We always recommend enabling optimizations in your dependencies (like `bevy`) using:
 
@@ -55,8 +55,8 @@ Even more advanced tips (such as `panic = "abort"`) with more nuanced tradeoffs 
 The most important setting is "what do we tell the compiler to optimize for".
 This is controlled with the [opt-level](https://doc.rust-lang.org/cargo/reference/profiles.html#opt-level) setting.
 
-In most cases, `opt-level='z` will produce the smallest binary (at the cost of runtime performance),
-but you should experiment with other values, as the effect can vary from project-to-project.
+In most cases, `opt-level = 'z'` will produce the smallest binary (at the cost of runtime performance),
+but you should experiment with other values, as the effect can vary from project to project.
 
 Modifying this setting will slow down compilation.
 
@@ -69,7 +69,7 @@ by allowing the linker to take a more global view.
 In addition to performance gains,
 this can improve dead code detection, reducing binary size.
 
-Setting `lto = "fat"` will result in improved results beyond basic "thin" LTO performed with `lto = true`.
+Setting `lto = "fat"` enables better optimization than the basic "thin" LTO provided by `lto = true`.
 
 Modifying this setting will slow down compilation.
 
@@ -83,7 +83,7 @@ Modifying this setting will slow down compilation.
 ### Stripping Symbols
 
 The [`strip`](https://doc.rust-lang.org/cargo/reference/profiles.html#strip) setting controls which symbols are removed
-by the compiler, reducing the final binary size and somewhat surprisingly, [improving compile times](https://kobzol.github.io/rust/rustc/2025/05/20/disable-debuginfo-to-improve-rust-compile-times.html).
+by the compiler, reducing the final binary size and, somewhat surprisingly, [improving compile times](https://kobzol.github.io/rust/rustc/2025/05/20/disable-debuginfo-to-improve-rust-compile-times.html).
 
 If you are not optimizing for binary size, we recommend only stripping debug symbols using `strip = "debuginfo"`,
 rather than `strip = true`, as the symbol table is used by many profiling tools.

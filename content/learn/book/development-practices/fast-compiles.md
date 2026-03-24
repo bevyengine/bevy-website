@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-Compile times can be quite long using the [Rust Compiler's](https://doc.rust-lang.org/rustc/what-is-rustc.html) default settings. Thankfully we have several methods that can speed compile time up.
+Compile times can be quite long using the [Rust Compiler's](https://doc.rust-lang.org/rustc/what-is-rustc.html) default settings. Thankfully, we have several methods that can speed compile time up.
 
 ## Linking Optimizations
 
