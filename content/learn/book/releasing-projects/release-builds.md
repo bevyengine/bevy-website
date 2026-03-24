@@ -11,7 +11,8 @@ trading off debuggability and compile times against final binary size and perfor
 
 There are a number of important settings we can experiment with here.
 Compilation settings are recorded in your root `Cargo.toml` file, and should be grouped into [profiles](https://doc.rust-lang.org/cargo/reference/profiles.html) designed for different tasks.
-You should store your settings for optimized builds under the default `release` profile, like so:
+You should store your settings for optimized builds under the default `release` profile.
+Two potential setups are shown (pick one!):
 
 ```toml
 # Optimized for size
@@ -35,14 +36,14 @@ Whenever you call `cargo build --release`,
 these options will be used by `rustc` to produce a release-ready build of your project.
 
 You can perform similar modifications to your `dev` profile, which is used by default when using `cargo run`.
-This produces settings that preserve the needed debug info while also compiling quickly
-and ensuring that your performance is reasonable for testing.
 We always recommend enabling optimizations in your dependencies (like `bevy`) using:
 
 ```toml
 [profile.dev.package."*"]
 opt-level = 3
 ```
+
+This preserves the needed debug info without sacrificing the compilation speed needed for testing.
 
 Much of the advice in this chapter comes from the excellent [min-sized-rust](https://github.com/johnthagen/min-sized-rust) guide.
 The options listed here are relatively safe and approachable, costing you only compilation time.
@@ -99,7 +100,7 @@ This should be called *after* [`wasm-bindgen`](https://github.com/wasm-bindgen/w
 
 ```sh
 # Optimize for size (z profile).
-wasm-opt -Oz -o --strip-debug output.wasm input.wasm
+wasm-opt -Oz --strip-debug -o output.wasm input.wasm
 
 # Optimize for size (s profile).
 wasm-opt -Os -o output.wasm input.wasm

@@ -157,7 +157,7 @@ To enable `sccache`, install it and update your Cargo configuration.
    rustc-wrapper = "sccache"
    ```
 
-## Removing parts of Bevy that you don't care about
+## Removing Unused Bevy Features
 
 More code means more time to compile.
 If there are parts of Bevy (or your other dependencies) that you simply don't need,

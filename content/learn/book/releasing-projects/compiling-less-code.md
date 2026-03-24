@@ -14,17 +14,6 @@ To get the best of both worlds, we need to allow users to customize which parts 
 This is called **conditional compilation**.
 In Rust, this is done through the use of [feature flags](https://doc.rust-lang.org/cargo/reference/features.html).
 
-{% callout(type="info") %}
-
-Bevy's ECS makes dead code analysis surprisingly challenging.
-Systems are registered regardless of whether or not any entities with those components ever exist.
-All types referenced and methods used are then marked as alive,
-and the compiler cannot strip them from the final binary.
-
-As a result, disabling plugins or removing systems from schedules will not result in a binary size reduction.
-
-{% endcallout %}
-
 ## Bevy's Default Features
 
 Rust allows us to designate "default" features for Bevy, causing them to be automatically enabled for users who add Bevy to their project.
@@ -55,6 +44,7 @@ bevy = { version = "0.18", default-features = false }
 ```
 
 In almost every published Bevy project, you should set `default-features = false`, and instead opt in to only the features you need.
+For most users, feature collections are the right level of granularity.
 
 ## Feature Collections
 
@@ -74,6 +64,17 @@ The most important ones are:
 
 Disabling the default features and using these feature collections quickly removes large portions of the engine
 that your project will not need, all without spending a great deal of time digging into and updating more granular feature flags.
+
+{% callout(type="info") %}
+
+Bevy's ECS makes dead code analysis surprisingly challenging.
+Systems are registered regardless of whether or not any entities with those components ever exist.
+All types referenced and methods used are then marked as alive,
+and the compiler cannot strip them from the final binary.
+
+As a result, disabling plugins or removing systems from schedules will not result in a binary size reduction.
+
+{% endcallout %}
 
 ## More Selective Feature Use
 
@@ -105,7 +106,7 @@ it will be enabled for all users of the crate.
 Be warned that ecosystem crates, or `bevy`'s own subcrates, may enable various features of subcrates.
 Simply not enabling them yourself is insufficient.
 
-You can check which features are enabled using `cargo tree -f`.
+You can check which features are enabled using `cargo tree -f {p} {f}`.
 
 If one of your dependencies is inadvertently enabling a feature that you don't need,
 please open an issue or PR!
