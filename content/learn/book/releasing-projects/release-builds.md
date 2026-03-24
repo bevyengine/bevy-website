@@ -99,7 +99,7 @@ This should be called *after* [`wasm-bindgen`](https://github.com/wasm-bindgen/w
 
 ```sh
 # Optimize for size (z profile).
-wasm-opt -Oz -o output.wasm input.wasm
+wasm-opt -Oz -o --strip-debug output.wasm input.wasm
 
 # Optimize for size (s profile).
 wasm-opt -Os -o output.wasm input.wasm
