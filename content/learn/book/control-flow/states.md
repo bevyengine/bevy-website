@@ -169,4 +169,3 @@ fn spawn_enemy(mut commands: Commands) {
 ## States and Schedules
 
 <!-- TBW -->
-

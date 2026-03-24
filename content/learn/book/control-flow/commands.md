@@ -6,7 +6,7 @@ weight = 5
 status = 'hidden'
 +++
 
-When we want to make structural changes to our application, we require mutable access to the `World`. 
+When we want to make structural changes to our application, we require mutable access to the `World`.
 Since only one system can mutably access the `World` at a time, we need a way to organize that access.
 **Commands** allow us to do just that.
 Each [`Command`] represents an instruction for manipulations to be performed on the world, and when we call a `Command` it gets placed in the **Command Queue**.

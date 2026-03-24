@@ -122,6 +122,7 @@ fn detect_removed_position(mut removed: RemovedComponents<Position>) {
 {% callout(type="warning") %}
 It's generally better to use an [`OnRemove`] observer or a component hook to detect removals.
 This has a number of advantages over using [`RemovedComponents`]:
+
 - You get access to the component values being removed.
 - [`RemovedComponents`] can miss component removals when used in [`FixedUpdate`].
 {% end %}
@@ -134,7 +135,7 @@ Bevy does not provide any API for detecting when resources are removed.
 
 ## What Gets Detected?
 
-Change detection is triggered when a component or resource is mutably dereferenced. 
+Change detection is triggered when a component or resource is mutably dereferenced.
 [`Mut<T>`] and [`ResMut<T>`] implement `DerefMut`, with an implementation that marks the item as changed.
 
 Simply reading components via a mutable query, or resources via [`ResMut`], will _not_ trigger change detection.
@@ -182,7 +183,7 @@ fn update_player_health(mut query: Query<(Entity, &mut Health), With<Player>>) {
 }
 ```
 
-Change detection applies to each ECS system separately. 
+Change detection applies to each ECS system separately.
 A system will see whatever changes occurred since the last time the system ran.
 This includes systems that only run sometimes (such as when using [states] or [run conditions]), so you do not need to worry about "missing" changes.
 
