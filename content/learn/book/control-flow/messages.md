@@ -6,8 +6,6 @@ weight = 12
 status = 'hidden'
 +++
 
-<!-- TBW -->
-
 When designing your Bevy applications, you might encounter situations where `Events` are evaluated *too* quickly.
 Or, maybe you don't need to *immediately* perform some logic that an `Observer` will watch for.
 There might even be some repeated functionality that you'll want to *defer* and accumulate before eventually processing.

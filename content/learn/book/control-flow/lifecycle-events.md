@@ -6,8 +6,6 @@ weight = 11
 status = 'hidden'
 +++
 
-<!-- TBW -->
-
 In the previous chapter we learned about `Events` and how they allow us to run code in the `World` or on a specific `Entity` in response to a trigger condition.
 We can extend this concept by using **Lifecycle Events** to run code in response to altering a `Component` within an `Entity`.
 Lifecycle events are still `Events`, but specifically they are `EntityEvents` meaning that they will have an `event_target` which determines the `Entity` being targeted.
