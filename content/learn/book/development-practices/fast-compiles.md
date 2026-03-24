@@ -162,12 +162,4 @@ To enable `sccache`, install it and update your Cargo configuration.
 More code means more time to compile.
 If there are parts of Bevy (or your other dependencies) that you simply don't need,
 you can improve compilation times substantially by removing them.
-
-In Rust, we control conditional compilation using [feature flags](https://doc.rust-lang.org/cargo/reference/features.html).
-For advice on how to navigate Bevy's collection of feature flags, see [](../releasing-projects/optimizing-binary-size.md#setting-feature-flags),
-as the same considerations apply to both binary size and compilation speed here.
-
-Note that this is not generally true!
-Building code that is optimized for either performance or binary size is often significantly slower.
-You should only produce fully-optimized builds for performance testing or release purposes,
-and stick to a fast-enough, compile-time-optimized setup for day-to-day development.
+For advice on how to navigate Bevy's collection of feature flags, see [Compiling Less Code](../releasing-projects/compiling-less-code.md).
