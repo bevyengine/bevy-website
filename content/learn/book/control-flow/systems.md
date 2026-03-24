@@ -68,13 +68,12 @@ fn register_players_system(mut player_parameter: PlayerSystemParameter) {
 }
 ```
 
-There are some additional caveats and restrictions that come with the `SystemParam` trait, but those are beyond the scope of this section. 
+There are some additional caveats and restrictions that come with the `SystemParam` trait, but those are beyond the scope of this section.
 If you're interested, you can check the [`SystemParam`] page for more details.
 
 [cache locality]: https://en.wikipedia.org/wiki/Locality_of_reference
 [`World`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html
 
-[`World`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.World.html
 [`System`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/trait.System.html
 [`SystemParam`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html
 [`Query`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Query.html
@@ -88,12 +87,12 @@ If you're interested, you can check the [`SystemParam`] page for more details.
 ## Accessing Data In Systems
 
 One of the major benefits of Bevy's system abstraction is that it easily and efficiently ["splits the borrow"] of a `World`.
-When a system is ran, the requested data is automatically fetched from the `World`. 
-Other systems are prevented from accessing the requested data if their access would violate the rules of the borrow checker. 
+When a system is ran, the requested data is automatically fetched from the `World`.
+Other systems are prevented from accessing the requested data if their access would violate the rules of the borrow checker.
 The prime directive of Rust still applies: accessing `World` data can be mutable *or* shared, but never both at once.
 
 We can see this in action when using multiple systems.
-If two systems access non-overlapping parts of the world they can run at the same time. 
+If two systems access non-overlapping parts of the world they can run at the same time.
 In the example below, both systems would be able to run in parallel since they do not access the same data.
 
 ```rust
@@ -174,19 +173,8 @@ This system state is used for performance optimizations (e.g. for queries), but 
 See the section on [local system state] for more details.
 
 ["splits the borrow"]: https://doc.rust-lang.org/nomicon/borrow-splitting.html
-[`MultiThreadedExecutor`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.MultiThreadedExecutor.html
-[`SystemParam`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html
-[`Query`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html
-[`Res`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
-[`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html
-[`MessageReader`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageReader.html
-[`MessageWriter`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageWriter.html
-[`Local`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Local.html
-[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
-
 
 [local system state]: ../storing-data/local-system-param
-[Queries book section]: ../storing-data/queries
 
 ## Running Systems In Schedules
 
@@ -225,8 +213,9 @@ This is an extremely flexible tool, allowing you to execute arbitrary logic on t
 One-shot systems are particularly useful for testing, handling callbacks in UI, or creating scripted events.
 
 We have two means of running one-shot systems:
+
 - Register and invoke a system's [`SystemId`].
-- Access a System by name, caching it in a [`CachedSystemId`]. 
+- Access a System by name, caching it in a [`CachedSystemId`].
 
 Both means involve accessing the *state* of a particular system.
 When working with one-shot systems, entities are spawned to store this information.
@@ -281,8 +270,8 @@ fn one_shot_system(mut local_value: Local<usize>) {
 }
 ```
 
-Be aware that it's possible for these systems to *not* run successfully. 
-`World::run_system`, `World::run_system_with`, and `World::run_system_cached` (along with other methods for running systems) return a `Result`, although if you aren't receiving any values you might not notice any failures. 
+Be aware that it's possible for these systems to *not* run successfully.
+`World::run_system`, `World::run_system_with`, and `World::run_system_cached` (along with other methods for running systems) return a `Result`, although if you aren't receiving any values you might not notice any failures.
 For example, if you attempt to run a system by id that hasn't been registered, you'll receive a `Result` carrying a [`RegisteredSystemError`] enum with a `SystemIdNotRegistered` variant.
 
 ```rust
@@ -387,7 +376,7 @@ fn one_shot_system_with_input(In(input): In<usize>) -> usize {
 }
 ```
 
-We can call [`World::run_system_once_with`] like we would normally, except we pass in an input value and receive an output value wrapped in a `Result`. 
+We can call [`World::run_system_once_with`] like we would normally, except we pass in an input value and receive an output value wrapped in a `Result`.
 Remember, one-shot systems can potentially fail if the conditions of the system parameters weren't met.
 The type of the output is always inferred, but when using system input the first parameter must be [`In<T>`], where `T` is any type of input that you want to pass in.
 

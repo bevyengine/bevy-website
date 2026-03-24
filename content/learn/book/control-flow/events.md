@@ -27,7 +27,7 @@ struct Speak {
 }
 ```
 
-2. Add an [`Observer`] to the `World` that will watch for our event:
+1. Add an [`Observer`] to the `World` that will watch for our event:
 
 ```rust
 // To add the observer immediately:
@@ -41,7 +41,7 @@ commands.add_observer(|speak: On<Speak>| {
 });
 ```
 
-3. Trigger the `Speak` event:
+1. Trigger the `Speak` event:
 
 ```rust
 // To trigger the event immediately:
