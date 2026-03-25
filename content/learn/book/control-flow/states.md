@@ -26,7 +26,7 @@ For example, you might have a HUD (heads-up display) entity which only exists du
 
 [`States`]: https://docs.rs/bevy/latest/bevy/state/state/trait.States.html
 
-## Defining States
+## Setting Up States
 
 Let's say that we're building a retro arcade game like [Galaga](https://en.wikipedia.org/wiki/Galaga).
 We'll want at least three states:
@@ -78,7 +78,7 @@ We continue to alternate between `Playing` and `LevelComplete` states until the 
 [`State<T>`]: https://docs.rs/bevy/latest/bevy/state/state/struct.State.html
 [`NextState<T>`]: https://docs.rs/bevy/latest/bevy/state/state/enum.NextState.html
 
-## States and Systems
+## States Control When Systems Run
 
 States can be used to determine which ECS systems get run.
 For example, say we only want enemy units to move and attack while in the `Playing` state:
@@ -102,7 +102,7 @@ app.add_systems(OnEnter(GameState::Playing), start_level_sound);
 [`OnEnter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.OnEnter.html
 [`OnExit`]: https://docs.rs/bevy/latest/bevy/prelude/struct.OnExit.html
 
-## States and Schedules
+## Digging in to State Transitions
 
 All state transitions occur during the [`StateTransition`] schedule.
 [`OnExit`] schedules run as the given state is left, and [`OnEnter`] schedules run just as they are entered.
@@ -137,7 +137,7 @@ For more details on where `StateTransition` fits into the broader game loop, see
 [`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
 [schedules]: /learn/book/the-game-loop/schedules
 
-## States and Entities
+## Cleaning Up Between States
 
 The [`DespawnOnExit`] component can be added to an entity to indicate that the entity should only exist in a particular state.
 When we exit that state, the entity will automatically be despawned.
