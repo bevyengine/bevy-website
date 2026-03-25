@@ -78,8 +78,7 @@ We continue to alternate between `Playing` and `LevelComplete` states until the 
 
 ## States Control When Systems Run
 
-While you can check the value of the [`State<T>`] resource during a system,
-their primary value lies in controlling when and if systems are run.
+While you can check the value of the [`State<T>`] resource during a system, their primary value lies in controlling when and if systems are run.
 
 For example, say we only want enemy units to move and attack while in the `Playing` state:
 
@@ -114,7 +113,8 @@ The `StateTransition` schedule itself runs at two points:
 2. **Each tick of the game loop**, after [`PreUpdate`] but before the fixed update loop and [`Update`].
 
 When you set a new state with [`NextState<T>`], the transition doesn't happen immediately.
-Instead, the change is queued and applied the next time `StateTransition` runs, so systems that run later in the same tick will still see the *old* state.
+Instead the change is queued and applied the next time `StateTransition` runs.
+This means that systems which will run later in the _same_ tick will still see the _old_ state.
 
 When a transition does occur, the schedules run in this order:
 
@@ -122,7 +122,8 @@ When a transition does occur, the schedules run in this order:
 2. [`OnTransition`] for the transition
 3. [`OnEnter`] for the new state
 
-For sub-states and computed states, transitions cascade: if changing `GameState` causes `ActionState` to be removed, the `OnExit` schedule for the old `ActionState` value will run as well.
+For sub-states and computed states, the transitions will cascade. 
+If changing `GameState` causes `ActionState` to be removed, the `OnExit` schedule for the old `ActionState` value will run as well.
 
 Every transition also emits a [`StateTransitionEvent<S>`], which you can read via a [`MessageReader`] to respond to specific transition edges.
 
@@ -140,9 +141,8 @@ For more details on where `StateTransition` fits into the broader game loop, see
 
 ## Cleaning Up Between States
 
-One of the most common patterns when working with states is to run some tear-down logic on state exit,
-and set up logic on state enter.
-The most common form of cleanup is despawning entities when the state they're associated with ends. 
+One of the most common patterns when working with states is to run some setup logic upon entering a state, and some tear-down or clean-up logic when exiting a state.
+The most common form of clean-up is despawning entities when the state they're associated with ends. 
 
 To make this easier, the [`DespawnOnExit`] component can be added to an entity to indicate that the entity should only exist in a particular state.
 When we exit that state, the entity will automatically be despawned.
@@ -158,9 +158,9 @@ fn spawn_enemy(mut commands: Commands) {
 }
 ```
 
-The same pattern can be very helpful for UI as well: automatically closing menus by despawning them when the state ends.
-This allows us to keep the "remember to clean this up" logic closely coupled with the creation of our objects,
-rather than needing to remember all of the things we might have spawned in a single monolithic cleanup system.
+The same pattern can be very helpful for UI as well.
+We can automatically close menus by despawning them when their associated state ends.
+This allows us to automatically couple the "remember to clean this up" logic with the creation of our objects, rather than needing to remember all of the things we might have spawned in a single monolithic cleanup system.
 
 Similar helper components exist: [`DespawnOnEnter`], for when you want to clean up when entering a specific state, and [`DespawnWhen`], for when you want to perform more complex state-matching logic.
 
