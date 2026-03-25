@@ -74,7 +74,7 @@ and the compiler cannot strip them from the final binary.
 
 As a result, disabling plugins or removing systems from schedules will not result in a binary size reduction.
 
-{% endcallout %}
+{% end %}
 
 ## More Selective Feature Use
 
@@ -113,7 +113,7 @@ please open an issue or PR!
 In many cases, this is a simple mistake, and can be fixed by disabling `default-features`
 or by gating some of their functionality behind feature flags of their own.
 
-{% endcallout %}
+{% end %}
 
 ## Looking For Duplicate Crates
 
