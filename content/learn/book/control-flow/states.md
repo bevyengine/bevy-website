@@ -166,9 +166,76 @@ Similar helper components exist: [`DespawnOnEnter`], for when you want to clean 
 [`DespawnOnEnter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnExit.html
 [`DespawnWhen`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnWhen.html
 
-## ComputedState
+## Computed States: Automatically-Derived States
 
-<!-- TBW -->
+Sometimes you want a state that you can't directly change, but that is instead *derived* from one or more other states.
+
+In our arcade game, many systems — the HUD, the score display, enemy spawning — need to run during *both* `Playing` and `LevelComplete`, but not during `Intro`.
+We could add `.run_if(in_state(GameState::Playing).or(in_state(GameState::LevelComplete)))` to each of those systems, but that's repetitive and fragile: every time we add a new `GameState` variant, we'd have to update every run condition.
+
+Instead, we can define a **computed state** called `InGame` that automatically exists whenever the game is in any "active" state.
+To do so, we must implement the [`ComputedStates`] trait:
+
+```rust,hide_lines=1-4
+# use bevy::prelude::*;
+
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default, States)]
+pub enum GameState { 
+    #[default]
+    Intro,
+    Playing,
+    LevelComplete
+}
+
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+pub struct InGame;
+
+impl ComputedStates for InGame {
+    type SourceStates = GameState;
+
+    fn compute(sources: GameState) -> Option<Self> {
+        match sources {
+            GameState::Intro => None,
+            _ => Some(InGame),
+        }
+    }
+}
+```
+
+The `compute` function receives the current value of the source state and returns `Option<Self>`:
+
+- Returning `Some` means the computed state should be active with that value.
+- Returning `None` means the computed state should not exist at all.
+
+This means computed states can appear and disappear automatically.
+`InGame` exists during `Playing` and `LevelComplete`, but during `Intro` the [`State<InGame>`][`State<T>`] resource simply isn't present in the world.
+
+Computed states are registered with [`add_computed_state`]:
+
+```rust
+app
+    .init_state::<GameState>()
+    .add_computed_state::<InGame>();
+```
+
+Now all of our shared in-game systems can use a single, clear run condition:
+
+```rs
+app.add_systems(Update, (update_hud, update_score, spawn_enemies).run_if(in_state(InGame)));
+```
+
+If we later add new `GameState` variants like `Cutscene` or `Tutorial`, we only need to update the `compute` function in one place.
+
+{% callout(type="info") %}
+
+Unlike sub-states, computed states are **read-only**: you cannot set them via [`NextState<T>`].
+Their value is entirely determined by their `compute` function.
+If you need a derived state that you can also manually override, use a sub-state instead.
+
+{% end %}
+
+[`add_computed_state`]: https://docs.rs/bevy/latest/bevy/app/struct.SubApp.html#method.add_computed_state
+[`ComputedStates`]: https://docs.rs/bevy/latest/bevy/state/state/trait.ComputedStates.html
 
 ## States and Schedules
 
