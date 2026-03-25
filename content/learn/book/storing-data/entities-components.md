@@ -10,8 +10,9 @@ status = 'hidden'
 On its own, the [`Entity`] type is a simple identifier: it has neither behavior nor data.
 Components store this data, and define the overlapping categories that the entity belongs to.
 
-Informally, we use the term "entity" to refer to the conceptual entry in our [world]: all of the component data with the correct identifier, although it's very rare to use all of the data for a single entity at once.
-If you're an experienced programmer, you can reason about the [world] as something like a (very fast) [`HashMap`] from [`Entity`] to a collection of components.
+Informally, we use the term "entity" to refer to a single conceptual entry in our [world].
+An "entity" is made up of all component data with the correct identifier, although it's very rare to use all of the data for a single entity at once.
+If you're an experienced programmer, you can reason about the [world] as something like a (very fast) [`HashMap`] that links an [`Entity`] identifier to a collection of components.
 
 Internally, [`Entity`] is roughly shaped like a `u64`, with arbitrary (unique) bits.
 While it is possible to work with the [`Entity`] type directly, it should be treated as an opaque, black box key.
@@ -23,13 +24,16 @@ Bevy makes no guarantees that exact entity assignment or storage behavior will b
 
 ## A Different Perspective on Entities
 
-There's another way to think about entities and components: the Bevy game world operates much like a traditional database application. Metaphorically, the "entities" represent rows in a table, and the "components" are much like columns. A "query" lets you read and manipulate the contents of the database by giving you access to a subset of the rows and columns in the table.
+There is another way to think about entities and components.
+The Bevy game world operates much like a traditional database application, with the "entities" representing rows in a table, and the "components" being akin to columns.
+A "query" lets you read and manipulate the contents of the database by giving you access to a subset of the rows and columns in the table.
 
-The ECS approach can take some getting used to, especially for someone coming from a traditional OOP (Object-Oriented Programming) background. However, the advantage of this approach is the ability to perform massive bulk operations efficiently within extremely large and complex game worlds.
+The ECS approach can take some getting used to, especially for someone coming from a traditional OOP (Object-Oriented Programming) background.
+However, the advantage of this approach is the ability to perform massive bulk operations efficiently within extremely large and complex game worlds.
 
 ## Spawning and Despawning Entities
 
-Before you can do much of anything in Bevy, you'll need to **spawn** your first entity, adding it to the app's [`World`].
+Before you can do much of anything in Bevy, you'll need to **spawn** your first entity by adding it to the app's [`World`].
 Once entities exist, they can likewise be despawned, deleting all of the data stored in their components and removing it from the world.
 
 Spawning and despawning entities can have far-reaching effects, and so cannot be done immediately (unless you are using an [exclusive system]).
@@ -199,4 +203,3 @@ fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>)>, mu
 ```
 
 Entities can only ever store one component of each type: inserting another component of the same type will instead overwrite the existing data.
-

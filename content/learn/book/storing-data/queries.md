@@ -6,37 +6,34 @@ weight = 4
 status = 'hidden'
 +++
 
-Queries are your primary tool for interacting with the Bevy world,
-allowing you to efficiently read and write component data from entities.
+Queries are your primary tool for interacting with the Bevy world, allowing you to efficiently read and write component data from entities.
 Queries create a filtered "view" into the metaphorical database that makes up our ECS.
-With that view, you can iterate over the requested components, ask what the "row number" (`Entity`) is for each element,
-or fetch the matching components for a particular `Entity` value.
+With that view you can iterate over the requested components, ask what the "row number" (`Entity`) is for each element, or fetch the matching components for a particular `Entity` value.
 
-We introduced queries briefly in our [introduction](../intro/) to Bevy: if you're brand to new Bevy or ECS, start there.
+We briefly covered queries in our [introduction](../intro/) to Bevy, so make sure to review that section if you haven't read it yet.
+If you're entirely brand to new Bevy or ECS, we would recommend you to start there before continuing on this page.
 
-## Anatomy of a query
+## Anatomy of a Query
 
 To understand how queries work in a bit more detail, let's take a look at the anatomy of a `Query`.
-The [`Query<D, F>`] type has two [generic type parameters]: `D`, which must implement the [`QueryData`] trait,
-and `F`, which must implement the [`QueryFilter`] trait.
+The [`Query<D, F>`] type has two [generic type parameters]:
 
-`D` describes "which data should I access", while `F` describes "how should I restrict the returned entities".
-Only entities which match *all* of the terms in `D` *and* `F` will be included in your query.
+- `D`, which must implement the [`QueryData`] trait, and
+- `F`, which must implement the [`QueryFilter`] trait.
 
-When we write `Query<&Life, With<Player>>`, we're supplying these generics, setting `D` to `&Life` and `F` to `With<Player>`,
-separated by a comma.
-Bevy uses the information in the [`QueryData`] and [`QueryFilter`] traits,
-along with the [`WorldQuery`] supertrait, to look up components of
-the correct type in the world and supply them to your system via [dependency injection].
+`D` describes _"which data should I access"_, while `F` describes _"how should I restrict the returned entities"_.
+Only entities which match _all_ of the terms in `D` _and_ `F` will be included in your query.
 
-If we don't want to fetch any data, or perform any filtering,
-we can use `()`, Rust's ["unit type"] in place of `D` or `F`.
+When we write `Query<&Life, With<Player>>`, we're supplying these generics, setting `D` to `&Life` and `F` to `With<Player>`, separated by a comma.
+Bevy uses the information in the [`QueryData`] and [`QueryFilter`] traits (along with the [`WorldQuery`] supertrait) to look up components of the correct type in the world and supply them to your system via [dependency injection].
 
-Inside the `Query` type, the `F: QueryFilter` generic defaults to `()`, allowing us to avoid explicitly writing `Query<&Life, ()>` when we don't want to filter. This simplified, filter-less form of query looks like `Query<&Life>`, which will fetch all instances of the `Life` component in the world.
+If we don't want to fetch any data, or perform any filtering, we can use `()`, Rust's ["unit type"] in place of `D` or `F`.
 
-To access more than one component at once, or add multiple filters at the same time,
-we can combine [`QueryData`] or [`QueryFilter`] types by putting them inside of a [tuple],
-wrapping them with parentheses.
+Inside the `Query` type, the `F: QueryFilter` generic defaults to `()`.
+Instead of explicitly writing `Query<&Life, ()>` when we don't want to filter, we skip this parameter and our `Query` will still work.
+This simplified, filter-less form of query looks like `Query<&Life>`, which will fetch all instances of the `Life` component in the world.
+
+To access more than one component at once (or add multiple filters at the same time) we can combine [`QueryData`] or [`QueryFilter`] types by putting them inside of a [tuple] (simply wrap them in a parentheses).
 
 [generic type parameters]: (https://doc.rust-lang.org/book/ch10-01-syntax.html)
 [dependency injection]: https://en.wikipedia.org/wiki/Dependency_injection
@@ -47,7 +44,7 @@ wrapping them with parentheses.
 [`QueryFilter`]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.QueryFilter.html
 [`WorldQuery`]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.WorldQuery.html
 
-### Accessing multiple components at once
+### Accessing Multiple Components At Once
 
 Let's say we have three components: `Energy`, `Life`, and `Mana`.
 
@@ -68,7 +65,6 @@ struct Life {
     value: u32
 }
 
-
 #[derive(Component)]
 struct Mana {
     value: u32
@@ -85,16 +81,14 @@ fn life_and_mana_system(query: Query<(&Life, &Mana)>){
 }
 ```
 
-When we use queries with multiple terms like this, the critical thing is that we're accessing the `Life` and `Mana` components
-on the same entity whenever we iterate over our query.
-This allows you to perform operations on entities as a whole: relating their properties in flexible but efficient ways.
+When we use queries with multiple terms like this, the critical thing is that we're accessing the `Life` and `Mana` components on the same entity whenever we iterate over our query.
+This allows you to perform operations on entities as a whole, relating their properties in flexible but efficient ways.
 
 We can add more terms to this tuple to request more components at once, like `Query<(&Life, &Mana, &Energy)>`.
 Up to 16 elements can be combined in this way.
 While this should be plenty, Bevy is currently limited by the lack of [variadic generics] in Rust itself.
 
-This works for `QueryFilter` terms too: if we set `F` to `(With<Life>, Without<Mana>)`,
-we can use it like `Query<&Energy, (With<Life>, Without<Mana>)>`.
+This works for `QueryFilter` terms too: if we set `F` to `(With<Life>, Without<Mana>)`, we can use it like `Query<&Energy, (With<Life>, Without<Mana>)>`.
 This means "get me the energy component of all entities that have a life component but do not have a mana component".
 
 Combining multiple terms in your queries like this should be the first tool you reach for when trying to implement more complex logic in Bevy.
@@ -105,25 +99,25 @@ Combining multiple terms in your queries like this should be the first tool you 
 
 Sometimes, you want to swap from the default "and" logic, where all of the components must be present, to "or" logic, where any of the components can be present. To do so, you can use [`Option`] and a few special types:
 
-- `Query<Option<&Life>>`, for an `Option` that contains the component value if present and nothing if it is absent
-- `Query<AnyOf<(&Life, &Mana)>>` which acts as a wrapper for multiple `Option` `QueryData` types
-- `Query<Has<Life>>`, which contains `true` if the component is present, and `false` if the component is absent
-- `Query<(), Or<(With<Life>, With<Mana>)>>`, which combines query filters via an `Or` relationship
+- `Query<Option<&Life>>`, for an `Option` that contains the component value if present and nothing if it is absent.
+- `Query<AnyOf<(&Life, &Mana)>>` which acts as a wrapper for multiple `Option` `QueryData` types.
+- `Query<Has<Life>>`, which contains `true` if the component is present, and `false` if the component is absent.
+- `Query<(), Or<(With<Life>, With<Mana>)>>`, which combines query filters via an `Or` relationship.
   - Using `()` in the `QueryData` field means that no data will be fetched: the only information retrieved is whether or not the query contains a given entity.
 
 As you can see, Bevy's type-driven querying can be quite expressive and elaborate!
-Don't worry, though: most of your queries will be quite simple, requesting a few pieces of data with a simple filter.
+Don't worry though, most of your queries will be quite simple.
+Typically you'll only be requesting a few pieces of data with a simple filter.
 
 [`Option`]: https://doc.rust-lang.org/core/option/enum.Option.html
 
-## Mutable and immutable query data
+## Mutable and Immutable Query Data
 
-Simply reading the values of our components isn't very useful: in order to actually implement gameplay,
-we need to change those values!
+Simply reading the values of our components isn't very useful.
+In order to actually implement gameplay, we need to change those values!
 
 We can change whether we're requesting the data "immutably" (read-only) or "mutably" (read-write) by changing `Query<&Life>` to `Query<&mut Life>` (pronounced "ref Life" and "ref mute Life", respectively).
-The ampersand is Rust's read-only [reference] indicator,
-while `&mut` is for mutable references, making it easy to remember the syntax once you're familiar with Rust.
+A lone ampersand (`&`) is Rust's read-only [reference] indicator while `&mut` is for mutable references, making it easy to remember the syntax once you're familiar with Rust.
 
 Let's take a look at how that might look in practice:
 
@@ -152,31 +146,27 @@ fn apply_poison(poisoned: Query<&mut Life, With<Poisoned>>){
 {% callout(type="info") %}
 
 You can include multiple queries within a single system, allowing you to access component data in more flexible ways.
-But, if Bevy is handing out mutable references to component data in safe Rust, how does it ensure that users don't
-invoke undefined behavior due to the forbidden [mutable aliasing]?
+But, if Bevy is handing out mutable references to component data in safe Rust, how does it ensure that users don't invoke undefined behavior due to the forbidden [mutable aliasing]?
 
-Bevy protects against this by examining the [`Access`] of each of the system params in each systems,
-then panicking if they could conflict.
+Bevy protects against this by examining the [`Access`] of each of the system params in each systems, then panicking if they could conflict.
 
-System params conflict if the data  they are accessing overlaps and at least one of the accesses are mutable.
+System params conflict if the data they are accessing overlaps and at least one of the accesses are mutable.
 You can avoid this by ensuring that your access is provably disjoint: `Without` can be very helpful.
 
-If you run into this, you'll be pointed to the [B0002] error page,
-which has advice on how to fix and avoid this problem.
+If you run into this you'll be pointed to the [B0002] error page, which has advice on how to fix and avoid this problem.
 
 [mutable aliasing]: https://doc.rust-lang.org/rust-by-example/scope/borrow/alias.html
 [`Access`]: https://dev-docs.bevy.org/bevy/ecs/query/struct.Access.html
 [B0002]: https://bevy.org/learn/errors/b0002/
 {% end %}
 
-By changing our [`QueryData`] terms from `&Life` to `&mut Life`, we change the type of [query item] returned,
-changing the type of object we get when we iterate over our queries.
+By changing our [`QueryData`] terms from `&Life` to `&mut Life`, we change the type of [query item] returned.
+This also changes the type of object we get when we iterate over our queries.
 `Query<&Life>` corresponds to a `&Life`, giving us direct read-only access to data inside of our world.
 However, you may have noticed that `Query<&mut Life>` returns a [`Mut<Life>`]. Why?
 
 This [smart pointer] wraps a `&mut T` and allows Bevy to automatically detect changes.
-While this is talked about in more depth in the chapter on [change detection],
-it's helpful to know that [`Changed`] and [`Added`] are both query filters.
+While this is talked about in more depth in the chapter on [change detection], it's helpful to know that [`Changed`] and [`Added`] are both query filters.
 
 [reference]: https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html
 [query item]: https://dev-docs.bevy.org/bevy/ecs/query/trait.QueryData.html#associatedtype.Item
@@ -186,17 +176,15 @@ it's helpful to know that [`Changed`] and [`Added`] are both query filters.
 [`Changed`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html
 [`Added`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Added.html
 
-## Accessing data on specific entities
+## Accessing Data on Specific Entities
 
-While many systems will operate by simply iterating over all of the entities in a query,
-it is often helpful to look up (and possibly mutate) the data of a specific entity.
+While many systems will operate by simply iterating over all of the entities in a query, it is often helpful to look up (and possibly mutate) the data of a specific entity.
 
 This is fast and easy to do, using [`Query::get`] and its mutable sibling [`Query::get_mut`].
-These respect the query data and query filters of the query they are called on,
-making them an extremely powerful tool.
+These respect the query data and query filters of the query they are called on, making them an extremely powerful tool.
 
-Of course, this raises the question: where do we get the [`Entity`] identifier.
-The simplest way to get this information is to record it when spawning an entity.
+Of course, this raises the question: where do we get the [`Entity`] identifier?
+The simplest way is to record it when spawning an entity.
 
 ```rust,hide_lines=1-2
 # use bevy::prelude::*;
@@ -222,13 +210,10 @@ fn print_selected_entity_name(query: Query<&Name>, special_entity: Res<SelectedE
 }
 ```
 
-As this example shows, you can store the retrieved `Entity` identifiers inside of components or resources,
-creating flexible connections between entities and lookup tables.
-Inside of Bevy itself, this pattern is combined with [hooks] to make it more robust
-and exposed to users as [relations].
+As this example shows, you can store the retrieved `Entity` identifiers inside of components or resources, creating flexible connections between entities and lookup tables.
+Inside of Bevy itself, this pattern is combined with [hooks] to make it more robust and is exposed to users as [relations].
 
-The other common way to get an [`Entity`] is to take advantage of its [`QueryData`] implementation,
-allowing you to determine the identifier for entities in queries that you are iterating over.
+The other common way to get an [`Entity`] is to take advantage of its [`QueryData`] implementation, allowing you to determine the identifier for entities in queries that you are iterating over.
 
 ```rust,hide_lines=1-2
 # use bevy::prelude::*;
@@ -250,14 +235,13 @@ fn despawn_all_enemies(enemies: Query<Entity, With<Enemy>>, mut commands: Comman
 [`Query::get_mut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get_mut
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 
-## Working with singleton entities
+## Working With Singleton Entities
 
-From time-to-time, you may find yourself writing systems that expect there to be only a single matching entity.
+From time-to-time, you may find yourself needing queries that only match a single entity.
 This might be a player, the sun, or something more abstract like your camera.
 
 While you could iterate over a query of length one, this can be confusing to read and feel a bit silly.
-To make working with these patterns more comfortable, Bevy provides two tools:
-[`Query::single`] and the [`Single`] system param.
+To make working with these patterns more comfortable, Bevy provides two tools: [`Query::single`] and the [`Single`] system param.
 Let's try writing the same simple system in each of the three ways.
 
 ```rust,hide_lines=1-2
@@ -312,38 +296,33 @@ Similarly, see the [resources] chapter of this book for a discussion on the choi
 [`QuerySingleError`]: https://docs.rs/bevy/latest/bevy/ecs/query/enum.QuerySingleError.html
 [`Single`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Single.html
 
-## Accessing multiple items from the same query
+## Accessing Multiple Items From The Same Query
 
 By contrast, you may have a query and need to access multiple items from it at once.
 The obvious method is to simply call [`Query::get`] multiple times on it.
-While this works for read-only access,
-it falls apart when using [`Query::get_mut`], as the borrow checker complains.
+While this works for read-only access, it falls apart when using [`Query::get_mut`] as the borrow checker will complain.
 After all, it can't tell from the type signature that you're not accessing the same entity's data twice!
 
 To help with this, Bevy offers two particularly helpful methods on [`Query`]:
 
-- [`Query::get_many_mut`]: fetch multiple entities by their [`Entity`] ids, which must be unique.
+- [`Query::get_many_mut`]: Fetch multiple entities by their [`Entity`] ids, which must be unique.
   - Helpful for things like collisions.
-- [`Query::iter_combinations_mut`]: iterate over all pairs, triples or so on of query items.
+- [`Query::iter_combinations_mut`]: Iterate over all pairs, triples or so on of query items.
   - Great for gravity simulations!
 
 [`Query::get_many_mut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get_many_mut
 [`Query::iter_combinations_mut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.iter_combinations_mut
+[`Query`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html
 
-## Disabling entities
+## Disabling Entities
 
 From time-to-time, you might want to hide or disable an entity without despawning it.
-While simply setting its [`Visibility`] can work well,
-it won't stop any gameplay effects.
+While simply setting its [`Visibility`] can work well, it won't stop any gameplay effects.
 
-Bevy offers a [`Disabled`] component, which works by hiding entities with this component from
-queries unless the [`Disabled`] component is explicitly permitted,
-such as via [`With`], [`Has`] or [`Allow`].
+Bevy offers a [`Disabled`] component which works by hiding entities with this component from queries unless the [`Disabled`] component is explicitly permitted (such as via [`With`], [`Has`] or [`Allow`]).
 
-Under the hood, this acts as a [default query filter],
-adding an overridable filter to each query.
-You can even add your own disabling components,
-which can be helpful if you want to assign a specific meaning for *why* entities are disabled.
+This acts as a [default query filter], adding an overridable filter to each query.
+You can even add your own disabling components, which can be helpful if you want to assign a specific meaning for _why_ entities are disabled.
 
 [default query filter]: https://docs.rs/bevy/latest/bevy/ecs/entity_disabling/struct.DefaultQueryFilters.html
 [`Visibility`]: https://docs.rs/bevy/latest/bevy/camera/visibility/enum.Visibility.html
@@ -352,7 +331,7 @@ which can be helpful if you want to assign a specific meaning for *why* entities
 [`Has`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Has.html
 [`Allow`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Allow.html
 
-## Working with complex queries
+## Working With Complex Queries
 
 In real projects, queries can get quite complex!
 As a result, Bevy users tend to disable [`clippy`'s `type_complexity` lint] altogether.
@@ -360,21 +339,21 @@ But even without red squiggles, working with complex types can be frustrating an
 
 Bevy offers three good tools for this, each with their own niche:
 
-- [type aliases]
-  - reduces typing and cognitive complexity
-  - quick and easy to define
-  - simple and flexible
-  - no added functionality
-- custom [`QueryData`] / [`QueryFilter`] types
-  - derive macro makes this easy!
-  - define custom methods on the struct or the generated item type
-  - bypass the standard 16-element limit of terms without nesting tuples
-  - more composable than a [`SystemParam`]
-- custom [`SystemParam`] types
-  - derive macro is great for simple cases
-  - combine data from multiple queries, or queries with other resources
-  - custom methods can be used to encapsulate complex logic
-  - sometimes provided by third-party libraries for ease of use
+- [Type Aliases]
+  - Reduces typing and cognitive complexity.
+  - Quick and easy to define.
+  - Simple and flexible.
+  - No added functionality.
+- Custom [`QueryData`] / [`QueryFilter`] Types
+  - Derive macro makes this easy!
+  - Define custom methods on the struct or the generated item type.
+  - Bypass the standard 16-element limit of terms without nesting tuples.
+  - More composable than a [`SystemParam`].
+- Custom [`SystemParam`] Types
+  - Derive macro is great for simple cases.
+  - Combine data from multiple queries, or queries with other resources.
+  - Custom methods can be used to encapsulate complex logic.
+  - Sometimes provided by third-party libraries for ease of use.
 
 [`clippy`'s `type_complexity` lint]: https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
 [type aliases]: https://doc.rust-lang.org/reference/items/type-aliases.html
