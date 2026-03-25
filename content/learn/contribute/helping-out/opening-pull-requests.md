@@ -103,7 +103,7 @@ When contributing, please:
 * Add or improve the examples when adding new user-facing functionality.
 * Break work into digestible chunks.
 * Ask for any help that you need!
-* Avoid using AI to generate code, as per the [AI Policy](@/learn/contribute/policies/ai.md).
+* Do not use AI to generate code, per the [AI Policy](@/learn/contribute/policies/ai.md).
 
 Your first PR will be merged in no time!
 
