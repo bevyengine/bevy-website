@@ -239,7 +239,7 @@ If you need a derived state that you can also manually override, use a sub-state
 
 ## States and Schedules
 
-All state transitions occur during a single meta-schedule: [`StateTransition`].
+All state transitions occur during the [`StateTransition`] schedule.
 [`OnExit`] schedules run as the given state is left, and [`OnEnter`] schedules run just as they are entered.
 
 The `StateTransition` schedule itself runs at two points:
@@ -247,9 +247,8 @@ The `StateTransition` schedule itself runs at two points:
 1. **During app startup**, after [`PreStartup`] but before [`Startup`]. This is when your initial states' [`OnEnter`] systems run.
 2. **Each tick of the game loop**, after [`PreUpdate`] but before the fixed update loop and [`Update`].
 
-This means that when you set a new state with [`NextState<T>`], the transition doesn't happen immediately.
-Instead, the change is queued and applied the next time `StateTransition` runs.
-This is important to keep in mind: systems that run later in the same tick will still see the *old* state.
+When you set a new state with [`NextState<T>`], the transition doesn't happen immediately.
+Instead, the change is queued and applied the next time `StateTransition` runs, so systems that run later in the same tick will still see the *old* state.
 
 When a transition does occur, the schedules run in this order:
 
@@ -259,8 +258,7 @@ When a transition does occur, the schedules run in this order:
 
 For sub-states and computed states, transitions cascade: if changing `GameState` causes `ActionState` to be removed, the `OnExit` schedule for the old `ActionState` value will run as well.
 
-Every transition also emits a [`StateTransitionEvent<S>`], which you can read via an [`MessageReader`].
-You can match on these messages to carefully respond to only the precise state-transition edges that you care about.
+Every transition also emits a [`StateTransitionEvent<S>`], which you can read via a [`MessageReader`] to respond to specific transition edges.
 
 For more details on where `StateTransition` fits into the broader game loop, see the [schedules] chapter.
 
