@@ -22,7 +22,7 @@ The [`Query<D, F>`] type has two [generic type parameters]:
 - `F`, which must implement the [`QueryFilter`] trait.
 
 `D` describes _"which data should I access"_, while `F` describes _"how should I restrict the returned entities"_.
-Only entities which match *all* of the terms in `D` *and* `F` will be included in your query.
+Only entities which match _all_ of the terms in `D` _and_ `F` will be included in your query.
 
 When we write `Query<&Life, With<Player>>`, we're supplying these generics, setting `D` to `&Life` and `F` to `With<Player>`, separated by a comma.
 Bevy uses the information in the [`QueryData`] and [`QueryFilter`] traits (along with the [`WorldQuery`] supertrait) to look up components of the correct type in the world and supply them to your system via [dependency injection].
@@ -64,7 +64,6 @@ We can iterate over this query like so:
 struct Life {
     value: u32
 }
-
 
 #[derive(Component)]
 struct Mana {
@@ -323,7 +322,7 @@ While simply setting its [`Visibility`] can work well, it won't stop any gamepla
 Bevy offers a [`Disabled`] component which works by hiding entities with this component from queries unless the [`Disabled`] component is explicitly permitted (such as via [`With`], [`Has`] or [`Allow`]).
 
 This acts as a [default query filter], adding an overridable filter to each query.
-You can even add your own disabling components, which can be helpful if you want to assign a specific meaning for *why* entities are disabled.
+You can even add your own disabling components, which can be helpful if you want to assign a specific meaning for _why_ entities are disabled.
 
 [default query filter]: https://docs.rs/bevy/latest/bevy/ecs/entity_disabling/struct.DefaultQueryFilters.html
 [`Visibility`]: https://docs.rs/bevy/latest/bevy/camera/visibility/enum.Visibility.html

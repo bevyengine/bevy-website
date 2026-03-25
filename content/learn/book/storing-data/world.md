@@ -20,7 +20,7 @@ However, it also means that entities must be moved between tables when component
 
 ## Using the World
 
-With a `&World` reference, you can read anything out of the ecs. 
+With a `&World` reference, you can read anything out of the ecs.
 With a `&mut World`, you can write to it as well.
 
 [entity]: /learn/book/storing-data/entities-components

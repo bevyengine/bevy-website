@@ -21,7 +21,7 @@ Over time, the Bevy community has converged on a few standard pieces of advice f
   - Create small modular systems based on common behavior.
   - Reduce the amount of data stored to improve cache performance and system-parallelism.
   - Group properties together within a single component if you need to maintain invariants.
-    -  Example: _A player's current life is always less than or equal to their max life._
+    - Example: _A player's current life is always less than or equal to their max life._
   - Additionally, group properties together within a single component if you need methods that operate across several pieces of data.
     - Example: _Computing the distance between two points._
 - Simple methods on components are a good tool for clean, testable code.
@@ -48,7 +48,7 @@ Over time, the Bevy community has converged on a few standard pieces of advice f
 ## Required Components
 
 In the previous chapter, we saw how multiple simple components can be composed to form a complex entity.
-Often times, a given component will need certain other components in order to do anything useful. 
+Often times, a given component will need certain other components in order to do anything useful.
 As an example, it probably doesn't make much sense to mark an entity as a `Combatant` if it doesn't also have `Life`.
 
 To help prevent errors of omission (and to simplify the task of spawning) Bevy lets you declare that a given component depends on the presence of another component:
@@ -138,8 +138,7 @@ impl Sub<u32> for Life {
 ```
 
 Keeping fields private can be very useful to ensure that key invariants are upheld.
-In the above example, we use this to ensure that the *current* life value cannot exceed the *max* life value.  
-
+In the above example, we use this to ensure that the _current_ life value cannot exceed the _max_ life value.  
 
 ### Storing Functions Inside of Components
 
