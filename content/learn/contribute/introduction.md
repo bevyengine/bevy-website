@@ -88,12 +88,3 @@ If you're making rendering changes, testing your changes across all of the examp
 Use the [bevy-example-runner](https://github.com/TheBevyFlock/bevy-example-runner) to automate this!
 Simply open an issue in that repository with your issue number in the title (and an empty body) and it'll kick off a run.
 This uses a *ton* of CI resources, so be kind to the planet and try to do some quick local validation first.
-
-## Last Note
-
-Once you've figured out what you want to fix or implement, do ensure you have checked the [AI Policy] with regards to
-what constitutes a valid Pull Request or Issue. This is primarily to keep us from being overwhelmed by AI generated contributions,
-as well as avoiding legal issues. If this presents a problem to your ability to contribute or have further questions regarding the policy,
-do reach out on [Discord] to see how else you might be able to help, though there's plenty of examples how in the next section.
-
-[AI Policy]: @/learn/contribute/policies/ai.md
