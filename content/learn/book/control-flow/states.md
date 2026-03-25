@@ -122,9 +122,6 @@ When a transition does occur, the schedules run in this order:
 2. [`OnTransition`] for the transition
 3. [`OnEnter`] for the new state
 
-For sub-states and computed states, the transitions will cascade. 
-If changing `GameState` causes `ActionState` to be removed, the `OnExit` schedule for the old `ActionState` value will run as well.
-
 Every transition also emits a [`StateTransitionEvent<S>`], which you can read via a [`MessageReader`] to respond to specific transition edges.
 
 For more details on where `StateTransition` fits into the broader game loop, see the [schedules] chapter.
@@ -203,6 +200,9 @@ app
     .init_state::<GameState>()
     .init_state::<ActionState>();
 ```
+
+When state transitions occur, sub-states and computed states are recomputed accordingly, causing these transitions to cascade.
+If we change `GameState`, causing `ActionState` to be removed, the `OnExit` schedule for the old `ActionState` value will run as well.
 
 {% callout(type="info") %}
 It might be reasonable to ask why we chose to model these different modes as sub-states: why not just have a single flat list of all the states?
