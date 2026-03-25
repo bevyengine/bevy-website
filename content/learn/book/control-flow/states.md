@@ -176,7 +176,7 @@ We could add `.run_if(in_state(GameState::Playing).or(in_state(GameState::LevelC
 Instead, we can define a **computed state** called `InGame` that automatically exists whenever the game is in any "active" state.
 To do so, we must implement the [`ComputedStates`] trait:
 
-```rust,hide_lines=1-4
+```rust,hide_lines=1
 # use bevy::prelude::*;
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default, States)]
