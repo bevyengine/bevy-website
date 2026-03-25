@@ -227,7 +227,7 @@ If you went to the effort of making and publishing a crate, you probably want pe
 Getting your crate in front of users:
 
 - **Write a short blog post or announcement.** Explaining *why* you built the crate and what problems it solves gives people a reason to try it.
-- **Submit to [Bevy Assets](https://bevyengine.org/assets/).** This is the official directory of Bevy ecosystem crates and the first place many users look. Submit your crate by opening a PR on the [bevy-assets repository](https://github.com/bevyengine/bevy-assets).
+- **Submit to [Bevy Assets](https://bevy.org/assets/).** This is the official directory of Bevy ecosystem crates and the first place many users look. Submit your crate by opening a PR on the [bevy-assets repository](https://github.com/bevyengine/bevy-assets).
 - **Post in the [Bevy Discord](https://discord.gg/bevy).** The `#showcase` channel is an active, welcoming place to share new releases. The community is generous with feedback.
 - **Share on social media.** Posts on Reddit ([r/bevy](https://reddit.com/r/bevy), [r/rust](https://reddit.com/r/rust), [r/rust_gamedev](https://reddit.com/r/rust_gamedev)), Mastodon, and Bluesky with the `#BevyEngine` tag can reach a wide audience.
 
