@@ -170,7 +170,7 @@ Similar helper components exist: [`DespawnOnEnter`], for when you want to clean 
 
 Sometimes you want a state that you can't directly change, but that is instead *derived* from one or more other states.
 
-In our arcade game, many systems — the HUD, the score display, enemy spawning — need to run during *both* `Playing` and `LevelComplete`, but not during `Intro`.
+In our arcade game, many systems — the HUD, the score display, maybe even player movement — need to run during *both* `Playing` and `LevelComplete`, but not during `Intro`.
 We could add `.run_if(in_state(GameState::Playing).or(in_state(GameState::LevelComplete)))` to each of those systems, but that's repetitive and fragile: every time we add a new `GameState` variant, we'd have to update every run condition.
 
 Instead, we can define a **computed state** called `InGame` that automatically exists whenever the game is in any "active" state.
