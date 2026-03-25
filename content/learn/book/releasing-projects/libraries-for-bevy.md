@@ -227,7 +227,7 @@ If you went to the effort of making and publishing a crate, you probably want pe
 Getting your crate in front of users:
 
 - **Write a short blog post or announcement.** Explaining *why* you built the crate and what problems it solves gives people a reason to try it.
-- **Submit to [Bevy Assets](https://bevyengine.org/assets/).** This is the official directory of Bevy ecosystem crates and the first place many users look. Submit your crate by opening a PR on the [bevy-website repository](https://github.com/bevyengine/bevy-website).
+- **Submit to [Bevy Assets](https://bevyengine.org/assets/).** This is the official directory of Bevy ecosystem crates and the first place many users look. Submit your crate by opening a PR on the [bevy-assets repository](https://github.com/bevyengine/bevy-assets).
 - **Post in the [Bevy Discord](https://discord.gg/bevy).** The `#showcase` channel is an active, welcoming place to share new releases. The community is generous with feedback.
 - **Share on social media.** Posts on Reddit ([r/bevy](https://reddit.com/r/bevy), [r/rust](https://reddit.com/r/rust), [r/rust_gamedev](https://reddit.com/r/rust_gamedev)), Mastodon, and Bluesky with the `#BevyEngine` tag can reach a wide audience.
 
@@ -256,7 +256,7 @@ This can be a fair bit of work, but there are a few practices that help:
 - **Use branches or tags** to maintain older versions if you need to backport fixes.
 - **Prepare your next release during Bevy's release candidate phase.** This phase exists to give ecosystem crate authors time to update and catch problems early: please use it!
 - **Work with your community to update.** Active crates often get PRs from users eager to update versions. Work with them to polish the migration and spread the load.
-- **Use the [Bevy migration guides](https://bevyengine.org/learn/migration-guides/).** These are the primary resource for updating your code.
+- **Use the [Bevy migration guides](https://bevy.org/learn/migration-guides/).** These are the primary resource for updating your code.
 
 ### Managing contributions
 
