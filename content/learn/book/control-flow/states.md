@@ -172,4 +172,37 @@ Similar helper components exist: [`DespawnOnEnter`], for when you want to clean 
 
 ## States and Schedules
 
-<!-- TBW -->
+All state transitions occur during a single meta-schedule: [`StateTransition`].
+[`OnExit`] schedules run as the given state is left, and [`OnEnter`] schedules run just as they are entered.
+
+The `StateTransition` schedule itself runs at two points:
+
+1. **During app startup**, after [`PreStartup`] but before [`Startup`]. This is when your initial states' [`OnEnter`] systems run.
+2. **Each tick of the game loop**, after [`PreUpdate`] but before the fixed update loop and [`Update`].
+
+This means that when you set a new state with [`NextState<T>`], the transition doesn't happen immediately.
+Instead, the change is queued and applied the next time `StateTransition` runs.
+This is important to keep in mind: systems that run later in the same tick will still see the *old* state.
+
+When a transition does occur, the schedules run in this order:
+
+1. [`OnExit`] for the old state
+2. [`OnTransition`] for the transition
+3. [`OnEnter`] for the new state
+
+For sub-states and computed states, transitions cascade: if changing `GameState` causes `ActionState` to be removed, the `OnExit` schedule for the old `ActionState` value will run as well.
+
+Every transition also emits a [`StateTransitionEvent<S>`], which you can read via an [`MessageReader`].
+You can match on these messages to carefully respond to only the precise state-transition edges that you care about.
+
+For more details on where `StateTransition` fits into the broader game loop, see the [schedules] chapter.
+
+[`StateTransitionEvent<S>`]: https://docs.rs/bevy/latest/bevy/state/state/struct.StateTransitionEvent.html
+[`MessageReader`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.MessageReader.html
+[`StateTransition`]: https://docs.rs/bevy/latest/bevy/state/state/struct.StateTransition.html
+[`OnTransition`]: https://docs.rs/bevy/latest/bevy/prelude/struct.OnTransition.html
+[`PreStartup`]: https://docs.rs/bevy/latest/bevy/app/struct.PreStartup.html
+[`Startup`]: https://docs.rs/bevy/latest/bevy/app/struct.Startup.html
+[`PreUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.PreUpdate.html
+[`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
+[schedules]: /learn/book/the-game-loop/schedules
