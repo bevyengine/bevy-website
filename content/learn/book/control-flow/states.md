@@ -66,7 +66,6 @@ The different state sets will be independent of each other, however we can also 
 
 ## Switching Between States
 
-You can access the current state of type `T` with the [`State<T>`] resource.
 To trigger a transition between states, update the [`NextState<T>`] resource with the state you want to transition to.
 
 In our example arcade game, we start in the `Intro` state.
@@ -75,12 +74,13 @@ If the player clears the level, we go to the `LevelComplete` state.
 This state only lasts a few seconds, at which point the next level begins (which means we go back to the `Playing` state).
 We continue to alternate between `Playing` and `LevelComplete` states until the player runs out of lives.
 
-[`State<T>`]: https://docs.rs/bevy/latest/bevy/state/state/struct.State.html
 [`NextState<T>`]: https://docs.rs/bevy/latest/bevy/state/state/enum.NextState.html
 
 ## States Control When Systems Run
 
-States can be used to determine which ECS systems get run.
+While you can check the value of the [`State<T>`] resource during a system,
+their primary value lies in controlling when and if systems are run.
+
 For example, say we only want enemy units to move and attack while in the `Playing` state:
 
 ```rs
@@ -90,7 +90,7 @@ app.add_systems(Update, update_enemies.run_if(in_state(GameState::Playing)));
 
 The [`in_state`] function is a run condition which evaluates to `true` if we are in that state.
 
-We can also configure systems to run when entering or exiting a state, using [`OnEnter`] and [`OnExit`].
+We can also configure systems to run when entering or exiting a state, using the [`OnEnter`] and [`OnExit`] schedules.
 For example, we might want to play a sound when we begin a new level:
 
 ```rs
@@ -98,6 +98,7 @@ For example, we might want to play a sound when we begin a new level:
 app.add_systems(OnEnter(GameState::Playing), start_level_sound);
 ```
 
+[`State<T>`]: https://docs.rs/bevy/latest/bevy/state/state/struct.State.html
 [`in_state`]: https://docs.rs/bevy/latest/bevy/prelude/fn.in_state.html
 [`OnEnter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.OnEnter.html
 [`OnExit`]: https://docs.rs/bevy/latest/bevy/prelude/struct.OnExit.html
