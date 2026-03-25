@@ -16,7 +16,7 @@ Each of these modes entails a different set of graphics as well as a different c
 During the intro mode (for example) all you can do is start the game, or perhaps get help, or maybe even view the game's credits screen.
 You can't start controlling your ship or character until after you have left the "intro" mode and entered "play" mode.
 
-How shall we organize all of these different modal states in code?
+How should we organize all of these different modal states in code?
 We could have separate variables for each of the modes and write a bunch of logic for all the various entities involved, but there's an easier way: **game states**.
 
 Bevy's [`States`] trait lets you define one or more [finite-state machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) that can be used to orchestrate changes to the Bevy world.
