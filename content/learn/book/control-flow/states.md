@@ -139,7 +139,11 @@ For more details on where `StateTransition` fits into the broader game loop, see
 
 ## Cleaning Up Between States
 
-The [`DespawnOnExit`] component can be added to an entity to indicate that the entity should only exist in a particular state.
+One of the most common patterns when working with states is to run some tear-down logic on state exit,
+and set up logic on state enter.
+The most common form of cleanup is despawning entities when the state they're associated with ends. 
+
+To make this easier, the [`DespawnOnExit`] component can be added to an entity to indicate that the entity should only exist in a particular state.
 When we exit that state, the entity will automatically be despawned.
 
 For example, if we wanted to despawn all remaining enemies at the end of a level:
@@ -152,6 +156,10 @@ fn spawn_enemy(mut commands: Commands) {
     ));
 }
 ```
+
+The same pattern can be very helpful for UI as well: automatically closing menus by despawning them when the state ends.
+This allows us to keep the "remember to clean this up" logic closely coupled with the creation of our objects,
+rather than needing to remember all of the things we might have spawned in a single monolithic cleanup system.
 
 Similar helper components exist: [`DespawnOnEnter`], for when you want to clean up when entering a specific state, and [`DespawnWhen`], for when you want to perform more complex state-matching logic.
 
