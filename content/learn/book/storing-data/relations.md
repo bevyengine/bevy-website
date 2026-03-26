@@ -6,22 +6,21 @@ weight = 6
 status = 'hidden'
 +++
 
-By themselves, entities exist in a flat data structure. **Relations** makes it possible to organize
-entities into groups or hierarchies. This has numerous potential uses:
+By themselves, entities exist in a flat data structure.
+**Relations** makes it possible to organize entities into groups or hierarchies.
+This has numerous potential uses:
 
 - A 3D scene may be made up of hierarchies of game objects.
 - A game user interface may be comprised of hierarchical 2D elements.
 - A container or character inventory might use relations to associate an entity with its contents.
 - Relations can be used to track abstract concepts such as ownership.
 
-There is one particular type of relation that gets used a lot in Bevy: the [`ChildOf`]
-relation. This is a [`Component`] which is inserted into a child entity, holding a
-reference to the child's parent entity. The parent has a corresponding [`Children`] component which
-contains a reference to all of the parent's children.
+There is one particular type of relation that gets used a lot in Bevy: the [`ChildOf`] relation.
+This is a [`Component`] which is inserted into a child entity, holding a reference to the child's parent entity.
+The parent has a corresponding [`Children`] component which contains a reference to all of the parent's children.
 
-Like all relations, the `ChildOf` / `Children` relation is dual-ended and directed, with separate
-components maintaining each end of the relationship. It represents a "one-to-many" relationship,
-with the parent being the one, and the children being the many.
+Like all relations, the `ChildOf` / `Children` relation is dual-ended and directed, with separate components maintaining each end of the relationship.
+It represents a "one-to-many" relationship, with the parent being the one, and the children being the many.
 
 [`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
 [`ChildOf`]: https://docs.rs/bevy/latest/bevy/ecs/hierarchy/struct.ChildOf.html
@@ -50,11 +49,10 @@ fn spawn_entity_with_children(mut commands: Commands) {
 }
 ```
 
-Note that `add_children` and `with_children` only set up the `ChildOf` and `Children` components,
-and nothing else. If you want any other components, you'll need to add them yourself.
+Note that `add_children` and `with_children` only set up the `ChildOf` and `Children` components, and nothing else.
+If you want any other components, you'll need to add them yourself.
 
-The `ChildOf` relation uses the [`linked_spawn`] option, which means that when a parent is
-despawned, it's children (and their children, and so on) are also despawned automatically.
+The `ChildOf` relation uses the [`linked_spawn`] option, which means that when a parent is despawned, it's children (and their children, and so on) are also despawned automatically.
 
 ```rs
 fn despawn_vehicle(mut commands: Commands, vehicle: Entity) {
@@ -72,17 +70,15 @@ fn despawn_wheels(mut commands: Commands, vehicle: Entity) {
 }
 ```
 
-There are many more methods for adding and removing children, which you can check out in the
-[API docs].
+There are many more methods for adding and removing children, which you can check out in the [API docs].
 
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 [`linked_spawn`]: https://docs.rs/bevy/latest/bevy/ecs/relationship/trait.Relationship.html#:~:text=linked%5Fspawn
 [API docs]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityCommands.html
 
-## Adding Children...Declaratively
+### Adding Children Declaratively
 
-There's another way to add children to an entity, one which lets you create an entire hierarchy
-in a single `spawn()` call:
+There's another way to add children to an entity, one which lets you create an entire hierarchy in a single `spawn()` call:
 
 ```rs
 fn spawn_entity_with_children(mut commands: Commands) {
@@ -102,9 +98,9 @@ fn spawn_entity_with_children(mut commands: Commands) {
 ```
 
 {% callout(type="info") %}
-The `Children::spawn` call uses an advanced feature called a "bundle effect" - this is an
-additional side-effect that happens after the `Children` component is inserted - in this case,
-creating the child entities.
+The `Children::spawn` call uses an advanced feature called a "bundle effect".
+This is an additional side-effect that happens after the `Children` component is inserted.
+In this case, the child entities are actually created once the component is inserted.
 
 Bundle effects also work for `insert()` as well as `spawn()`.
 {% end %}
@@ -129,13 +125,13 @@ fn spawn_entity_with_children(mut commands: Commands) {
 ```
 
 {% callout(type="warn") %}
-**Caution**: In this shorter syntax, the parentheses around each child entity can trip you up
-if you are not careful. The expression `(Wheel, Color::Black)` adds a single child entity with two
-components; but if you wrote `Wheel, Color::Black`, without the parentheses, that would add two
-separate entities, each with just one component.
+**Caution**
 
-There are also some advanced scenarios where using `children!` may not be appropriate, as the longer
-`Children::spawn()` syntax gives you greater flexibility.
+In this shorter syntax, the parentheses around each child entity can trip you up if you are not careful.
+The expression `(Wheel, Color::Black)` adds a single child entity with two components.
+If you instead wrote `Wheel, Color::Black` (without the parentheses) that would add two separate entities, each with just one component.
+
+There are also some advanced scenarios where using `children!` may not be appropriate, as the longer `Children::spawn()` syntax gives you greater flexibility.
 {% end %}
 
 [`children!`]: https://docs.rs/bevy/latest/bevy/ecs/macro.children.html
@@ -162,9 +158,9 @@ fn scan_parents(mut query: Query<(&Color, &ChildOf)>) {
 
 ## Traversing Hierarchies
 
-The `bevy_ecs` crate has a bunch of handy methods for traversing hierarchies: upwards through
-ancestors, or downwards through descendants. All you need to kick off the process is a query able
-to access the relationship components:
+The `bevy_ecs` crate has a bunch of handy methods for traversing hierarchies.
+You can travel upwards through ancestors (using [`Query::iter_ancestors`]), or downwards through descendants (using [`Query::iter_descendants`]).
+All you need to kick off the process is a query able to access the relationship components:
 
 ```rust
 // Query descendants
@@ -175,13 +171,16 @@ fn scan_descendants(mut query: Query<&Children>, start: Entity) {
 }
 ```
 
+[`Query::iter_ancestors`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Query.html#method.iter_ancestors
+[`Query::iter_descendants`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Query.html#method.iter_descendants
+
 ## Defining Other Relations
 
-You can also create new _kinds_ of relations. Let's say we want to define a relation that represents
-the contents of a treasure chest or character inventory. Since we don't want the
-container's contents to be drawn in the scene, we don't want to use the normal `ChildOf` relation.
-Instead, we'll define a new `ContainedBy` relation. The other end of the relation (called the
-"relationship target") will be called `Contents`.
+You can also create new _kinds_ of relations.
+Let's say we want to define a relation that represents the contents of a treasure chest or character inventory.
+Since we don't want the container's contents to be drawn in the scene, we don't want to use the normal `ChildOf` relation.
+Instead, we'll define a new `ContainedBy` relation.
+The other end of the relation (called the "relationship target") will be called `Contents`.
 
 ```rust
 /// A relation representing the container of an item.
@@ -202,16 +201,16 @@ pub struct Contents(Vec<Entity>);
 ```
 
 {% callout(type="info") %}
-**Note on naming**: when speaking of relationships, names are important because otherwise
-it's easy for language to get confused. For example, if a component is named `Parent`, does that
-mean that the entity _is_ a parent, or that it _has_ a parent?
+**Note on naming**:
+When speaking of relationships, names are important because otherwise it's easy for language to get confused.
+For example, if a component is named `Parent`, does that mean that the entity _is_ a parent, or that it _has_ a parent?
 
-The convention in Bevy is to try and pick names that are unambiguous: so `ChildOf` means that this
-entity _is_ a child, not that it _has_ a child. Similarly, `ContainedBy` makes it clear that this
-is an item in a container, not a container itself.
+The convention in Bevy is to try and pick names that are unambiguous.
+For example, `ChildOf` means that this entity _is_ a child, not that it _has_ a child.
+Similarly, `ContainedBy` makes it clear that this is an item in a container, not a container itself.
 {% end %}
 
-Now that we've defined our new relation, we can start using it! Remember in the previous sections
-all of the various methods for adding children? Well, those methods are just special cases of
-more general ones. Instead of `add_children()`, you could use `add_related::<ContainedBy>()`. And
-instead of `Children::spawn()` you can call `Contents::spawn()`. And so on...
+Now that we've defined our new relation, we can start using it!
+Remember in the previous sections all of the various methods for adding children?
+Well, those methods are just special cases of more general ones.
+Instead of `add_children()`, you could use `add_related::<ContainedBy>()`, and instead of `Children::spawn()` you can call `Contents::spawn()`.

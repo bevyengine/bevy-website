@@ -6,13 +6,10 @@ weight = 5
 status = 'hidden'
 +++
 
-Resources are used to represent global, shared data that exists independently of any specific entity
-and which can be accessed by any system in your application. Unlike components, which are attached
-to individual entities, resources provide a way to store singleton data such as game settings, asset
-handles, time information, or any other state that needs to be accessible across multiple systems.
+Resources are used to represent global, shared data that exists independently of any specific entity and which can be accessed by any system in your application.
+Unlike components (which are attached to individual entities), resources provide a way to store singleton data such as game settings, asset handles, time information, or any other state that needs to be accessible across multiple systems.
 
-To create a new resource type, simply create a Rust `struct` or `enum`, and derive the [`Resource`]
-trait:
+To create a new resource type, simply create a Rust `struct` or `enum`, and derive the [`Resource`] trait:
 
 ```rs
 #[derive(Resource)]
@@ -26,13 +23,12 @@ struct AudioSettings {
 For each unique resource type `T`, there can only be one instance of that type in the Bevy [`World`].
 If you might need multiple instances, then consider using [entities and components] instead.
 
-Bevy uses resources for many of the built-in features of the engine. For example, Bevy's
-[`AssetServer`] is a resource.
+Bevy uses resources for many of the built-in features of the engine.
+For example, Bevy's [`AssetServer`] is a resource.
 
 [entities and components]: ../entities-components
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`AssetServer`]: https://docs.rs/bevy/latest/bevy/asset/struct.AssetServer.html
-
 
 ## Accessing Resources
 
@@ -74,8 +70,8 @@ App::new()
     .init_resource::<AudioSettings>();
 ```
 
-This requires that the resource implement either [`Default`] or [`FromWorld`]. The latter is a trait
-that lets you construct a new instance of the type using data already in the Bevy world.
+This requires that the resource implement either [`Default`] or [`FromWorld`].
+The latter is a trait that lets you construct a new instance of the type using data already in the Bevy world.
 
 [`Default`]: https://doc.rust-lang.org/std/default/trait.Default.html
 
@@ -119,9 +115,11 @@ fn setup_audio_settings(world: &mut World) {
 ```
 
 {% callout(type="warn") %}
-**Caution**: Use care when accessing resources which may not exist. Attempting to inject a
-non-existent resource using [`Res`] or [`ResMut`] will cause a panic. You can avoid this by
-wrapping the resource in `Option`:
+**Caution**
+
+Use care when accessing resources which may not exist.
+Attempting to inject a non-existent resource using [`Res`] or [`ResMut`] will cause a panic.
+You can avoid this by wrapping the resource in `Option`:
 
 ```rs
 fn audio_settings_system(settings_res: Option<Res<AudioSettings>>) {
@@ -138,34 +136,29 @@ fn audio_settings_system(settings_res: Option<Res<AudioSettings>>) {
 ## Resources vs Singleton Entities
 
 Not every singleton object has to be stored as a resource, and in some cases you may not want to.
-Any data that is storable in a resource could instead be stored as a component on a singleton
-entity; which approach is better is a design question that depends on a number of tradeoffs.
+Any data that is storable in a resource could instead be stored as a component on a singleton entity.
+Which approach is better is a design question that depends on a number of tradeoffs.
 
-The advantages of resources is simplicity and ease of use: it requires very little code to read or
-write data stored in a resource. Accessing data within a component is more involved, and entails a
-multi-step process where you first have to get access to the entity, and then its components. Often
-this will involve writing a query.
+The advantages of resources is simplicity and ease of use: it requires very little code to read or write data stored in a resource.
+Accessing data within a component is more involved, and entails a multi-step process where you first have to get access to the entity, and then its components.
+Often this will involve writing a query.
 
-Resources make sense when the data is truly singular and always will be. For example, there can
-only be one master audio volume on a device, so it doesn't make sense to allow for multiple
-instances.
+Resources make sense when the data is _truly_ singular and _always will be_ singular.
+For example, there can only be one master audio volume on a device, so it doesn't make sense to allow for multiple instances.
 
-However, sometimes things that appear at first glance to be singletons...aren't.
+However, sometimes things that appear at first glance to be singletons actually aren't.
 
-For example, there might only be one instance of a type now, but perhaps there will be more in the
-future. Your single-player game only supports one game controller, but what if you decide later to
-make it a split-screen co-op game? Then you'll need more than one gamepad.
+For example, there might only be one instance of a type now, but perhaps there will be more in the future.
+Your single-player game only supports one game controller _now_, but what if you decide to make it a split-screen co-op game _later_?
+Then you'll need more than one gamepad.
 
-Also, an object which is unique might be a member of a larger class: in a single-player game, there
-is only one player avatar, but that avatar is going to be part of a larger collection of characters
-or ships which are rendered and simulated using common ECS systems. If at any point your object
-is going to be part of a collection, it can't be a resource.
+An object also can't be a resource if it is going to be apart of a bigger collection at any point.
+For example, lets say a game has a `PlayerAvatar` struct representing the object that the player controls and moves.
+If `PlayerAvatar` needs to be rendered and simulated using common ECS systems, it can't be a resource as it's apart of a larger collection and therefore isn't unique.
 
-Finally, a resource can only be a single `struct` or `enum`. If the object is a composite of
-multiple structs, then using components is the way to go.
+Finally, a resource can only be a single `struct` or `enum`.
+If the object is a composite of multiple structs, then using components is the way to go.
 
 [`Resource`]: https://docs.rs/bevy/latest/bevy/prelude/trait.Resource.html
-[`Res`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Res.html
-[`ResMut`]: https://docs.rs/bevy/latest/bevy/prelude/struct.ResMut.html
 [`App`]: https://docs.rs/bevy/latest/bevy/prelude/struct.App.html
 [`FromWorld`]: https://docs.rs/bevy/latest/bevy/prelude/trait.FromWorld.html
