@@ -9,12 +9,12 @@ status = 'hidden'
 There's one more place where the ECS can store data: on the systems themselves.
 With the help of the [`Local<T>`] system parameter, you can cache data from one run of a system to the next.
 
-In most cases, a [resource] is going to be more flexible, as you can read and mutate it from other systems.
+In most cases a [resource] is going to be more flexible, as you can read and mutate it from other systems.
 However, from time to time, you might want to:
 
-- store some system-specific state about the last value
-- maintain a cache of intermediate results to improve efficiency of computation
-- avoid allocating a new large data structure each frame
+- Store some system-specific state about the last value.
+- Maintain a cache of intermediate results to improve efficiency of computation.
+- Avoid allocating a new large data structure each frame.
 
 Bevy itself uses `Local` system params in two prominent places:
 
@@ -25,11 +25,9 @@ Bevy itself uses `Local` system params in two prominent places:
 
 `Local` system params are always initialized with a default value.
 This value is set by either the [`FromWorld`] trait or the [`Default`] trait.
-The [`FromWorld`] trait allows you to access arbitrary data from the world,
-allowing more complex initialization.
+The [`FromWorld`] trait allows you to access arbitrary data from the world, allowing more complex initialization.
 
-If you can't figure out what a good default value might be, remember that [`Option<T>`]
-implements `Default`, even if `T` does not!
+If you can't figure out what a good default value might be, remember that [`Option<T>`] implements `Default`, even if `T` does not!
 
 ```rust,hide_lines=1
 # use bevy::prelude::*;
