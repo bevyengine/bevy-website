@@ -691,7 +691,7 @@ and compares them against `main`.
 If a PR changes rendering output, a bot comments on the PR with a link to the visual diff.
 
 For your own project, you could use Pixel Eagle, or build something simpler
-with an image comparison library like [`image-compare`].
+with an image comparison library like [`nv-flip-rs`].
 
 In the end, **visual regression testing is for unexpected changes, not for correctness.**
 A human still has to verify that the baseline looks right;
@@ -735,5 +735,5 @@ The techniques in [Testing with the ECS](#testing-with-the-ecs) cover the simula
 Save graphical testing for problems that are fundamentally graphical.
 
 [Pixel Eagle]: https://pixel-eagle.com
-[`image-compare`]: https://crates.io/crates/image-compare
+[`nv-flip-rs`]: https://github.com/gfx-rs/nv-flip-rs
 [`TimeUpdateStrategy::ManualDuration`]: https://docs.rs/bevy/latest/bevy/time/enum.TimeUpdateStrategy.html
