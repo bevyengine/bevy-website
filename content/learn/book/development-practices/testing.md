@@ -425,7 +425,7 @@ Bevy's own plugins are designed to work quite robustly without rendering.
 For example, `bevy_ui` and `bevy_ui_render` are different crates with their own plugins.
 The best way to ensure that your code works without rendering (sometimes called "headlessly") is to create a `headless` feature flag for your application, and then disable plugins which are causing crashes in a feature-flagged cfg block:
 
-```rust, hide-lines=1
+```rust, hide-lines=1,hide_lines=1
 # use bevy::prelude::*;
 let mut app = App::new();
 
@@ -470,7 +470,7 @@ We'll cover the concepts and point you to the right tools, but expect to dig int
 Bevy provides the [`Screenshot`] component for programmatic screen capture.
 Spawn an entity with a `Screenshot` component and attach an observer to handle the result:
 
-```rust, hide-lines=1
+```rust, hide-lines=1,hide_lines=1
 # use bevy::prelude::*;
 fn take_screenshot(mut commands: Commands) {
 commands
@@ -547,7 +547,7 @@ WGPU_ADAPTER_NAME=llvmpipe cargo run --example my_example
 
 You can test software rendering locally by setting [`WgpuSettings`]:
 
-```rust, hide-lines=1-3
+```rust, hide-lines=1-3,hide_lines=1-3
 # use bevy::prelude::*;
 # use bevy::render::settings::{RenderCreation, WgpuSettings};
 # use bevy::render::RenderPlugin;
@@ -558,8 +558,7 @@ App::new()
             ..default()
         }),
         ..default()
-    }))
-# ;
+    }));
 ```
 
 #### Headless Display on Linux
