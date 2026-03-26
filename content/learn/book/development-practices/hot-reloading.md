@@ -25,6 +25,8 @@ cargo run --features bevy/file_watcher
 
 When enabled, assets loaded in your game will automatically reload when their asset file changes - specifically the `Assets<T>` resource will be updated to include the new asset data.
 
+To detect changes that occur due to hot-reloading, listen for [`AssetEvent::Modified`], or use the [`AssetChanged`] query filter.
+
 {% callout(type="note") %}
 If you are also using embedded assets (through the [`load_embedded_asset!`] macro), it can be useful to also enable the `embedded_watcher` feature.
 {% end %}
@@ -32,6 +34,8 @@ If you are also using embedded assets (through the [`load_embedded_asset!`] macr
 [`AssetWatcher`]: https://docs.rs/bevy/latest/bevy/asset/struct.AssetWatcher.html
 [`Assets<T>`]: https://docs.rs/bevy/latest/bevy/asset/struct.Assets.html
 [`load_embedded_asset!` macro]: https://docs.rs/bevy/latest/bevy_asset_macro/macro.load_embedded_asset.html
+[`AssetEvent::Modified`]: https://docs.rs/bevy/latest/bevy/asset/enum.AssetEvent.html
+[`AssetChanged`]: https://docs.rs/bevy/latest/bevy/asset/prelude/struct.AssetChanged.html
 
 ## Asset-driven gameplay logic
 
