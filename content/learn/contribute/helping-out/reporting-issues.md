@@ -22,9 +22,12 @@ Issues are great for formally tracking the progress of bugs and features. Here a
 
 When in doubt, prefer creating an issue over immediately opening a pull request. This allows community members to weigh in before you spend time on work that may be unnecessary.
 
-Before submitting an issue, please check that it has not already been created. [GitHub Search] is fairly good at finding similar issues based on keywords. If you do find an existing issue, please comment on it instead of creating a duplicate.
+Before submitting an issue, please check that it has not already been created. [GitHub Search] is fairly good at finding similar issues based on keywords. If you do find an existing issue, please comment on it instead of creating a duplicate. 
+
+Please don't use AI to generate issues (see our [AI Policy]). There's often important context that needs to be communicated that AI systems tend to struggle to capture.
 
 [GitHub Search]: https://github.com/search?q=repo%3Abevyengine%2Fbevy&type=issues
+[AI Policy]: @/learn/contribute/policies/ai.md
 
 ## When to Create a Discussion Instead
 
