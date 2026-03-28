@@ -21,3 +21,7 @@ A local server should start and you should be able to access a local version of 
 ### Assets, Errors, and Examples pages
 
 These pages need to be generated in a separate step by running the shell scripts in the `generate-assets`, `generate-errors`, and `generate-wasm-examples` directories. On Windows, you can use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) or [git bash](https://gitforwindows.org/).
+
+## Contributing documentation
+
+If you want to contribute to Bevy's documentation found under `content/learn/`, we have a [style guide](content/learn/contribute/helping-out/writing-docs.md#contributors-style-guide) to help you.
