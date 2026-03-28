@@ -194,8 +194,9 @@ When writing and reviewing content for The Bevy Book, The Quick Start Guide, and
 4. Provide plenty of links, but be sure that what you are linking to is obvious by context.
    1. Link to other sections of the book / example / web page when you mention them.
    2. Always link to the most specific location you can, whether that's a section on a page or a method on a struct.
-   3. Use the `latest` tag when linking to Bevy docs and source code so it won't go stale every time the version is updated.
-   4. When linking to detailed explanations or discussions, summarize the most important points in addition to providing a link.
+   3. When referencing a Rust API by name, mark it as a link every time, not just the first time it appears on the page.
+   4. Use the `latest` tag when linking to Bevy docs and source code so it won't go stale every time the version is updated.
+   5. When linking to detailed explanations or discussions, summarize the most important points in addition to providing a link.
 
 ### Technical
 
@@ -229,7 +230,7 @@ These may be appropriate to link in "next steps" however at the end of the examp
     {% callout() %}
     The CI also includes `editorconfigchecker`, but there isn't an easy way to run this manually, so you should instead rely on CI to validate files with this tool.
     {% end %}
-11. To reference Rust API docs you can use markdown's reference-style links like so: [`HashMap`]
+11. To reference Rust API docs use markdown's reference-style links like so: [`HashMap`]. This keeps the raw text more readable and lets you reference the same url multiple times.
     
     ```md
     [`HashMap`]
