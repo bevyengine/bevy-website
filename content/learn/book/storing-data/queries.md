@@ -195,7 +195,7 @@ struct SelectedEntity(Entity);
 fn spawn_selected_entity(mut commands: Commands, mut selected_entity: ResMut<SelectedEntity>) {
     // .id() records the allocated identifier of the entity that is about to be spawned
     let special_entity_id = commands.spawn(Name::new("Throckmorton")).id();
-    special_entity.0 = special_entity_id;
+    selected_entity.0 = special_entity_id;
 }
 
 fn print_selected_entity_name(query: Query<&Name>, special_entity: Res<SelectedEntity>) {
