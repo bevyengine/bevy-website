@@ -194,17 +194,17 @@ struct SelectedEntity(Entity);
 
 fn spawn_selected_entity(mut commands: Commands, mut selected_entity: ResMut<SelectedEntity>) {
     // .id() records the allocated identifier of the entity that is about to be spawned
-    let special_entity_id = commands.spawn(Name::new("Throckmorton")).id();
-    selected_entity.0 = special_entity_id;
+    let selected_entity_id = commands.spawn(Name::new("Throckmorton")).id();
+    selected_entity.0 = selected_entity_id;
 }
 
-fn print_selected_entity_name(query: Query<&Name>, special_entity: Res<SelectedEntity>) {
-    if let Ok(name) = query.get(special_entity.0){
+fn print_selected_entity_name(query: Query<&Name>, selected_entity: Res<SelectedEntity>) {
+    if let Ok(name) = query.get(selected_entity.0){
         info!("{name} is selected.");
     } else {
         warn!(
             "Selected entity {} has been despawned, or does not have a Name component", 
-            special_entity.0
+            selected_entity.0
         );
     }
 }
