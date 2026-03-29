@@ -7,13 +7,19 @@ cd $(dirname $0)
 
 # If Bevy folder already exists, pull the latest changes.
 if [[ -d bevy ]]; then
-    echo Bevy folder already exists, attempting to fetch latest changes.
+    echo Bevy folder already exists.
 
     cd bevy
 
-    # Attempts to fetch the latest commits, which should only happen every Bevy release.
-    git pull --depth=1
+    if [[ $* != *--no-pull* ]]; then
+        # Attempts to fetch the latest commits, which should only happen every Bevy release.
+        git pull --depth=1
+    fi
 else
+    if [[ $* == *--no-pull* ]]; then
+        echo "--no-pull was specified, but Bevy folder doesn't exist"
+        exit 1
+    fi
     echo Bevy folder does not exist, cloning repository.
 
     # Clone Bevy's latest branch from scratch, only downloading the latest commit.

@@ -1,5 +1,7 @@
+# Zola config for compiling examples locally
+
 # The URL the site will be built for
-base_url = "https://bevy.org"
+base_url = "http://127.0.0.1:1111"
 
 # Used for the Atom feed
 title = "Bevy Engine"
@@ -28,6 +30,5 @@ highlight_theme = "css"
 extra_syntaxes_and_themes = ["syntaxes"]
 
 [extra]
-# Put all your custom variables here
-wasm_webgl2_base_url = "https://bevy-webgl2-examples.pages.dev"
-wasm_webgpu_base_url = "https://bevy-webgpu-examples.pages.dev"
+wasm_webgl2_base_url = "http://127.0.0.1:1111/assets/examples/wasm_webgl2"
+wasm_webgpu_base_url = "http://127.0.0.1:1111/assets/examples/wasm_webgpu"
