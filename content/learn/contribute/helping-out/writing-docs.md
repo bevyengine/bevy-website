@@ -277,7 +277,7 @@ The Quickstart Guide in particular should assume a lower level of expertise.
    2. Do not mention upcoming features or changes, even if the corresponding work is merged.
    3. Mentioning current limitations is acceptable, but must come with an issue link.
 2. The code in each example should be correct and up-to-date, but does not need to be able to be compiled and run.
-   1. Setting up and maintaining self-isolated examples is time-consuming, and pollutes the example for editors. Only do this for code that you expect users to copy-paste directly.
+   1. Setting up and maintaining self-isolated examples is time-consuming, and pollutes the example for editors. Only do this for code that you expect users to copy-paste directly. See `learning-code-examples/README.md` for how to do this.
    2. If distracting setup is needed in a checked example, add it to the start of the example and use `hide-lines` to hide the setup.
    3. To validate that the checked examples work, run:
    
