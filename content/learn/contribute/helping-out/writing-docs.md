@@ -166,7 +166,11 @@ This path should prioritize:
 
 ## Contributor's style guide
 
-When writing and reviewing content for The Bevy Book, The Quick Start Guide, and other related learning materials, please try to follow these guidelines:
+**The Quick Start Guide** is the intended first-stop for new Bevy users. We want to give an overview of core concepts and make new users feel excited and confident in using Bevy for their projects.  
+
+**The Bevy Book** is intended to be an approachable, canonical, and comprehensive overview of concepts and patterns related to developing with Bevy. We want this to be on-par with other similar Books in the ecosystem such as [The Rust Book](https://doc.rust-lang.org/stable/book/), but this doesn't mean only Bevy veterans can contribute.  
+
+When writing and reviewing content for The Bevy Book, The Quick Start Guide, and other related learning materials, please try to follow these guidelines:  
 
 ### Style and tone
 
@@ -185,10 +189,16 @@ When writing and reviewing content for The Bevy Book, The Quick Start Guide, and
 
 ### Explanations
 
+Documentation should explain things well.
+We've prepared some tips to help you do that!
+
+This advice applies broadly to Bevy's documentation, but is formulated with the Bevy Book in mind.
+The Quickstart Guide in particular should assume a lower level of expertise.
+
 1. Your target audience is intelligent, curious and new to Bevy.
    1. Basic programming knowledge can be assumed.
    2. Readers are expected to be familiar with basic Rust syntax and concepts.
-   3. Advanced Rust concepts (e.g. `unsafe`, lifetimes, macros) cannot be assumed, but should be avoided where possible.
+   3. Advanced Rust concepts (e.g. `unsafe`, lifetimes, macros) cannot be assumed, and should be avoided where possible.
    4. Rust knowledge around best practices and development cannot be assumed, but detailed explanations should be given via links to other resources.
    5. Basic familiarity with the concepts and tropes of games can be assumed.
    6. Familiarity with the tools and concepts of game development cannot be assumed, but information that is not specific to Bevy should be kept brief in most cases.
@@ -210,7 +220,7 @@ When writing and reviewing content for The Bevy Book, The Quick Start Guide, and
    3. Lack of polish should serve an end: don't show bad or sloppy practices without a good reason.
    4. Showing how (and why!) to refactor your code is a very powerful teaching tool.
 7. When teaching about related concepts, create a running example or theme and build upon the previous example.
-   1. Named characters are occasionally useful as a pedagogical device when writing long-running examples.
+   1. Named characters are occasionally useful as a pedagogical device when demonstrating complex concepts.
 8. When multiple related or competing tools exist, clearly compare and contrast them.
    1. You should be lightly opinionated about limitations and strengths.
    2. Focus on factual tradeoffs (performance, flexibility, ease of reasoning, ...) rather than style.
@@ -250,6 +260,15 @@ When writing and reviewing content for The Bevy Book, The Quick Start Guide, and
    6. Make sure the text reads well even when removing the link. For example, write "Start exploring [our examples](https://github.com/bevyengine/bevy/tree/latest/examples#examples)" rather than "Start exploring our examples [here](https://github.com/bevyengine/bevy/tree/latest/examples#examples)"
    7. When linking to detailed explanations or discussions, summarize the most important points in addition to providing a link.
    8. Do not place multiple links directly after another if they will look similar to a single link.
+   9. To reference Rust API docs use markdown's reference-style links like so: [`HashMap`]. This keeps the raw text more readable and lets you reference the same url multiple times.
+    
+    ```md
+    [`HashMap`]
+    
+    [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
+    ```
+    
+    [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
 
 ### Technical
 
@@ -257,17 +276,22 @@ When writing and reviewing content for The Bevy Book, The Quick Start Guide, and
    1. Do not mention previous versions or the history of a feature.
    2. Do not mention upcoming features or changes, even if the corresponding work is merged.
    3. Mentioning current limitations is acceptable, but must come with an issue link.
-2. All examples must be able to be compiled and run.
+2. The code in each example should be correct and up-to-date, but does not need to be able to be compiled and run.
+   1. Setting up and maintaining self-isolated examples is time-consuming, and pollutes the example for editors. Only do this for code that you expect users to copy-paste directly.
+   2. If distracting setup is needed, add it to the start of the example and use `hide-lines` to hide the setup.
+   3. To validate that the checked examples work, run:
+   
+       ```sh
+       ./learning-code-examples/validate_examples.sh
+       ```
 3. Prefer game-relevant, descriptive examples and variable names over generic ones like `MyEvent`. Avoid meaningless names like `foo` at all times.
 4. It's good practice to break your code into blocks with comments or explanatory text, but you need to link to a cohesive, copy-able whole at the end.
 5. Examples must pass Bevy's standard `clippy` lints.
 6. Stick to a consistent style (e.g. for loops vs map) within each example.
 7. If you need to give advice that will only matter to some of your audience (e.g. how to handle an edge case, or support a specific platform), do so in a clearly marked aside (like a callout) or list.
-8. Examples should not use or rely on third-party plugins.
-These may be appropriate to link in "next steps" however at the end of the examples.
+8. Examples should not use or rely on third-party plugins. These may be appropriate to link in "next steps" however at the end of the examples.
    1. Third-party crates should be limited to the most essential, such as `rand`.
-1. To validate local code changes you can either `./learning-code-examples/validate_examples.sh` from anywhere, or from the project's root `cd learning-code-examples && cargo check --examples && cargo clippy --examples && cargo fmt --check`.
-2.  To make sure your web-based files (html, markdown) are formatted correctly run the commands:
+9.     To make sure your web-based files (html, markdown) are formatted correctly run the commands:
    
     ```sh
     markdownlint -f -c .github/linters/.markdown-lint.yml .
@@ -282,12 +306,3 @@ These may be appropriate to link in "next steps" however at the end of the examp
     {% callout() %}
     The CI also includes `editorconfigchecker`, but there isn't an easy way to run this manually, so you should instead rely on CI to validate files with this tool.
     {% end %}
-3.  To reference Rust API docs use markdown's reference-style links like so: [`HashMap`]. This keeps the raw text more readable and lets you reference the same url multiple times.
-    
-    ```md
-    [`HashMap`]
-    
-    [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
-    ```
-    
-    [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
