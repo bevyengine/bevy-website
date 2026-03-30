@@ -28,7 +28,7 @@ Let's look at the other schedules provided by Bevy by default.
 When a Bevy [app] starts, it typically executes several schedules in order:
 
 + [`StateTransition`]: Part of Bevy's [state machine abstraction].
-+ [`PreStartup`]: Library setup which must proceed application setup.
++ [`PreStartup`]: Library setup which must precede application setup.
 + [`Startup`]: Setup for the application itself.
 + [`PostStartup`]: Stuff that must follow application setup.
 
