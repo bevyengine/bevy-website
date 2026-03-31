@@ -45,11 +45,11 @@ Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shie
 
 [available as a library on crates.io]: https://crates.io/crates/bevy
 
-## In-engine examples
+## In-Engine Examples
 
 If you would like to see Bevy in action before starting a new project, you can clone the [Bevy Engine repo] and run a number of examples:
 
-1. Clone the [Bevy Engine repo]:
+1. Clone the [Bevy repo](https://github.com/bevyengine/bevy):
 
     ```sh
     git clone https://github.com/bevyengine/bevy
@@ -70,14 +70,14 @@ If you would like to see Bevy in action before starting a new project, you can c
     git checkout v0.18.0
     ```
 
-4. Try the examples in the [examples folder]
+4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
 
     ```sh
     cargo run --example breakout
     ```
 
 {% callout(type="warning") %}
-When using Rust `1.89+` and Bevy `0.16.x or earlier` the examples will not run and instead error. For more info on *why* see [issue 20475].
+When using Rust `1.89+` and Bevy `0.16.x or earlier` the examples will not run and instead error. For more info on *why* see [issue #20475].
 
 Some workarounds:
 
@@ -85,10 +85,9 @@ Some workarounds:
 - Use Rust 1.88 *only* in your Bevy Engine directory using this command: `rustup override set 1.88`
   - (See [this link] for more information.)
 
-[issue 20475]: <https://github.com/bevyengine/bevy/issues/20475>
+[issue #20475]: <https://github.com/bevyengine/bevy/issues/20475>
 [this link]: https://rust-lang.github.io/rustup/overrides.html#directory-overrides
 
 {% end %}
 
 [Bevy Engine repo]: https://github.com/bevyengine/bevy
-[examples folder]: https://github.com/bevyengine/bevy/tree/latest/examples#examples

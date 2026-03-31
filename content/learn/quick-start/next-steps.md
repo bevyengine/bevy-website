@@ -8,7 +8,6 @@ weight = 3
 
 You have reached the end of The Quick Start Guide! If you're hungry for more learning materials, we recommend checking out:
 
-- **[The Bevy Book]**: This is our in-depth learning resource, and goes into detail about how various aspects of the Bevy Engine function.
 - **[The Bevy Examples]**: We create an example for every major Bevy feature. This is currently the best way to learn Bevy's features and how to use them.
   - **[The Bevy Web Examples]**: We also try to make most of these examples available directly in your browser.
 - **[Breakout]**: A small "breakout" clone that illustrates what a real Bevy game looks like.
@@ -19,7 +18,6 @@ You have reached the end of The Quick Start Guide! If you're hungry for more lea
   - **[Plugins]**: Extra functionality you can use in your projects.
   - **[Games]**: Open-source games in various stages of development.
 
-[The Bevy Book]: /learn/book/intro
 [The Bevy Examples]: https://github.com/bevyengine/bevy/tree/latest/examples#examples
 [The Bevy Web Examples]: https://bevy.org/examples
 [Breakout]: https://github.com/bevyengine/bevy/blob/latest/examples/games/breakout.rs

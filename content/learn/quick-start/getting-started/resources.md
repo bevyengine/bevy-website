@@ -10,9 +10,9 @@ The [`Entity`] and [`Component`] data types are great for representing complex, 
 
 Here are some examples of data that could be encoded as a [`Resource`]:
 
-- Elapsed Time
-- Asset Collections (sounds, textures, meshes)
-- Renderers
+* Elapsed Time
+* Asset Collections (sounds, textures, meshes)
+* Renderers
 
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 [`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html

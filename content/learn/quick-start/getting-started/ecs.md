@@ -16,15 +16,15 @@ The ECS pattern encourages clean, decoupled designs by forcing you to break up y
 
 Bevy ECS is Bevy's implementation of the ECS pattern. Unlike other Rust ECS implementations, which often require complex lifetimes, traits, builder patterns, or macros, Bevy ECS uses normal Rust datatypes for all of these concepts:
 
-- **Components**: Rust structs that implement the [`Component`] trait.
+* **Components**: Rust structs that implement the [`Component`] trait
 
 {{file_code_block(file="quick-start/position_ecs.rs", anchor="position_component")}}
 
-- **Systems**: Normal Rust functions.
+* **Systems**: normal Rust functions
 
 {{file_code_block(file="quick-start/position_ecs.rs", anchor="position_system")}}
 
-- **Entities**: A simple type containing a unique integer.
+* **Entities**: a simple type containing a unique integer
 
 {{file_code_block(file="quick-start/mock_entity.rs", anchor="entity_struct")}}
 
@@ -32,7 +32,7 @@ Now let's see how this works in practice!
 
 [`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
 
-## Your first System
+## Your First System
 
 Paste the following function into your `main.rs` file:
 
@@ -51,7 +51,7 @@ Now run your app again using `cargo run`. You should see `hello world!` printed 
 [`Schedule`]: https://docs.rs/bevy_ecs/latest/bevy_ecs/schedule/struct.Schedule.html
 [`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
 
-## Your first Components
+## Your First Components
 
 Greeting the whole world is great, but what if we want to greet specific people? In ECS, you would generally model people as entities with a set of components that define them. Let's start simple with a `Person` component.
 
@@ -74,7 +74,7 @@ Now register the startup system like this:
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
-## Your first Query
+## Your First Query
 
 We could run this now and the `add_people` system would run first, followed by `hello_world`. But our new people don't have anything to do yet! Let's make a system that properly greets the new citizens of our [`World`]:
 
@@ -103,7 +103,7 @@ hello Zayna Nieves!
 
 Marvelous!
 
-### Your first mutable Query
+### Your First Mutable Query
 
 If we want to change the names of some people (perhaps they got married!), for example, we can do this using a mutable query:
 
