@@ -57,7 +57,7 @@ If you would like to learn more about the Rust language, check out the following
   </summary>
 
   - Run the [Visual Studio C++ Build Tools installer].
-  - For easy setup, select the ```Desktop development with C++``` workload in the installer.
+  - For easy setup, select the `Desktop development with C++` workload in the installer.
   - For a minimal setup, follow these steps:
       1. In the installer, navigate to `Individual components`
       2. Select the latest `MSVC` for your architecture and version of Windows
