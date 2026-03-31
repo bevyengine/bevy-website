@@ -32,7 +32,7 @@ In addition, we have two additional categories which are treated as examples by 
 1. Stress tests: uses extreme entity counts or otherwise unrealistic settings to allow us to readily detect performance changes in particular performance-sensitive hot paths.
 2. Testbeds: designed to test features and scenes that rely on graphical rendering or interactivity, in both an automated and manual fashion.
 
-Unlike examples, stress tests and test beds should be configurable, allowing Bevy contriubtors (and curious users) to see the impact of changes.
+Unlike examples, stress tests and test beds should be configurable, allowing Bevy contributors (and curious users) to see the impact of changes.
 
 ## When should I add an example?
 

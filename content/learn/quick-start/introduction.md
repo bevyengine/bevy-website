@@ -17,7 +17,7 @@ We promise it will be fun!
 A bevy is a group of birds!
 
 But Bevy is also a refreshingly simple data-driven game engine built in Rust.
-It is [free and open-source](https://github.com/bevyengine/bevy) forever under your choice of the MIT or Apache 2.0 licenses.
+It is [free and open-source] forever under your choice of the MIT or Apache 2.0 licenses.
 
 Bevy has the following design goals:
 
@@ -28,13 +28,18 @@ Bevy has the following design goals:
 * **Fast**: App logic should run quickly, and when possible, in parallel.
 * **Productive**: Changes should compile quickly... waiting isn't fun!
 
-Bevy is [built in the open by volunteers](https://bevy.org/learn/contribute/introduction) using the [Rust programming language](https://www.rust-lang.org/).
+Bevy is [built in the open by volunteers] using the [Rust programming language].
 The code is free and open-source because we believe developers should fully own their tools.
 Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games.
 Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily?
 We believe that the developer community can do so much better.
 
-For a more in-depth introduction, check out the [Introducing Bevy](/news/introducing-bevy/) blog post.
+For a more in-depth introduction, check out the [Introducing Bevy] blog post.
+
+[free and open-source]: https://github.com/bevyengine/bevy
+[built in the open by volunteers]: https://bevy.org/learn/contribute/introduction
+[Rust programming language]: https://www.rust-lang.org/
+[Introducing Bevy]: /news/introducing-bevy/
 
 {% callout(type="warning") %}
 
@@ -42,14 +47,20 @@ For a more in-depth introduction, check out the [Introducing Bevy](/news/introdu
 
 Bevy is still in development.
 Important features are missing, and documentation can be sparse.
-A new version of Bevy containing breaking changes to the API is released [approximately once every 3 months](https://bevy.org/news/bevy-0-6/#the-train-release-schedule).
-We provide [migration guides](https://bevy.org/learn/book/migration-guides/), but we can't guarantee that migrations will always be easy.
+A new version of Bevy containing breaking changes to the API is released [approximately once every 3 months].
+We provide [migration guides], but we can't guarantee that migrations will always be easy.
 
 **Our recommendation is to only use Bevy if you are willing to work in this environment.**
 
-If you are currently trying to pick an engine for your _Next Big Project™_, we recommend that you check out [Godot Engine](https://godotengine.org).
+If you are currently trying to pick an engine for your _Next Big Project™_, we recommend that you check out [Godot Engine].
 It is currently much more feature-complete and stable.
-Plus, it is also free, open-source, and [scriptable with Rust](https://github.com/godot-rust/gdext)!
+Plus, it is also free, open-source, and [scriptable with Rust]!
+
+[approximately once every 3 months]: https://bevy.org/news/bevy-0-6/#the-train-release-schedule
+[migration guides]: https://bevy.org/learn/book/migration-guides/
+[Godot Engine]: https://godotengine.org
+[scriptable with Rust]: https://github.com/godot-rust/gdext
+
 {% end %}
 
 ## Bevy Learning Paths
@@ -68,7 +79,10 @@ Each book chapter provides a detailed look at different aspects of Bevy, includi
 Please be aware that the Bevy Book is still a work-in-progress.
 
 While the Bevy Book is continuously being expanded and improved alongside the Bevy Engine, there are still sections that are missing and core aspects that need to be documented.
-If you'd like to help us get these missing sections written out, please check out the [Contribute](/learn/contribute) page on the website!
+If you'd like to help us get these missing sections written out, please check out the [Contribute] page on the website!
+
+[Contribute]: /learn/contribute
+
 {% end %}
 
 Phew! If you haven't been scared away yet, let's move on to learning some Bevy!
