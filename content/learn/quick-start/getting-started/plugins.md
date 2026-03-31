@@ -35,7 +35,7 @@ You should hopefully notice two things:
 - **Your console is now full of "hello" messages**.
   - This is because [`DefaultPlugins`] adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
 
-## Creating your first plugin
+## Creating Your First Plugin
 
 For better organization, let's move all of our "hello" logic to a plugin. To create a plugin we just need to implement the [`Plugin`] interface. Add the following code to your `main.rs` file:
 

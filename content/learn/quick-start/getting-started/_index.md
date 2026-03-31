@@ -19,7 +19,7 @@ After this, the rest of this section will focus on helping you setup your develo
 
 {% callout(type="info") %}
 Bevy is built in pure Rust, which gives us the benefit of only needing a working Rust installation to install the engine itself.
-However, additional dependencies are needed when we want to interact with different parts of our system, like creating application windows or taking in input from peripherals.
+However, additional dependencies are needed when we want to interact with different parts of our system, like creating application windows or reading input from peripherals.
 For these additional dependencies, please see the [Installing OS Dependencies] section on the Setup page.
 
 [Installing OS Dependencies]: /learn/quick-start/getting-started/setup/#installing-os-dependencies

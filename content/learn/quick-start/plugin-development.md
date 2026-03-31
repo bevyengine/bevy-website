@@ -26,9 +26,9 @@ While they are only guidelines, it can be useful for you to look at and consider
 
 ## Generic Plugin Types
 
-When developing a plugin you might want to allow your users to supply generic types.
-Enabling this can enable the user to write custom logic for the components they want to use.
-For example, the user could give your plugin a marker component to specify an entity that the plugin should perform some logic on.
+When developing a plugin, you might want to allow your users to supply your plugin with generic types.
+Enabling this can let the user write custom logic for the components they want to use.
+For example, a user could give your plugin a marker component to specify an entity that the plugin should perform some logic on.
 The user could also add events that your plugin should listen for, or add a resource your plugin should use (which is useful if you want to apply your plugin to multiple resources of the same type via type aliases.)
 
 You can define a generic plugin like so:
@@ -39,9 +39,9 @@ A prime example of generic plugins in use is the [Bevy Cellular Automaton Plugin
 
 ## Small Crate Size
 
-To avoid long build times in your plugin and in projects using it, you should aim for a small crate size: only include the Bevy features you absolutely need.
+To avoid long build times in your plugin (and in projects using it), you should aim for a small crate size: only include the Bevy features you absolutely need.
 
-Features are additive — Bevy features enabled in your plugin cannot be disabled by someone using your plugin.
+Features are additive: Bevy features enabled in your plugin cannot be disabled by someone using your plugin.
 You should add `default-features = false` to the Bevy dependency in your `Cargo.toml` and manually specify the features you need.
 You can find a [list of Bevy's features here](https://github.com/bevyengine/bevy/blob/latest/docs/cargo_features.md). 
 
@@ -113,7 +113,7 @@ Additionally, it can be helpful to list:
 - SystemSets available from your plugin, and their execution order if that's important.
 - Components available from your plugin.
 
-## Publishing your plugin
+## Publishing Your Plugin
 
 There are some [extra fields](https://doc.rust-lang.org/cargo/reference/manifest.html) that you can add to your `Cargo.toml` manifest in the `[package]` section:
 
@@ -124,7 +124,7 @@ There are some [extra fields](https://doc.rust-lang.org/cargo/reference/manifest
 - [`categories`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-categories-field) — Categories of the plugin. See [the full list on crates.io](https://crates.io/categories).
 - [`exclude`](https://doc.rust-lang.org/cargo/reference/manifest.html#the-exclude-and-include-fields) — Files to exclude from the released package. Excluding the `assets` folder that you may have is a good idea, as well as any large files that are not needed by the plugin.
 
-Once a crate is published to [crates.io], there are two badges that you can add to your `README.md` for easy links:
+Once a crate is published to [crates.io](https://crates.io), there are two badges that you can add to your `README.md` for easy links:
 
 [![crates.io](https://img.shields.io/crates/v/bevy)](https://crates.io/crates/bevy)
 
