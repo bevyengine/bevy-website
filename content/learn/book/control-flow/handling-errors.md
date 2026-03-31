@@ -308,7 +308,7 @@ fn update(query: Query<&Camera>) -> Result {
 ```
 
 Since Bevy controls system execution, it also controls what happens to the `Result` we return.
-The `Result` returned from a system gets passed to Bevy's global error handler which panics by default:
+A `Result::Err` returned from a system gets passed to Bevy's global error handler which panics by default:
 
 ```
 Encountered an error in system `test_programs::update`: No entities fit the query bevy_ecs::system::query::Query<'_, '_, &bevy_camera::camera::Camera>
