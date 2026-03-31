@@ -189,7 +189,7 @@ fn update(query: Query<&Camera>, mut commands: Commands) {
 In this case, if there is a `NoEntities` error, we use `Commands` to spawn an entity with a `Camera2d`, which requires `Camera`.
 The next frame this system runs again, and matches the `Ok` value, giving us access to the `Camera` value.
 
-### let-else
+### `let else`
 
 An alternative to `match` is let-else.
 `let-else` allows matching a specific pattern and handling all other cases in the else block.
