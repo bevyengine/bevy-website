@@ -6,20 +6,36 @@ aliases = ["learn/book/getting-started/setup"]
 weight = 1
 +++
 
-I know you are itching to start making games, but we need to do a _small_ amount of setup first.
+We know you are itching to start making games, but Bevy requires us to do a _small_ amount of setup first.
 
-## Rust Setup
+## Setting up your development environment 
 
-All Bevy app and engine code is written in Rust. This means that before we begin, we need to set up our Rust development environment.
+While all Bevy app and engine code is written in Rust, there are still a number of additional tools we need to configure before we can begin developing.
+The first of which is making sure that Rust itself is installed!
 
 ### Installing Rust
 
 Bevy relies heavily on improvements in the Rust language and compiler.
 As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust.
 
-Install Rust by following the [Rust Getting Started Guide](https://www.rust-lang.org/learn/get-started).
+Install Rust by following the [Rust Getting Started Guide].
 
-Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path.
+Once this is done, you should have the `rustc` compiler and the `cargo` build system installed in your path.
+
+[Rust Getting Started Guide]: https://www.rust-lang.org/learn/get-started
+
+#### Rust learning resources
+
+The goal of this guide is to get started learning Bevy quickly, so it won't serve as a full Rust education.
+If you would like to learn more about the Rust language, check out the following resources:
+
+- [**The Rust Book**]: The best place to learn Rust from scratch.
+- [**Rust by Example**]: Learn Rust by working through live coding examples.
+- [**Rustlings**]: Learn Rust through a series of fun and interactive exercises.
+
+[**The Rust Book**]: https://doc.rust-lang.org/book/
+[**Rust by Example**]: https://doc.rust-lang.org/rust-by-example/
+[**Rustlings**]: https://github.com/rust-lang/rustlings
 
 ### Installing OS Dependencies
 
@@ -29,7 +45,9 @@ Once this is done, you should have the ```rustc``` compiler and the ```cargo``` 
   #### Linux
   </summary>
 
-  Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/bevy/blob/latest/docs/linux_dependencies.md)
+  Follow the instructions at [Linux Dependencies].
+  
+  [Linux Dependencies]: https://github.com/bevyengine/bevy/blob/latest/docs/linux_dependencies.md
 </details>
 
 <details>
@@ -38,14 +56,16 @@ Once this is done, you should have the ```rustc``` compiler and the ```cargo``` 
   #### Windows
   </summary>
 
-  * Run the [Visual Studio C++ Build Tools installer](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
-  * For easy setup, select the ```Desktop development with C++``` workload in the installer.
-  * For a minimal setup, follow these steps:
+  - Run the [Visual Studio C++ Build Tools installer].
+  - For easy setup, select the ```Desktop development with C++``` workload in the installer.
+  - For a minimal setup, follow these steps:
       1. In the installer, navigate to `Individual components`
       2. Select the latest `MSVC` for your architecture and version of Windows
       3. Select the latest `Windows SDK` for your version of Windows
       4. Select the `C++ CMake tools` for Windows component
       5. Install the components
+    
+  [Visual Studio C++ Build Tools installer]: https://visualstudio.microsoft.com/visual-cpp-build-tools/
 </details>
 
 <details>
@@ -54,20 +74,18 @@ Once this is done, you should have the ```rustc``` compiler and the ```cargo``` 
   #### MacOS
   </summary>
 
-  Install the Xcode command line tools with `xcode-select --install` or the [Xcode app](https://apps.apple.com/en/app/xcode/id497799835)
+  Install the Xcode command line tools with `xcode-select --install` or the [Xcode app].
+  
+  [Xcode app]: https://apps.apple.com/en/app/xcode/id497799835
 </details>
 
 ### Code Editor / IDE
 
-You can use any code editor you want, but we highly recommend one that has a [rust-analyzer](https://github.com/rust-lang/rust-analyzer) plugin. It's still in development, but it already provides top-tier autocomplete and code intelligence. [Visual Studio Code](https://code.visualstudio.com/) has an officially supported [rust-analyzer extension](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+You can use any code editor you want, but we highly recommend one that has a [rust-analyzer] plugin. It's still in development, but it already provides top-tier autocomplete and code intelligence. [Visual Studio Code] has an officially supported [rust-analyzer extension].
 
-### Rust Learning Resources
-
-The goal of this guide is to get started learning Bevy quickly, so it won't serve as a full Rust education. If you would like to learn more about the Rust language, check out the following resources:
-
-* [**The Rust Book**](https://doc.rust-lang.org/book/): the best place to learn Rust from scratch
-* [**Rust by Example**](https://doc.rust-lang.org/rust-by-example/): learn Rust by working through live coding examples
-* [**Rustlings**](https://github.com/rust-lang/rustlings): learn Rust through a series of fun and interactive exercises
+[rust-analyzer]: https://github.com/rust-lang/rust-analyzer
+[Visual Studio Code]: https://code.visualstudio.com/
+[rust-analyzer extension]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
 
 ## Create a new Bevy Project
 
@@ -82,9 +100,9 @@ cargo new my_bevy_game
 cd my_bevy_game
 ```
 
-Now run ```cargo run``` to build and run your project. You should see ```Hello, world!``` printed to your terminal. Open the ```my_bevy_game``` folder in your code editor of choice and take some time to look through the files.
+Now run `cargo run` to build and run your project. You should see `Hello, world!` printed to your terminal. Open the `my_bevy_game` folder in your code editor of choice and take some time to look through the files.
 
-```main.rs``` is the entry point of your program:
+`main.rs` is the entry point of your program:
 
 ```rs
 fn main() {
@@ -105,7 +123,7 @@ edition = "2024"
 
 ### Add Bevy as a dependency
 
-Bevy is [available as a library on crates.io](https://crates.io/crates/bevy), the official Rust package repository.
+Bevy is [available as a library on crates.io], the official Rust package repository.
 
 The easiest way to add it to your project is to use `cargo add`:
 
@@ -124,11 +142,13 @@ cargo add bevy
   edition = "2024"
 
   [dependencies]
-  bevy = "0.17" # make sure this is the latest version
+  bevy = "0.18.1" # make sure this is the latest version
   ```
 </details>
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
+
+[available as a library on crates.io]: https://crates.io/crates/bevy
 
 ### Compile with Performance Optimizations
 
@@ -406,5 +426,9 @@ Now run `cargo run` again. The Bevy dependencies should start building. This wil
 Now that we have our Bevy project set up, we're ready to start making our first Bevy app!
 
 {% callout(type="note") %}
-If something went wrong, check out our [troubleshooting section](/learn/quick-start/troubleshooting/) or [ask for help on our Discord](https://discord.gg/bevy).
+If something went wrong, check out our [troubleshooting section] or [ask for help on our Discord].
+
+[troubleshooting section]: /learn/quick-start/troubleshooting/
+[ask for help on our Discord]: https://discord.gg/bevy
+
 {% end %}
