@@ -157,7 +157,7 @@ The output of the above program shows the alternative values in the failure case
 
 Once you have a `Result`, `Option`, or other enum, there are a number of options for control flow to better handle the specific variants that matter for your application.
 
-### match
+### `match`
 
 Here we have a Bevy application with a single system that runs every frame.
 The system queries for all of the `Camera` components that have been spawned and uses [`Query::single`](https://docs.rs/bevy/latest/bevy/prelude/struct.Query.html#method.single) to test if there is only a single `Entity` matching the `Query`.
