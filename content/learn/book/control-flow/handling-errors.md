@@ -13,11 +13,13 @@ In Bevy, with data such as Entities, Components, and Resources being inserted an
 
 Broadly speaking, there are two types of failure in Rust:
 
-- Errors you can recover from
-- Errors you can't recover from
+- Panics (which crash the app, and are "Unrecoverable")
+- Everything else (which don't crash the app so are called "Recoverable")
 
-Unrecoverable errors cause crashes and panics which are generally considered undesirable since a game or application crashing is a catastrophic experience for a player or user!
-These types of crashes result in no opportunity to clean up the application before crashing, so current game progress doesn't get an opportunity to save.
+Panics are usually undesirable, since a game or application crashing is a catastrophic experience for a player or user!
+They happen immediately, and provide us no opportunity for clean up or a graceful shutdown. Current game progress cannot be saved, and the entire state of the application is discarded.
+
+So panics are bad? Well, kind of. They are _very very convenient_, especially during prototyping. Just try to remove them before you let anyone run your code. 
 
 ## Avoiding crashes
 
