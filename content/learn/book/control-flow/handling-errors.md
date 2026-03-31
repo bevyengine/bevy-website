@@ -7,7 +7,7 @@ weight = 6
 
 Failures happen all the time in production software, from recoverable failures like not finding a user's save file on first run to unrecoverable errors which are symptoms of critical bugs.
 Dealing with that failure in a productive way means games and applications become more reliable.
-In Bevy, with data such as Entities, Components, and Resources being inserted and manipulated at runtime, handling cases when a Resource doesn't exist yet, an index needs to be updated, or a Component doesn't have the data
+In Bevy, with data such as Entities, Components, and Resources being inserted and manipulated at runtime, handling cases when a Resource doesn't exist yet, an index needs to be updated, or a Component doesn't have the data you're looking for is routine work.
 
 ## To Recover or Not
 
@@ -19,7 +19,7 @@ Broadly speaking, there are two types of failure in Rust:
 Panics are usually undesirable, since a game or application crashing is a catastrophic experience for a player or user!
 They happen immediately, and provide us no opportunity for clean up or a graceful shutdown. Current game progress cannot be saved, and the entire state of the application is discarded.
 
-So panics are bad? Well, kind of. They are _very very convenient_, especially during prototyping. Just try to remove them before you let anyone run your code. 
+So panics are bad? Well, kind of. Using panicking macros like [`todo!`](https://doc.rust-lang.org/std/macro.todo.html) can be extremely useful during prototyping. Just try to remove them before you let anyone run your code.
 
 ## Avoiding crashes
 
@@ -42,6 +42,24 @@ Some functions that will signal a potential crash include:
 You can check your own code for these panicking functions and remove them, but some functions outside of your own program code, such as from third party crates, could also contain them.
 The only way to make sure a function won't panic is to read and understand the source code.
 Crates like Bevy document which functions they provide could call panics internally and in what scenarios they will panic.
+
+{% callout() %}
+
+Additionally, there are some clippy lints that can help catch _some_ panics, but not all of them.
+Here's an example of a few and how to configure them in a workspace.
+You can look up what each does [on the clippy website](https://rust-lang.github.io/rust-clippy/master/)
+
+```toml
+[workspace.lints.clippy]
+unwrap_used = "warn"
+expect_used = "warn"
+arithmetic-side-effects = "warn"
+indexing_slicing = "warn"
+panic = "warn"
+todo = "warn"
+```
+
+{% end %}
 
 ## Recoverable failures
 
@@ -283,6 +301,13 @@ This works because Bevy contains a global, configurable error handler.
 
 Bevy's prelude contains a custom [`Result`](https://docs.rs/bevy/latest/bevy/ecs/error/type.Result.html) type alias that amounts to `Result<(), BevyError>` in the default case.
 This can be used as the return type from systems.
+
+{% callout() %}
+
+Bevy's built-in error type [`BevyError`](https://docs.rs/bevy/latest/bevy/ecs/error/struct.BevyError.html) has a blanket `From` impl for any type that implements Rust’s [`Error`](https://doc.rust-lang.org/std/error/trait.Error.html) trait.
+This means you can write your own errors either manually or with a higher-level crate like [`thiserror`](https://docs.rs/thiserror/latest/thiserror/), and use those custom errors alongside `?` to return them in a system that returns Bevy's `Result` as we cover next.
+
+{% end %}
 
 Consider the `Query::single` case, which returns a `Result`.
 In a system that returns `Result`, we can return errors by explicitly returning `Err` or using `?` on `Result`s.

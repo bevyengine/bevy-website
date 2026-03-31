@@ -1,4 +1,3 @@
-
 +++
 title = "Compiling Release Builds"
 insert_anchor_links = "right"
@@ -94,9 +93,9 @@ rather than `strip = true`, as the symbol table is used by many profiling tools.
 Binary size is particularly important on the web, as it impacts page load times.
 When working with WASM builds specifically, we have another tool: [`wasm-opt`](https://github.com/WebAssembly/binaryen).
 
-This is a distinct step that runs *after* compilation,
+This is a distinct step that runs _after_ compilation,
 and can be tuned to optimize speed or size.
-This should be called *after* [`wasm-bindgen`](https://github.com/wasm-bindgen/wasm-bindgen) or similar tools.
+This should be called _after_ [`wasm-bindgen`](https://github.com/wasm-bindgen/wasm-bindgen) or similar tools.
 
 ```sh
 # Optimize for size (z profile).
