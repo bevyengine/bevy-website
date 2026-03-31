@@ -49,7 +49,7 @@ struct Args {
 enum Commands {
     /// Gets all merged PRs with the `M-Migration-Guide` label or with a `Migration Guide` section in the body
     /// * For each PR generate a file with the migration guide and a frontmatter with metadata about the PR.
-    ///   This parses the markdown and generates valid makrdown that should pass markdownlint rules.
+    ///   This parses the markdown and generates valid markdown that should pass markdownlint rules.
     #[command(verbatim_doc_comment)]
     MigrationGuides {
         /// Use this if you want to overwrite existing files
