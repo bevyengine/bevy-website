@@ -42,4 +42,4 @@ Apps can be used to combine code that's been broken down into modular, reusable 
 With that, you should have everything you need to start [exploring our examples](https://github.com/bevyengine/bevy/tree/latest/examples#examples),
 or diving into the rest of the book.
 
-The remaining chapters of this book are non-linear: you can read or referenced them in any order.
+The remaining chapters of this book are non-linear: you can read or reference them in any order.
