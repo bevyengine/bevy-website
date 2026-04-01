@@ -82,7 +82,7 @@ There's another way to add children to an entity, one which lets you create an e
 
 ```rs
 fn spawn_entity_with_children(mut commands: Commands) {
-    // Spawn a car and it's wheels
+    // Spawn a car and its wheels
     commands.spawn((
         Camaro,
         Color::Red,
@@ -109,7 +109,7 @@ The [`children!`] macro can make this code even more concise:
 
 ```rs
 fn spawn_entity_with_children(mut commands: Commands) {
-    // Spawn a car and it's wheels
+    // Spawn a car and its wheels
     commands.spawn((
         Camaro,
         Color::Red,
