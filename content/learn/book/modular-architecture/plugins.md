@@ -30,7 +30,7 @@ Let's break that down:
 
 - this is a trait, so we need to implement it for a user-defined type
 - `build` takes `&self`, allowing you to change the behavior based on the value.
-- it takes a`&mut App` reference, allowing you to mutate the [`App`] state freely
+- it takes a `&mut App` reference, allowing you to mutate the [`App`] state freely
   - adding systems via [`App::add_systems`] is the most common and important method
   - as discussed in our section on [apps], [`App`] holds a [`World`], allowing you to add resources, make queries, spawn entities and more
 - because of how simple this is, we can just cut-and-paste code from our `main.rs` into plugins when we're ready to clean up
@@ -46,7 +46,7 @@ Let's see how this works in practice:
 struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
-    fn build(&self, app: &mut App) -> &mut App {
+    fn build(&self, app: &mut App) {
         app.add_systems(Update, check_if_player_is_dead);
     }
 }
@@ -55,7 +55,7 @@ App::new().add_plugins(PlayerPlugin);
 ```
 
 Because our plugin is so simple (it doesn't take any config, and only uses the `build` method),
-we could instead choose to use [the blanket for all functions that take a &mut App] instead:
+we could instead choose to use [the blanket impl for functions that take a &mut App]:
 
 ```rust,hide_lines=1-4
 # use bevy::prelude::*;
@@ -149,7 +149,7 @@ Then, when the app is run, a few other plugin life-cycle functions are called, a
 
 In most cases, this complexity can be completely ignored, but when working with subsystems that require deferred initialization it can be helpful.
 
-[apps]: [../the-game-loop/app]
+[apps]: ../the-game-loop/app
 [`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
 [`App::add_systems`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html?search=add#method.add_systems
 [`App::add_plugins`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html?search=add#method.add_plugins
