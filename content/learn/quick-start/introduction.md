@@ -18,18 +18,19 @@ But Bevy is also a refreshingly simple data-driven game engine built in Rust. It
 
 Bevy has the following design goals:
 
-* **Capable**: Offer a complete 2D and 3D feature set.
-* **Simple**: Easy for newbies to pick up, but infinitely flexible for power users.
-* **Data Focused**: Data-oriented architecture using the Entity Component System paradigm.
-* **Modular**: Use only what you need. Replace what you don't like.
-* **Fast**: App logic should run quickly, and when possible, in parallel.
-* **Productive**: Changes should compile quickly... waiting isn't fun.
+* **Capable**: Offer a complete 2D and 3D feature set
+* **Simple**: Easy for newbies to pick up, but infinitely flexible for power users
+* **Data Focused**: Data-oriented architecture using the Entity Component System paradigm
+* **Modular**: Use only what you need. Replace what you don't like
+* **Fast**: App logic should run quickly, and when possible, in parallel
+* **Productive**: Changes should compile quickly... waiting isn't fun
 
 Bevy is [built in the open by volunteers](https://bevy.org/learn/contribute/introduction) using the [Rust programming language](https://www.rust-lang.org/). The code is free and open-source because we believe developers should fully own their tools. Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games. Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? We believe that the developer community can do so much better.
 
 For a more in-depth introduction, check out the [Introducing Bevy](/news/introducing-bevy/) blog post.
 
 {% callout(type="warning") %}
+
 ## Stability Warning
 
 Bevy is still in development.

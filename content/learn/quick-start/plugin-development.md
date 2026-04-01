@@ -43,7 +43,7 @@ To avoid long build times in your plugin (and in projects using it), you should 
 
 Features are additive: Bevy features enabled in your plugin cannot be disabled by someone using your plugin.
 You should add `default-features = false` to the Bevy dependency in your `Cargo.toml` and manually specify the features you need.
-You can find a [list of Bevy's features here](https://github.com/bevyengine/bevy/blob/latest/docs/cargo_features.md). 
+You can find a [list of Bevy's features here](https://github.com/bevyengine/bevy/blob/latest/docs/cargo_features.md).
 
 - Avoid large new dependencies.
 - Make sure your dependencies are not duplicated, using [`cargo tree`](https://doc.rust-lang.org/cargo/commands/cargo-tree.html) or [`cargo-deny`](https://github.com/EmbarkStudios/cargo-deny).
@@ -55,7 +55,7 @@ Since the release of Bevy 0.16, it is now possible to use Bevy in a [`no_std`](h
 If you don't want to or can't support `no_std` in your plugin, you'll likely want to enable the `std` feature in Bevy to regain some functionality that was previously included by default.
 
 ```toml
-bevy = { version = "0.18.1", default-features = false, features = ["std"] }
+bevy = { version = "0.18", default-features = false, features = ["std"] }
 ```
 
 If you _do_ want to pursue `no_std` support, please refer to the `no_std` example in `examples/no_std/library`.

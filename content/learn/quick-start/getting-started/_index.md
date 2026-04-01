@@ -18,8 +18,8 @@ After this, the rest of this section will focus on helping you setup your develo
 ## Installing Bevy
 
 {% callout(type="info") %}
-Bevy is built in pure Rust, which gives us the benefit of only needing a working Rust installation to install the engine itself.
-However, additional dependencies are needed when we want to interact with different parts of our system, like creating application windows or reading input from peripherals.
+Bevy is built in pure Rust, which gives us the benefit of only needing a working Rust installation to get start with the engine itself.
+However, additional operating system specific dependencies are needed when we want to interact with different parts of our system, like creating application windows, playing audio, or reading input from peripherals.
 For these additional dependencies, please see the [Installing OS Dependencies] section on the Setup page.
 
 [Installing OS Dependencies]: /learn/quick-start/getting-started/setup/#installing-os-dependencies
@@ -75,19 +75,5 @@ If you would like to see Bevy in action before starting a new project, you can c
     ```sh
     cargo run --example breakout
     ```
-
-{% callout(type="warning") %}
-When using Rust `1.89+` and Bevy `0.16.x or earlier` the examples will not run and instead error. For more info on *why* see [issue #20475].
-
-Some workarounds:
-
-- Use Rust 1.88 or earlier using this command: `rustup default 1.88.0`
-- Use Rust 1.88 *only* in your Bevy Engine directory using this command: `rustup override set 1.88`
-  - (See [this link] for more information.)
-
-[issue #20475]: <https://github.com/bevyengine/bevy/issues/20475>
-[this link]: https://rust-lang.github.io/rustup/overrides.html#directory-overrides
-
-{% end %}
 
 [Bevy Engine repo]: https://github.com/bevyengine/bevy
