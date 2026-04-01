@@ -33,7 +33,7 @@ If you are also using embedded assets (through the [`load_embedded_asset!`] macr
 
 [`AssetWatcher`]: https://docs.rs/bevy/latest/bevy/asset/struct.AssetWatcher.html
 [`Assets<T>`]: https://docs.rs/bevy/latest/bevy/asset/struct.Assets.html
-[`load_embedded_asset!` macro]: https://docs.rs/bevy/latest/bevy_asset_macro/macro.load_embedded_asset.html
+[`load_embedded_asset!`]: https://docs.rs/bevy/latest/bevy_asset_macro/macro.load_embedded_asset.html
 [`AssetEvent::Modified`]: https://docs.rs/bevy/latest/bevy/asset/enum.AssetEvent.html
 [`AssetChanged`]: https://docs.rs/bevy/latest/bevy/asset/prelude/struct.AssetChanged.html
 
@@ -44,7 +44,7 @@ and deliberately architect their games to drive important gameplay parameters vi
 
 While assets are commonly thought of as being the "art" assets of a game (meshes, images, sounds...),
 there's nothing that fundamentally links the pattern or infrastructure to those assets.
-If you define our gameplay data in terms of human-readable structured text files (like `.ron` or `.json`),
+If you define your gameplay data in terms of human-readable structured text files (like `.ron` or `.json`),
 you can hot reload those too:
 
 ```ron
