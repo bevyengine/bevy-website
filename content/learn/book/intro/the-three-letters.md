@@ -37,7 +37,7 @@ An Entity, by itself, is just an identifier; it does not store any data within i
 
 In the "in-memory database" model, entities are the row keys in our database, with each entity getting its own row and unique identifier.
 
-While entities are conceptually similar to Objects in object-oriented engines, they are distinctly different bececause they **do not store any behavior**.
+While entities are conceptually similar to Objects in object-oriented engines, they are distinctly different because they **do not store any behavior**.
 Instead, behavior is controlled by [systems](#the-s-systems).
 
 {% callout(type="note") %}
@@ -106,7 +106,7 @@ fn my_system(entities: Query<&mut Location>) {
 ```
 
 {% callout(type="info") %}
-Bevy systems use a technique called [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to access data about the Bevy world. By declaring your function parameters wrapped in special types like [Query](../intro/the-next-three-letters#queries) or [Res](../intro/the-next-three-letters#resources), the data for those parameters will be filled in for you automagically - without you having to actually call the system.
+Bevy systems use a technique called [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to access data about the Bevy world. By declaring your function parameters wrapped in special types like [Query](../intro/the-next-three-letters#queries) or [Res](../intro/the-next-three-letters#resources), the data for those parameters will be filled in for you automatically — without you having to actually call the system.
 
 Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are *disjoint* and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
 {% end %}

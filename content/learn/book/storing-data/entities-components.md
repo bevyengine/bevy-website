@@ -82,7 +82,7 @@ To make a basic cube, you'd probably need to add:
 To define a component type, we simply implement the [`Component`] [trait](https://doc.rust-lang.org/book/ch10-02-traits.html) for a Rust type of our choice.
 You will almost always want to use the `#[derive(Component)]` [macro](https://doc.rust-lang.org/reference/attributes/derive.html) to do this for you; which quickly and reliably generates the correct trait implementation.
 
-Components come in a variety of tasty flavors:
+Components come in several different forms:
 
 ```rust,hide_lines=1
 # use bevy::ecs::component::Component;

@@ -13,14 +13,14 @@ It's where your data lives.
 
 If you are familiar with SQL database terminology, you can think of a world as a database.
 Just like a database, a world contains several tables called **Archetypes**.
-Each [entity] is an entry within this database, stored as a row in on one of the archetype tables.
+Each [entity] is an entry within this database, stored as a row in one of the archetype tables.
 The components on an entity form the columns of the archetype table.
 This allows archetype tables to be stored as dense arrays, containing only entities with exactly the same set of components.
 However, it also means that entities must be moved between tables when components are added or removed.
 
 ## Using the World
 
-With a `&World` reference, you can read anything out of the ecs.
+With a `&World` reference, you can read anything out of the ECS.
 With a `&mut World`, you can write to it as well.
 
 [entity]: /learn/book/storing-data/entities-components

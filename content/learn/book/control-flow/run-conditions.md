@@ -30,7 +30,7 @@ Run conditions can also be composed.
 You can chain multiple `.run_if()` calls using AND logic, but there are also various boolean operations provided by the [`SystemCondition`] trait.
 
 Run conditions can also be applied to multiple systems at once by using a [`SystemSet`].
-If a system set is given a run condition, it will be evaluated once per frame for that system set and the systems inside of it will be skipped if it returns true.
+If a system set is given a run condition, it will be evaluated once per frame for that system set and the systems inside of it will be skipped if it returns false.
 
 As a result, run conditions can be useful when working with systems that you do not own.
 They can be used to configure if (or under what conditions) these foreign systems should run as long as the crate author has publicly exposed either the system function or a system set that contains it.

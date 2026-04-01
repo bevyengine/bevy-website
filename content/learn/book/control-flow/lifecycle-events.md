@@ -45,7 +45,7 @@ We have a couple ways to use `ComponentHooks`, the first of which is through the
 pub struct MyComponent;
 
 // This method adds the ComponentHook to `MyComponent`, and will
-// run it's code whenever `MyComponent` is added to an Entity.
+// run its code whenever `MyComponent` is added to an Entity.
 world.register_component_hooks::<MyComponent>().on_add(|add| {
     println!("MyComponent added to {}", add.entity);
 });
@@ -274,7 +274,7 @@ fn player_reconnect(world: DeferredWorld, reconnection: HookContext) {
 // In effect, this will log all connections to the match.
 fn log_player_connections(query: Query<&Name, Added<PlayerConnection>>) {
     for player in &query {
-        println!{"Player Connection Log: {} Joined The Match"};
+        println!("Player Connection Log: {} Joined The Match", player);
     }
 }
 ```

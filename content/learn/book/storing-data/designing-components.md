@@ -89,7 +89,7 @@ The `require` macro is the easiest way to declare required components, but you c
 Check the `Component` trait documentation for up-to-date guidance.
 
 [`Add`]: https://doc.rust-lang.org/std/ops/trait.Add.html
-[`Display`]: https://doc.rust-lang.org/std/path/struct.Display.html
+[`Display`]: https://doc.rust-lang.org/std/fmt/trait.Display.html
 [`Deref`]: https://doc.rust-lang.org/std/ops/trait.Deref.html
 [`DerefMut`]: https://doc.rust-lang.org/std/ops/trait.DerefMut.html
 [newtypes]: https://doc.rust-lang.org/rust-by-example/generics/new_types.html

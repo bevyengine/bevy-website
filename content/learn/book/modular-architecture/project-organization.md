@@ -88,7 +88,7 @@ But there's still a few good reasons to take advantage of Rust's visibility syst
   - more complex patterns can often benefit from custom commands or system params to ensure a single blessed workflow
   - clean encapsulation ensures that you can update how something works in a single place
 - dead code detection
-  - if your types/methods/functions are `pub`, Rust won't known if they're dead code
+  - if your types/methods/functions are `pub`, Rust won't know if they're dead code
   - dead code slows down compile times, confuses the reader and slowly rots
 - keeping your code *reasonably* untangled
   - iterating quickly is important, and Rust will help you refactor, so you should be careful not to get too tangled up
@@ -326,7 +326,7 @@ We can split out our new AI library for sure though: that's something we might w
 We're still not sure exactly how our combat is going to work,
 and it's going to need to interface closely with our character code.
 Let's leave that alone for now.
-However, we've been bitten before by spaghettti code with our UI:
+However, we've been bitten before by spaghetti code with our UI:
 let's spin that out and reduce the temptation.
 We'll define the various settings for the UI in our `wild_west_lib` using resources,
 and have our new `wild_west_ui` simply read and write those resource values.
