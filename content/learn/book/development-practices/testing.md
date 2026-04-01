@@ -282,7 +282,7 @@ You get full data access and Bevy's ECS ergonomics, but you still control exactl
 ### Running Entire Schedules
 
 When the behavior you care about comes from the interaction *between* systems, you can build up a [`Schedule`] and run it against a `World`.
-This lets you verify [system ordering](../control-flow/system-ordering.md) and [run conditions](../control-flow/run-conditions.md), which you can't do with `run_system_once`.
+This lets you verify [system ordering](../control-flow/systems#running-systems-in-schedules) and [run conditions](../control-flow/run-conditions.md), which you can't do with `run_system_once`.
 
 ```rust
 fn regenerate(mut query: Query<&mut Life>) {
@@ -425,7 +425,7 @@ Bevy's own plugins are designed to work quite robustly without rendering.
 For example, `bevy_ui` and `bevy_ui_render` are different crates with their own plugins.
 The best way to ensure that your code works without rendering (sometimes called "headlessly") is to create a `headless` feature flag for your application, and then disable plugins which are causing crashes in a feature-flagged cfg block:
 
-```rust, hide-lines=1,hide_lines=1
+```rust,hide_lines=1
 # use bevy::prelude::*;
 let mut app = App::new();
 
@@ -470,7 +470,7 @@ We'll cover the concepts and point you to the right tools, but expect to dig int
 Bevy provides the [`Screenshot`] component for programmatic screen capture.
 Spawn an entity with a `Screenshot` component and attach an observer to handle the result:
 
-```rust, hide-lines=1,hide_lines=1
+```rust,hide_lines=1
 # use bevy::prelude::*;
 fn take_screenshot(mut commands: Commands) {
 commands
@@ -511,9 +511,9 @@ If you need to render without any window at all (say, on a build server with no 
 [`save_to_disk`]: https://docs.rs/bevy/latest/bevy/render/view/window/screenshot/fn.save_to_disk.html
 [`ScreenshotCaptured`]: https://docs.rs/bevy/latest/bevy/render/view/window/screenshot/struct.ScreenshotCaptured.html
 [`Image`]: https://docs.rs/bevy/latest/bevy/image/struct.Image.html
-[`screenshot`]: https://github.com/bevyengine/bevy/blob/main/examples/window/screenshot.rs
+[`screenshot`]: https://github.com/bevyengine/bevy/blob/latest/examples/window/screenshot.rs
 [`bevy_ci_testing`]: https://docs.rs/bevy/latest/bevy/dev_tools/ci_testing/index.html
-[`headless_renderer`]: https://github.com/bevyengine/bevy/blob/main/examples/app/headless_renderer.rs
+[`headless_renderer`]: https://github.com/bevyengine/bevy/blob/latest/examples/app/headless_renderer.rs
 
 ### Running Graphical Tests in CI
 
@@ -547,7 +547,7 @@ WGPU_ADAPTER_NAME=llvmpipe cargo run --example my_example
 
 You can test software rendering locally by setting [`WgpuSettings`]:
 
-```rust, hide-lines=1-3,hide_lines=1-3
+```rust,hide_lines=1-3
 # use bevy::prelude::*;
 # use bevy::render::settings::{RenderCreation, WgpuSettings};
 # use bevy::render::RenderPlugin;
