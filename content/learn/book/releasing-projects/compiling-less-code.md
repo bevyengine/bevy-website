@@ -19,13 +19,13 @@ In Rust, this is done through the use of [feature flags](https://doc.rust-lang.o
 Rust allows us to designate "default" features for Bevy, causing them to be automatically enabled for users who add Bevy to their project.
 When you call `cargo add bevy`, this creates the following entry in your `Cargo.toml`, which tracks your project's dependencies:
 
-```rust
+```toml
 bevy = "0.18"
 ```
 
 This is equivalent to:
 
-```rust
+```toml
 bevy = { version = "0.18", default-features = true }
 
 ```
@@ -52,7 +52,7 @@ Bevy is a large project, with lots of different functionality and users who each
 As a result, it has *many* feature flags, and these feature flags often change quickly across versions.
 
 To make this easier to manage, Bevy offers "feature collections", which are feature flags that simply enable other features.
-You can see the full list of features by reading `bevy`'s [Cargo.toml](https://github.com/bevyengine/bevy/blob/main/Cargo.toml).
+You can see the full list of features by reading `bevy`'s [Cargo.toml](https://github.com/bevyengine/bevy/blob/latest/Cargo.toml).
 The most important ones are:
 
 - `2d`: For 2D games.
