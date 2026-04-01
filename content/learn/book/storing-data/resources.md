@@ -152,9 +152,9 @@ For example, there might only be one instance of a type now, but perhaps there w
 Your single-player game only supports one game controller _now_, but what if you decide to make it a split-screen co-op game _later_?
 Then you'll need more than one gamepad.
 
-An object also can't be a resource if it is going to be apart of a bigger collection at any point.
+An object also can't be a resource if it is going to be a part of a bigger collection at any point.
 For example, lets say a game has a `PlayerAvatar` struct representing the object that the player controls and moves.
-If `PlayerAvatar` needs to be rendered and simulated using common ECS systems, it can't be a resource as it's apart of a larger collection and therefore isn't unique.
+If `PlayerAvatar` needs to be rendered and simulated using common ECS systems, it can't be a resource as it's a part of a larger collection and therefore isn't unique.
 
 Finally, a resource can only be a single `struct` or `enum`.
 If the object is a composite of multiple structs, then using components is the way to go.
