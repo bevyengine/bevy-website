@@ -73,7 +73,7 @@ If you would like to learn more about the Rust language, check out the following
 
 ### Code Editor / IDE
 
-You can use any code editor you want, but we highly recommend one that has a [rust-analyzer](https://github.com/rust-lang/rust-analyzer) plugin. It's still in development, but it already provides top-tier autocomplete and code intelligence. [Visual Studio Code](https://code.visualstudio.com/) has an officially supported [rust-analyzer extension](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+You can use any code editor you want, but we highly recommend one that supports Language Server Protocol in order to use [rust-analyzer](https://github.com/rust-lang/rust-analyzer). [Visual Studio Code](https://code.visualstudio.com/) has an officially supported [rust-analyzer extension](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
 
 ## Create A New Bevy Project
 

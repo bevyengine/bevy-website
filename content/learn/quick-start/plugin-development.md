@@ -39,7 +39,7 @@ A prime example of generic plugins in use is the [Bevy Cellular Automaton Plugin
 
 ## Small Crate Size
 
-To avoid long build times in your plugin (and in projects using it), you should aim for a small crate size: only include the Bevy features you absolutely need.
+To avoid long build times in your plugin (and in projects using it), you should aim for a small crate size: Only include the Bevy features you absolutely need.
 
 Features are additive: Bevy features enabled in your plugin cannot be disabled by someone using your plugin.
 You should add `default-features = false` to the Bevy dependency in your `Cargo.toml` and manually specify the features you need.
