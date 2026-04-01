@@ -289,7 +289,7 @@ fn update_cooldowns(time: Res<Time>, mut cooldowns: Query<&mut Cooldown>) {
     let delta_time = time.delta();
     for mut cooldown in cooldowns.iter_mut(){
         // We never want our remaining time to become negative
-        cooldown.remaining.saturating_sub(delta_time);
+        cooldown.remaining = cooldown.remaining.saturating_sub(delta_time);
     }
 }
 ```
@@ -306,7 +306,7 @@ To trigger a system periodically, the `on_timer` run condition can be very conve
 # }
 
 fn tick_buildings(query: Query<&mut Building>){
-   for query in query.iter_mut(){
+   for mut building in query.iter_mut(){
       building.tick();
    }
 }
@@ -326,6 +326,6 @@ Instead, you should either split the work into bite-sized pieces that can safely
 within a single frame, or spawn an async task which you periodically poll for completion.
 
 [`Timer`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
-[`Duration`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
+[`Duration`]: https://doc.rust-lang.org/std/time/struct.Duration.html
 [relationship]: ../storing-data/relations.md
 [`on_timer`]: https://docs.rs/bevy/latest/bevy/time/common_conditions/fn.on_timer.html

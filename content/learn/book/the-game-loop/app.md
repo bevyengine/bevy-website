@@ -5,8 +5,8 @@ insert_anchor_links = "right"
 weight = 0
 +++
 
-An [`App`] is the entry-point to a bevy game.
-Apps exist to configure bevy before start up: registering [systems], initializing [resources], and registering [events], and so on.
+An [`App`] is the entry-point to a Bevy game.
+Apps exist to configure Bevy before start up: registering [systems], initializing [resources], and registering [events], and so on.
 Once configured, an app can be started with [`App::run`].
 This takes control of the main thread and enters the game loop.
 
@@ -21,7 +21,7 @@ To simplify this, [`App`] proxies most of the [`World`] API.
 The world can also be accessed directly via [`App::world_mut`].
 
 The main thing that distinguishes an [`App`] from a world is the runner function.
-It's this function that defines the game loop, and like everything else in bevy it's configurable:
+It's this function that defines the game loop, and like everything else in Bevy it's configurable:
 You can manually set a runner with [`App::set_runner`], but you shouldn't have to:
 When using [`DefaultPlugins`] or [`MinimalPlugins`] the runner is set for you.
 We will take a closer look at the runner function in the [custom loops] chapter.
@@ -36,6 +36,6 @@ We will take a closer look at the runner function in the [custom loops] chapter.
 [events]: /learn/book/control-flow/events
 [schedules]: /learn/book/the-game-loop/schedules
 [custom loops]: /learn/book/the-game-loop/schedules
-[plugins]: /learn/book/architecture/plugins
+[plugins]: /learn/book/modular-architecture/plugins
 [`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
 [`MinimalPlugins`]: https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html
