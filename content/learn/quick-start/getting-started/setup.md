@@ -6,7 +6,7 @@ aliases = ["learn/book/getting-started/setup"]
 weight = 1
 +++
 
-We know you are itching to start making games, but Bevy requires us to do a _small_ amount of setup first.
+We know you're itching to start making games, but Bevy requires us to do a _small_ amount of setup first.
 
 ## Setting Up Your Development Environment
 

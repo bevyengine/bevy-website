@@ -27,7 +27,7 @@ While they are only guidelines, it can be useful for you to look at and consider
 ## Generic Plugin Types
 
 When developing a plugin, you might want to allow your users to supply your plugin with generic types.
-Enabling this can let the user write custom logic for the components they want to use.
+It can enable a user to write custom logic for the components they want to use.
 For example, a user could give your plugin a marker component to specify an entity that the plugin should perform some logic on.
 The user could also add events that your plugin should listen for, or add a resource your plugin should use (which is useful if you want to apply your plugin to multiple resources of the same type via type aliases.)
 

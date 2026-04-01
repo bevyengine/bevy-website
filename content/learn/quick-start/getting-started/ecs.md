@@ -82,7 +82,7 @@ We could run this now and the `add_people` system would run first, followed by `
 
 The parameters we pass into a "system function" define what data the system runs on. In this case, `greet_people` will run on all entities with the `Person` and `Name` component.
 
-You can interpret the [`Query`] above as: _"iterate over every `Name` component for entities that also have a `Person` component"_.
+You can interpret the [`Query`] above as: "iterate over every `Name` component for entities that also have a `Person` component".
 
 Now we just register the system in our `App`. Note that you can pass more than one system into an `add_systems` call by using a tuple!
 

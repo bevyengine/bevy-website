@@ -37,8 +37,7 @@ Bevy is still in development.
 Important features are missing, and documentation can be sparse.
 A new version of Bevy containing breaking changes to the API is released [approximately once every 3 months](https://bevy.org/news/bevy-0-6/#the-train-release-schedule).
 We provide [migration guides](https://bevy.org/learn/book/migration-guides/), but we can't guarantee that migrations will always be easy.
-
-**Our recommendation is to only use Bevy if you are willing to work in this environment.**
+Use only if you are willing to work in this environment.
 
 If you are currently trying to pick an engine for your _Next Big Project™_, we recommend that you check out [Godot Engine](https://godotengine.org).
 It is currently much more feature-complete and stable.
