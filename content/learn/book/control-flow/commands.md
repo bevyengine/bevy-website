@@ -159,7 +159,7 @@ fn remove_the_component(mut commands: Commands, mut player: Single<Entity, With<
 ```
 
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Schedule.html
-[`ApplyDeferred`]: https://docs.rs/bevy/0.18.0/bevy/ecs/prelude/struct.ApplyDeferred.html
+[`ApplyDeferred`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.ApplyDeferred.html
 
 ## Entity Commands
 
