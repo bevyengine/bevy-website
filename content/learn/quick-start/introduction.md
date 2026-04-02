@@ -34,7 +34,7 @@ This Quick Start Guide is designed to get you up and running with Bevy as quickl
 It takes a hands-on approach, diving straight into the core tools you need to start making things today.
 
 For a deeper understanding of Bevy's core concepts, consult [The Bevy Book](/learn/book/intro/).
-The Book takes a more academic approach: discussing the tradeoffs of various techniques, important details and best practices when making games with Bevy.
+The Book takes a more academic approach: discussing the tradeoffs of various techniques, important details, and best practices when making games with Bevy.
 You can read it alongside this guide, or return to it once you've completed your first simple project.
 
 {% callout(type="warning") %}
