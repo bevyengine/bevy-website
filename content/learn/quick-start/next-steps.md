@@ -1,7 +1,6 @@
 +++
 title = "Next Steps"
 insert_anchor_links = "right"
-aliases = ["learn/book/next-steps"]
 [extra]
 weight = 3
 +++

@@ -1,7 +1,6 @@
 +++
 title = "Setup"
 insert_anchor_links = "right"
-aliases = ["learn/book/getting-started/setup"]
 [extra]
 weight = 1
 +++

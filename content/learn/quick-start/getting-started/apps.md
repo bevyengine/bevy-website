@@ -1,7 +1,6 @@
 +++
 title = "Apps"
 insert_anchor_links = "right"
-aliases = ["learn/book/getting-started/apps"]
 [extra]
 weight = 2
 +++

@@ -1,7 +1,6 @@
 +++
 title = "Plugins"
 insert_anchor_links = "right"
-aliases = ["learn/book/getting-started/plugins"]
 [extra]
 weight = 4
 +++

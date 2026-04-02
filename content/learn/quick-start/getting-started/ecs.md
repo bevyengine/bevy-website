@@ -1,7 +1,6 @@
 +++
 title = "ECS"
 insert_anchor_links = "right"
-aliases = ["learn/book/getting-started/ecs"]
 [extra]
 weight = 3
 +++
