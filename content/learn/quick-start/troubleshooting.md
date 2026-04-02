@@ -5,7 +5,9 @@ insert_anchor_links = "right"
 weight = 5
 +++
 
-Is something in Bevy not working as expected? Maybe one of these will resolve your problem:
+Is something in Bevy not working as expected? Maybe one of these will resolve your problem.
+
+For help with compile times and build configuration, see [Fast Compiles](/learn/book/development-practices/fast-compiles/) in The Bevy Book.
 
 ## Unable to find a GPU
 
