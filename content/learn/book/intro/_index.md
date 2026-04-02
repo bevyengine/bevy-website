@@ -7,30 +7,48 @@ weight = 1
 status = 'hidden'
 +++
 
-Like any game engine, Bevy is a large project, and there's a lot to learn!
-Everyone learns differently, so we offer a variety of complementary learning paths:
+Bevy is a modern, ECS (Entity Component System)-first game engine written in Rust. We aim to be:
 
-* [Quickstart](learn/quickstart): Dive in and get your hands dirty, learning how to create a simple game in a hands-on tutorial for absolute beginners.
-* [The Book](learn/book): Read about the core concepts that make Bevy work, and browse our library of the advanced topics needed to ship a production game.
-* [docs.rs](https://docs.rs/bevy/latest/bevy/): Versioned API documentation that explains exactly what every struct, method and function mean. Module and crate docs are also great, and provide an overview of the structure and usage of specific areas of the code.
-* [Feature Examples](https://bevyengine.org/examples): Figure out how to solve specific game dev problems (like running a game in split screen, implementing UI elements, or writing shaders) by shamelessly stealing from our runnable snippets.
-* [Game Examples](https://bevyengine.org/examples/#games): Get a sense of how to structure larger projects and tackle new genres with playable game stubs.
+- **Capable:** Offer a complete 2D and 3D feature set.
+- **Simple:** Easy for new users to pick up, but flexible enough for power users.
+- **Modular:** Use only what you need. Replace what you don't like.
+- **Fast:** App logic should run quickly, and when possible, in parallel.
+- **Productive:** Short compile times and fast refreshes keep iteration tight.
+
+Bevy is dual-licensed under [MIT](https://github.com/bevyengine/bevy/blob/main/LICENSE-MIT) and [Apache v2](https://github.com/bevyengine/bevy/blob/main/LICENSE-APACHE), and governed by the [Bevy Foundation](https://bevyengine.org/foundation/), a 501(c)(3) nonprofit. It is built in the open by hundreds of [community contributors](https://bevyengine.org/learn/contribute/introduction).
+
+In practice, this means:
+
+- You model game state as data in the ECS.
+- You express behavior as systems that read and write that data.
+- You compose functionality by combining small, modular pieces.
+- You can inspect engine code, ecosystem code, and your game code using the same language and tooling.
+
+This can feel unusual at first, especially if you are coming from object-oriented engines,
+but don't be afraid: it'll click soon enough.
 
 ## Reading This Book
 
-This book is [explanatory documentation](https://diataxis.fr/): you can read it cover to cover, or simply skip ahead to the sections that are most interesting to you.
+This book is [explanatory documentation](https://diataxis.fr/) covering Bevy's core ideas.
+You can read it cover to cover, or skip ahead to the sections that interest you.
 
-If you are new to Bevy, [read the first chapter].
-It will give you a quick summary of the most important concepts and terms needed to understand the rest of this book.
+If you are new to Bevy, [read the first chapter] before proceeding.
+It introduces the ECS vocabulary and core terms you'll need for the rest of this book.
+After that, use the sidebar to jump to any chapter you need.
+We've attempted to arrange them in a useful order, but they do not assume you have read previous chapters.
 
-Once you're done that, feel free to jump around to any chapter you please, using the sidebar as an index.
-We've attempted to arrange them in the order that you might encounter them
-but they do not assume you have read previous chapters.
+If you want a broader map of Bevy's documentation ecosystem (quick start guide, examples, API docs, and more), see [Further Reading](../further-reading).
 
-## Corrections and Extensions
+If you're evaluating whether Bevy is the right fit for your project, read [Is Bevy Right for Your Project?](../is-bevy-right-for-your-project).
 
-Like any good piece of documentation, the Bevy Book is a living, breathing resource.
+{% callout(type="info") %}
+### Corrections and Extensions
+
+Like any good piece of documentation, the Bevy Book is continuously updated.
+
 If you spot a typo, [submit a quick PR](https://github.com/bevyengine/bevy-website/pulls).
+The files used to create the book are just Markdown; you can find them in `content/learn/book`.
 If you'd like to refactor something or add a new section, read our [Contributing Guide](https://bevyengine.org/learn/contribute/introduction/) and we'd be happy to welcome you to the flock!
+{% end %}
 
-[read the first chapter]: ./what-is-bevy
+[read the first chapter]: ./the-three-letters
