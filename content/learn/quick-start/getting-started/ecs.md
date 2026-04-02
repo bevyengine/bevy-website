@@ -103,7 +103,7 @@ hello Zayna Nieves!
 
 Marvelous!
 
-### Your First mutable Query
+### Your First Mutable Query
 
 If we want to change the names of some people (perhaps they got married!), for example, we can do this using a mutable query:
 

@@ -6,21 +6,48 @@ insert_anchor_links = "right"
 weight = 2
 +++
 
-This section will help you get started on your Bevy journey as quickly as possible. It will walk you through setting up your development environment and writing a simple Bevy app.
+Welcome to Bevy!
 
-## Quick Start
+This page will help you get started on your journey as quickly as possible.
+You can start by either immediately creating a Bevy project, or examine some [examples] that showcase a number of features and capabilities that Bevy provides.
 
-If you want to dive in immediately and you already have a working Rust setup, feel free to follow this "quick start" guide. Otherwise, move on to the next page.
+After this, the rest of this section will focus on helping you setup your development environment and begin writing your own Bevy applications.
 
-{% callout() %}
-Depending on your platform, you may have to [install additional dependencies].
-You can also speed up compile times by following the ["fast compiles"] section.
+[examples]: https://github.com/bevyengine/bevy/tree/latest/examples#examples
 
-[install additional dependencies]: /learn/quick-start/getting-started/setup/#installing-os-dependencies
-["fast compiles"]: /learn/quick-start/getting-started/setup/#enable-fast-compiles-optional
+## Installing Bevy
+
+{% callout(type="info") %}
+Bevy is built in pure Rust, which gives us the benefit of only needing a working Rust installation to get start with the engine itself.
+However, additional operating system specific dependencies are needed when we want to interact with different parts of our system, like creating application windows, playing audio, or reading input from peripherals.
+For these additional dependencies, please see the [Installing OS Dependencies] section on the Setup page.
+
+[Installing OS Dependencies]: /learn/quick-start/getting-started/setup/#installing-os-dependencies
+
 {% end %}
 
-### Try the Examples
+Bevy is [available as a library on crates.io].
+
+After making a new Rust project with `cargo init` or `cargo new my_project`, the easiest way to add it to your project is to use `cargo add`:
+
+```sh
+cargo add bevy
+```
+
+Alternatively, you can manually add it to your project's Cargo.toml like this:
+
+```toml
+[dependencies]
+bevy = "0.18.1"
+```
+
+Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
+
+[available as a library on crates.io]: https://crates.io/crates/bevy
+
+## In-Engine Examples
+
+If you would like to see Bevy in action before starting a new project, you can clone the [Bevy Engine repo] and run a number of examples:
 
 1. Clone the [Bevy repo](https://github.com/bevyengine/bevy):
 
@@ -49,29 +76,4 @@ You can also speed up compile times by following the ["fast compiles"] section.
     cargo run --example breakout
     ```
 
-{% callout(type="warning") %}
-When using Rust `1.89+` and Bevy `0.16.x or earlier` the examples will not run and instead error. For more info on *why* see the issue: [bevyengine/bevy#20475 "0.16 fails to build breakout example due to bevy_mikktspace not compiling on Rust 1.89"](<https://github.com/bevyengine/bevy/issues/20475>)
-
-Some workarounds:
-- Use Rust 1.88 or earlier using this command: `rustup default 1.88.0`
-- Use Rust 1.88 *only* in your Bevy Engine directory using this command: `rustup override set 1.88` (See https://rust-lang.github.io/rustup/overrides.html#directory-overrides for more on this)
-{% end %}
-
-### Add Bevy as a Dependency
-
-Bevy is [available as a library on crates.io](https://crates.io/crates/bevy).
-
-The easiest way to add it to your project is to use `cargo add`:
-
-```sh
-cargo add bevy
-```
-
-Alternatively, you can manually add it to your project's Cargo.toml like this:
-
-```toml
-[dependencies]
-bevy = "0.18" # make sure this is the latest version
-```
-
-Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
+[Bevy Engine repo]: https://github.com/bevyengine/bevy

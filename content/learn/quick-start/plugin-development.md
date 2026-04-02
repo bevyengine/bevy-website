@@ -26,7 +26,10 @@ While they are only guidelines, it can be useful for you to look at and consider
 
 ## Generic Plugin Types
 
-It can be useful to allow your users to supply generic types to your plugins. It can enable them to write custom logic for components to be used; give your plugin a marker component to note an entity it should do some logic to; add events that your plugin should listen for; or a resource your plugin should use (which is useful if you want to apply your plugin to multiple resources of the same type via type aliases.)
+When developing a plugin, you might want to allow your users to supply your plugin with generic types.
+It can enable a user to write custom logic for the components they want to use.
+For example, a user could give your plugin a marker component to specify an entity that the plugin should perform some logic on.
+The user could also add events that your plugin should listen for, or add a resource your plugin should use (which is useful if you want to apply your plugin to multiple resources of the same type via type aliases.)
 
 You can define a generic plugin like so:
 
@@ -36,15 +39,11 @@ A prime example of generic plugins in use is the [Bevy Cellular Automaton Plugin
 
 ## Small Crate Size
 
-To avoid long build times in your plugin and in projects using it, you should aim for a small crate size:
+To avoid long build times in your plugin (and in projects using it), you should aim for a small crate size: Only include the Bevy features you absolutely need.
 
-- Only include the Bevy features you absolutely need.
-
-  Features are additive — Bevy features enabled in your plugin cannot be disabled by someone using your plugin.
-
-  You should add `default-features = false` to the Bevy dependency in your `Cargo.toml` and manually specify the features you need.
-
-  You can find a list of Bevy's features [here](https://github.com/bevyengine/bevy/blob/latest/docs/cargo_features.md).
+Features are additive: Bevy features enabled in your plugin cannot be disabled by someone using your plugin.
+You should add `default-features = false` to the Bevy dependency in your `Cargo.toml` and manually specify the features you need.
+You can find a [list of Bevy's features here](https://github.com/bevyengine/bevy/blob/latest/docs/cargo_features.md).
 
 - Avoid large new dependencies.
 - Make sure your dependencies are not duplicated, using [`cargo tree`](https://doc.rust-lang.org/cargo/commands/cargo-tree.html) or [`cargo-deny`](https://github.com/EmbarkStudios/cargo-deny).
@@ -56,7 +55,7 @@ Since the release of Bevy 0.16, it is now possible to use Bevy in a [`no_std`](h
 If you don't want to or can't support `no_std` in your plugin, you'll likely want to enable the `std` feature in Bevy to regain some functionality that was previously included by default.
 
 ```toml
-bevy = { version = "0.17", default-features = false, features = ["std"] }
+bevy = { version = "0.18", default-features = false, features = ["std"] }
 ```
 
 If you _do_ want to pursue `no_std` support, please refer to the `no_std` example in `examples/no_std/library`.
