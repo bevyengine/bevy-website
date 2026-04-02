@@ -371,7 +371,7 @@ This section explains how to speed up iterative compiles: the amount of time it 
   details on other ways in which cranelift can be enabled. The installation process for Windows is a bit more involved. Consult the linked documentation for help.
   MacOS builds can currently crash on Bevy applications, so you should still wait a bit before using cranelift on that system.
 
-  While cranelift is very fast to compile, the generated binaries are not optimized for speed. Additionally, it is generally still immature, so you may run into issues with it.
+  While cranelift is very fast to compile, the generated binaries are not optimized for speed to the same extent. Additionally, it is generally still immature, so you may run into issues with it.
   Notably, Wasm builds do not work yet.
 
   When shipping your game, you should still compile it with LLVM.
