@@ -14,7 +14,7 @@ There are three required parts when using an Event: a **Trigger**, an **Observer
 - The Entities that will react to our `Event` are known as **Observers**. These Entities "observe" the `World` and will run some functionality in response to our `Event`.
 - Finally, the `Event` is a Rust type that implements the [`Event`] trait.
 
-A basic use of an `Event` would something like this:
+A basic use of an `Event` would be something like this:
 
 1. Implement the [`Event`] trait on a type:
 
@@ -149,8 +149,8 @@ fn player_damage(mut commands: Commands, player: Single<(Entity, Name), With<Pla
     let (player_entity, player_name): (Entity, Name) = *player;    
     // Trigger a PlayerDamage event and pass the event the required values.
     commands.trigger(PlayerDamage {
-        amount = damage_value,
-        taken_by = player_name.to_string(),
+        amount: damage_value,
+        taken_by: player_name.to_string(),
     });
 }
 
@@ -237,7 +237,7 @@ An `EntityEvent` is still an `Event` though; we can create global observers that
 ```rust
 world.add_observer(|explode: On<Explode>| {}); // Global observer that will run when the Explode event is triggered.
 
-world.entity_mut(some_entity).observe(|explode: On<Explode| {}); // Entity observer that will only run when the Explode event is triggered for `some_entity`.
+world.entity_mut(some_entity).observe(|explode: On<Explode>| {}); // Entity observer that will only run when the Explode event is triggered for `some_entity`.
 ```
 
 [`EntityEvent`]: https://docs.rs/bevy/latest/bevy/prelude/trait.EntityEvent.html

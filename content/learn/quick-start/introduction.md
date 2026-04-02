@@ -30,13 +30,18 @@ Bevy is [built in the open by volunteers](https://bevy.org/learn/contribute/intr
 For a more in-depth introduction, check out the [Introducing Bevy](/news/introducing-bevy/) blog post.
 
 {% callout(type="warning") %}
+
 ## Stability Warning
 
-Bevy is still in the early stages of development. Important features are missing. Documentation is sparse. A new version of Bevy containing breaking changes to the API is released [approximately once every 3 months](https://bevy.org/news/bevy-0-6/#the-train-release-schedule). We provide [migration guides](https://bevy.org/learn/book/migration-guides/), but we can't guarantee migrations will always be easy. Use only if you are willing to work in this environment.
+Bevy is still in development.
+Important features are missing, and documentation can be sparse.
+A new version of Bevy containing breaking changes to the API is released [approximately once every 3 months](https://bevy.org/news/bevy-0-6/#the-train-release-schedule).
+We provide [migration guides](https://bevy.org/learn/book/migration-guides/), but we can't guarantee that migrations will always be easy.
+Use only if you are willing to work in this environment.
 
-If you are currently trying to pick an engine for your Next Big Project™, we recommend that you check out [Godot Engine](https://godotengine.org). It is currently much more feature-complete and stable. And it is also free, open-source, and [scriptable with Rust](https://github.com/godot-rust/gdext)!
+If you are currently trying to pick an engine for your _Next Big Project™_, we recommend that you check out [Godot Engine](https://godotengine.org).
+It is currently much more feature-complete and stable.
+Plus, it is also free, open-source, and [scriptable with Rust](https://github.com/godot-rust/gdext)!
 {% end %}
-
-The Quick Start Guide is not a comprehensive guide to Bevy and the next section [Getting Started](/learn/quick-start/getting-started/) will help you with the setup of Bevy and learning the basics, but it does not cover most of Bevy's features. In the future you can use the Bevy Book to gain a better understanding, until then see the last page [Next Steps](/learn/quick-start/next-steps) for more exhaustive and complex resources on Bevy.
 
 Phew! If you haven't been scared away yet, let's move on to learning some Bevy!

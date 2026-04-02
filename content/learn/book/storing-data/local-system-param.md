@@ -44,7 +44,7 @@ fn increment_local_system_data(mut local: Local<Option<NoGoodDefaultValue>>){
 ```
 
 [`Local<T>`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Local.html
-[resource]: [./resources.md]
+[resource]: ./resources.md
 [`MessageReader`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageReader.html
 [`on_timer`]: https://docs.rs/bevy/latest/bevy/time/common_conditions/fn.on_timer.html
 [`Default`]: https://doc.rust-lang.org/std/default/trait.Default.html

@@ -335,13 +335,33 @@ fn update(query: Query<&Camera>) -> Result {
 ```
 
 Since Bevy controls system execution, it also controls what happens to the `Result` we return.
-A `Result::Err` returned from a system gets passed to Bevy's global error handler which panics by default:
+A `Result::Err` returned from a system gets passed to Bevy's global error handler which reads the [`Severity`] level
+of the error and ignores/logs/panics accordingly:
 
 ```
 Encountered an error in system `test_programs::update`: No entities fit the query bevy_ecs::system::query::Query<'_, '_, &bevy_camera::camera::Camera>
 ```
 
-This can help raise issues quickly in development, but you may prefer a different approach to handling errors globally, especially in production.
+You can set the severity level of any `Result` by calling [`with_severity`] on it:
+
+```rust
+fn update(query: Query<&Camera>) -> Result {
+    let camera = query.single().with_severity(Severity::Debug)?;
+
+    info!(?camera);
+
+    Ok(())
+}
+```
+
+This is a common and useful pattern: quickly allowing you to downgrade errors based on the local context about how big of a problem they actually pose.
+
+[`Severity`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Severity.html
+[`with_severity`]: https://docs.rs/bevy/latest/bevy/prelude/trait.ResultSeverityExt.html#tymethod.with_severity
+
+#### Configuring the global error handler
+
+This policy of aggressive panicking can help raise issues quickly in development, but you may prefer a different approach to handling errors globally, especially in production.
 The job of the global error handler is to decide how to log a global error, so Bevy provides [a series of preset handlers](https://docs.rs/bevy/latest/bevy/ecs/error/index.html) ranging from panicking to completely ignoring errors and all log levels in between.
 
 Here is an example that changes the default global error handler to `warn`, one of the presets.
@@ -368,15 +388,21 @@ fn update(query: Query<&Camera>) -> Result {
 }
 ```
 
-Note that the error that is displayed has the same content, but doesn't panic and crash the application anymore; It is now a warn-level log.
+Note that the error that is displayed has the same content, but doesn't panic and crash the application anymore; it is now a warn-level log.
 
 ```
 WARN bevy_ecs::error::handler: Encountered an error in system `test_programs::update`: No entities fit the query bevy_ecs::system::query::Query<'_, '_, &bevy_camera::camera::Camera>
 ```
 
-This allows the use of succinct error handling using `?` without crashing the application.
+This allows the use of succinct error handling using `?` without changing the severity at every call site, or crashing the application.
 
-Global error handling is a large hammer that affects all systems, so you may prefer to keep the panicking default in development and use a different log level like trace in production.
+Changing how your app handles errors by default is very convenient, but it's a big hammer.
+You should prefer to handle errors locally by providing graceful fallbacks, optionally logging.
+If this can't be done and the system needs to abort completely, you should downgrade its severity using `with_severity`, and then return it using `?`.
+This is particularly true if you are writing a library: you should *never* override the global error handler in a library plugin.
+
+Instead, we recommend you change the global error handler when preparing a game for production, turning unhandled crashes into errors.
+Use a feature flag for this, so you can decide on error policies for development and production separately.
 
 ### Per-system error handling
 

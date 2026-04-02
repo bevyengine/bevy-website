@@ -29,7 +29,7 @@ but they do not assume you have read previous chapters.
 
 ## Corrections and Extensions
 
-Like any good piece of documentation, the Bevy Book is a living, breathing, piece of documentation.
+Like any good piece of documentation, the Bevy Book is a living, breathing resource.
 If you spot a typo, [submit a quick PR](https://github.com/bevyengine/bevy-website/pulls).
 If you'd like to refactor something or add a new section, read our [Contributing Guide](https://bevyengine.org/learn/contribute/introduction/) and we'd be happy to welcome you to the flock!
 

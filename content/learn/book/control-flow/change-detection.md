@@ -24,7 +24,7 @@ The [`Added<T>`] query filter detects new component instances, either if the com
 This is also triggered if a component is reinserted on an entity that already had it.
 
 The [`Changed<T>`] query filter detects when a component has been changed.
-Adding a new component counts as "changed" - in otherwords, this is a superset of [`Added<T>`].
+Adding a new component counts as "changed" - in other words, this is a superset of [`Added<T>`].
 
 ```rust
 // Detecting added components

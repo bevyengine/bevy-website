@@ -162,7 +162,7 @@ This allows us to automatically couple the "remember to clean this up" logic wit
 Similar helper components exist: [`DespawnOnEnter`], for when you want to clean up when entering a specific state, and [`DespawnWhen`], for when you want to perform more complex state-matching logic.
 
 [`DespawnOnExit`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnExit.html
-[`DespawnOnEnter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnExit.html
+[`DespawnOnEnter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnEnter.html
 [`DespawnWhen`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnWhen.html
 
 ## SubStates: States Within States

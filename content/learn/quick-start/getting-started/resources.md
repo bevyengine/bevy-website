@@ -6,9 +6,9 @@ aliases = ["learn/book/getting-started/resources"]
 weight = 5
 +++
 
-The **[`Entity`]** and **[`Component`]** data types are great for representing complex, query-able groups of data. But most Apps will also require "globally unique" data of some kind. In Bevy ECS, we represent globally unique data using the **[`Resource`]** trait.
+The [`Entity`] and [`Component`] data types are great for representing complex, query-able groups of data. But most Apps will also require "globally unique" data of some kind. In Bevy ECS, we represent globally unique data using the [`Resource`] trait.
 
-Here are some examples of data that could be encoded as a **[`Resource`]**:
+Here are some examples of data that could be encoded as a [`Resource`]:
 
 * Elapsed Time
 * Asset Collections (sounds, textures, meshes)

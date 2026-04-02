@@ -57,7 +57,7 @@ pub struct PlayerSystemParameter{
     list_of_players: ResMut<'w, PlayerListResource>,
 }
 
-// Use our custom system parameter to replcate the same functionality
+// Use our custom system parameter to replicate the same functionality
 // as the system in the previous example.
 fn register_players_system(mut player_parameter: PlayerSystemParameter) {
     for player_entity in player_parameter.player_query.iter() {
@@ -407,7 +407,7 @@ fn second_system(In(input): In<usize>) {
 
 Using the `IntoSystem::pipe` method requires that the second system have an `In<T>` type as it's first parameter.
 Both of the systems are treated as a single system from the perspective of the scheduler.
-This can be repeated indefintely, but branching is not supported.
+This can be repeated indefinitely, but branching is not supported.
 
 System piping is mostly useful for composing fragments of logic in a modular, reusable way.
 System output is also used when returning errors from systems, as explained in the [Handling Errors] section of this chapter.

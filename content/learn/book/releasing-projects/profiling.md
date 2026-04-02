@@ -32,12 +32,13 @@ This can be done by setting the `RUST_LOG=info` environment variable when runnin
 
 You also need to select a `tracing` backend using one of the cargo features described in the below sections.
 
-> [!NOTE]
-> When your app is bottlenecked by the GPU, you may encounter frames that have multiple prepare-set systems all taking an unusually long time to complete, and all finishing at about the same time.
->
-> See the section on GPU profiling for determining what GPU work is the bottleneck.
->
-> You can find more details in the docs for [`prepare_windows`](https://docs.rs/bevy/latest/bevy/render/view/fn.prepare_windows.html).
+{% callout(type="note") %}
+When your app is bottlenecked by the GPU, you may encounter frames that have multiple prepare-set systems all taking an unusually long time to complete, and all finishing at about the same time.
+
+See the section on GPU profiling for determining what GPU work is the bottleneck.
+
+You can find more details in the docs for [`prepare_windows`](https://docs.rs/bevy/latest/bevy/render/view/fn.prepare_windows.html).
+{% end %}
 
 ![prepare_windows span bug](https://github.com/bevyengine/bevy/assets/2771466/15c0819b-0e07-4665-aa1e-579caa24fece)
 
@@ -212,12 +213,13 @@ While it doesn't provide as much detail as vendor-specific tooling, Tracy can al
 
 When you compile with Bevy's `trace_tracy` feature, GPU spans will show up in a separate row at the top of Tracy, labeled as `RenderQueue`.
 
-> [!NOTE]
-> Due to dynamic clock speeds, GPU timings will have large frame-to-frame variance, unless you use an external tool to lock your GPU clocks to base speeds. When measuring GPU performance via Tracy, only look at the MTPC column of Tracy's statistics panel, or the span distribution/median, and not at any individual frame data.
-<!-- markdownlint-disable MD028 -->
+{% callout(type="note") %}
+Due to dynamic clock speeds, GPU timings will have large frame-to-frame variance, unless you use an external tool to lock your GPU clocks to base speeds. When measuring GPU performance via Tracy, only look at the MTPC column of Tracy's statistics panel, or the span distribution/median, and not at any individual frame data.
+{% end %}
 
-> [!NOTE]
-> Unlike ECS systems, Bevy will not automatically add GPU profiling spans. You will need to add GPU timing spans yourself for any custom rendering work. See the [`RenderDiagnosticsPlugin`](https://docs.rs/bevy/latest/bevy/render/diagnostic/struct.RenderDiagnosticsPlugin.html) docs for more details.
+{% callout(type="note") %}
+Unlike ECS systems, Bevy will not automatically add GPU profiling spans. You will need to add GPU timing spans yourself for any custom rendering work. See the [`RenderDiagnosticsPlugin`](https://docs.rs/bevy/latest/bevy/render/diagnostic/struct.RenderDiagnosticsPlugin.html) docs for more details.
+{% end %}
 
 ## Binary Size
 

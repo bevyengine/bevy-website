@@ -14,7 +14,7 @@ You add systems to a schedule as part of your app setup.
 
 ```rust
 // Add the `move_players` system to the `Update` schedule.
-app.add_plugin(Update, move_players)
+app.add_systems(Update, move_players)
 ```
 
 Now, whenever Bevy runs the `Update` schedule, `move_players` will execute.
@@ -97,8 +97,8 @@ For even more control over your game loop, read the [custom loops] chapter!
 [`Main`]: https://docs.rs/bevy/latest/bevy/app/struct.Main.html
 [systems]: /learn/book/control-flow/systems
 [app]: /learn/book/the-game-loop/app
-[plugins]: /learn/book/architecture/plugins
-[state machine abstraction]: /learn/book/architecture/states
+[plugins]: /learn/book/modular-architecture/plugins
+[state machine abstraction]: /learn/book/control-flow/states
 [fixed update loop]: /learn/book/the-game-loop/fixed-time
 [custom loops]: /learn/book/the-game-loop/custom-loops
 [`ScheduleRunnerPlugin`]: https://docs.rs/bevy/latest/bevy/app/struct.ScheduleRunnerPlugin.html

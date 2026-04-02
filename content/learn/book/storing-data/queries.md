@@ -11,7 +11,7 @@ Queries create a filtered "view" into the metaphorical database that makes up ou
 With that view you can iterate over the requested components, ask what the "row number" (`Entity`) is for each element, or fetch the matching components for a particular `Entity` value.
 
 We briefly covered queries in our [introduction](../intro/) to Bevy, so make sure to review that section if you haven't read it yet.
-If you're entirely brand to new Bevy or ECS, we would recommend you to start there before continuing on this page.
+If you're entirely brand new to Bevy or ECS, we would recommend you to start there before continuing on this page.
 
 ## Anatomy of a Query
 

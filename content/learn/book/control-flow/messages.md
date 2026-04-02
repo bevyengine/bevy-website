@@ -103,7 +103,7 @@ fn main() {
 ## Reading & Writing Messages
 
 Messages function based on *writing* them in response to something happening and *reading* them at a later point to perform some functionality.
-Lets work through an example to showcase how and why messages should be used in your application.
+Let's work through an example to showcase how and why messages should be used in your application.
 To do this we'll be creating a very basic scoreboard update mechanic for a king-of-the-hill style gamemode.
 Before we jump into the code, lets assess our objectives for the scoreboard update:
 
@@ -132,7 +132,7 @@ fn main() {
 
 Now lets *write* our message which will update the scoreboard.
 We'll do this by creating a `Single` query for the hill objective that our players are fighting for control of.
-Specifically we'll be looking for the player `Entity` value stored in a `CurrentHillKing` component, which is apart of an `Entity` with a `HillObjective` marker component.
+Specifically we'll be looking for the player `Entity` value stored in a `CurrentHillKing` component, which is a part of an `Entity` with a `HillObjective` marker component.
 Once we have our player `Entity`, we'll write a new `ScoreboardUpdate` message containing the player and the value to update their score by (5 in our case).
 
 ```rust
