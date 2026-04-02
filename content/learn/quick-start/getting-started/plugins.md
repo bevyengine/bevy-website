@@ -51,6 +51,11 @@ Note `add_plugins` can add any number of plugins (or plugin groups like `Default
 
 Try running the app again. It should do exactly what it did before. In the next section, we'll fix the "hello" spam using Resources.
 
+## Building Plugins for the Ecosystem
+
+Once you're comfortable with Bevy, you may want to share your work by publishing a plugin to [crates.io](https://crates.io).
+For guidance on naming, licensing, documentation, and publishing, see [Creating libraries for Bevy](/learn/book/releasing-projects/libraries-for-bevy/) in The Bevy Book.
+
 [`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
 [`UiPlugin`]: https://docs.rs/bevy/latest/bevy/ui/struct.UiPlugin.html
 [`RenderPlugin`]: https://docs.rs/bevy/latest/bevy/render/struct.RenderPlugin.html
