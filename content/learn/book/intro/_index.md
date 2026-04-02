@@ -10,7 +10,7 @@ status = 'hidden'
 Like any game engine, Bevy is a large project, and there's a lot to learn!
 Everyone learns differently, so we offer a variety of complementary learning paths:
 
-* [Quickstart](learn/quickstart): Dive in and get your hands dirty, learning how to create a simple game in a hands-on tutorial for absolute beginners.
+* [Quick Start](/learn/quick-start/introduction): Dive in and get your hands dirty, learning how to create a simple game in a hands-on tutorial for absolute beginners.
 * [The Book](learn/book): Read about the core concepts that make Bevy work, and browse our library of the advanced topics needed to ship a production game.
 * [docs.rs](https://docs.rs/bevy/latest/bevy/): Versioned API documentation that explains exactly what every struct, method and function mean. Module and crate docs are also great, and provide an overview of the structure and usage of specific areas of the code.
 * [Feature Examples](https://bevyengine.org/examples): Figure out how to solve specific game dev problems (like running a game in split screen, implementing UI elements, or writing shaders) by shamelessly stealing from our runnable snippets.
