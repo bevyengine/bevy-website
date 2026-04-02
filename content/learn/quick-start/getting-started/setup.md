@@ -32,7 +32,7 @@ If you would like to learn more about the Rust language, check out the following
 
 [**The Rust Book**]: https://doc.rust-lang.org/book/
 [**Rust by Example**]: https://doc.rust-lang.org/rust-by-example/
-[**Rustlings**]: https://github.com/rust-lang/rustlings
+[**Rustlings**]: https://rustlings.rust-lang.org/
 
 ### Installing OS Dependencies
 
