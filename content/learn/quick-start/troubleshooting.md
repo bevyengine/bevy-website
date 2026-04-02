@@ -8,6 +8,7 @@ weight = 5
 Is something in Bevy not working as expected? Maybe one of these will resolve your problem.
 
 For help with compile times and build configuration, see [Fast Compiles](/learn/book/development-practices/fast-compiles/) in The Bevy Book.
+For detailed information about common errors, see the [Bevy Errors](https://bevy.org/learn/errors/introduction/) reference.
 
 ## Unable to find a GPU
 
