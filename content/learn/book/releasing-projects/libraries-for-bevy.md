@@ -85,7 +85,13 @@ A few conventions go a long way:
   - Name features after what they enable (e.g. `serialize`, `bevy_ui`), not what they depend on.
   - Keep your default features minimal.
   - Document your features in your `Cargo.toml` using comments above each feature.
-- **Consider `no_std` support.** If your crate is primarily logic — math, data structures, ECS patterns — it may not need the standard library at all. Adding `#![no_std]` (with a `std` feature flag for anything that requires it) makes your crate usable in more environments, including embedded platforms and WebAssembly without a full runtime. This is easiest to set up at the start of a project; retrofitting it later is harder.
+- **Consider `no_std` support.** If your crate is primarily logic — math, data structures, ECS patterns — it may not need the standard library at all. This makes your crate usable in more environments, including embedded platforms and WebAssembly without a full runtime.
+  - This is easiest to set up at the start of a project; retrofitting it later is harder but not impossible.
+  - Add `#![no_std]` to your `lib.rs`, with a `std` feature flag to enable anything that requires it
+  - In the majority of cases, you can just use `core` or `alloc` directly instead
+  - For more advice on this topic, check out Bevy's own [`no_std` example], which will walk you through best practices and setup.
+
+[`no_std` example]: https://github.com/bevyengine/bevy/tree/latest/examples/no_std
 
 ### Minimizing dependencies
 
