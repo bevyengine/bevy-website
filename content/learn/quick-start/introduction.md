@@ -1,7 +1,6 @@
 +++
 title = "Introduction"
 insert_anchor_links = "right"
-aliases = ["learn/book/introduction"]
 [extra]
 weight = 1
 +++
@@ -28,6 +27,15 @@ Bevy has the following design goals:
 Bevy is [built in the open by volunteers](https://bevy.org/learn/contribute/introduction) using the [Rust programming language](https://www.rust-lang.org/). The code is free and open-source because we believe developers should fully own their tools. Games are a huge part of our culture and humanity is investing _millions_ of hours into the development of games. Why are we continuing to build up the ecosystems of closed-source monopolies that take cuts of our sales and deny us visibility into the tech we use daily? We believe that the developer community can do so much better.
 
 For a more in-depth introduction, check out the [Introducing Bevy](/news/introducing-bevy/) blog post.
+
+## Learning Resources
+
+This Quick Start Guide is designed to get you up and running with Bevy as quickly as possible.
+It takes a hands-on approach, diving straight into the core tools you need to start making things today.
+
+For a deeper understanding of Bevy's core concepts, consult [The Bevy Book](/learn/book/intro/).
+The Book takes a more academic approach: discussing the tradeoffs of various techniques, important details, and best practices when making games with Bevy.
+You can read it alongside this guide, or return to it once you've completed your first simple project.
 
 {% callout(type="warning") %}
 
