@@ -77,7 +77,7 @@ fn setup_greeting(mut commands: Commands) {
 }
 
 // Update Messages<Greeting> to collect new messages.
-fn update_greeting_messages(greeting_res: Res<Messages<Greeting>>) {
+fn update_greeting_messages(greeting_res: ResMut<Messages<Greeting>>) {
     greeting_res.update();
 }
 
