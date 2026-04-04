@@ -52,7 +52,7 @@ struct Life {
     max: u32,
 }
 
-fn apply_poison(mut query: Query<&Poison, &mut Life>){
+fn apply_poison(mut query: Query<(&Poison, &mut Life)>){
     for (poison, mut life) in query.iter_mut(){
         life.current.saturating_sub(poison.stacks);
     }
