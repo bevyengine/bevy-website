@@ -85,14 +85,15 @@ This means that every `Combatant` will get 10 `Life` by default.
 But this is just a default.
 It can be overridden by explicitly including a `Life` component, either as part of the initial bundle while spawning, or by insertion at a later point.
 
-The `require` macro is the easiest way to declare required components, but you can also define the required components programmatically by manually implementing the `Component` trait.
-Check the `Component` trait documentation for up-to-date guidance.
+The `require` macro is the easiest way to declare required components, but you can also define the required components programmatically by manually implementing the [`Component`] trait.
+Check the [`Component`] trait documentation for up-to-date guidance.
 
 [`Add`]: https://doc.rust-lang.org/std/ops/trait.Add.html
 [`Display`]: https://doc.rust-lang.org/std/fmt/trait.Display.html
 [`Deref`]: https://doc.rust-lang.org/std/ops/trait.Deref.html
 [`DerefMut`]: https://doc.rust-lang.org/std/ops/trait.DerefMut.html
 [newtypes]: https://doc.rust-lang.org/rust-by-example/generics/new_types.html
+[`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
 
 ## Reusable Logic for Components
 
@@ -146,7 +147,7 @@ Occasionally you might want to store arbitrarily complex, one-off logic on your 
 This usually comes up in the context of UI or script-like behavior, where you want each instance of a similar object to perform easily-customized behavior in response to some cue (like a button being pressed or the player interacting with an object).
 While the patterns described here will be relatively slow (due to poor cache locality) and harder to debug, this pattern can be easier to work with when compared to approaches that rely on a huge number of marker components.
 
-The core pattern here is to store an owned [trait object](https://doc.rust-lang.org/reference/types/trait-object.html) inside of your component, usually in a `Box`.
+The core pattern here is to store an owned [trait object](https://doc.rust-lang.org/reference/types/trait-object.html) inside of your component, usually in a [`Box`].
 
 The simplest example of this is to store a `Box<dyn Command>`:
 
@@ -167,7 +168,7 @@ fn handle_clickable_props(trigger: On<Pointer<Click>>, query: Query<&ClickablePr
 }
 ```
 
-This can be repeated with other traits: `Event` and `Message` are quite powerful if you want to hook into existing logic.
+This can be repeated with other traits: [`Event`] and [`Message`] are quite powerful if you want to hook into existing logic.
 
 Storing [one-shot systems](../control-flow/systems.md) can be even more expressive.
 See the [callbacks example](https://github.com/bevyengine/bevy/blob/latest/examples/ecs/callbacks.rs) for a demonstration of this pattern.
@@ -175,6 +176,10 @@ See the [callbacks example](https://github.com/bevyengine/bevy/blob/latest/examp
 If your benchmarks show that you need to make this pattern more performant, you can consider swapping to [function pointers](https://doc.rust-lang.org/std/primitive.fn.html).
 However, this comes at a cost of flexibility.
 Using function pointers disallows trait methods and you cannot capture the environment during their creation.
+
+[`Event`]: https://docs.rs/bevy/latest/bevy/ecs/event/trait.Event.html
+[`Message`]: https://docs.rs/bevy/latest/bevy/ecs/message/trait.Message.html
+[`Box`]: https://doc.rust-lang.org/stable/std/boxed/struct.Box.html
 
 ### Accessing Data Beyond the Component
 
@@ -188,11 +193,17 @@ For example, you might find that you need to repeatedly:
 Duplicating these complex pieces of logic can be both error-prone and tedious!
 Your first thought should be to ask "Can we combine this data into a single component", but that's not always feasible (sometimes for reasons outside of your control).
 
-One solution is to abstract complex ECS lookups like this by creating our own custom `QueryData`, `QueryFilter` and `SystemParam` types, using the provided derive macros.
-`QueryData` and `QueryFilter` are useful when the data is in separate components on the same entity and is quite composable (you can always add more terms to your `Query`!).
-Meanwhile, `SystemParam` is best reserved for when you need to access distinct entities, resources, commands, messages, or other forms of data in the same logic.
+One solution is to abstract complex ECS lookups like this by creating our own custom [`QueryData`], [`QueryFilter`] and [`SystemParam`] types, using the provided derive macros.
+[`QueryData`] and [`QueryFilter`] are useful when the data is in separate components on the same entity and is quite composable (you can always add more terms to your [`Query`]!).
+Meanwhile, [`SystemParam`] is best reserved for when you need to access distinct entities, resources, commands, messages, or other forms of data in the same logic.
 
 While simply defining these types can save boilerplate and reduce error, they become dramatically more powerful when we implement methods on them.
 The implemented methods will automatically incorporate data across disparate sources into a single atomic operation.
-When working with custom `QueryData` types, you should be aware that you can implement methods on the generated (and doc-hidden) `QueryData::Item` types.
+When working with custom [`QueryData`] types, you should be aware that you can implement methods on the generated (and doc-hidden) [`QueryData::Item`] types.
 Implementing methods will allow you to define operations for a single element of your complex queries.
+
+[`QueryData`]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.QueryData.html
+[`QueryFilter`]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.QueryFilter.html
+[`SystemParam`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html
+[`Query`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Query.html
+[`QueryData::Item`]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.QueryData.html#associatedtype.Item
