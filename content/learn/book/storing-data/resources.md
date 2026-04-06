@@ -46,6 +46,8 @@ fn update_music_volume(mut settings: ResMut<AudioSettings>) {
     settings.music_volume = 0.8;
 }
 ```
+[`Res`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
+[`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html
 
 ## Initializing Resources
 

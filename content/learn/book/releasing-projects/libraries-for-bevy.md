@@ -89,9 +89,10 @@ A few conventions go a long way:
   - This is easiest to set up at the start of a project; retrofitting it later is harder but not impossible.
   - Add `#![no_std]` to your `lib.rs`, with a `std` feature flag to enable anything that requires it
   - In the majority of cases, you can just use `core` or `alloc` directly instead
+  - Confirm that your dependencies work without `std` by compiling to a target that does not have `std` (such as `wasm32v1-none`).
   - For more advice on this topic, check out Bevy's own [`no_std` example], which will walk you through best practices and setup.
 
-[`no_std` example]: https://github.com/bevyengine/bevy/tree/latest/examples/no_std
+[`no_std` example]: https://github.com/bevyengine/bevy/tree/latest/examples/no_std/library
 
 ### Minimizing dependencies
 

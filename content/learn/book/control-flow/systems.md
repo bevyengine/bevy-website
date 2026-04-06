@@ -143,6 +143,7 @@ fn damage_player(
         player_stats.health -= 1
     }
 }
+```
 
 Even though we've been talking about multiple systems, single systems also have to abide by the borrow checker when accessing data.
 As an example, `Component` data cannot be accessed both mutably and immutably without using some workarounds (which you can read about in the [Queries book section]). 

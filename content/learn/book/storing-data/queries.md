@@ -102,7 +102,7 @@ Sometimes, you want to swap from the default "and" logic, where all of the compo
 - `Query<Option<&Life>>`, for an `Option` that contains the component value if present and nothing if it is absent.
 - `Query<AnyOf<(&Life, &Mana)>>` which acts as a wrapper for multiple `Option` `QueryData` types.
 - `Query<Has<Life>>`, which contains `true` if the component is present, and `false` if the component is absent.
-- `Query<(), Or<(With<Life>, With<Mana>)>>`, which combines query filters via an `Or` relationship.
+- `Query<(), Or<(With<Life>, With<Mana>)>>`, which combines query filters via an [`Or`] relationship.
   - Using `()` in the `QueryData` field means that no data will be fetched: the only information retrieved is whether or not the query contains a given entity.
 
 As you can see, Bevy's type-driven querying can be quite expressive and elaborate!
@@ -110,6 +110,7 @@ Don't worry though, most of your queries will be quite simple.
 Typically you'll only be requesting a few pieces of data with a simple filter.
 
 [`Option`]: https://doc.rust-lang.org/core/option/enum.Option.html
+[`Or`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Or.html
 
 ## Mutable and Immutable Query Data
 
@@ -151,12 +152,13 @@ But, if Bevy is handing out mutable references to component data in safe Rust, h
 Bevy protects against this by examining the [`Access`] of each of the system params in each systems, then panicking if they could conflict.
 
 System params conflict if the data they are accessing overlaps and at least one of the accesses are mutable.
-You can avoid this by ensuring that your access is provably disjoint: `Without` can be very helpful.
+You can avoid this by ensuring that your access is provably disjoint: [`Without`] can be very helpful.
 
 If you run into this you'll be pointed to the [B0002] error page, which has advice on how to fix and avoid this problem.
 
 [mutable aliasing]: https://doc.rust-lang.org/rust-by-example/scope/borrow/alias.html
 [`Access`]: https://dev-docs.bevy.org/bevy/ecs/query/struct.Access.html
+[`Without`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Without.html
 [B0002]: https://bevy.org/learn/errors/b0002/
 {% end %}
 
@@ -285,7 +287,7 @@ fn kill_player_when_dead_query_single(player: Single<(Entity, &Life), With<Playe
 }
 ```
 
-`Query::single` returns a [`QuerySingleError`], allowing you to check if zero, one, or more than one matching entities were found.
+[`Query::single`] returns a [`QuerySingleError`], allowing you to check if zero, one, or more than one matching entities were found.
 
 For more discussion on [`Single`] and how it works, please see the [error handling] chapter.
 Similarly, see the [resources] chapter of this book for a discussion on the choice between using a singleton entity or a resource.
