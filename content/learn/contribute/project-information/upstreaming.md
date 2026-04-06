@@ -122,7 +122,6 @@ More subjectively, they should also:
 - have a pleasant API that feels Bevy-idiomatic
    - makes use of existing ECS primitives where possible: entities, components, resources, events...
    - prefers simple patterns and avoids new abstractions
-   - defaults to relatively public internals
    - uses enums and new-types to encode intent, rather than relying on argument names
    - minimizes use of macros
 - present a solid foundation to build on, by making good architectural decisions
