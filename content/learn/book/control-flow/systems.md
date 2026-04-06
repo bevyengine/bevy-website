@@ -30,9 +30,13 @@ fn register_players_system(
         // Insert a InGameMarker component into the Entity returned by the Query.
         commands.entity(player_entity).insert(InGameMarker);
         // Add the Entity to our Resource.
-        res.entity_field.push(query_entity);
+        player_resource.player_list.push(player_entity);
     }
 }
+
+// A simple Component to mark a newly added active Player.
+#[derive(Component)]
+struct ActivePlayerMarker;
 
 // A simple Component to mark a Player as being in game.
 #[derive(Component)]
@@ -63,7 +67,7 @@ fn register_players_system(mut player_parameter: PlayerSystemParameter) {
     for player_entity in player_parameter.player_query.iter() {
         player_parameter.commands.entity(player_entity).insert(InGameMarker);
         
-        player_parameter.list_of_players.player_list.push(entity);
+        player_parameter.list_of_players.player_list.push(player_entity);
     }
 }
 ```
