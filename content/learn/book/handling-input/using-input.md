@@ -1,13 +1,13 @@
 +++
-title = "Utilizing Input"
+title = "Using Input"
 insert_anchor_links = "right"
 [extra]
 weight = 1
 +++
 
 Bevy can read input data from gamepads (controllers), keyboards, mice, and touch inputs.
-The process for reading and interacting with the input data will generally be the same across all devices.
-When the button on a gamepad or a key on a keyboard gets pressed, Bevy uses [Winit] (via [`bevy_winit`], Bevy's conversion tool for Winit) to initially turn the input into [`Messages`].
+The process for reading and interacting with input data will generally be the same across all devices.
+When the button on a gamepad or a key on a keyboard gets pressed, Bevy uses [Winit] (via [`bevy_winit`], Bevy's conversion tool for Winit) to initially turn the input into a [`Message`].
 With these `Messages`, we have several ways to use the input data which we'll cover over the next few sections.
 
 Before we cover the general process though, you should know that each device type also has their own unique circumstances to be aware of.
@@ -27,7 +27,6 @@ See the [Selective Feature Use section] in the Compiling Less Code page for more
 
 [Winit]: https://crates.io/crates/winit
 [`bevy_winit`]: https://docs.rs/bevy/latest/bevy/winit/index.html
-[`Messages`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Messages.html
 [feature flag]: https://docs.rs/bevy/latest/bevy/index.html#feature-list
 
 ## Input Messages
@@ -138,33 +137,6 @@ fn crouching_system(
 }
 ```
 
-Because of the immediate nature of input messages, they also make activating one-shot systems incredibly straightforward.
-We can see this in the example below, where every click of the left mouse button will queue a `mouse_click_system` to be run.
-Toggling UI boxes, initiating interactions with NPC characters, and adding a new player when a controller is connected are all situations where one-shot systems could be triggered by input messages.
-
-```rust
-// This system will read input events from `MouseButtonInput`.
-fn run_system_on_click(
-    mut commands: Commands,
-    input_event_reader: MessageReader<MouseButtonInput>
-) {
-    for event in input_event_reader {
-        if event.button == MouseButton::Left && 
-            event.state == ButtonState::Pressed {
-            commands.run_system(registered_system);
-        }
-    }
-}
-// A system that will run when LeftMouseButton is clicked.
-fn mouse_click_system() {
-    println!("The Left Mouse Button was clicked!");
-}
-// Register a system that will be queued to run.
-fn register_system(mut commands: Commands) {
-    let registered_system = commands.register_system(mouse_click_system);
-}
-```
-
 [read like any other message]: /learn/book/control-flow/messages
 
 [`Message`]: https://docs.rs/bevy/latest/bevy/ecs/message/trait.Message.html
@@ -177,8 +149,28 @@ fn register_system(mut commands: Commands) {
 
 ## ButtonInput Resources
 
-Once most input messages are processed, they're placed into an associated [`ButtonInput`] resource that we can directly access via a system parameter.
-Input data is added to a `ButtonInput` via the same systems that process and clear the input `Message` data, meaning we'll only have access to the input data as long as the original input `Message` is still available.
+Once most "button-like" input messages are processed, they're placed into an associated [`ButtonInput`] resource that we can directly access via a system parameter.
+Input data is added to a `ButtonInput` via the same systems that process and clear the input `Message` data.
+These same systems will also clear each registered `ButtonInput` resource every frame.
+However, when `ButtonInput` is cleared, [change detection] is not triggered.
+
+{% callout(type="info") %}
+
+### What Makes An Input "Button-like"?
+
+When you start looking at each input device, you might wonder what makes an input "button-like"?
+
+It's actually very straightforward.
+To be considered "button-like" in Bevy, the input has to be "press-able".
+This means that Bevy can register the state of the input as either `pressed` or `released`.
+Both of these values are explicitly stored in a [`ButtonState`] enum, which is apart of every "button-like" input `Message` that is sent.
+
+Something like a joystick can be pressed if the joystick can be "clicked".
+If it can then the joytstick button data will be accessible in a `ButtonInput` resource.
+However, the direction you move the joystick in is not "press-able", and therefore is not "button-like" and will not be accessible in a `ButtonInput` resource.
+
+[`ButtonState`]: https://docs.rs/bevy/latest/bevy/input/enum.ButtonState.html
+{% end %}
 
 Interacting with input data this way provides us with easier access to the state of the button input and gives us more control over how we respond to it. For example, accessing a [`ButtonInput`] resource provides us with a number of methods that will return a `bool` based on if the button [has just been pressed], [is currently being pressed], or [if its just been released].
 
@@ -217,10 +209,87 @@ fn keyboard_and_mouse_input(
 }
 ```
 
+[change detection]: /learn/book/control-flow/change-detection
+
 [`ButtonInput`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html
 [has just been pressed]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_pressed
 [is currently being pressed]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.pressed
 [if its just been released]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_released
+
+### Pressed Versus Just Pressed
+
+Although it might appear like the difference between [`pressed`] and [`just_pressed`] is negligible, the two are quite distinct.
+While both signal a `ButtonInput` input being activated, `pressed` is continuously `true` until the input is released.
+Meanwhile `just_pressed` will only be `true` for _a single frame_ after the input is activated.
+The same is true for [`just_released`], which will only be `true` for a single frame after the input is deactivated.
+
+To see the differences, think of using a weapon in any action game.
+Unless the game is based solely on precision, there will likely be moments where players will want to repeatedly use their weapon without having to also repeatedly press a button.
+In this case, we can use `pressed` to check if the weapon attack button is pressed, and if it is, then the weapon can be repeatedly used.
+
+```rust
+// A component indicating a weapon.
+#[derive(Component)]
+struct Weapon;
+
+// A component indicating how much time needs to pass in-between weapon attacks.
+#[derive(Component)]
+struct WeaponAttackInterval(pub Timer);
+
+fn repeated_weapon_attack(
+    button_input: Res<ButtonInput<MouseButton>>,
+    player_weapon: Single<(&Weapon, &WeaponAttackInterval), With<PlayerWeapon>>
+    time: Res<Time>,
+) {
+    let delta_time = time.delta();
+    
+    // Progress the WeaponAttackInterval.
+    player_weapon.1.tick(delta_time);
+    
+    // If LeftMouseButton is pressed and our WeaponAttackInterval has completed, attack.
+    if button_input.pressed(MouseButton::LeftMouseButton) && player_weapon.1.just_finished() {
+        player_weapon.0.attack();
+    }
+}
+```
+
+However, we don't want the cooldown timer within the `WeaponAttackInterval` component to be running arbitrarily.
+We only want it to run after the player has made an initial attack.
+To start the timer in `WeaponAttackInterval`, we can now use `just_pressed` to start the cooldown timer after an initial attack is made.
+
+```rust
+fn weapon_attack(
+    button_input: Res<ButtonInput<MouseButton>>,
+    mut player_weapon: Single<(&Weapon, &mut WeaponAttackInterval), With<PlayerWeapon>>
+) {
+    if button_input.just_pressed(MouseButton::LeftMouseButton) {
+        // Perform an initial weapon attack.
+        player_weapon.0.attack();
+        // Create a new the timer within `WeaponAttackInterval` that will run.
+        player_weapon.1.from_seconds(1.5, TimerMode::Repeating);
+    }
+}
+```
+
+Finally, we can extend this mechanic even further by using `just_released` to change the `WeaponAttackInterval` timer mode to `Once` when the player finally releases the attack button.
+This will still let the timer tick down and finish.
+
+```rust
+fn cancel_weapon_attack_timer(
+    button_input: Res<ButtonInput<MouseButton>>,
+    mut player_weapon: Single<&mut WeaponAttackInterval, With<PlayerWeapon>>
+) {
+    if button_input.just_released(MouseButton::LeftMouseButton) {
+        player_weapon.0.set_mode(TimerMode::Once);
+    }
+}
+```
+
+This example doesn't quite cover the full extent of a mechanic like this, however it does provide you with an idea of how `pressed`, `just_pressed`, and `just_released` can be effectively used.
+
+[`pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.pressed
+[`just_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_pressed
+[`just_released`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_released
 
 ### ButtonInput Combinations
 
@@ -324,138 +393,3 @@ fn only_trigger_once(mut input: ResMut<ButtonInput<MouseButton>>, mut commands: 
 
 [`release`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.release
 [`release_all`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.release_all
-
-### Pressed Versus Just Pressed
-
-Although it might appear like the difference between [`pressed`] and [`just_pressed`] is negligible, the two are quite distinct.
-While both signal a `ButtonInput` input being activated, `pressed` is continuously `true` until the input is released.
-Meanwhile `just_pressed` will only be `true` for _a single frame_ after the input is activated.
-The same is true for [`just_released`], which will only be `true` for a single frame after the input is deactivated.
-
-To see the differences, think of using a weapon in any action game.
-Unless the game is based solely on precision, there will likely be moments where players will want to repeatedly use their weapon without having to also repeatedly press a button.
-In this case, we can use `pressed` to check if the weapon attack button is pressed, and if it is, then the weapon can be repeatedly used.
-
-```rust
-// A component indicating a weapon.
-#[derive(Component)]
-struct Weapon;
-
-// A component indicating how much time needs to pass in-between weapon attacks.
-#[derive(Component)]
-struct WeaponAttackInterval(pub Timer);
-
-fn repeated_weapon_attack(
-    button_input: Res<ButtonInput<MouseButton>>,
-    player_weapon: Single<(&Weapon, &WeaponAttackInterval), With<PlayerWeapon>>
-    time: Res<Time>,
-) {
-    let delta_time = time.delta();
-    
-    // Progress the WeaponAttackInterval.
-    player_weapon.1.tick(delta_time);
-    
-    // If LeftMouseButton is pressed and our WeaponAttackInterval has completed, attack.
-    if button_input.pressed(MouseButton::LeftMouseButton) && player_weapon.1.just_finished() {
-        player_weapon.0.attack();
-    }
-}
-```
-
-However, we don't want the cooldown timer within the `WeaponAttackInterval` component to be running arbitrarily.
-We only want it to run after the player has made an initial attack.
-To start the timer in `WeaponAttackInterval`, we can now use `just_pressed` to start the cooldown timer after an initial attack is made.
-
-```rust
-fn weapon_attack(
-    button_input: Res<ButtonInput<MouseButton>>,
-    mut player_weapon: Single<(&Weapon, &mut WeaponAttackInterval), With<PlayerWeapon>>
-) {
-    if button_input.just_pressed(MouseButton::LeftMouseButton) {
-        // Perform an initial weapon attack.
-        player_weapon.0.attack();
-        // Create a new the timer within `WeaponAttackInterval` that will run.
-        player_weapon.1.from_seconds(1.5, TimerMode::Repeating);
-    }
-}
-```
-
-Finally, we can extend this mechanic even further by using `just_released` to change the `WeaponAttackInterval` timer mode to `Once` when the player finally releases the attack button.
-This will still let the timer tick down and finish.
-
-```rust
-fn cancel_weapon_attack_timer(
-    button_input: Res<ButtonInput<MouseButton>>,
-    mut player_weapon: Single<&mut WeaponAttackInterval, With<PlayerWeapon>>
-) {
-    if button_input.just_released(MouseButton::LeftMouseButton) {
-        player_weapon.0.set_mode(TimerMode::Once);
-    }
-}
-```
-
-This example doesn't quite cover the full extent of a mechanic like this, however it does provide you with an idea of how `pressed`, `just_pressed`, and `just_released` can be effectively used.
-
-[`pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.pressed
-[`just_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_pressed
-[`just_released`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_released
-
-## Input System Conditions
-
-Input data can also be used as a conditional check for deciding when a system should run.
-Instead of needing to manually evaluate input data within a system, we can use several built-in functions to check whether a system should run.
-These functions will return a boolean based on the state of a specific input button, and require us to pass in a type that can be accessed from a `ButtonInput` type.
-
-```rust
-fn main() {
-    App::new()
-        .add_plugins(DefaultPlugins)
-        .add_systems(Update, jump.run_if(input_just_pressed(KeyCode::Space)))
-        .run();
-}
-```
-
-In the above example, [`input_just_pressed`] is a function that will evaluate whether `KeyCode::Space` has just been pressed.
-If it has, then the `jump` system is ran.
-Even though we aren't accessing `ButtonInput` directly, our conditional function (`input_just_pressed`) is accessing the `just_pressed` method on the `ButtonInput` that contains all of the `KeyCode` input data.
-The same process occurs when we use the other input conditional functions: [`input_pressed`] and [`input_just_released`].
-
-```rust
-fn main() {
-    App::new()
-        .add_plugins(DefaultPlugins)
-        // `jump` if the Space key has just been pressed.
-        .add_systems(Update, jump.run_if(input_just_pressed(KeyCode::Space)))
-        // Repeat a weapon attack if LeftMouseButton is currently being pressed.
-        .add_systems(Update, weapon_repeated_attack.run_if(input_pressed(MouseButton::LeftMouseButton)))
-        // Unscope the weapon if RightMouseButton has been released.
-        .add_systems(Update, unscope_weapon.run_if(input_just_released(MouseButton::RightMouseButton)))
-        .run();
-}
-```
-
-We also have one more system condition function that relates to input: [`input_toggle_active`].
-This condition uses XOR bitwise logic, taking in a button to check the state of (using `just_pressed`) and a `bool` value to compare against.
-If either the `bool` you pass in or the button you want to check evaluate to true, then the system will run.
-However, if both the `bool` and the evaluated button state are equivalent, then the system will not run.
-
-In the example below, we only want to run the `pause_menu` system if the `Escape` key is pressed.
-We'll pass in a `false` value alongside `KeyCode::Escape` to ensure that `pause_menu` will only run when `KeyCode::Escape` is pressed.
-
-```rust
-fn main() {
-    App::new()
-        .add_plugins(DefaultPlugins)
-        .add_systems(Update, pause_menu.run_if(input_toggle_active(false, KeyCode::Escape)))
-        .run();
-}
-
-fn pause_menu() {
-    println!("in pause menu");
-}
-```
-
-[`input_just_pressed`]: https://docs.rs/bevy/latest/bevy/input/common_conditions/fn.input_just_pressed.html
-[`input_pressed`]: https://docs.rs/bevy/latest/bevy/input/common_conditions/fn.input_pressed.html
-[`input_just_released`]: https://docs.rs/bevy/latest/bevy/input/common_conditions/fn.input_just_released.html
-[`input_toggle_active`]: https://docs.rs/bevy/latest/bevy/input/common_conditions/fn.input_toggle_active.html
