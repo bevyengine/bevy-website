@@ -13,39 +13,33 @@ Whether it's controllers, keyboards, mice, or even touch screens, Bevy allows us
 ## Interacting with Input Devices
 
 Bevy can read input from the aforementioned devices: gamepads (controllers), keyboards, mice, and touch inputs.
-When the button on a gamepad or a key on a keyboard gets pressed, Bevy is able to convert the value using [Winit] and [`bevy_winit`] (Bevy's translation tool for Winit).
+All of these devices are enabled through a [feature flag].
+By default, larger groupings of features like profiles and collections will enable all input devices.
+If you know that your game will not need touch input (or keyboard and mouse inputs if you're building a mobile game), you can disable these input devices by turning their feature flag off in your project `Cargo.toml` file.
+See the [Selective Feature Use section] in the Compiling Less Code page for more details.
 
-In order to start using input in your game, all you need to know is that Bevy takes the input data and converts it to a [`Message`] that can be [read like any other message you'd use normally]. 
-These messages are sent every frame, and are processed in the [`PreUpdate`] schedule.
-Each input device type will send a unique message type: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
+Once you start working with the actual input data, you'll find that Bevy handles all input in a similar way.
+When the button on a gamepad or a key on a keyboard gets pressed, Bevy uses [Winit] (via [`bevy_winit`], Bevy's conversion tool for Winit) to initially turn the input into [`Messages`] that we can use inside our systems.
 
-All input in Bevy is handled in a similar way, however each device type has their own unique circumstances to be aware of.
-To see how each input device type can be used in Bevy, see their respective pages:
+Input data from every device will follow the same process that is covered on this page, however you should know that each device type also has their own unique circumstances to be aware of.
+Once you've read how input data is generally handled on this page, make sure to read a specific devices' page to see how their data is uniquely handled:
 
 - [Keyboard Input](/learn/book/handling-input/keyboard-input)
 - [Mouse Input](/learn/book/handling-input/mouse-input)
 - [Gamepad Input](/learn/book/handling-input/gamepad-input)
 - [Touch Input](/learn/book/handling-input/touch-input)
 
-Every input device is enabled through a [feature flag].
-By default, larger groupings of features like profiles and collections will have all input devices enabled.
-If you know that your game will not need touch input (or keyboard and mouse inputs if you're building a mobile game), you can disable these input devices by turning their feature flag off in your project `Cargo.toml` file.
-See the [Selective Feature Use section] in the Compiling Less Code page for more details.
-
-[read like any other message you'd use normally]: /learn/book/control-flow/messages
 [Selective Feature Use section]: /learn/book/releasing-projects/compiling-less-code/#more-selective-feature-use
 
 [Winit]: https://crates.io/crates/winit
 [`bevy_winit`]: https://docs.rs/bevy/latest/bevy/winit/index.html
-[`Message`]: https://docs.rs/bevy/latest/bevy/ecs/message/trait.Message.html
-[`PreUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.PreUpdate.html
-[`KeyboardInput`]: https://docs.rs/bevy/latest/bevy/input/keyboard/struct.KeyboardInput.html
-[`MouseButtonInput`]: https://docs.rs/bevy/latest/bevy/input/mouse/struct.MouseButtonInput.html
 [feature flag]: https://docs.rs/bevy/latest/bevy/index.html#feature-list
 
 ## Input Messages
 
-The first way we can interact with input data is by reading the [`Messages`] that are sent from each input source.
+Bevy takes input data from a device and converts it to a [`Message`].
+These messages can be [read like any other message] and are sent every frame.
+Each input device type will send a unique message type: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
 Each `Message` type will automatically be set up for each input device that has its feature flag enabled.
 In addition, Bevy will also insert systems in the [`PreUpdate`] schedule to process and eventually clear each `Message` type.
 
@@ -96,7 +90,7 @@ If we're dealing with multiple types of input data, input messages can allow us 
 As an example, let's look at how we can handle multiple keys being pressed down at the same time.
 This can be the case when using the W, A, S, and D keys for general movement alongside using the Shift or Ctrl keys for crouching.
 Since crouching might have a slight delay before being fully active, we'll want to make sure that we're constantly moving first rather than crouching.
-This ensures that the player won't be interupted by crouching or sprinting while moving.
+This ensures that the player won't be interrupted by crouching or sprinting while moving.
 
 ```rust
 #[derive(Component)]
@@ -176,7 +170,12 @@ fn register_system(mut commands: Commands) {
 }
 ```
 
-[`Messages`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Messages.html
+[read like any other message]: /learn/book/control-flow/messages
+
+[`Message`]: https://docs.rs/bevy/latest/bevy/ecs/message/trait.Message.html
+[`PreUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.PreUpdate.html
+[`KeyboardInput`]: https://docs.rs/bevy/latest/bevy/input/keyboard/struct.KeyboardInput.html
+[`MouseButtonInput`]: https://docs.rs/bevy/latest/bevy/input/mouse/struct.MouseButtonInput.html
 [`MessageReader`]: https://docs.rs/bevy/latest/bevy/prelude/struct.MessageReader.html
 [`MessageWriter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.MessageWriter.html
 [`MessageMutator`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageMutator.html
@@ -186,7 +185,7 @@ fn register_system(mut commands: Commands) {
 Once most input messages are processed, they're placed into an associated [`ButtonInput`] resource that we can directly access via a system parameter.
 Input data is added to a `ButtonInput` via the same systems that process and clear the input `Message` data, meaning we'll only have access to the input data as long as the original input `Message` is still available.
 
-Interacting with input data this way gives us access to a variety of methods which provide more information about the state of the input and give us more control over how we respond to it. For example, accessing a [`ButtonInput`] resource for a specific input action provides us with a number of methods that will return a bool based on if the button [has just been pressed], [is currently being pressed], or [if its just been released].
+Interacting with input data this way gives us access to a variety of methods which provide more information about the state of the input and give us more control over how we respond to it. For example, accessing a [`ButtonInput`] resource provides us with a number of methods that will return a `bool` based on if the button [has just been pressed], [is currently being pressed], or [if its just been released].
 
 ```rust
 // This system provides access to the KeyCodes in the `ButtonInput` resource.
@@ -231,7 +230,8 @@ fn keyboard_and_mouse_input(
 ### ButtonInput Combinations
 
 We're able to create button combinations by accessing multiple buttons within a given `ButtonInput<>`.
-Using the [`any_pressed`], [`any_just_pressed`], or [`any_just_released`] methods allows us to setup AND logic to handle our combinations, or we can use the [`all_pressed`], [`all_just_pressed`], and [`all_just_released`] methods and supplying a list of button inputs.
+Using the [`any_pressed`], [`any_just_pressed`], or [`any_just_released`] methods allows us to establish AND logic for handling our combinations.
+Alternatively, we could use the [`all_pressed`], [`all_just_pressed`], and [`all_just_released`] methods and supply a list of button inputs instead.
 
 ```rust
 // This system prints when `Ctrl + Shift + A` is pressed.
@@ -251,8 +251,18 @@ fn strict_keyboard_combo(input: Res<ButtonInput<KeyCode>>) {
 }
 ```
 
-We also have the ability to see what button inputs are being pressed at a given point in time.
-Using [`get_pressed`], [`get_just_pressed`], and [`get_just_released`] will return a collection of all pressed or released buttons.
+We can also access a collection of every button that is being interacted with at a given point in time.
+Using [`get_pressed`], [`get_just_pressed`], or [`get_just_released`] will return an [`Iterator`] (specifically an [`ExactSizeIterator`]) of all currently pressed, just pressed, or just released buttons.
+Any of these options can be preferable when processing a lot of input data at once since you can iterate over all relevant buttons.
+As an example, if you want the `Escape` key to always be evaluated first (but not evaluated separately), we can use `get_pressed` to see if its being pressed.
+
+```rust
+fn get_all_pressed_buttons(input: Res<ButtonInput<KeyCode>>) {
+    if input.get_pressed().iter().any(|key| key == KeyCode::Esc) {
+        // Pause the game, open the menu.
+    }
+}
+```
 
 [`any_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.any_pressed
 [`any_just_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.any_just_pressed
@@ -263,10 +273,12 @@ Using [`get_pressed`], [`get_just_pressed`], and [`get_just_released`] will retu
 [`get_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.get_pressed
 [`get_just_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.get_just_pressed
 [`get_just_released`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.get_just_released
+[`Iterator`]: https://doc.rust-lang.org/nightly/core/iter/trait.Iterator.html
+[`ExactSizeIterator`]: https://doc.rust-lang.org/nightly/core/iter/trait.ExactSizeIterator.html
 
-### Resetting ButtonInput 
+### Resetting ButtonInput
 
-Since `ButtonInput` is accessed through a `Resource`, we also have the ability to mutably interact with this data via a `ResMut` system parameter.
+Since `ButtonInput` is accessed through a `Resource`, we also have the ability to alter this data through a `ResMut` system parameter.
 This can be especially helpful if we want to clear all input from a specific key or button, or even reset all input from the entire device.
 The [`clear`], [`clear_just_pressed`], and [`clear_just_released`] methods allow us to remove the current state of a button input.
 For example, if we use `clear_just_pressed` on a button input, we won't receive a `true` value from calling `just_pressed` on that button input until a new button press occurs.
@@ -292,12 +304,29 @@ fn clear_all_mouse_clicks(mut mouse_clicks: ResMut<ButtonInput<MouseButton>>) {
 ```
 
 Finally, we also have the [`release`] and [`release_all`] methods which will register a release event for either a single button, or for all buttons.
+`release` allows you to generate a release event for a specific button, while `release_all` will create release events for every button on the device.
+These methods can be helpful in situations where the player continuously holding a button press would cause issues for your game.
+
+```rust
+// We only want this event to be triggered once.
+#[deriver(Event)]
+struct SingleTriggerEvent;
+
+fn only_trigger_once(mut input: ResMut<ButtonInput<MouseButton>>, mut commands: Commands) {
+    if input.just_pressed(MouseButton::LeftMouseButton) {
+        // As soon as `LeftMouseButton` is pressed, release it.
+        input.release(MouseButton::LeftMouseButton);
+        commands.trigger(SingleTriggerEvent);
+    }
+}
+```
 
 [`clear`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.clear
 [`clear_just_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.clear_just_pressed
 [`clear_just_released`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.clear_just_released
 [`reset`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.reset
 [`reset_all`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.reset_all
+
 [`release`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.release
 [`release_all`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.release_all
 
@@ -306,13 +335,76 @@ Finally, we also have the [`release`] and [`release_all`] methods which will reg
 Although it might appear like the difference between [`pressed`] and [`just_pressed`] is negligible, the two are quite distinct.
 While both signal a `ButtonInput` input being activated, `pressed` is continuously `true` until the input is released.
 Meanwhile `just_pressed` will only be `true` for _a single frame_ after the input is activated.
+The same is true for [`just_released`], which will only be `true` for a single frame after the input is deactivated.
 
-The same is true for [`just_released`], which will only be `true` for a single frame after the input is deactivated, and for any other `ButtonInput` method that contains `just` in it's name.
+To see the differences, think of using a weapon in any action game.
+Unless the game is based solely on precision, there will likely be moments where players will want to repeatedly use their weapon without having to also repeatedly press a button.
+In this case, we can use `pressed` to check if the button which activates the weapon is pressed, and if so then the weapon can be repeatedly used.
+
+```rust
+// A component indicating a weapon.
+#[derive(Component)]
+struct Weapon;
+
+// A component indicating how much time needs to pass in-between weapon attacks.
+#[derive(Component)]
+struct WeaponAttackInterval(pub Timer);
+
+fn repeated_weapon_use(
+    button_input: Res<ButtonInput<MouseButton>>,
+    player_weapon: Single<(&Weapon, &WeaponAttackInterval), With<PlayerWeapon>>
+    time: Res<Time>,
+) {
+    let delta_time = time.delta();
+    
+    // Progress the WeaponAttackInterval.
+    player_weapon.1.tick(delta_time);
+    
+    // If LeftMouseButton is pressed and our WeaponAttackInterval has completed, attack.
+    if button_input.pressed(MouseButton::LeftMouseButton) && player_weapon.1.just_finished() {
+        player_weapon.0.attack();
+    }
+}
+```
+
+However, we don't want the cooldown timer within the `WeaponAttackInterval` component to be running arbitrarily.
+We only want it to run after the player has made an initial attack.
+To start the timer in `WeaponAttackInterval`, we can now use `just_pressed` to start the cooldown timer after an initial attack is made.
+
+```rust
+fn weapon_attack(
+    button_input: Res<ButtonInput<MouseButton>>,
+    mut player_weapon: Single<(&Weapon, &mut WeaponAttackInterval), With<PlayerWeapon>>
+) {
+    if button_input.just_pressed(MouseButton::LeftMouseButton) {
+        // Perform an initial weapon attack.
+        player_weapon.0.attack();
+        // Create a new the timer within `WeaponAttackInterval` that will run.
+        player_weapon.1.from_seconds(1.5, TimerMode::Repeating);
+    }
+}
+```
+
+Finally, we can extend this mechanic even further by using `just_released` to change the `WeaponAttackInterval` timer mode to `Once` when the player finally releases the attack button.
+This will still let the timer tick down and finish.
+
+```rust
+fn cancel_weapon_interval(
+    button_input: Res<ButtonInput<MouseButton>>,
+    mut player_weapon: Single<&mut WeaponAttackInterval, With<PlayerWeapon>>
+) {
+    if button_input.just_released(MouseButton::LeftMouseButton) {
+        player_weapon.0.set_mode(TimerMode::Once);
+    }
+}
+```
+
+This example doesn't quite cover the full extent of a mechanic like this, however it does provide you with an idea of how `pressed`, `just_pressed`, and `just_released` can be effectively used.
 
 [`pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.pressed
 [`just_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_pressed
 [`just_released`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_released
 
-
+## Input System Conditions
 
 ## Window Input Events
