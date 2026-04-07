@@ -174,7 +174,7 @@ While this is talked about in more depth in the chapter on [change detection], i
 [query item]: https://dev-docs.bevy.org/bevy/ecs/query/trait.QueryData.html#associatedtype.Item
 [`Mut<Life>`]: https://dev-docs.bevy.org/bevy/ecs/change_detection/struct.Mut.html
 [smart pointer]: https://doc.rust-lang.org/book/ch15-00-smart-pointers.html
-[change detection]: ../control-flow/change-detection.md
+[change detection]: /learn/book/control-flow/change-detection
 [`Changed`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html
 [`Added`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Added.html
 
@@ -231,8 +231,8 @@ fn despawn_all_enemies(enemies: Query<Entity, With<Enemy>>, mut commands: Comman
 }
 ```
 
-[hooks]: ../control-flow/hooks.md
-[relations]: ./relations.md
+[hooks]: /learn/book/control-flow/lifecycle-events
+[relations]: /learn/book/storing-data/relations
 [`Query::get`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get
 [`Query::get_mut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get_mut
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html

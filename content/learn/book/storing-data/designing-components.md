@@ -170,7 +170,7 @@ fn handle_clickable_props(trigger: On<Pointer<Click>>, query: Query<&ClickablePr
 
 This can be repeated with other traits: [`Event`] and [`Message`] are quite powerful if you want to hook into existing logic.
 
-Storing [one-shot systems](../control-flow/systems.md) can be even more expressive.
+Storing [one-shot systems](/learn/book/control-flow/systems) can be even more expressive.
 See the [callbacks example](https://github.com/bevyengine/bevy/blob/latest/examples/ecs/callbacks.rs) for a demonstration of this pattern.
 
 If your benchmarks show that you need to make this pattern more performant, you can consider swapping to [function pointers](https://doc.rust-lang.org/std/primitive.fn.html).
