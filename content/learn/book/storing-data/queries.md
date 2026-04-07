@@ -292,8 +292,8 @@ fn kill_player_when_dead_query_single(player: Single<(Entity, &Life), With<Playe
 For more discussion on [`Single`] and how it works, please see the [error handling] chapter.
 Similarly, see the [resources] chapter of this book for a discussion on the choice between using a singleton entity or a resource.
 
-[error handling]: ../control-flow/error-handling.md
-[resources]: ./resources.md
+[error handling]: /learn/book/control-flow/handling-errors
+[resources]: /learn/book/storing-data/resources
 [`Query::single`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.single
 [`QuerySingleError`]: https://docs.rs/bevy/latest/bevy/ecs/query/enum.QuerySingleError.html
 [`Single`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Single.html
