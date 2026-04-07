@@ -35,7 +35,7 @@ This simplified, filter-less form of query looks like `Query<&Life>`, which will
 
 To access more than one component at once (or add multiple filters at the same time) we can combine [`QueryData`] or [`QueryFilter`] types by putting them inside of a [tuple] (simply wrap them in a parentheses).
 
-[generic type parameters]: (https://doc.rust-lang.org/book/ch10-01-syntax.html)
+[generic type parameters]: https://doc.rust-lang.org/book/ch10-01-syntax.html
 [dependency injection]: https://en.wikipedia.org/wiki/Dependency_injection
 ["unit type"]: https://doc.rust-lang.org/core/primitive.unit.html
 [tuple]: https://doc.rust-lang.org/rust-by-example/primitives/tuples.html
