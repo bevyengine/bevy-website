@@ -50,12 +50,11 @@ A **component** is a modular piece of data that can be reused across entities in
 In Bevy, components are "just Rust structs" (or enums).
 
 ```rs
-/// The location of a player, creature, or object in our game.
+/// The grid-based location of a player, creature, or object in our game.
 #[derive(Component)]
 struct Location {
-    x: f32,
-    y: f32,
-    z: f32,
+    x: u32,
+    y: u32,
 }
 
 /// The color of an object in our game.
