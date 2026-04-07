@@ -285,7 +285,48 @@ fn cancel_weapon_attack_timer(
 }
 ```
 
-This example doesn't quite cover the full extent of a mechanic like this, however it does provide you with an idea of how `pressed`, `just_pressed`, and `just_released` can be effectively used.
+Since all three of these systems are interacting with the same data, we can combine them into one single `weapon_attack` system that will pick what happens when mouse input is received.
+
+```rust
+fn weapon_attack(
+    button_input: Res<ButtonInput<MouseButton>>,
+    mut player_weapon: Single<(&Weapon, &mut WeaponAttackInterval), With<PlayerWeapon>>,
+    time: Res<Time>,
+) {
+    let delta_time = time.delta();
+    
+    // Check the state of the WeaponAttackInterval timer if it's active.
+    if player_weapon.1.is_finished() != true {
+        // Progress the WeaponAttackInterval.
+        player_weapon.1.tick(delta_time);
+    }
+    
+    // The initial LeftMouseButton press.
+    if button_input.just_pressed(MouseButton::LeftMouseButton) {
+        // Perform an initial weapon attack.
+        player_weapon.0.attack();
+        // Create a new the timer within `WeaponAttackInterval` that will run.
+        player_weapon.1.from_seconds(1.5, TimerMode::Repeating);
+    }
+    
+    // If LeftMouseButton is pressed and our WeaponAttackInterval has completed, attack.
+    if button_input.pressed(MouseButton::LeftMouseButton) && player_weapon.1.just_finished() {
+        player_weapon.0.attack();
+    }
+    
+    // If LeftMouseButton was released, switch the timer mode to expire.
+    if button_input.just_released(MouseButton::LeftMouseButton) {
+        player_weapon.1.set_mode(TimerMode::Once);
+    }
+}
+```
+
+You might have noticed that this example only `ticks` (progresses) the timer when receiving input.
+Since input data is only received each frame, if we experience lag or dropped frames, the weapon timer won't function consistently.
+We won't cover a fix in this example since the intent is to provide you with an idea of how `pressed`, `just_pressed`, and `just_released` can be effectively used.
+If you'd like to see how we can fix this issue, check out the [Timers and Input] section on the Input Patterns page.
+
+[Timers and Input]: /learn/book/handling-input/input-patterns#timers-and-input
 
 [`pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.pressed
 [`just_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_pressed

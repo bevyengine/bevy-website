@@ -14,6 +14,10 @@ The obvious application of input data is to run systems and update the game base
 Given that input data is based on using [`Messages`], it only interacts with a small part of the various [control flow] tools that Bevy provides.
 Lets compare handling input data with some other tools that are also used for running systems and updating values in a Bevy game.
 
+[control flow]: /learn/book/control-flow
+
+[`Messages`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Messages.html
+
 ### Observers Vs Input
 
 [Observers (and the events that trigger them)] might be the first thing that comes to mind when reacting to changes in your game.
@@ -28,7 +32,7 @@ Observers are also sequentially evaluated, while `Messages` can be evaluated con
 This allows our systems that access input `Messages` to run much faster overall than if we were triggering observers individually for each input received.
 
 This isn't to say the you can't use both in your systems.
-If there's some logic that you want to call from both input data and from events, then combining input messages and observers can work for this purpose.
+If there's some logic that you want to call from both receiving input data and from triggering an event, then combining input messages and observers can work for this purpose.
 Take the example below, where we spawn a new unit by triggering an observer.
 Receiving a `LeftMouseButton` input will trigger the observer, but we'll also trigger the observer when we're setting up our app.
 
@@ -64,28 +68,36 @@ world.add_observer(|event: On<PlaceUnitOnMap>, mut commands: Commands) {
 }
 ```
 
+[Observers (and the events that trigger them)]: /learn/book/control-flow/events
+
 ### Activating One-shot Systems with Input
 
-In a similar way, input messages can also make activating one-shot systems incredibly straightforward.
-We can see this in the example below, where every click of the left mouse button will queue a `mouse_click_system` to be run.
+Continuing with the observer comparison, directly running one-shot systems with input can skip an entire processing step when compared to triggering an observer.
+If we wanted to use an observer, we would have to:
+
+1. Spawn our `Observer` and the `Event` that will trigger it.
+2. Read an input `Message` and trigger our `Observer` in response.
+3. The `Observer` will call a one-shot system to be run.
+
+Input messages simplifies activating one-shot systems by removing a redundant step.
 Toggling UI boxes, initiating interactions with NPC characters, and adding a new player when a controller is connected are all situations where one-shot systems could be triggered by input messages.
+
+We can see this in the example below, where we're running a `toggle_weapon_sights` system whenever the `RightMouseButton` is pressed.
 
 ```rust
 // This system will read input events from `MouseButtonInput`.
-fn run_system_on_click(
+fn activate_toggle_weapon_sights(
     mut commands: Commands,
     input_event_reader: MessageReader<MouseButtonInput>
 ) {
     for event in input_event_reader {
-        if event.button == MouseButton::Left && 
+        if event.button == MouseButton::Right && 
             event.state == ButtonState::Pressed {
-            commands.run_system(registered_system);
+            commands.run_system(toggle_weapon_sights);
         }
     }
 }
 ```
-
-[Observers (and the events that trigger them)]: /learn/book/control-flow/events
 
 ### Input System Conditions
 
@@ -142,9 +154,161 @@ fn pause_menu() {
 }
 ```
 
+{% callout(type="info") %}
+
+#### Why Use Input System Conditions?
+
+Given that the `run_if` method only requires a `SystemCondition`-satisfying system, you might wonder why we would want to use `input_just_pressed` or `input_just_released` when we could just check for the existence of an input `Message` with [`on_message`] in the first place.
+
+`on_message` only checks for the existence of a new message.
+It doesn't allow us to see the potential state of that message.
+On the other hand, our input systems do allow us to explicitly check the state of the message, which will almost always be the preferred way of using input data for conditionally running systems.
+
+[`on_message`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/fn.on_message.html
+
+{% end %}
+
 [`input_just_pressed`]: https://docs.rs/bevy/latest/bevy/input/common_conditions/fn.input_just_pressed.html
 [`input_pressed`]: https://docs.rs/bevy/latest/bevy/input/common_conditions/fn.input_pressed.html
 [`input_just_released`]: https://docs.rs/bevy/latest/bevy/input/common_conditions/fn.input_just_released.html
 [`input_toggle_active`]: https://docs.rs/bevy/latest/bevy/input/common_conditions/fn.input_toggle_active.html
 
 ## Input & Time
+
+Input [`Messages`] are sent every frame, which means that its possible for frame drops and lag to introduce gaps where there is no player input being received by the game.
+This also means that if we're using timers and cooldowns inside of systems that will only run based on input, we have to be aware of the fact that those timers and cooldowns won't function properly unless we manually correct them.
+
+Most of what we'll cover here can also be found in more depth over in the [Time and Timers] page within The Game Loop chapter, so if there are concepts that aren't making sense or you just want to read more, be sure to check that page out as well.
+
+### Utilizing Delta Time with Input
+
+Fixing the discrepancies between frame rate and consistent game systems is a fundamental aspect of game design.
+Games usually don't run at a consistent frame rate, but players do experience a consistent flow of time.
+If the what the game displays and what the player is perceiving don't align, it can lead to an unexpected (and likely negative) experience.
+To reconcile these, we use ["delta time"].
+
+When incorporating delta time into input data, we have to think about what we're trying to adjust.
+If we're trying to adjust player movement, we can just multiply the player's speed by the `delta_secs` value Bevy tracks internally.
+This ensures that the player will be moving at a consistent rate between frames.
+
+```rust
+fn move_player(
+    input: Res<ButtonInput<KeyCode>>,
+    mut player_transform: Single<&mut Transform, With<Player>>,
+    time: Res<Time>
+){
+    const PLAYER_SPEED: f32 = 60.;
+    
+    if input.just_pressed(KeyCode::W) {
+        player_transform.translation.x += PLAYER_SPEED * time.delta_secs();
+    }
+}
+```
+
+However, you should be aware that if a player encounters large frame drops, this system has the potential to overcorrect.
+Further modifications to account for these types of situations are beyond the scope of this book, however it is something to be aware about.
+
+["delta time"]: https://en.wikipedia.org/wiki/Delta_timing
+
+### Timers and Input
+
+[`Timers`] and [`Stopwatches`] allow us to run code at set intervals, and can pair nicely with input data.
+However, you have to be careful when using these together, as a `Timer`'s (and a `Stopwatch`'s) functionality is tied to how often they are updated.
+As we discussed in the previous section, input data is sent every frame, which means any logic tied to input data isn't guaranteed to run at a consistent rate.
+
+In the [Pressed vs Just Pressed] section of the Using Input page, we established a scenario where we wanted to create a system that would allow the player to repeatedly use a weapon attack after a cooldown had occurred.
+Utilizing a system that read mouse input, we initiated, ticked (progressed), and then adjusted a timer based on whether `LeftMouseButton` was being pressed.
+However, a key flaw was that the timer's  [`tick`] was tied to the input data.
+If we wanted a truly consistent timer, we need to fix this.
+
+At the end of that example, the code looked like this:
+
+```rust
+// A component indicating a weapon.
+#[derive(Component)]
+struct Weapon;
+
+// A component indicating how much time needs to pass in-between weapon attacks.
+#[derive(Component)]
+struct WeaponAttackInterval(pub Timer);
+
+fn weapon_attack(
+    button_input: Res<ButtonInput<MouseButton>>,
+    mut player_weapon: Single<(&Weapon, &mut WeaponAttackInterval), With<PlayerWeapon>>,
+    time: Res<Time>,
+) {
+    let delta_time = time.delta_secs();
+    
+    // Check the state of the WeaponAttackInterval timer if it's active.
+    if player_weapon.1.is_finished() != true {
+        // Progress the WeaponAttackInterval.
+        player_weapon.1.tick(delta_time);
+    }
+    
+    // The initial LeftMouseButton press.
+    if button_input.just_pressed(MouseButton::LeftMouseButton) {
+        // Perform an initial weapon attack.
+        player_weapon.0.attack();
+        // Create a new the timer within `WeaponAttackInterval` that will run.
+        player_weapon.1.from_seconds(1.5, TimerMode::Repeating);
+    }
+    
+    // If LeftMouseButton is pressed and our WeaponAttackInterval has completed, attack.
+    if button_input.pressed(MouseButton::LeftMouseButton) && player_weapon.1.just_finished() {
+        player_weapon.0.attack();
+    }
+    
+    // If LeftMouseButton was released, switch the timer mode to expire.
+    if button_input.just_released(MouseButton::LeftMouseButton) {
+        player_weapon.1.set_mode(TimerMode::Once);
+    }
+}
+```
+
+The solution to fixing this is simple: our `WeaponAttackInterval` timer `tick` needs to occur independently of the `weapon_attack` system.
+We can set up a `weapon_attack_tick` system to run in the [`FixedUpdate`] schedule, meaning that it will update consistently.
+Within `weapon_attack_tick` we'll place our `WeaponAttackInterval` timer `tick` update, removing it from the `weapon_attack` system.
+Now, the whole weapon attack setup looks like this:
+
+```rust
+// The plugin where we add our systems to the game.
+fn weapon_plugin(mut app: &mut App) {
+    app.add_systems(FixedUpdate, weapon_attack_tick);
+    app.add_systems(Update, weapon_attack);
+    ...
+}
+// A system which consistently updates the `tick` of the player weapon.
+fn weapon_attack_tick(
+    mut player_weapon: Single<&mut WeaponAttackInterval, With<PlayerWeapon>>,
+    time: Res<Time>
+) {
+    if player_weapon.0.remaining() > 0 {
+        player_weapon.0.tick(time.delta_secs());
+    }
+}
+// A system which will perform the weapon attacks and adjust the timer.
+fn weapon_attack(
+    button_input: Res<ButtonInput<MouseButton>>,
+    mut player_weapon: Single<(&Weapon, &mut WeaponAttackInterval), With<PlayerWeapon>>,
+) {
+    if button_input.just_pressed(MouseButton::LeftMouseButton) {
+        player_weapon.0.attack();
+        player_weapon.1.from_seconds(1.5, TimerMode::Repeating);
+    }
+    
+    if button_input.pressed(MouseButton::LeftMouseButton) && player_weapon.1.just_finished() {
+        player_weapon.0.attack();
+    }
+    
+    if button_input.just_released(MouseButton::LeftMouseButton) {
+        player_weapon.1.set_mode(TimerMode::Once);
+    }
+}
+```
+
+[Pressed vs Just Pressed]: /learn/book/handling-input/using-input#pressed-versus-just-pressed
+
+[`Timers`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html#method.tick
+[`Stopwatches`]: https://docs.rs/bevy/latest/bevy/time/struct.Stopwatch.html
+[`tick`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html#method.tick
+[`FixedUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.FixedUpdate.html
