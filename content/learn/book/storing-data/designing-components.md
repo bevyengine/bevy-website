@@ -197,7 +197,7 @@ One solution is to abstract complex ECS lookups like this by creating our own cu
 [`QueryData`] and [`QueryFilter`] are useful when the data is in separate components on the same entity and is quite composable (you can always add more terms to your [`Query`]!).
 Meanwhile, [`SystemParam`] is best reserved for when you need to access distinct entities, resources, commands, messages, or other forms of data in the same logic.
 
-While simply defining these types can save boilerplate and reduce error, they become dramatically more powerful when we implement methods on them.
+While simply defining these types can save boilerplate and reduce errors, they become dramatically more powerful when we implement methods on them.
 The implemented methods will automatically incorporate data across disparate sources into a single atomic operation.
 When working with custom [`QueryData`] types, you should be aware that you can implement methods on the generated (and doc-hidden) [`QueryData::Item`] types.
 Implementing methods will allow you to define operations for a single element of your complex queries.
