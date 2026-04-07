@@ -33,7 +33,7 @@ Inside the `Query` type, the `F: QueryFilter` generic defaults to `()`.
 Instead of explicitly writing `Query<&Life, ()>` when we don't want to filter, we skip this parameter and our `Query` will still work.
 This simplified, filter-less form of query looks like `Query<&Life>`, which will fetch all instances of the `Life` component in the world.
 
-To access more than one component at once (or add multiple filters at the same time) we can combine [`QueryData`] or [`QueryFilter`] types by putting them inside of a [tuple] (simply wrap them in a parentheses).
+To access more than one component at once (or add multiple filters at the same time) we can combine [`QueryData`] or [`QueryFilter`] types by putting them inside of a [tuple] (simply wrap them in parentheses).
 
 [generic type parameters]: https://doc.rust-lang.org/book/ch10-01-syntax.html
 [dependency injection]: https://en.wikipedia.org/wiki/Dependency_injection
