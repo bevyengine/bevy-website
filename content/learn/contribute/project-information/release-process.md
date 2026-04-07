@@ -2,7 +2,7 @@
 title = "Release Process"
 insert_anchor_links = "right"
 [extra]
-weight = 6
+weight = 100
 +++
 
 Bevy uses three-months-long development cycles, delimited by a weeks-long rolling release process.

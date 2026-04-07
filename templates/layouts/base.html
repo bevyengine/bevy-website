@@ -108,6 +108,11 @@
 
     <title>{% if page.extra.public_draft or section.extra.public_draft %}[DRAFT] {% endif -%}{{ page_title }}</title>
     {% block head_extensions %}{% endblock head_extensions %}
+    <script async src="https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js"></script>
+    <script>
+      window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()
+    </script>
   </head>
   <body>
     <div class="layout">
