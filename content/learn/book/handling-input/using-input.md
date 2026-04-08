@@ -8,7 +8,7 @@ weight = 1
 Bevy can read input data from gamepads (controllers), keyboards, mice, and touch inputs.
 The process for reading and interacting with input data will generally be the same across all devices.
 When the button on a gamepad or a key on a keyboard gets pressed, Bevy uses [Winit] (via [`bevy_winit`], Bevy's conversion tool for Winit) to initially turn the input into a [`Message`].
-With these `Messages`, we have several ways to use the input data which we'll cover over the next few sections.
+These `Messages` are then processed and placed into a resource (or a component) that we can then read and use for setting up movement, tracking aim, activating abilities, or any other input-based actions you would want to set up.
 
 Before we cover the general process though, you should know that each device type also has their own unique circumstances to be aware of.
 While input data from every device will follow the same process that is covered on this page, you should read each devices' page to see how their data is uniquely handled:
@@ -32,12 +32,27 @@ See the [Selective Feature Use section] in the Compiling Less Code page for more
 ## Input Messages
 
 Bevy takes input data from a device and converts it to a [`Message`].
-These messages can be [read like any other message] and are sent every frame.
-Each input device type will send a unique message type: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
+These messages can be [read like any other message], and will be a unique type for each device: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
 Each `Message` type will automatically be set up for each input device that has its feature flag enabled.
-In addition, Bevy will also insert systems in the [`PreUpdate`] schedule to process and eventually clear each `Message` type.
+Bevy will also insert systems in the [`PreUpdate`] schedule to process and eventually clear each `Message` type.
 
-Accessing input data in this manner gives us access to all of the regular functionality that messages provide, including [`MessageReader`], [`MessageWriter`], and [`MessageMutator`].
+{% callout(type="info") %}
+
+### Using Input Messages
+
+While receiving input messages is the way that Bevy accesses input data, this doesn't mean that you should use input messages in every scenario.
+
+Input messages are only sent when an input is initially activated and then re-sent periodically if the input is still being activated (i.e. if a button is being pressed down or a joystick is continuously being pushed in a direction).
+Since these messages aren't being received consistently, it's not recommended to use them for logic that needs to be continuously updated, like player movement or updating a player's aim.
+These types of mechanics should instead be accessing the [`ButtonInput` resources] that we'll cover in the next section.
+
+Instead, input messages are best suited for testing and logging input events, tracking text input, and activating systems or logic that don't rely on consistently repeated input.
+
+[`ButtonInput` resources]: /learn/book/handling-input/using-input#buttoninput-resources
+
+{% end %}
+
+Accessing input data in through messages gives us access to all of the regular functionality that messages provide, including [`MessageReader`], [`MessageWriter`], and [`MessageMutator`].
 
 ```rust
 // This system reads and prints out all `KeyboardInput` messages.
@@ -81,61 +96,30 @@ fn keyboard_message_mutator(mut keyboard_inputs: MessageMutator<KeyboardInput>) 
 Reading input messages can be beneficial in several situations.
 If we're dealing with multiple types of input data, input messages can allow us to easily order the input data relative to each other within a single frame.
 
-As an example, let's look at how we can handle multiple keys being pressed down at the same time.
-This can be the case when using the W, A, S, and D keyboard keys for general movement alongside using the Ctrl key for crouching.
-Since crouching might have a slight delay before being fully active, we'll want to make sure that we're constantly moving first rather than crouching.
-This ensures that the player won't be interrupted by crouching while moving.
+As an example, let's setup a pause game mechanic.
+Using input messages lets us iterate over each input message sent for the `KeyboardInput` message type.
+If we detect that `KeyCode::Esc` is pressed, we'll evaluate whether the game is currently in `GameState::Playing` or `GameState::Paused`.
+Based on this, we'll queue a transition to the opposite `GameState` variant.
 
 ```rust
-#[derive(Component)]
-enum CrouchState {
-    Uncrouched,
-    Crouched
-}
-
-fn movement_plugin(mut app: &mut App) {
-    // Using `.chain()` allows us to ensure that WASD movements get applied before Crouch movements.
-    app.add_systems(FixedUpdate, (wasd_movement, crouching_system).chain());
-}
-
-fn wasd_movement(
-    movement_input: MessageReader<KeyboardInput>,
-    mut player_location: Single<&mut Transform, With<Player>>,
+fn ensure_pause(
+    button_inputs: MessageReader<KeyboardInput>,
+    current_game_state: Res<State<GameState>>,
+    mut next_game_state: ResMut<NextState<GameState>>,
 ) {
-    for input in movement_input.read() {
-        // Match the input message based on what keyboard key is being pressed.
-        match input.key_code {
-            KeyCode::W => player_location.0.translation.y += 0.1,
-            KeyCode::A => player_location.0.translation.x -= 0.1,
-            KeyCode::S => player_location.0.translation.y -= 0.1,
-            KeyCode::D => player_location.0.translation.x += 0.1,
-            _ => continue;
+    for input in button_inputs.iter() {
+        if input.key_code == KeyCode::Esc {
+            match current_game_state.get() {
+                GameState::Paused => next_game_state.set(GameState::Playing),
+                GameState::Playing => next_game_state.set(GameState::Paused);
+            }
         }
-    }
-}
-
-fn crouching_system(
-    movement_input: Messages<KeyboardInput>,
-    mut player_crouch_state: Single<&mut CrouchState, With<Player>>,
-) {
-    for input in movement_input.read() {
-        // Make the input data more easily accessible. 
-        let (button_key, button_state) = (input.key_code, input.state);
-        // We only care about crouch input data.
-        if button_key != KeyCode::CtrlLeft {
-            continue
-        }
-        // Crouching logic, with `Uncrouched` as a default response.
-        match (button_state, player_crouch_state) {
-            (ButtonState::Pressed, CrouchState::Uncrouched) => 
-                *player_crouch_state = CrouchState::Crouched,
-            (ButtonState::Unpressed, CrouchState::Crouched) => 
-                *player_crouch_state = CrouchState::Uncrouched,
-            _ => *player_crouch_state = CrouchState::Uncrouched,
-        } 
     }
 }
 ```
+
+`ensure_pause` is setup as a standalone system, but we could easily place more input-based functionality inside of it.
+As long as our `if` statement that checks whether `KeyCode::Esc` is being pressed is being evaluated first, we've structured it to run before any other input data that is received.
 
 [read like any other message]: /learn/book/control-flow/messages
 
@@ -163,7 +147,7 @@ When you start looking at each input device, you might wonder what makes an inpu
 It's actually very straightforward.
 To be considered "button-like" in Bevy, the input has to be "press-able".
 This means that Bevy can register the state of the input as either `pressed` or `released`.
-Both of these values are explicitly stored in a [`ButtonState`] enum, which is apart of every "button-like" input `Message` that is sent.
+Both of these values are explicitly stored in a [`ButtonState`] enum, which is a part of every "button-like" input `Message` that is sent.
 
 Something like a joystick can be pressed if the joystick can be "clicked".
 If it can then the joytstick button data will be accessible in a `ButtonInput` resource.
@@ -266,7 +250,7 @@ fn weapon_attack(
         // Perform an initial weapon attack.
         player_weapon.0.attack();
         // Create a new the timer within `WeaponAttackInterval` that will run.
-        player_weapon.1.from_seconds(1.5, TimerMode::Repeating);
+        player_weapon.1.0 = Timer::from_seconds(1.5, TimerMode::Repeating);
     }
 }
 ```
@@ -296,7 +280,7 @@ fn weapon_attack(
     let delta_time = time.delta();
     
     // Check the state of the WeaponAttackInterval timer if it's active.
-    if player_weapon.1.is_finished() != true {
+    if !player_weapon.1.is_finished() {
         // Progress the WeaponAttackInterval.
         player_weapon.1.tick(delta_time);
     }
@@ -306,7 +290,7 @@ fn weapon_attack(
         // Perform an initial weapon attack.
         player_weapon.0.attack();
         // Create a new the timer within `WeaponAttackInterval` that will run.
-        player_weapon.1.from_seconds(1.5, TimerMode::Repeating);
+        player_weapon.1.0 = Timer::from_seconds(1.5, TimerMode::Repeating);
     }
     
     // If LeftMouseButton is pressed and our WeaponAttackInterval has completed, attack.
@@ -320,13 +304,6 @@ fn weapon_attack(
     }
 }
 ```
-
-You might have noticed that this example only `ticks` (progresses) the timer when receiving input.
-Since input data is only received each frame, if we experience lag or dropped frames, the weapon timer won't function consistently.
-We won't cover a fix in this example since the intent is to provide you with an idea of how `pressed`, `just_pressed`, and `just_released` can be effectively used.
-If you'd like to see how we can fix this issue, check out the [Timers and Input] section on the Input Patterns page.
-
-[Timers and Input]: /learn/book/handling-input/input-patterns#timers-and-input
 
 [`pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.pressed
 [`just_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_pressed
