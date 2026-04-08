@@ -73,9 +73,8 @@ struct Mana {
 fn life_and_mana_system(query: Query<(&Life, &Mana)>){
     // This pattern is called "destructuring",
     // and is very convenient when working with queries.
-    // The type annotations (": &Life") are optional;
-    // they're shown here for clarity!
-    for (life: &Life, mana: &Mana) in query.iter(){
+    // Here, `life` has type `&Life` and `mana` has type `&Mana`.
+    for (life, mana) in query.iter() {
         todo!();
     } 
 }
