@@ -78,10 +78,10 @@ If we wanted to use an observer, we would have to:
 1. Spawn our `Observer` and the `Event` that will trigger it.
 2. Read a `ButtonInput`, and see if the key we want is being pressed.
 3. If the button is pressed, trigger our `Observer` in response.
-4. The `Observer` will then call a one-shot system to be run.
+4. The `Observer` will then queue a one-shot system to be run.
 
-If instead we run the one-shot system based on reading the input alone, we'll simplify our systems by removing a redundant step.
-Toggling UI boxes, initiating interactions with NPC characters, and adding a new player when a controller is connected are all situations where one-shot systems could be triggered by input directly
+If instead we run the one-shot system based on input alone, we'll simplify our systems by removing a redundant step.
+Toggling UI boxes, initiating interactions with NPC characters, and adding a new player when a controller is connected are all situations where one-shot systems could be triggered by input directly.
 
 We can see this in the example below, where we're running a `toggle_weapon_sights` system whenever the `RightMouseButton` is pressed.
 
@@ -91,7 +91,7 @@ fn activate_toggle_weapon_sights(
     mut commands: Commands,
     button_input: Res<ButtonInput<MouseButton>>,
 ) {
-    if button_input.pressed(MouseButton::RightMouseButton) {
+    if button_input.just_pressed(MouseButton::Right) {
         commands.run_system(toggle_weapon_sights);
     }
 }
@@ -100,7 +100,7 @@ fn activate_toggle_weapon_sights(
 ### Input System Conditions
 
 Input data can also be used as a conditional check for deciding when a system should run.
-Instead of needing to manually evaluate input data within a system, we can use several built-in functions to check whether a system should run.
+If the input data is only meant to signal that a system should run (instead of being needed inside the system itself), we can use several built-in functions to check whether a system should run.
 These functions will return a boolean based on the state of a specific input button, and require us to pass in a type that can be accessed from a `ButtonInput` type.
 
 ```rust
@@ -113,7 +113,7 @@ fn main() {
 ```
 
 In the above example, [`input_just_pressed`] is a function that will evaluate whether `KeyCode::Space` has just been pressed.
-If it has, then the `jump` system is ran.
+If it has been pressed, then the `jump` system is ran once in the `Update` schedule.
 Even though we aren't accessing `ButtonInput` directly, our conditional function (`input_just_pressed`) is accessing the `just_pressed` method on the `ButtonInput` that contains all of the `KeyCode` input data.
 The same process occurs when we use the other input conditional functions: [`input_pressed`] and [`input_just_released`].
 
@@ -132,10 +132,16 @@ fn main() {
 ```
 
 We also have one more system condition function that relates to input: [`input_toggle_active`].
-This condition taking in a input button to check the state of (using `just_pressed`) and a `bool` value to set the initial state.
+This condition takes in a button to check the state of (using the `just_pressed` method) and a `bool` value.
+When you press the button you passed into `input_toggle_active` for the first time, the system will switch from the initial `bool` value you pass in.
+If you initially passed in `true` to have the system run from it's initialization, `input_toggle_active` will switch to `false` and the system will stop running.
+Likewise, if you initially passed in `false`, the system will start running.
+Subsequent presses of the specified button will continue this pattern, toggling the system from on to off and off to on with each alternating press.
 
 In the example below, we only want to run the `pause_menu` system if the `Escape` key is pressed.
 We'll pass in a `false` value alongside `KeyCode::Escape` to indicate that `pause_menu` starts disabled.
+When we first press `KeyCode::Escape`, the `pause_menu` system will run.
+If we press it a second time, `pause_menu` will stop running.
 
 ```rust
 fn main() {
@@ -171,8 +177,8 @@ On the other hand, our input systems do allow us to explicitly check the state o
 
 ## Input & Time
 
-Input data can be read every frame, which means that its possible for frame drops and lag to introduce gaps where there is no player input being received by the game.
-This also means that if we're using timers and cooldowns inside of systems that will only run based on input, we have to be aware of the fact that those timers and cooldowns won't function properly unless we manually correct them.
+Input data can be accessed every frame, which means that any changes we make based on input data will be applied every frame.
+This isn't an issue for one-shot logic, but if we have some functionality that repeats and needs to be consistent across the player's real-time experience, we begin to run into issues.
 
 Most of what we'll cover here can also be found in more depth over in the [Time and Timers] page within The Game Loop chapter, so if there are concepts that aren't making sense or you just want to read more, be sure to check that page out as well.
 
@@ -209,6 +215,6 @@ How high a player can jump isn't affected by how long it took the last frame to 
 The same can be said for any action that doesn't need to compensate for inconsistencies in the frame render time, like dashes, interactions, or attacks.
 
 You should also be aware that if a player encounters large frame drops, accounting for delta time has the potential to overcorrect.
-Further modifications to account for these types of situations are beyond the scope of this book, however it is something to be aware about.
+Further modifications to account for these types of situations are beyond the scope of this book, however its something to also be aware of.
 
 ["delta time"]: https://en.wikipedia.org/wiki/Delta_timing

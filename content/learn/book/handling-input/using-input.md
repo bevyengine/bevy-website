@@ -5,10 +5,10 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-Bevy can read input data from gamepads (controllers), keyboards, mice, and touch inputs.
+Bevy can read input data from gamepads (which includes controllers), keyboards, mice, and touch inputs.
 The process for reading and interacting with input data will generally be the same across all devices.
 When the button on a gamepad or a key on a keyboard gets pressed, Bevy uses [Winit] (via [`bevy_winit`], Bevy's conversion tool for Winit) to initially turn the input into a [`Message`].
-These `Messages` are then processed and placed into a resource (or a component) that we can then read and use for setting up movement, tracking aim, activating abilities, or any other input-based actions you would want to set up.
+These `Messages` are then processed and placed into a resource (or a component) that we can then read and use for setting up movement, tracking aim, activating abilities, or any other input-based actions you'd like to set up.
 
 Before we cover the general process though, you should know that each device type also has their own unique circumstances to be aware of.
 While input data from every device will follow the same process that is covered on this page, you should read each devices' page to see how their data is uniquely handled:
@@ -21,7 +21,7 @@ While input data from every device will follow the same process that is covered 
 When you use larger groupings of features (like profiles and collections), all of these devices are enabled in your game by default.
 However we can adjust which ones are enabled by manually enabling their [feature flag].
 If you know that your game will not need touch input (or keyboard and mouse inputs if you're building a mobile game), you can disable these input devices by turning their feature flag off in your project `Cargo.toml` file.
-See the [Selective Feature Use section] in the Compiling Less Code page for more details.
+See the [Selective Feature Use section] on the Compiling Less Code page for more details.
 
 [Selective Feature Use section]: /learn/book/releasing-projects/compiling-less-code/#more-selective-feature-use
 
@@ -31,10 +31,10 @@ See the [Selective Feature Use section] in the Compiling Less Code page for more
 
 ## Input Messages
 
-Bevy takes input data from a device and converts it to a [`Message`].
-These messages can be [read like any other message], and will be a unique type for each device: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
-Each `Message` type will automatically be set up for each input device that has its feature flag enabled.
-Bevy will also insert systems in the [`PreUpdate`] schedule to process and eventually clear each `Message` type.
+Bevy takes input data from a device and converts it into a [`Message`].
+These messages can be [read like any other message], and will have a unique type for each device: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
+Each unique `Message` type will be automatically set up for the enabled devices in your game.
+Bevy will also insert systems in the [`PreUpdate`] schedule to process, store, and eventually clear each `Message` type.
 
 {% callout(type="info") %}
 
@@ -48,11 +48,14 @@ These types of mechanics should instead be accessing the [`ButtonInput` resource
 
 Instead, input messages are best suited for testing and logging input events, tracking text input, and activating systems or logic that don't rely on consistently repeated input.
 
+Additionally, if you do choose to use input messages for some functionality, be wary of the `repeat` field on an input message which indicates that the message will be re-sent.
+If you do not have some control for dealing with the `repeat` field, your functionality might cancel itself out, or flicker multiple times until `repeat` eventually returns `false`.
+
 [`ButtonInput` resources]: /learn/book/handling-input/using-input#buttoninput-resources
 
 {% end %}
 
-Accessing input data in through messages gives us access to all of the regular functionality that messages provide, including [`MessageReader`], [`MessageWriter`], and [`MessageMutator`].
+Accessing input data through messages gives us access to all of the regular functionality that messages provide, including [`MessageReader`], [`MessageWriter`], and [`MessageMutator`].
 
 ```rust
 // This system reads and prints out all `KeyboardInput` messages.
@@ -108,7 +111,7 @@ fn ensure_pause(
     mut next_game_state: ResMut<NextState<GameState>>,
 ) {
     for input in button_inputs.iter() {
-        if input.key_code == KeyCode::Esc {
+        if input.key_code == KeyCode::Esc && !input.repeat {
             match current_game_state.get() {
                 GameState::Paused => next_game_state.set(GameState::Playing),
                 GameState::Playing => next_game_state.set(GameState::Paused);
@@ -119,7 +122,7 @@ fn ensure_pause(
 ```
 
 `ensure_pause` is setup as a standalone system, but we could easily place more input-based functionality inside of it.
-As long as our `if` statement that checks whether `KeyCode::Esc` is being pressed is being evaluated first, we've structured it to run before any other input data that is received.
+As long as our `if` statement evaluating `KeyCode::Esc` is being evaluated first, we've structured it to run before any other input data is handled.
 
 [read like any other message]: /learn/book/control-flow/messages
 
@@ -150,13 +153,14 @@ This means that Bevy can register the state of the input as either `pressed` or 
 Both of these values are explicitly stored in a [`ButtonState`] enum, which is a part of every "button-like" input `Message` that is sent.
 
 Something like a joystick can be pressed if the joystick can be "clicked".
-If it can then the joytstick button data will be accessible in a `ButtonInput` resource.
+If it can be clicked, then the joytstick button data will be accessible in a `ButtonInput` resource.
 However, the direction you move the joystick in is not "press-able", and therefore is not "button-like" and will not be accessible in a `ButtonInput` resource.
 
 [`ButtonState`]: https://docs.rs/bevy/latest/bevy/input/enum.ButtonState.html
 {% end %}
 
-Interacting with input data this way provides us with easier access to the state of the button input and gives us more control over how we respond to it. For example, accessing a [`ButtonInput`] resource provides us with a number of methods that will return a `bool` based on if the button [has just been pressed], [is currently being pressed], or [if its just been released].
+Interacting with input data through [`ButtonInput`] provides us with easier access to the state of the button input and gives us more control over how we respond to it.
+For example, accessing a `ButtonInput` resource provides us with a number of methods that will return a `bool` based on if the button [has just been pressed], [is currently being pressed], or [if its just been released].
 
 ```rust
 // This system provides access to KeyCode input data from a `ButtonInput` resource.
@@ -184,8 +188,8 @@ fn keyboard_and_mouse_input(
     keyboard_input: Res<ButtonInput<KeyCode>>,
     mouse_input: Res<ButtonInput<MouseButton>>
 ) {
-    let mouse_click = mouse_input.pressed(MouseButton::Left);
-    let keyboard_press = keyboard_input.any_pressed([KeyCode::ControlLeft, KeyCode::ControlRight]);
+    let mouse_click = mouse_input.just_pressed(MouseButton::Left);
+    let keyboard_press = keyboard_input.any_just_pressed([KeyCode::ControlLeft, KeyCode::ControlRight]);
     
     if mouse_click && keyboard_press {
         info!("Just clicked LeftMouseButton and pressed Ctrl!");
@@ -203,8 +207,8 @@ fn keyboard_and_mouse_input(
 ### Pressed Versus Just Pressed
 
 Although it might appear like the difference between [`pressed`] and [`just_pressed`] is negligible, the two are quite distinct.
-While both signal a `ButtonInput` input being activated, `pressed` is continuously `true` until the input is released.
-Meanwhile `just_pressed` will only be `true` for _a single frame_ after the input is activated.
+While both signal a `ButtonInput` button being activated, `pressed` is continuously `true` until the input is released.
+`just_pressed` will only be `true` for _a single frame_ after the input is activated.
 The same is true for [`just_released`], which will only be `true` for a single frame after the input is deactivated.
 
 To see the differences, think of using a weapon in any action game.
@@ -269,7 +273,7 @@ fn cancel_weapon_attack_timer(
 }
 ```
 
-Since all three of these systems are interacting with the same data, we can combine them into one single `weapon_attack` system that will pick what happens when mouse input is received.
+Since all three of these systems are interacting with the same data, we can combine them into one single `weapon_attack` system that can handle each scenario that might occur when mouse input is received.
 
 ```rust
 fn weapon_attack(
