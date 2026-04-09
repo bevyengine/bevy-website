@@ -33,9 +33,9 @@ Inside the `Query` type, the `F: QueryFilter` generic defaults to `()`.
 Instead of explicitly writing `Query<&Life, ()>` when we don't want to filter, we skip this parameter and our `Query` will still work.
 This simplified, filter-less form of query looks like `Query<&Life>`, which will fetch all instances of the `Life` component in the world.
 
-To access more than one component at once (or add multiple filters at the same time) we can combine [`QueryData`] or [`QueryFilter`] types by putting them inside of a [tuple] (simply wrap them in a parentheses).
+To access more than one component at once (or add multiple filters at the same time) we can combine [`QueryData`] or [`QueryFilter`] types by putting them inside of a [tuple] (simply wrap them in parentheses).
 
-[generic type parameters]: (https://doc.rust-lang.org/book/ch10-01-syntax.html)
+[generic type parameters]: https://doc.rust-lang.org/book/ch10-01-syntax.html
 [dependency injection]: https://en.wikipedia.org/wiki/Dependency_injection
 ["unit type"]: https://doc.rust-lang.org/core/primitive.unit.html
 [tuple]: https://doc.rust-lang.org/rust-by-example/primitives/tuples.html
@@ -73,9 +73,8 @@ struct Mana {
 fn life_and_mana_system(query: Query<(&Life, &Mana)>){
     // This pattern is called "destructuring",
     // and is very convenient when working with queries.
-    // The type annotations (": &Life") are optional;
-    // they're shown here for clarity!
-    for (life: &Life, mana: &Mana) in query.iter(){
+    // Here, `life` has type `&Life` and `mana` has type `&Mana`.
+    for (life, mana) in query.iter() {
         todo!();
     } 
 }
@@ -174,7 +173,7 @@ While this is talked about in more depth in the chapter on [change detection], i
 [query item]: https://dev-docs.bevy.org/bevy/ecs/query/trait.QueryData.html#associatedtype.Item
 [`Mut<Life>`]: https://dev-docs.bevy.org/bevy/ecs/change_detection/struct.Mut.html
 [smart pointer]: https://doc.rust-lang.org/book/ch15-00-smart-pointers.html
-[change detection]: ../control-flow/change-detection.md
+[change detection]: /learn/book/control-flow/change-detection
 [`Changed`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html
 [`Added`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Added.html
 
@@ -231,8 +230,8 @@ fn despawn_all_enemies(enemies: Query<Entity, With<Enemy>>, mut commands: Comman
 }
 ```
 
-[hooks]: ../control-flow/hooks.md
-[relations]: ./relations.md
+[hooks]: /learn/book/control-flow/lifecycle-events
+[relations]: /learn/book/storing-data/relations
 [`Query::get`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get
 [`Query::get_mut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get_mut
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
@@ -292,8 +291,8 @@ fn kill_player_when_dead_query_single(player: Single<(Entity, &Life), With<Playe
 For more discussion on [`Single`] and how it works, please see the [error handling] chapter.
 Similarly, see the [resources] chapter of this book for a discussion on the choice between using a singleton entity or a resource.
 
-[error handling]: ../control-flow/error-handling.md
-[resources]: ./resources.md
+[error handling]: /learn/book/control-flow/handling-errors
+[resources]: /learn/book/storing-data/resources
 [`Query::single`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.single
 [`QuerySingleError`]: https://docs.rs/bevy/latest/bevy/ecs/query/enum.QuerySingleError.html
 [`Single`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Single.html
