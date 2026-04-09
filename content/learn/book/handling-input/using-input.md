@@ -48,7 +48,7 @@ These types of mechanics should instead be accessing the [`ButtonInput` resource
 
 Instead, input messages are best suited for testing and logging input events, tracking text input, and activating systems or logic that don't rely on consistently repeated input.
 
-Additionally, if you do choose to use input messages for some functionality, be wary of the `repeat` field on an input message which indicates that the message will be re-sent.
+Additionally, if you do choose to use input messages for some functionality, be wary of the `repeat` field on an input message which indicates that the input is being repeated (such as when a key or button is held down).
 If you do not have some control for dealing with the `repeat` field, your functionality might cancel itself out, or flicker multiple times until `repeat` eventually returns `false`.
 
 [`ButtonInput` resources]: /learn/book/handling-input/using-input#buttoninput-resources

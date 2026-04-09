@@ -134,7 +134,7 @@ fn main() {
 We also have one more system condition function that relates to input: [`input_toggle_active`].
 This condition takes in a button to check the state of (using the `just_pressed` method) and a `bool` value.
 When you press the button you passed into `input_toggle_active` for the first time, the system will switch from the initial `bool` value you pass in.
-If you initially passed in `true` to have the system run from it's initialization, `input_toggle_active` will switch to `false` and the system will stop running.
+If you initially passed in `true` to have the system run from its initialization, `input_toggle_active` will switch to `false` and the system will stop running.
 Likewise, if you initially passed in `false`, the system will start running.
 Subsequent presses of the specified button will continue this pattern, toggling the system from on to off and off to on with each alternating press.
 
