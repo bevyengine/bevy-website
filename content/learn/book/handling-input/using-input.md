@@ -5,44 +5,18 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-Bevy can read input data from gamepads (which includes controllers), keyboards, mice, and touch inputs.
-The process for reading and interacting with input data will generally be the same across all devices.
-When the button on a gamepad or a key on a keyboard gets pressed, Bevy uses [Winit] (via [`bevy_winit`], Bevy's conversion tool for Winit) to initially turn the input into a [`Message`].
-These `Messages` are then processed and placed into a resource (or a component) that we can then read and use for setting up movement, tracking aim, activating abilities, or any other input-based actions you'd like to set up.
-
-Before we cover the general process though, you should know that each device type also has their own unique circumstances to be aware of.
-While input data from every device will follow the same process that is covered on this page, you should read each devices' page to see how their data is uniquely handled:
-
-- [Keyboard Input](/learn/book/handling-input/keyboard-input)
-- [Mouse Input](/learn/book/handling-input/mouse-input)
-- [Gamepad Input](/learn/book/handling-input/gamepad-input)
-- [Touch Input](/learn/book/handling-input/touch-input)
-
-When you use larger groupings of features (like profiles and collections), all of these devices are enabled in your game by default.
-However we can adjust which ones are enabled by manually enabling their [feature flag].
-If you know that your game will not need touch input (or keyboard and mouse inputs if you're building a mobile game), you can disable these input devices by turning their feature flag off in your project `Cargo.toml` file.
-See the [Selective Feature Use section] on the Compiling Less Code page for more details.
-
-[Selective Feature Use section]: /learn/book/releasing-projects/compiling-less-code/#more-selective-feature-use
+The process for reading and interacting with input data will generally be the same across all devices that Bevy can use.
+When the button on a gamepad or a key on a keyboard gets pressed, Bevy uses [Winit] (via [`bevy_winit`], Bevy's conversion layer for Winit) to initially turn the input into a [`Message`].
+These `Message`s are then processed and placed into a [`ButtonInput`] resource (or a `ButtonInput` component for gamepads) that we can then read and use for setting up movement, tracking aim, activating abilities, or any other input-based actions you'd like to set up.
 
 [Winit]: https://crates.io/crates/winit
 [`bevy_winit`]: https://docs.rs/bevy/latest/bevy/winit/index.html
-[feature flag]: https://docs.rs/bevy/latest/bevy/index.html#feature-list
 
-## Input Messages
-
-Bevy takes input data from a device and converts it into a [`Message`].
-These messages can be [read like any other message], and will have a unique type for each device: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
-Each unique `Message` type will be automatically set up for the enabled devices in your game.
-Bevy will also insert systems in the [`PreUpdate`] schedule to process, store, and eventually clear each `Message` type.
-
-{% callout(type="info") %}
-
-### Using Input Messages
+## Using ButtonInput Versus Input Messages
 
 While receiving input messages is the way that Bevy accesses input data, this doesn't mean that you should use input messages in every scenario.
 
-Input messages are only sent when an input is initially activated and then re-sent periodically if the input is still being activated (i.e. if a button is being pressed down or a joystick is continuously being pushed in a direction).
+Input messages are only sent when an input is initially activated (and can even be re-sent periodically for `KeyboardInput` messages if a keyboard key is being held down).
 Since these messages aren't being received consistently, it's not recommended to use them for logic that needs to be continuously updated, like player movement or updating a player's aim.
 These types of mechanics should instead be accessing the [`ButtonInput` resources] that we'll cover in the next section.
 
@@ -53,7 +27,12 @@ If you do not have some control for dealing with the `repeat` field, your functi
 
 [`ButtonInput` resources]: /learn/book/handling-input/using-input#buttoninput-resources
 
-{% end %}
+## Reading Input Messages
+
+Bevy takes input data from a device and converts it into a [`Message`].
+These messages can be [read like any other message], and will have a unique type for each device: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
+Each unique `Message` type will be automatically set up for the enabled devices in your game.
+Bevy will also insert systems in the [`PreUpdate`] schedule to process, store, and eventually clear each `Message` type.
 
 Accessing input data through messages gives us access to all of the regular functionality that messages provide, including [`MessageReader`], [`MessageWriter`], and [`MessageMutator`].
 
@@ -61,13 +40,13 @@ Accessing input data through messages gives us access to all of the regular func
 // This system reads and prints out all `KeyboardInput` messages.
 fn keyboard_message_reader(keyboard_inputs: MessageReader<KeyboardInput>) {
     for keyboard_input in keyboard_inputs.read() {
-        info!("{:?}", keyboard_input);
+        info!("{keyboard_input:?}");
     }
 }
 // This system writes a new `KeyboardInput` message.
 fn keyboard_message_writer(
     mut keyboard_inputs: MessageWriter<KeyboardInput>,
-    window_query: Single<(Entity, &Window)>,
+    window_query: Single<Entity, With<Window>>,
 ) {
     keyboard_inputs.write(
         KeyboardInput {
@@ -134,7 +113,7 @@ As long as our `if` statement evaluating `KeyCode::Esc` is being evaluated first
 [`MessageWriter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.MessageWriter.html
 [`MessageMutator`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageMutator.html
 
-## ButtonInput Resources
+## Accessing ButtonInput Resources
 
 Once most "button-like" input messages are processed, they're placed into an associated [`ButtonInput`] resource that we can directly access via a system parameter.
 Input data is added to a `ButtonInput` via the same systems that process and clear the input `Message` data.
