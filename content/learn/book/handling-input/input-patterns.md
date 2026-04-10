@@ -50,7 +50,7 @@ struct SetupParameters {
 
 // A system reading input data which will call a `PlaceUnitOnMap` event.
 fn trigger_observer(mouse_input: Res<ButtonInput<MouseButton>>, mut commands: Commands) {
-    if mouse_input.just_pressed(MouseButton::LeftMouseButton) {
+    if mouse_input.just_pressed(MouseButton::Left) {
         commands.trigger(PlaceUnitOnMap);
     }
 }
@@ -124,9 +124,9 @@ fn main() {
         // `jump` if the Space key has just been pressed.
         .add_systems(Update, jump.run_if(input_just_pressed(KeyCode::Space)))
         // Repeat a weapon attack if LeftMouseButton is currently being pressed.
-        .add_systems(Update, weapon_repeated_attack.run_if(input_pressed(MouseButton::LeftMouseButton)))
+        .add_systems(Update, weapon_repeated_attack.run_if(input_pressed(MouseButton::Left)))
         // Unscope the weapon if RightMouseButton has been released.
-        .add_systems(Update, unscope_weapon.run_if(input_just_released(MouseButton::RightMouseButton)))
+        .add_systems(Update, unscope_weapon.run_if(input_just_released(MouseButton::Right)))
         .run();
 }
 ```
