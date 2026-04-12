@@ -342,11 +342,24 @@ of the error and ignores/logs/panics accordingly:
 Encountered an error in system `test_programs::update`: No entities fit the query bevy_ecs::system::query::Query<'_, '_, &bevy_camera::camera::Camera>
 ```
 
-You can set the severity level of any `Result` by calling [`with_severity`] on it:
+You can set the severity level of any `Result` by calling [`with_severity`] or [`map_severity`] on it:
 
 ```rust
-fn update(query: Query<&Camera>) -> Result {
+fn update_with_severity(query: Query<&Camera>) -> Result {
+    // Handle all the error variants with the same severity
     let camera = query.single().with_severity(Severity::Debug)?;
+
+    info!(?camera);
+
+    Ok(())
+}
+
+fn update_map_severity(query: Query<&Camera>) -> Result {
+    // Vary severity by error contents
+    let camera = query.single().map_severity(|e| match e {
+        QuerySingleError::NoEntities(_) => Severity::Ignore,
+        QuerySingleError::MultipleEntities(_) => Severity::Error,
+    })?;
 
     info!(?camera);
 
@@ -358,6 +371,7 @@ This is a common and useful pattern: quickly allowing you to downgrade errors ba
 
 [`Severity`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Severity.html
 [`with_severity`]: https://docs.rs/bevy/latest/bevy/prelude/trait.ResultSeverityExt.html#tymethod.with_severity
+[`map_severity`]: https://docs.rs/bevy/latest/bevy/prelude/trait.ResultSeverityExt.html#tymethod.map_severity
 
 #### Configuring the global error handler
 
