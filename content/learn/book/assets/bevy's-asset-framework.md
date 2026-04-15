@@ -31,7 +31,7 @@ look up the asset they're pointing to, and then use that information to
 do things like "render them" or "determine collisions".
 
 While this explanation serves as an excellent mental model for the core data flow of assets in Bevy,
-there are a few subtleties that are worth getting into in this chapter.
+there are a few subtleties that are worth getting into in this chapter (how to mutate assets and the fact that handles are reference counted).
 
 But before that: let's load our first assets!
 
@@ -44,13 +44,15 @@ But before that: let's load our first assets!
 
 ## The basics of loading assets
 
-The basic approach to loading an asset is pretty simple:
+Loading an asset is pretty simple:
 call `AssetServer::load("bevy_bird.png")`, it gives you a handle to the asset,
 you put that handle inside of the component that needed asset data to control appearance, behavior or sounds.
 
 ```rust
 // Breaking the steps down for clarity
 fn spawn_bevy_bird_verbose(mut commands: Commands, asset_server: Res<AssetServer>) {
+	// AssetServer::load takes a path: the "/" means that we're looking in the "branding" folder
+	// for the file named "bevy_bird_dark.png"
     let handle_to_bevy_bird_image: Handle<Image> = asset_server.load("branding/bevy_bird_dark.png");
 
 	commands.spawn(Sprite {
