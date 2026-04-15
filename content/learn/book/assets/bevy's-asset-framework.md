@@ -12,7 +12,7 @@ status = 'hidden'
 2. They are often very large: multiple megabytes, when typical data-storing components are measured in bytes.
 
 The first point means that we need tools to dynamically load (and unload) them at runtime.
-This is handled by the [`AssetServer`], 
+This is handled by the [`AssetServer`], which handles the surprisingly complex process of turning a path to an asset we want to use into bytes in RAM that we can stick in a Rust struct.
 
 The second point means that we really don't want to be storing multiple copies of the same asset: RAM and VRAM usage is often a critical limitation for game performance.
 In Bevy, the canonical version of every asset of a type `A` is stored in a matching resource: [`Assets<A>`].
@@ -107,17 +107,17 @@ This allows us to change the asset file during testing and see those changes ref
 
 ## Mutating handles vs mutating assets
 
-Understanding the [`Handle<A>`] / [`Assets<A>`] distinction becomes quite important when when you want to mutate assets.
+Understanding the [`Handle<A>`] / [`Assets<A>`] distinction becomes quite important when you want to mutate assets.
 Should you change the handle that your sprite holds, or the asset that the handle points to?
 
-Both appraoches will change what your sprite looks like, and are valid to do, but the effects differ in an important way:
+Both approaches will change what your sprite looks like, and are valid to do, but the effects differ in an important way:
 
 - mutating the handle changes the [`Image`] asset your sprite entity is pointing to
   - this only affects the entity in question
-  - this is analagous to replacing a `&` reference
+  - this is analogous to replacing a `&` reference
 - mutating the asset changes the underlying data that the handle is pointing to
   - this affects *all* entities that point to the same asset
-  - this is analagous to mutating the data that your `&` reference is pointing to
+  - this is analogous to mutating the data that your `&` reference is pointing to
 
 To mutate a handle (90% of cases):
 
@@ -168,7 +168,7 @@ This behavior is quite useful, as it allows you to dynamically spawn and despawn
 that rely on different asset data without holding onto all of their assets forever.
 That would be, in effect, a memory leak.
 
-However, this behavior can be frustrating when trying to pre-load asssets.
+However, this behavior can be frustrating when trying to pre-load assets.
 Loading all of your assets ahead of time simply won't work if you immediately drop the handles.
 Instead, you need to hold onto them somehow.
 Resources can work well for this, as can "zoos" of loaded entities or scenes that you quickly clone into your game as needed.
@@ -180,7 +180,7 @@ Resources can work well for this, as can "zoos" of loaded entities or scenes tha
 
 {% callout(type="warning") %}
 
-Rendering is one of the most important consumers of assets in Bevy: consuming
+Rendering is one of the most important consumers of assets in Bevy: using the images and models that we load to make pretty pixels.
 However, when rendering data, we need to load it into VRAM on the GPU;
 not ordinary RAM on the CPU.
 As a result, Bevy is configured to unload [`RenderAsset`] data from the CPU by default,
