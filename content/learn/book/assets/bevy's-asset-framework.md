@@ -135,15 +135,18 @@ fn swap_player_image(
 To mutate the underlying asset (10% of cases):
 
 ```rust
-fn invert_enemy_image_asset(
-    sprite: Single<&Sprite, With<EnemyToInvert>>,
+fn fade_enemy_image_asset(
+    sprite: Single<&Sprite, With<EnemyToFade>>,
     mut images: ResMut<Assets<Image>>,
 ) {
     if let Some(image) = images.get_mut(&sprite.image) {
         // Every entity using this image will be affected!
-        if let Some(data) = image.data.as_mut() {
-            for byte in data.iter_mut() {
-                *byte = 255 - *byte;
+        for y in 0..image.height() {
+            for x in 0..image.width() {
+                if let Ok(mut color) = image.get_color_at(x, y) {
+                    color.set_alpha(color.alpha() / 2.0);
+                    let _ = image.set_color_at(x, y, color);
+                }
             }
         }
     }
