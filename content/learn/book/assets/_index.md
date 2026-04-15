@@ -15,7 +15,3 @@ level layouts, enemy statistics, or even scripts.
 In game development, these are called **assets.**
 This chapter covers the underlying machinery of assets in Bevy,
 helping you structure your game to work with them effectively.
-
-At the scale of a hobbyist who is just starting out, this is quite simple:
-simply drop files in an `assets` folder.
-The initial [`Bevy's Asset Framework`](./bevy's-asset-framework.md) section of this chapter focus on the basics needed to form a useful mental model and get started with real projects.
