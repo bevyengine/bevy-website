@@ -184,7 +184,7 @@ Most of what we'll cover here can also be found in more depth over in the [Time 
 
 [Time and Timers]: /learn/book/the-game-loop/time-and-timers
 
-### Utilizing Delta Time with Input
+### Using Delta Time to Fix Input
 
 Fixing the discrepancies between frame rate and consistent game systems is a fundamental aspect of game design.
 Games usually don't run at a consistent frame rate, but players do experience a consistent flow of time.
