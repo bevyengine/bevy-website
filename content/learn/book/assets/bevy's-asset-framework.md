@@ -46,9 +46,9 @@ But before that: let's load our first assets!
 
 Loading an asset is pretty simple:
 
-1. Call `AssetServer::load("bevy_bird.png")`
-2. It gives you a handle to the asset,
-3. You put that handle inside of the component that needed asset data to control appearance, behavior or sounds.
+1. Call `AssetServer::load("bevy_bird.png")`.
+2. It will give you a handle to the asset.
+3. Place that handle inside of a component that needs the asset data to control its appearance, behavior, or sounds.
 
 ```rust
 // Breaking the steps down for clarity
