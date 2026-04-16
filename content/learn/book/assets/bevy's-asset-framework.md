@@ -85,8 +85,8 @@ However, this behavior can be overridden by setting the `BEVY_ASSET_ROOT` enviro
 {% end %}
 
 Asset loading is, by default, done asynchronously.
-This means that, while `AssetServer::load("bevy_bird.png")` will give you a [`Handle<Image>`]
-that you can use to set up your [`Sprite`], the program will not block and wait for the image to actually load.
+This means that the program will not block and wait for the image to actually load.
+You can call `AssetServer::load("bevy_bird.png")` and receive a [`Handle<Image>`] that can be used to set up a [`Sprite`], but you might not immediately see the `"bevy_bird.png"` image in your game.
 
 Because of asynchronous loading, using the handles immediately can result in objects not rendering, sounds not playing, etc. Most games handle this by creating a loading screen while their assets load. Bevy is no different! You can check the progress of asset loading using [`AssetServer::load_state`]. This can be used to create a loading screen (or something more sophisticated).
 
