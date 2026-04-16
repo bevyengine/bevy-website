@@ -42,7 +42,7 @@ But before that: let's load our first assets!
 [`Handle<A>`]: https://docs.rs/bevy/latest/bevy/asset/struct.Handle.html
 [`AssetPath`]: https://docs.rs/bevy/latest/bevy/asset/struct.AssetPath.html
 
-## The basics of loading assets
+## The Basics of Loading Assets
 
 Loading an asset is pretty simple:
 
@@ -101,7 +101,7 @@ This allows us to change the asset file during testing and see those changes ref
 [`AssetServer::load_state`]: https://docs.rs/bevy/latest/bevy/asset/struct.AssetServer.html#method.load_state
 [`Handle::id`]: https://docs.rs/bevy/latest/bevy/asset/struct.Handle.html#method.id
 
-## Mutating handles vs mutating assets
+## Mutating Handles vs Mutating Assets
 
 Understanding the [`Handle<A>`] / [`Assets<A>`] distinction becomes quite important when you want to mutate assets.
 Should you change the handle that your sprite holds, or the asset that the handle points to?
@@ -168,7 +168,7 @@ This behavior can be configured by setting [`RenderAssetUsages`] when loading as
 
 {% end %}
 
-## Handles are reference-counted
+## Handles are Reference-Counted
 
 The [`Handle`] type can be thought of as a [smart pointer] with two key properties:
 
