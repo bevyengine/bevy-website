@@ -159,6 +159,23 @@ fn fade_enemy_image_asset(
 
 [`Image`]: https://docs.rs/bevy/latest/bevy/render/texture/struct.Image.html
 
+{% callout(type="warning") %}
+
+Rendering is one of the most important consumers of assets in Bevy: using the images and models that we load to make pretty pixels.
+In order to do so, we need to load it into VRAM on the GPU;
+not ordinary RAM on the CPU.
+As a result, Bevy is configured to unload [`RenderAsset`] data from the CPU by default,
+in order to save significant amounts of RAM.
+
+This can present issues when attempting to mutate asset data,
+as the actual info things like "pixel data" is moved to the GPU, even though the asset remains loaded.
+This behavior can be configured by setting [`RenderAssetUsages`] when loading assets.
+
+[`RenderAsset`]: https://docs.rs/bevy/latest/bevy/render/render_asset/trait.RenderAsset.html
+[`RenderAssetUsages`]: https://docs.rs/bevy/latest/bevy/asset/struct.RenderAssetUsages.html
+
+{% end %}
+
 ## Handles are reference-counted
 
 The [`Handle`] type can be thought of as a [smart pointer] with two key properties:
@@ -184,22 +201,3 @@ A resource storing something like a `HashMap<String, Handle<Image>>` can work we
 [`AssetId`]: https://docs.rs/bevy/latest/bevy/asset/enum.AssetId.html
 [smart pointer]: https://doc.rust-lang.org/book/ch15-00-smart-pointers.html
 [reference-counted]: https://doc.rust-lang.org/std/rc/index.html
-
-{% callout(type="warning") %}
-
-If you are trying and failing to access asset data, but are *confident* that your handles have not been dropped, you may be running into a different gotcha.
-
-Rendering is one of the most important consumers of assets in Bevy: using the images and models that we load to make pretty pixels.
-However, when rendering data, we need to load it into VRAM on the GPU;
-not ordinary RAM on the CPU.
-As a result, Bevy is configured to unload [`RenderAsset`] data from the CPU by default,
-in order to save significant amounts of RAM.
-
-This can make assets look like they have been dropped, when they've in fact been moved to the GPU,
-removing things like "pixel data" while leaving asset metadata behind.
-This behavior can be configured by setting [`RenderAssetUsages`] when loading assets.
-
-[`RenderAsset`]: https://docs.rs/bevy/latest/bevy/render/render_asset/trait.RenderAsset.html
-[`RenderAssetUsages`]: https://docs.rs/bevy/latest/bevy/asset/struct.RenderAssetUsages.html
-
-{% end %}
