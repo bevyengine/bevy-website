@@ -108,12 +108,12 @@ Should you change the handle that your sprite holds, or the asset that the handl
 
 Both approaches will change what your sprite looks like, and are valid to do, but the effects differ in an important way:
 
-- mutating the handle changes the [`Image`] asset your sprite entity is pointing to
-  - this only affects the entity in question
-  - this is analogous to replacing a `&` reference
-- mutating the asset changes the underlying data that the handle is pointing to
-  - this affects *all* entities that point to the same asset
-  - this is analogous to mutating the data that your `&` reference is pointing to
+- mutating the handle changes the [`Image`] asset your sprite entity is pointing to.
+  - this only affects the entity you specify.
+  - you can think of it as replacing one `&` reference with a different `&` reference.
+- mutating the asset changes the underlying data that the handle is pointing to.
+  - this affects *all* entities that point to the same asset.
+  - this is like changing the actual data that a `&` reference is pointing to.
 
 To mutate a handle (90% of cases):
 
