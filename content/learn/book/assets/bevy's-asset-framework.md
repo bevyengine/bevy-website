@@ -160,7 +160,7 @@ As a result, Bevy is configured to unload [`RenderAsset`] data from the CPU by d
 in order to save significant amounts of RAM.
 
 This can present issues when attempting to mutate asset data,
-as the actual info things like "pixel data" is moved to the GPU, even though the asset remains loaded.
+as the actual data (like the pixel data of an image) is moved to the GPU, even though the asset remains loaded.
 This behavior can be configured by setting [`RenderAssetUsages`] when loading assets.
 
 [`RenderAsset`]: https://docs.rs/bevy/latest/bevy/render/render_asset/trait.RenderAsset.html
