@@ -182,7 +182,7 @@ If this causes the number of handles referencing the asset to hit zero, the data
 
 This behavior is quite useful, as it allows you to dynamically spawn and despawn entities
 that rely on different asset data without holding onto all of their assets forever.
-That would be, in effect, a memory leak.
+If unused asset data was never unloaded, it would be, in effect, a memory leak.
 
 However, this behavior needs to be considered when trying to pre-load assets.
 Loading all of your assets ahead of time simply won't work if you immediately drop the handles, since this tells the asset system you don't need the assets anymore!
