@@ -12,7 +12,7 @@ status = 'hidden'
 2. They are often very large: multiple megabytes, when typical data-storing components are measured in bytes.
 
 The first point means that we need tools to dynamically load (and unload) them at runtime.
-This is handled by the [`AssetServer`], which handles the surprisingly complex process of turning a path to an asset we want to use into bytes in RAM that we can stick in a Rust struct.
+This is handled by the [`AssetServer`], which handles the surprisingly complex process of turning a path of an asset we want to use, into usable data in memory.
 
 The second point means that we really don't want to be storing multiple copies of the same asset: RAM and VRAM usage is often a critical limitation for game performance.
 In Bevy, the single, authoritative version of every asset of a type `A` is stored in a matching resource: [`Assets<A>`].
@@ -80,7 +80,7 @@ in the same folder as the `Cargo.toml` of your binary crate.
 When shipping your game, this should be an `assets` folder in the same folder as the final binary.
 
 This behavior is a reasonable choice for most projects.
-However, this behavior can be overridden by setting the `BEVY_ASSET_ROOT` environment variable for your program. 
+However, this behavior can be overridden by setting the `BEVY_ASSET_ROOT` environment variable for your program or setting `AssetPlugin::file_path`.
 
 {% end %}
 
@@ -88,15 +88,7 @@ Asset loading is, by default, done asynchronously.
 This means that, while `AssetServer::load("bevy_bird.png")` will give you a [`Handle<Image>`]
 that you can use to set up your [`Sprite`], the program will not block and wait for the image to actually load.
 
-If your asset is large enough (or you are loading many assets at once),
-this can take long enough for it to be noticeable.
-Objects will look like they "didn't spawn" or look "invisible",
-only for them to suddenly "pop in".
-
-You can check the progress of asset loading using [`AssetServer::load_state`],
-looking up the asset identifier to provide by calling [`Handle::id`].
-As your project grows, you will probably want to use this method to create a loading screen (or something more sophisticated);
-waiting for all of your assets to load in before allowing the player to actually play the game.
+Because of asynchronous loading, using the handles immediately can result in objects not rendering, sounds not playing, etc. Most games handle this by creating a loading screen while their assets load. Bevy is no different! You can check the progress of asset loading using [`AssetServer::load_state`]. This can be used to create a loading screen (or something more sophisticated).
 
 {% callout(type="info") %}
 
@@ -175,8 +167,8 @@ This behavior is quite useful, as it allows you to dynamically spawn and despawn
 that rely on different asset data without holding onto all of their assets forever.
 That would be, in effect, a memory leak.
 
-However, this behavior can be frustrating when trying to pre-load assets.
-Loading all of your assets ahead of time simply won't work if you immediately drop the handles.
+However, this behavior needs to be considered when trying to pre-load assets.
+Loading all of your assets ahead of time simply won't work if you immediately drop the handles, since this tells the asset system you don't need the assets anymore!
 Instead, you need to hold onto them somehow.
 A resource storing something like a `HashMap<String, Handle<Image>>` can work well for this, but some games choose to create a collection of hidden, loaded entities or scenes that they can quickly clone into your game as needed.
 
