@@ -40,19 +40,17 @@ pub fn write_markdown_section(
         let mut list_item_level = 0;
         for event in markdown.by_ref() {
             match event {
-                Event::Start(Tag::Heading(level, _, _)) => {
-                    if level <= heading_level {
+                Event::Start(Tag::Heading(level, _, _))
+                    if level <= heading_level => {
                         // go until next heading
                         break;
                     }
-                }
                 Event::Start(Tag::List(_)) => list_item_level += 1,
                 Event::End(Tag::List(_)) => list_item_level -= 1,
-                Event::End(Tag::Heading(level, _, _)) => {
-                    if level == heading_level {
+                Event::End(Tag::Heading(level, _, _))
+                    if level == heading_level => {
                         println!("!!! end of heading !!!");
                     }
-                }
                 Event::Start(Tag::Link(_, _, _)) => {
                     write!(output, "[")?;
                     continue;
