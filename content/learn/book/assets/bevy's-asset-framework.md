@@ -8,14 +8,14 @@ status = 'hidden'
 
 **Assets** have two defining qualities that shape Bevy's architecture for working with them:
 
-1. Their values are not compiled into the program. Typically, this means the file system on the user's hard drive.
+1. Their values are not compiled into the program. Typically, this means they're stored in the file system on the user's hard drive.
 2. They are often very large: multiple megabytes, when typical data-storing components are measured in bytes.
 
 The first point means that we need tools to dynamically load (and unload) them at runtime.
 This is handled by the [`AssetServer`], which handles the surprisingly complex process of turning a path to an asset we want to use into bytes in RAM that we can stick in a Rust struct.
 
 The second point means that we really don't want to be storing multiple copies of the same asset: RAM and VRAM usage is often a critical limitation for game performance.
-In Bevy, the canonical version of every asset of a type `A` is stored in a matching resource: [`Assets<A>`].
+In Bevy, the single, authoritative version of every asset of a type `A` is stored in a matching resource: [`Assets<A>`].
 Components (like [`Mesh3d`] or [`Sprite`]) which want to reference this data store a [`Handle<A>`],
 which point to this canonical version.
 
@@ -45,20 +45,23 @@ But before that: let's load our first assets!
 ## The basics of loading assets
 
 Loading an asset is pretty simple:
-call `AssetServer::load("bevy_bird.png")`, it gives you a handle to the asset,
-you put that handle inside of the component that needed asset data to control appearance, behavior or sounds.
+
+1. Call `AssetServer::load("bevy_bird.png")`
+2. It gives you a handle to the asset,
+3. You put that handle inside of the component that needed asset data to control appearance, behavior or sounds.
 
 ```rust
 // Breaking the steps down for clarity
 fn spawn_bevy_bird_verbose(mut commands: Commands, asset_server: Res<AssetServer>) {
-	// AssetServer::load takes a path: the "/" means that we're looking in the "branding" folder
-	// for the file named "bevy_bird_dark.png"
+    // AssetServer::load takes a relative path:
+    // we're looking inside the "assets" folder for the "branding" subdirectory,
+    // then looking for the file named "bevy_bird_dark.png"
     let handle_to_bevy_bird_image: Handle<Image> = asset_server.load("branding/bevy_bird_dark.png");
 
-	commands.spawn(Sprite {
-		image: handle_to_bevy_bird_image,
-		..default()
-	});
+    commands.spawn(Sprite {
+        image: handle_to_bevy_bird_image,
+        ..default()
+    });
 }
 
 // In practice, you'd use something more like this
@@ -78,7 +81,6 @@ When shipping your game, this should be an `assets` folder in the same folder as
 
 This behavior is a reasonable choice for most projects.
 However, this behavior can be overridden by setting the `BEVY_ASSET_ROOT` environment variable for your program. 
-You should be careful to only modify this locally, rather than globally, to avoid interfering with other Bevy programs.
 
 {% end %}
 
@@ -129,7 +131,7 @@ fn swap_player_image(
     asset_server: Res<AssetServer>,
 ) {
     // Only this entity's appearance changes;
-	// other sprites are unaffected
+    // other sprites are unaffected
     sprite.image = asset_server.load("new_image.png");
 }
 ```
@@ -176,7 +178,7 @@ That would be, in effect, a memory leak.
 However, this behavior can be frustrating when trying to pre-load assets.
 Loading all of your assets ahead of time simply won't work if you immediately drop the handles.
 Instead, you need to hold onto them somehow.
-Resources can work well for this, as can "zoos" of loaded entities or scenes that you quickly clone into your game as needed.
+A resource storing something like a `HashMap<String, Handle<Image>>` can work well for this, but some games choose to create a collection of hidden, loaded entities or scenes that they can quickly clone into your game as needed.
 
 [`Handle`]: https://docs.rs/bevy/latest/bevy/asset/struct.Handle.html
 [`AssetId`]: https://docs.rs/bevy/latest/bevy/asset/enum.AssetId.html
@@ -185,6 +187,8 @@ Resources can work well for this, as can "zoos" of loaded entities or scenes tha
 
 {% callout(type="warning") %}
 
+If you are trying and failing to access asset data, but are *confident* that your handles have not been dropped, you may be running into a different gotcha.
+
 Rendering is one of the most important consumers of assets in Bevy: using the images and models that we load to make pretty pixels.
 However, when rendering data, we need to load it into VRAM on the GPU;
 not ordinary RAM on the CPU.
@@ -192,7 +196,7 @@ As a result, Bevy is configured to unload [`RenderAsset`] data from the CPU by d
 in order to save significant amounts of RAM.
 
 This can make assets look like they have been dropped, when they've in fact been moved to the GPU,
-leaving only the asset metadata behind.
+removing things like "pixel data" while leaving asset metadata behind.
 This behavior can be configured by setting [`RenderAssetUsages`] when loading assets.
 
 [`RenderAsset`]: https://docs.rs/bevy/latest/bevy/render/render_asset/trait.RenderAsset.html
