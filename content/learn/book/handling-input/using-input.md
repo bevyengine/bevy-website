@@ -5,120 +5,32 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-The process for reading and interacting with input data will generally be the same across all devices that Bevy can use.
-When the button on a gamepad or a key on a keyboard gets pressed, Bevy uses [Winit] (via [`bevy_winit`], Bevy's conversion layer for Winit) to initially turn the input into a [`Message`].
-These `Message`s are then processed and placed into a [`ButtonInput`] resource (or a `ButtonInput` component for gamepads) that we can then read and use for setting up movement, tracking aim, activating abilities, or any other input-based actions you'd like to set up.
+Bevy handles input data the same way for each supported device.
+When a device creates input events (for example, when a button is pressed or the mouse is moved), Bevy will process those events and make them easily available for you to use in your games.
+
+```rust
+fn keyboard_input_system(
+    keyboard_input: Res<ButtonInput<KeyCode>>,
+) {
+    if keyboard_input.just_pressed(KeyCode::KeyA) {
+        info!("'A' was just pressed");
+    }
+}
+```
+
+Bevy uses [Winit] (via [`bevy_winit`], Bevy's conversion layer for Winit) to initially turn the input event into a [`Message`].
+These messages are then processed and placed into a resource that we can read and use for setting up movement, tracking aim, activating abilities, or any other input-based actions you'd like to set up.
 
 [Winit]: https://crates.io/crates/winit
 [`bevy_winit`]: https://docs.rs/bevy/latest/bevy/winit/index.html
 
-## Using ButtonInput Versus Input Messages
-
-While receiving input messages is the way that Bevy accesses input data, this doesn't mean that you should use input messages in every scenario.
-
-Input messages are only sent when an input is initially activated (and can even be re-sent periodically for `KeyboardInput` messages if a keyboard key is being held down).
-Since these messages aren't being received consistently, it's not recommended to use them for logic that needs to be continuously updated, like player movement or updating a player's aim.
-These types of mechanics should instead be accessing the [`ButtonInput` resources] that we'll cover in the next section.
-
-Instead, input messages are best suited for testing and logging input events, tracking text input, and activating systems or logic that don't rely on consistently repeated input.
-
-Additionally, if you do choose to use input messages for some functionality, be wary of the `repeat` field on an input message which indicates that the input is being repeated (such as when a key or button is held down).
-If you do not have some control for dealing with the `repeat` field, your functionality might cancel itself out, or flicker multiple times until `repeat` eventually returns `false`.
-
-[`ButtonInput` resources]: /learn/book/handling-input/using-input#buttoninput-resources
-
-## Reading Input Messages
-
-Bevy takes input data from a device and converts it into a [`Message`].
-These messages can be [read like any other message], and will have a unique type for each device: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
-Each unique `Message` type will be automatically set up for the enabled devices in your game.
-Bevy will also insert systems in the [`PreUpdate`] schedule to process, store, and eventually clear each `Message` type.
-
-Accessing input data through messages gives us access to all of the regular functionality that messages provide, including [`MessageReader`], [`MessageWriter`], and [`MessageMutator`].
-
-```rust
-// This system reads and prints out all `KeyboardInput` messages.
-fn keyboard_message_reader(keyboard_inputs: MessageReader<KeyboardInput>) {
-    for keyboard_input in keyboard_inputs.read() {
-        info!("{keyboard_input:?}");
-    }
-}
-// This system writes a new `KeyboardInput` message.
-fn keyboard_message_writer(
-    mut keyboard_inputs: MessageWriter<KeyboardInput>,
-    window_query: Single<Entity, With<Window>>,
-) {
-    keyboard_inputs.write(
-        KeyboardInput {
-            key_code: KeyCode::W,
-            logical_key: Key::Character("W"),
-            state: ButtonState::Pressed,
-            text: Some("W"),
-            repeat: false,
-            window: window_query.0,
-        }
-    )
-}
-// This system changes the right Ctrl, Alt, and Shift keys to their left versions.
-fn keyboard_message_mutator(mut keyboard_inputs: MessageMutator<KeyboardInput>) {
-    for message in keyboard_inputs.par_read() {
-        if message.key_code == KeyCode::CtrlRight {
-            message.key_code = KeyCode::CtrlLeft
-        }
-        if message.key_code == KeyCode::AltRight {
-            message.key_code == KeyCode::AltLeft
-        }
-        if message.key_code == KeyCode::ShiftRight {
-            message.key_code == KeyCode::ShiftLeft
-        }
-    }
-}
-```
-
-Reading input messages can be beneficial in several situations.
-If we're dealing with multiple types of input data, input messages can allow us to easily order the input data relative to each other within a single frame.
-
-As an example, let's setup a pause game mechanic.
-Using input messages lets us iterate over each input message sent for the `KeyboardInput` message type.
-If we detect that `KeyCode::Esc` is pressed, we'll evaluate whether the game is currently in `GameState::Playing` or `GameState::Paused`.
-Based on this, we'll queue a transition to the opposite `GameState` variant.
-
-```rust
-fn ensure_pause(
-    button_inputs: MessageReader<KeyboardInput>,
-    current_game_state: Res<State<GameState>>,
-    mut next_game_state: ResMut<NextState<GameState>>,
-) {
-    for input in button_inputs.iter() {
-        if input.key_code == KeyCode::Esc && !input.repeat {
-            match current_game_state.get() {
-                GameState::Paused => next_game_state.set(GameState::Playing),
-                GameState::Playing => next_game_state.set(GameState::Paused);
-            }
-        }
-    }
-}
-```
-
-`ensure_pause` is setup as a standalone system, but we could easily place more input-based functionality inside of it.
-As long as our `if` statement evaluating `KeyCode::Esc` is being evaluated first, we've structured it to run before any other input data is handled.
-
-[read like any other message]: /learn/book/control-flow/messages
-
 [`Message`]: https://docs.rs/bevy/latest/bevy/ecs/message/trait.Message.html
-[`PreUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.PreUpdate.html
-[`KeyboardInput`]: https://docs.rs/bevy/latest/bevy/input/keyboard/struct.KeyboardInput.html
-[`MouseButtonInput`]: https://docs.rs/bevy/latest/bevy/input/mouse/struct.MouseButtonInput.html
-[`MessageReader`]: https://docs.rs/bevy/latest/bevy/prelude/struct.MessageReader.html
-[`MessageWriter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.MessageWriter.html
-[`MessageMutator`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageMutator.html
+[`ButtonInput`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html
 
-## Accessing ButtonInput Resources
+## Accessing Button-like Inputs
 
-Once most "button-like" input messages are processed, they're placed into an associated [`ButtonInput`] resource that we can directly access via a system parameter.
-Input data is added to a `ButtonInput` via the same systems that process and clear the input `Message` data.
-These same systems will also clear each registered `ButtonInput` resource every frame.
-However, when `ButtonInput` is cleared, [change detection] is not triggered.
+It's likely that you'll be working with the [`ButtonInput`] resource more frequently than other input resources.
+This is because Bevy stores all "button-like" input data in an input-specific [`ButtonInput`] resource.
 
 {% callout(type="info") %}
 
@@ -129,7 +41,7 @@ When you start looking at each input device, you might wonder what makes an inpu
 It's actually very straightforward.
 To be considered "button-like" in Bevy, the input has to be "press-able".
 This means that Bevy can register the state of the input as either `pressed` or `released`.
-Both of these values are explicitly stored in a [`ButtonState`] enum, which is a part of every "button-like" input `Message` that is sent.
+Both of these values are explicitly stored in a [`ButtonState`] enum, which is recorded as a part of every "button-like" input event.
 
 Something like a joystick can be pressed if the joystick can be "clicked".
 If it can be clicked, then the joytstick button data will be accessible in a `ButtonInput` resource.
@@ -138,8 +50,9 @@ However, the direction you move the joystick in is not "press-able", and therefo
 [`ButtonState`]: https://docs.rs/bevy/latest/bevy/input/enum.ButtonState.html
 {% end %}
 
-Interacting with input data through [`ButtonInput`] provides us with easier access to the state of the button input and gives us more control over how we respond to it.
-For example, accessing a `ButtonInput` resource provides us with a number of methods that will return a `bool` based on if the button [has just been pressed], [is currently being pressed], or [if its just been released].
+We can directly access an input-specific [`ButtonInput`] struct through a system parameter.
+This will provide us with tools that can help us set up the exact situations that our gameplay requires.
+For example, `ButtonInput` provides us with a number of methods that will return a `bool` based on if the button has just been pressed ([`just_pressed`]), is currently being pressed ([`pressed`]), or if its just been released ([`just_released`]).
 
 ```rust
 // This system provides access to KeyCode input data from a `ButtonInput` resource.
@@ -158,30 +71,9 @@ fn keyboard_input_system(
 }
 ```
 
-Additionally, we aren't limited to only accessing one button input at a time.
-We can access mouse input data and keyboard input data at the same time, and use both in our systems if needed.
-
-```rust
-// This system prints when `Ctrl + LeftMouseButton` is pressed.
-fn keyboard_and_mouse_input(
-    keyboard_input: Res<ButtonInput<KeyCode>>,
-    mouse_input: Res<ButtonInput<MouseButton>>
-) {
-    let mouse_click = mouse_input.just_pressed(MouseButton::Left);
-    let keyboard_press = keyboard_input.any_just_pressed([KeyCode::ControlLeft, KeyCode::ControlRight]);
-    
-    if mouse_click && keyboard_press {
-        info!("Just clicked LeftMouseButton and pressed Ctrl!");
-    }
-}
-```
-
-[change detection]: /learn/book/control-flow/change-detection
-
-[`ButtonInput`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html
-[has just been pressed]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_pressed
-[is currently being pressed]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.pressed
-[if its just been released]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_released
+[`pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.pressed
+[`just_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_pressed
+[`just_released`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_released
 
 ### Pressed Versus Just Pressed
 
@@ -288,12 +180,9 @@ fn weapon_attack(
 }
 ```
 
-[`pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.pressed
-[`just_pressed`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_pressed
-[`just_released`]: https://docs.rs/bevy/latest/bevy/input/struct.ButtonInput.html#method.just_released
+### Button Combinations
 
-### ButtonInput Combinations
-
+Additionally, we aren't limited to only accessing one button input at a time.
 We're able to create button combinations by accessing multiple buttons within a given `ButtonInput`.
 Using the [`any_pressed`], [`any_just_pressed`], or [`any_just_released`] methods allow us to establish AND logic for handling combinations.
 Alternatively, we could use the [`all_pressed`], [`all_just_pressed`], and [`all_just_released`] methods and supply a list of button inputs instead.
@@ -341,7 +230,7 @@ fn get_all_pressed_buttons(input: Res<ButtonInput<KeyCode>>) {
 [`Iterator`]: https://doc.rust-lang.org/nightly/core/iter/trait.Iterator.html
 [`ExactSizeIterator`]: https://doc.rust-lang.org/nightly/core/iter/trait.ExactSizeIterator.html
 
-### Resetting ButtonInput
+### Resetting Button Inputs
 
 Since `ButtonInput` is accessed through a `Resource`, we also have the ability to alter this data through a `ResMut` system parameter.
 This can be especially helpful if we want to clear all input from a specific key or button, or even reset all input from the entire device.

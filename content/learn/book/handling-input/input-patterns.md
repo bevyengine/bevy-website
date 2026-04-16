@@ -1,40 +1,30 @@
 +++
-title = "Input Data Patterns"
+title = "Where To Use Input"
 insert_anchor_links = "right"
 [extra]
 weight = 2
 +++
 
-Interacting with input data can be done in many forms.
-This page is meant to illustrate some of the ways you can combine input data with other tools that Bevy provides, along with highlighting some patterns to avoid if possible.
-
-## Reacting To Input
-
-The obvious application of input data is to run systems and update the game based on player input.
-Given that input data is based on using [`Messages`], it only interacts with a small part of the various [control flow] tools that Bevy provides.
-Lets compare handling input data with some other tools that are also used for running systems and updating values in a Bevy game.
+Figuring out where and how to use input data in your game isn't always an obvious process.
+Since Bevy records and interprets input data using [`Messages`], it only interacts with a small part of the various [control flow] tools that Bevy provides.
+This page is will compare using input data in your systems with other tools that Bevy provides, along with highlighting some patterns to avoid if possible.
 
 [control flow]: /learn/book/control-flow
 
 [`Messages`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Messages.html
 
-### Observers Vs Input
+## Observers and Input
 
-[Observers (and the events that trigger them)] might be the first thing that comes to mind when reacting to changes in your game.
-After all, observers will react immediately as opposed to waiting for the input data to update each frame.
-Surely input would be better handled with events and observers rather than collecting `Messages` and moving them into a resource?
+[Observers (and the events that trigger them)] can be a vital tool for controlling the flow of your game.
+They'll react to change immediately and can allow for multiple events to be triggered each frame.
+The strength of observers lies in their flexibility.
+You can combine observers with input data to simplify your systems, allowing you to run some specific functionality based on receiving either input data or in-game logic.
 
-Not quite.
-
-Observers can be triggered multiple times within a single frame.
-If the data causing the observer to trigger isn't kept in check, the tidal wave of resulting logic could massively impact the performance of your game.
-Observers are also sequentially evaluated, while `Messages` can be evaluated and placed into their respective resources concurrently.
-This allows our systems that access `ButtonInput` to run much faster overall than if we were triggering observers individually for each input received.
-
-This isn't to say the you can't use both in your systems.
-If there's some logic that you want to call from both receiving input data and from triggering an event, then combining `ButtonInput` and observers can work for this purpose.
-Take the example below, where we spawn a new unit by triggering an observer.
-Receiving a `LeftMouseButton` input will trigger the observer, but we'll also trigger the observer when we're setting up our app.
+Take the example below, where we're creating a simple unit spawning mechanic.
+In this example, we want to spawn a unit when the game receives input data as well as initially when the game loads up.
+There could be two systems that accomplish these goals separately, but this would be redundant.
+Since our unit spawning mechanic is very simple, it makes more sense to have both input data and in-game logic trigger an observer which will then spawn a unit.
+We've set this example up so that when a `LeftMouseButton` input is received, the observer will trigger, but we'll also trigger the observer when we're initially setting up our app.
 
 ```rust
 // An event that will spawn a new unit.
@@ -70,7 +60,7 @@ world.add_observer(|event: On<PlaceUnitOnMap>, mut commands: Commands) {
 
 [Observers (and the events that trigger them)]: /learn/book/control-flow/events
 
-### Activating One-shot Systems with Input
+## Activating One-shot Systems with Input
 
 Continuing with the observer comparison, directly running one-shot systems with input can skip an entire processing step when compared to triggering an observer.
 If we wanted to use an observer, we would have to:
@@ -97,7 +87,7 @@ fn activate_toggle_weapon_sights(
 }
 ```
 
-### Input System Conditions
+## Running Systems Based on Input
 
 Input data can also be used as a conditional check for deciding when a system should run.
 If the input data is only meant to signal that a system should run (instead of being needed inside the system itself), we can use several built-in functions to check whether a system should run.
@@ -111,6 +101,16 @@ fn main() {
         .run();
 }
 ```
+
+{% callout(type="info") %}
+
+Be aware that tying conditional checks to specific [`KeyCode`]s or [`Key`]s might be convenient in the short-term, but can cause development issues when implementing input-related mechanics or features.
+If you are wanting to implement support for rebinding keys or supporting alternative control schemes, make sure you take into account how these features will affect any conditional checks that you setup to control how or when your systems run.
+
+[`KeyCode`]: https://docs.rs/bevy/latest/bevy/input/keyboard/enum.KeyCode.html
+[`Key`]: https://docs.rs/bevy/latest/bevy/input/keyboard/enum.Key.html
+
+{% end %}
 
 In the above example, [`input_just_pressed`] is a function that will evaluate whether `KeyCode::Space` has just been pressed.
 If it has been pressed, then the `jump` system is ran once in the `Update` schedule.
@@ -158,7 +158,7 @@ fn pause_menu() {
 
 {% callout(type="info") %}
 
-#### Why Use Input System Conditions?
+### Why Use Input System Conditions?
 
 Given that the `run_if` method only requires a `SystemCondition`-satisfying system, you might wonder why we would want to use `input_just_pressed` or `input_just_released` when we could just check for the existence of an input `Message` with [`on_message`] in the first place.
 
@@ -218,3 +218,103 @@ You should also be aware that if a player encounters large frame drops, accounti
 Further modifications to account for these types of situations are beyond the scope of this book, however its something to also be aware of.
 
 ["delta time"]: https://en.wikipedia.org/wiki/Delta_timing
+
+## Accessing Input Through Messages
+
+We've stated before that Bevy accesses input data initially as a `Message` before being processed and then stored in its respected struct.
+While this is the way that Bevy accesses the data, this doesn't mean that you should use input messages in most scenarios.
+
+Input messages are only sent when an input is initially activated (and can even be re-sent periodically for `KeyboardInput` messages if a keyboard key is being held down).
+Since these messages aren't being received consistently, it's not recommended to use them for logic that needs to be continuously updated, like player movement or updating a player's aim.
+These types of mechanics should instead be accessing the [`ButtonInput` resources] that we covered on the previous page.
+
+Instead, input messages are best suited for testing and logging input events, tracking text input, and activating systems or logic that don't rely on consistently repeated input.
+
+Additionally, if you do choose to use input messages for some functionality, be wary of the `repeat` field on an input message which indicates that the input is being repeated (such as when a key or button is held down).
+If you do not have some control for dealing with the `repeat` field, your functionality might cancel itself out, or flicker multiple times until `repeat` eventually returns `false`.
+
+[`ButtonInput` resources]: /learn/book/handling-input/using-input#buttoninput-resources
+
+### Reading Input Messages
+
+Input data `Message`s can be [read like any other message], and will have a unique type for each device: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
+Each unique `Message` type will be automatically set up in your game on launch.
+Bevy will also insert systems in the [`PreUpdate`] schedule to process, store, and eventually clear each `Message` type.
+
+Accessing input data through messages gives us access to all of the regular functionality that messages provide, including [`MessageReader`], [`MessageWriter`], and [`MessageMutator`].
+
+```rust
+// This system reads and prints out all `KeyboardInput` messages.
+fn keyboard_message_reader(keyboard_inputs: MessageReader<KeyboardInput>) {
+    for keyboard_input in keyboard_inputs.read() {
+        info!("{keyboard_input:?}");
+    }
+}
+// This system writes a new `KeyboardInput` message.
+fn keyboard_message_writer(
+    mut keyboard_inputs: MessageWriter<KeyboardInput>,
+    window_query: Single<Entity, With<Window>>,
+) {
+    keyboard_inputs.write(
+        KeyboardInput {
+            key_code: KeyCode::W,
+            logical_key: Key::Character("W"),
+            state: ButtonState::Pressed,
+            text: Some("W"),
+            repeat: false,
+            window: window_query.0,
+        }
+    )
+}
+// This system changes the right Ctrl, Alt, and Shift keys to their left versions.
+fn keyboard_message_mutator(mut keyboard_inputs: MessageMutator<KeyboardInput>) {
+    for message in keyboard_inputs.par_read() {
+        if message.key_code == KeyCode::CtrlRight {
+            message.key_code = KeyCode::CtrlLeft
+        }
+        if message.key_code == KeyCode::AltRight {
+            message.key_code == KeyCode::AltLeft
+        }
+        if message.key_code == KeyCode::ShiftRight {
+            message.key_code == KeyCode::ShiftLeft
+        }
+    }
+}
+```
+
+Reading input messages can be beneficial in several situations.
+If we're dealing with multiple types of input data, input messages can allow us to easily order the input data relative to each other within a single frame.
+
+As an example, let's setup a pause game mechanic.
+Using input messages lets us iterate over each input message sent for the `KeyboardInput` message type.
+If we detect that `KeyCode::Esc` is pressed, we'll evaluate whether the game is currently in `GameState::Playing` or `GameState::Paused`.
+Based on this, we'll queue a transition to the opposite `GameState` variant.
+
+```rust
+fn ensure_pause(
+    button_inputs: MessageReader<KeyboardInput>,
+    current_game_state: Res<State<GameState>>,
+    mut next_game_state: ResMut<NextState<GameState>>,
+) {
+    for input in button_inputs.iter() {
+        if input.key_code == KeyCode::Esc && !input.repeat {
+            match current_game_state.get() {
+                GameState::Paused => next_game_state.set(GameState::Playing),
+                GameState::Playing => next_game_state.set(GameState::Paused);
+            }
+        }
+    }
+}
+```
+
+`ensure_pause` is setup as a standalone system, but we could easily place more input-based functionality inside of it.
+As long as our `if` statement evaluating `KeyCode::Esc` is being evaluated first, we've structured it to run before any other input data is handled.
+
+[read like any other message]: /learn/book/control-flow/messages
+
+[`PreUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.PreUpdate.html
+[`KeyboardInput`]: https://docs.rs/bevy/latest/bevy/input/keyboard/struct.KeyboardInput.html
+[`MouseButtonInput`]: https://docs.rs/bevy/latest/bevy/input/mouse/struct.MouseButtonInput.html
+[`MessageReader`]: https://docs.rs/bevy/latest/bevy/prelude/struct.MessageReader.html
+[`MessageWriter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.MessageWriter.html
+[`MessageMutator`]: https://docs.rs/bevy/latest/bevy/ecs/message/struct.MessageMutator.html
