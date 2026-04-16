@@ -37,7 +37,8 @@ fn validate_node(node: &CommunityNode) -> Result<(), String> {
                         .unwrap()
                         .clone()
                         .with_file_name(file)
-                        .exists() => {
+                        .exists() =>
+                {
                     Err(format!(
                         "{:?}: Profile Picture set to a file, but file not found",
                         member.original_path.as_ref().unwrap()
