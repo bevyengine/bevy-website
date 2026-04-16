@@ -156,8 +156,8 @@ fn fade_enemy_image_asset(
 Rendering is one of the most important consumers of assets in Bevy: using the images and models that we load to make pretty pixels.
 In order to do so, we need to load it into VRAM on the GPU;
 not ordinary RAM on the CPU.
-As a result, Bevy is configured to unload [`RenderAsset`] data from the CPU by default,
-in order to save significant amounts of RAM.
+Because of this, some [`RenderAsset`]s may be configured to unload their CPU data,
+saving significant amounts of RAM.
 
 This can present issues when attempting to mutate asset data,
 as the actual data (like the pixel data of an image) is moved to the GPU, even though the asset remains loaded.
