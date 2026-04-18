@@ -129,16 +129,16 @@ struct Poisoned;
 
 #[derive(Component)]
 struct Life {
-    value: u32
+    value: u32,
 }
 
-fn apply_poison(poisoned: Query<&mut Life, With<Poisoned>>){ 
+fn apply_poison(poisoned: Query<&mut Life, With<Poisoned>>) {
     // The `mut life` tells Rust that we want to mutate the Rust variable
     // and `.iter_mut` tells Bevy that we want to access the query data mutably,
     // rather than downgrading it to a read-only `&Life`
-    for mut life in poisoned.iter_mut(){
+    for mut life in poisoned.iter_mut() {
         // Simply calling life.value -= 1 will underflow!
-        life.value.saturating_sub(1);
+        life.value = life.value.saturating_sub(1);
     }
 }
 ```
@@ -251,7 +251,7 @@ Let's try writing the same simple system in each of the three ways.
 #[derive(Component)]
 struct Life {
     value: u32
-};
+}
 
 fn kill_player_when_dead_query_iter(player_query: Query<(Entity, &Life), With<Player>>, mut commands: Commands) {
     for (player_entity, player_life) in player_query.iter() {
@@ -266,7 +266,7 @@ fn kill_player_when_dead_query_single(player_query: Query<(Entity, &Life), With<
         // We could instead use the ? operator and return an error;
         // see the error handling chapter        
         return;
-    }
+    };
 
     if player_life.value == 0 {
         commands.entity(player_entity).despawn();
