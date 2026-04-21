@@ -5,8 +5,15 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-Bevy handles input data the same way for each supported device.
-When a device creates input events (for example, when a button is pressed or the mouse is moved), Bevy will process those events and make them easily available for you to use in your games.
+When a device emits input events, we need a way to use the data from within those events.
+Everything from the press of a keyboard key to the direction a joystick is being pressed in has to be captured and made available for use in-game.
+While it might seem like we have to handle each device separately, Bevy will automatically setup and update all input data from every supported device.
+
+The process begins at the device itself, with some kind of input event being generated and sent to the computer the device is connected to.
+Then, Bevy uses [Winit] (via [`bevy_winit`], Bevy's conversion layer for Winit) to initially turn that input event into a [`Message`].
+These messages are then processed and placed into a resource that can be read from in order to set up movement, track aim, activate abilities, or build any other input-based actions you'd like to set up.
+
+To actually use input data in our systems, we can access a system parameter (most commonly a [`ButtonInput`] resource) and use the variety of provided methods to integrate player input into our systems.
 
 ```rust
 fn keyboard_input_system(
@@ -18,9 +25,6 @@ fn keyboard_input_system(
 }
 ```
 
-Bevy uses [Winit] (via [`bevy_winit`], Bevy's conversion layer for Winit) to initially turn the input event into a [`Message`].
-These messages are then processed and placed into a resource that we can read and use for setting up movement, tracking aim, activating abilities, or any other input-based actions you'd like to set up.
-
 [Winit]: https://crates.io/crates/winit
 [`bevy_winit`]: https://docs.rs/bevy/latest/bevy/winit/index.html
 
@@ -29,8 +33,19 @@ These messages are then processed and placed into a resource that we can read an
 
 ## Accessing Button-like Inputs
 
-It's likely that you'll be working with the [`ButtonInput`] resource more frequently than other input resources.
-This is because Bevy stores all "button-like" input data in an input-specific [`ButtonInput`] resource.
+Like we mentioned above, it's likely that you'll be working with the [`ButtonInput`] resource more frequently than other input resources.
+This is because Bevy stores all "button-like" input data for a specific device in a [`ButtonInput`] resource.
+Accessing a `ButtonInput` resource will use the same `Res<ButtonInput>` or `ResMut<ButtonInput>` syntax that other resources use, however we have to add another specifier to indicate which `ButtonInput` we're trying to access.
+Ultimately it will look something like this:
+
+```rust
+fn button_input_resource (
+  keyboard_input: Res<ButtonInput<KeyCode>>,
+  mouse_button_input: Res<ButtonInput<MouseButton>>,
+) {
+  ...
+}
+```
 
 {% callout(type="info") %}
 
@@ -50,9 +65,8 @@ However, the direction you move the joystick in is not "press-able", and therefo
 [`ButtonState`]: https://docs.rs/bevy/latest/bevy/input/enum.ButtonState.html
 {% end %}
 
-We can directly access an input-specific [`ButtonInput`] struct through a system parameter.
-This will provide us with tools that can help us set up the exact situations that our gameplay requires.
-For example, `ButtonInput` provides us with a number of methods that will return a `bool` based on if the button has just been pressed ([`just_pressed`]), is currently being pressed ([`pressed`]), or if its just been released ([`just_released`]).
+The [`ButtonInput`] struct provides us with methods which can help us access exact information about the state of a button.
+For example, there are different methods which will return a `bool` based on if the button has just been pressed ([`just_pressed`]), is currently being pressed ([`pressed`]), or if its just been released ([`just_released`]).
 
 ```rust
 // This system provides access to KeyCode input data from a `ButtonInput` resource.
@@ -106,7 +120,7 @@ fn repeated_weapon_attack(
     player_weapon.1.tick(delta_time);
     
     // If LeftMouseButton is pressed and our WeaponAttackInterval has completed, attack.
-    if button_input.pressed(MouseButton::LeftMouseButton) && player_weapon.1.just_finished() {
+    if button_input.pressed(MouseButton::Left) && player_weapon.1.just_finished() {
         player_weapon.0.attack();
     }
 }
@@ -121,7 +135,7 @@ fn weapon_attack(
     button_input: Res<ButtonInput<MouseButton>>,
     mut player_weapon: Single<(&Weapon, &mut WeaponAttackInterval), With<PlayerWeapon>>
 ) {
-    if button_input.just_pressed(MouseButton::LeftMouseButton) {
+    if button_input.just_pressed(MouseButton::Left) {
         // Perform an initial weapon attack.
         player_weapon.0.attack();
         // Create a new the timer within `WeaponAttackInterval` that will run.
@@ -138,7 +152,7 @@ fn cancel_weapon_attack_timer(
     button_input: Res<ButtonInput<MouseButton>>,
     mut player_weapon: Single<&mut WeaponAttackInterval, With<PlayerWeapon>>
 ) {
-    if button_input.just_released(MouseButton::LeftMouseButton) {
+    if button_input.just_released(MouseButton::Left) {
         player_weapon.0.set_mode(TimerMode::Once);
     }
 }
@@ -152,6 +166,7 @@ fn weapon_attack(
     mut player_weapon: Single<(&Weapon, &mut WeaponAttackInterval), With<PlayerWeapon>>,
     time: Res<Time>,
 ) {
+    // Ensure that our timer runs consistently by using `delta_time`.
     let delta_time = time.delta();
     
     // Check the state of the WeaponAttackInterval timer if it's active.
@@ -160,21 +175,21 @@ fn weapon_attack(
         player_weapon.1.tick(delta_time);
     }
     
-    // The initial LeftMouseButton press.
-    if button_input.just_pressed(MouseButton::LeftMouseButton) {
+    // The initial Left MouseButton press.
+    if button_input.just_pressed(MouseButton::Left) {
         // Perform an initial weapon attack.
         player_weapon.0.attack();
-        // Create a new the timer within `WeaponAttackInterval` that will run.
+        // Create a new timer within `WeaponAttackInterval`.
         player_weapon.1.0 = Timer::from_seconds(1.5, TimerMode::Repeating);
     }
     
-    // If LeftMouseButton is pressed and our WeaponAttackInterval has completed, attack.
-    if button_input.pressed(MouseButton::LeftMouseButton) && player_weapon.1.just_finished() {
+    // If Left MouseButton is pressed and our WeaponAttackInterval has completed, attack.
+    if button_input.pressed(MouseButton::Left) && player_weapon.1.just_finished() {
         player_weapon.0.attack();
     }
     
-    // If LeftMouseButton was released, switch the timer mode to expire.
-    if button_input.just_released(MouseButton::LeftMouseButton) {
+    // If Left MouseButton was released, switch the timer mode to expire.
+    if button_input.just_released(MouseButton::Left) {
         player_weapon.1.set_mode(TimerMode::Once);
     }
 }
@@ -232,7 +247,7 @@ fn get_all_pressed_buttons(input: Res<ButtonInput<KeyCode>>) {
 
 ### Resetting Button Inputs
 
-Since `ButtonInput` is accessed through a `Resource`, we also have the ability to alter this data through a `ResMut` system parameter.
+Since `ButtonInput` is accessed as a `Resource`, we also have the ability to alter its data through a `ResMut` system parameter.
 This can be especially helpful if we want to clear all input from a specific key or button, or even reset all input from the entire device.
 The [`clear`], [`clear_just_pressed`], and [`clear_just_released`] methods allow us to remove the current state of a button input.
 For example, if we use `clear_just_pressed` on a button input, we won't receive a `true` value from calling `just_pressed` on that button input until a new button press occurs.
@@ -246,7 +261,7 @@ fn clear_a_mouse_click(mut mouse_clicks: ResMut<ButtonInput<MouseButton>>) {
 }
 ```
 
-Additionally, if we want to go one step further and completely reset a button state, we have the [`reset`] and [`reset_all`] methods which will completely reset the state of either a single button or all buttons.
+If we want to go one step further, we also have the [`reset`] and [`reset_all`] methods which will completely reset the state of either a single button or all buttons.
 
 ```rust
 // Reset all MouseButton states.
@@ -257,7 +272,7 @@ fn clear_all_mouse_clicks(mut mouse_clicks: ResMut<ButtonInput<MouseButton>>) {
 }
 ```
 
-Finally, we also have the [`release`] and [`release_all`] methods which will register a release event for either a single button, or for all buttons.
+Finally, we also have the [`release`] and [`release_all`] methods which will register a release event.
 `release` allows you to generate a release event for a specific button, while `release_all` will create release events for every button on the device.
 These methods can be helpful in situations where the player continuously holding a button press would cause issues for your game.
 
@@ -267,9 +282,9 @@ These methods can be helpful in situations where the player continuously holding
 struct SingleTriggerEvent;
 
 fn only_trigger_once(mut input: ResMut<ButtonInput<MouseButton>>, mut commands: Commands) {
-    if input.just_pressed(MouseButton::LeftMouseButton) {
-        // As soon as `LeftMouseButton` is pressed, release it.
-        input.release(MouseButton::LeftMouseButton);
+    if input.just_pressed(MouseButton::Left) {
+        // As soon as Left MouseButton is pressed, release it.
+        input.release(MouseButton::Left);
         commands.trigger(SingleTriggerEvent);
     }
 }

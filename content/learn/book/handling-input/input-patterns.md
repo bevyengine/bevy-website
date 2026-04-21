@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 weight = 2
 +++
 
-Figuring out where and how to use input data in your game isn't always an obvious process.
+Figuring out where and how to use input data in your game isn't always a straightforward process.
 Since Bevy records and interprets input data using [`Messages`], it only interacts with a small part of the various [control flow] tools that Bevy provides.
 This page is will compare using input data in your systems with other tools that Bevy provides, along with highlighting some patterns to avoid if possible.
 
@@ -73,7 +73,7 @@ If we wanted to use an observer, we would have to:
 If instead we run the one-shot system based on input alone, we'll simplify our systems by removing a redundant step.
 Toggling UI boxes, initiating interactions with NPC characters, and adding a new player when a controller is connected are all situations where one-shot systems could be triggered by input directly.
 
-We can see this in the example below, where we're running a `toggle_weapon_sights` system whenever the `RightMouseButton` is pressed.
+We can see this in the example below, where we're running a `toggle_weapon_sights` system whenever the `MouseButton::Right` is pressed.
 
 ```rust
 // This system will read input events from `MouseButtonInput`.
@@ -89,7 +89,7 @@ fn activate_toggle_weapon_sights(
 
 ## Running Systems Based on Input
 
-Input data can also be used as a conditional check for deciding when a system should run.
+Input data can also be used as a conditional check for deciding if a system should run.
 If the input data is only meant to signal that a system should run (instead of being needed inside the system itself), we can use several built-in functions to check whether a system should run.
 These functions will return a boolean based on the state of a specific input button, and require us to pass in a type that can be accessed from a `ButtonInput` type.
 
@@ -164,7 +164,7 @@ Given that the `run_if` method only requires a `SystemCondition`-satisfying syst
 
 `on_message` only checks for the existence of a new message.
 It doesn't allow us to see the potential state of that message.
-On the other hand, our input systems do allow us to explicitly check the state of the message, which will almost always be the preferred way of using input data for conditionally running systems.
+On the other hand, our input system conditions do allow us to explicitly check the state of the message, which will almost always be the preferred way of using input data for conditionally running systems.
 
 [`on_message`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/fn.on_message.html
 
@@ -178,7 +178,7 @@ On the other hand, our input systems do allow us to explicitly check the state o
 ## Input & Time
 
 Input data can be accessed every frame, which means that any changes we make based on input data will be applied every frame.
-This isn't an issue for one-shot logic, but if we have some functionality that repeats and needs to be consistent across the player's real-time experience, we begin to run into issues.
+This isn't an issue for one-shot logic, but if we have some functionality that repeats and needs to repeat consistently across the player's real-time experience, we begin to run into issues.
 
 Most of what we'll cover here can also be found in more depth over in the [Time and Timers] page within The Game Loop chapter, so if there are concepts that aren't making sense or you just want to read more, be sure to check that page out as well.
 
@@ -186,8 +186,8 @@ Most of what we'll cover here can also be found in more depth over in the [Time 
 
 ### Using Delta Time to Fix Input
 
-Fixing the discrepancies between frame rate and consistent game systems is a fundamental aspect of game design.
-Games usually don't run at a consistent frame rate, but players do experience a consistent flow of time.
+Fixing the discrepancies between the rate a game can render each frame and game systems that run at a consistent rate is a fundamental component of good game design.
+Games won't usually run at a consistent frame rate, but players do experience a consistent flow of time.
 If what the game displays and what the player is perceiving don't align, it can lead to an unexpected (and likely negative) experience.
 To reconcile these, we use ["delta time"].
 
@@ -225,7 +225,7 @@ We've stated before that Bevy accesses input data initially as a `Message` befor
 While this is the way that Bevy accesses the data, this doesn't mean that you should use input messages in most scenarios.
 
 Input messages are only sent when an input is initially activated (and can even be re-sent periodically for `KeyboardInput` messages if a keyboard key is being held down).
-Since these messages aren't being received consistently, it's not recommended to use them for logic that needs to be continuously updated, like player movement or updating a player's aim.
+Since these messages aren't being received consistently, it's not recommended to use them for logic that needs to be continuously updated, like calculating player movement or updating a player's aim.
 These types of mechanics should instead be accessing the [`ButtonInput` resources] that we covered on the previous page.
 
 Instead, input messages are best suited for testing and logging input events, tracking text input, and activating systems or logic that don't rely on consistently repeated input.
@@ -237,7 +237,7 @@ If you do not have some control for dealing with the `repeat` field, your functi
 
 ### Reading Input Messages
 
-Input data `Message`s can be [read like any other message], and will have a unique type for each device: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
+Input `Message`s can be [read like any other message], and will have a unique type for each device: [`KeyboardInput`] for keyboards, [`MouseButtonInput`] for mouse button presses, and so on for each input type.
 Each unique `Message` type will be automatically set up in your game on launch.
 Bevy will also insert systems in the [`PreUpdate`] schedule to process, store, and eventually clear each `Message` type.
 
