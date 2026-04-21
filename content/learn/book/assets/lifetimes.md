@@ -194,22 +194,10 @@ struct EnemyAssets {
 }
 ```
 
-How does this help us? Well now we can change our implementation of `EnemyAssets::is_loaded`:
-
-```rust
-impl EnemyAssets {
-    fn is_loaded(&self, asset_server: &AssetServer) -> bool {
-        let mut is_loaded = true;
-        self.visit_dependencies(&mut |asset_id| {
-            is_loaded = is_loaded && asset_server.is_loaded(asset_id);
-        });
-        is_loaded
-    }
-}
-```
-
-Now as long as we annotate all handles (and other fields) with `#[dependency]`,
-`EnemyAssets::is_loaded` will not get out of sync with the handles.
+How does this help us? Well now we entirely replace our `enemy_assets.is_loaded()` method, with just
+`asset_server.are_dependencies_loaded(&enemy_assets)`. As long as we annotate all handles (and
+fields containing handles) with `#[dependency]`, this call will immediately tell us whether all our
+assets are loaded or not!
 
 [`TimerMode::Repeating`]: https://docs.rs/bevy/latest/bevy/prelude/enum.TimerMode.html#variant.Repeating
 [`Sprite`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Sprite.html
