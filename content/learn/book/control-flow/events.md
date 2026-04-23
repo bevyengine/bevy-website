@@ -118,8 +118,8 @@ world.add_observer(|event: On<A>, mut commands: Commands| {
 
 ### Conditionally Triggering Observers
 
-The [Skipping Systems page] introduced conditional checks that can be used to control when a system should run.
-Observers can also be controlled with conditional checks using a similar [`.run_if`] pattern.
+The [Skipping Systems page] introduced run conditions, which can be used to control when a system should run.
+These work for observers too!
 `.run_if` can be used when you create your observer, as we can see in the example below:
 
 ```rust
