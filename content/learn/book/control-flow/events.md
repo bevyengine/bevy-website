@@ -116,6 +116,47 @@ world.add_observer(|event: On<A>, mut commands: Commands| {
 
 [`Component`]: https://docs.rs/bevy/latest/bevy/prelude/trait.Component.html
 
+### Conditionally Triggering Observers
+
+The [Skipping Systems page] introduced run conditions, which can be used to control when a system should run.
+These work for observers too!
+`.run_if` can be used when you create your observer, as we can see in the example below:
+
+```rust
+#[derive(Resource)]
+struct GameActive(bool);
+
+// Global Observer
+app.add_observer(
+    on_damage.run_if(|paused: Res<GamePaused>| !paused.0)
+);
+
+// Entity Observer
+commands.spawn(Enemy).observe(
+    on_hit.run_if(|paused: Res<GamePaused>| !paused.0)
+);
+
+// Builder Pattern
+world.spawn(
+    Observer::new(DamageEvent)
+        .with_entity(Enemy)
+        .run_if(|paused: Res<GamePaused>| !paused.0)
+);
+```
+
+We also have the ability to chain multiple `.run_if` conditions together, although be aware that only `AND` logic can be established by using multiple `.run_if` conditions.
+
+```rust
+// Multiple conditions can be chained (AND semantics)
+world.add_observer(
+    on_damage
+        .run_if(|paused: Res<GamePaused>| !paused.0)
+        .run_if(resource_exists::<Player>)
+);
+```
+
+[`.run_if`]: https://docs.rs/bevy/latest/bevy/ecs/observer/struct.Observer.html#method.run_if
+
 ## Event Triggers
 
 Every `Event` requires a [`Trigger`], represented by default with the `On<Event>` syntax. It's best to think of a `Trigger` as the call which activates the `Event`, hence why we use `On`: our code will run `On` our `Event`.
