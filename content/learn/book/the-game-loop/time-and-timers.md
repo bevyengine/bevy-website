@@ -329,3 +329,27 @@ within a single frame, or spawn an async task which you periodically poll for co
 [`Duration`]: https://doc.rust-lang.org/std/time/struct.Duration.html
 [relationship]: ../storing-data/relations.md
 [`on_timer`]: https://docs.rs/bevy/latest/bevy/time/common_conditions/fn.on_timer.html
+
+## Delaying Commands
+
+When developing your game, you might encounter some functionality that you'll want to run at a later point.
+Using [`Commands`] would work for delaying the functionality until after the end of the system, but what if you need to delay it for a particular number of seconds?
+Fortunately we have [`DelayedCommands`], a wrapper over the regular `Commands` struct which will store a queue of commands that will be applied after a specified delay.
+
+Using `DelayedCommands` will look very similar to using the regular `Commands`, although we have to insert the [`.delayed`] method and an amount of time to delay in between our `Commands` struct and the command we want to execute.
+
+```rust
+fn delayed_spawn(mut commands: Commands) {
+    commands.delayed().secs(1.0).spawn(DummyComponent);
+}
+```
+
+`DelayedCommands` can be set using either seconds (using [`.secs`]) or a duration (using [`.duration`]), much like `Timer`s and `Stopwatch`s can.
+However, instead of needing to manually tick our `DelayedCommands`, Bevy will automatically tick them in a system ran in the `PreUpdate` schedule.
+All we have to do is provide the amount of time to delay our command by, and Bevy will handle the rest.
+
+[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Commands.html
+[`DelayedCommands`]: https://docs.rs/bevy/latest/bevy/time/delayed_commands/struct.DelayedCommands.html
+[`.delayed`]: https://docs.rs/bevy/latest/bevy/time/delayed_commands/trait.DelayedCommandsExt.html#tymethod.delayed
+[`.secs`]: https://docs.rs/bevy/latest/bevy/time/struct.DelayedCommands.html#method.secs
+[`.duration`]: https://docs.rs/bevy/latest/bevy/time/struct.DelayedCommands.html#method.duration
