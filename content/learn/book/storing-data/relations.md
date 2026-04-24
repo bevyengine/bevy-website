@@ -214,3 +214,32 @@ Now that we've defined our new relation, we can start using it!
 Remember in the previous sections all of the various methods for adding children?
 Well, those methods are just special cases of more general ones.
 Instead of `add_children()`, you could use `add_related::<ContainedBy>()`, and instead of `Children::spawn()` you can call `Contents::spawn()`.
+
+### Defining Self-Relationships
+
+As your game develops further, you might find that there are cases where you want a relationship between an `Entity` and _itself_.
+Maybe your game is inspired by JRPGs and you want to include the player's character in a custom `Party` relationship collection, or perhaps the enemy boss should include themselves in a `EnemyCombatants` relationship collection.
+However you wish to implement it, including an `Entity` in a relationship collection that the same `Entity` owns can potentially help simplify the logic required to build your game.
+
+However, Bevy does not allow this by default: attempting to create a relationship between an `Entity` and itself will simply remove the relationship component from the `Entity` and a warning will be logged.
+To get around the default behavior, we have to include the `allow_self_referential` attribute when defining our relationship struct:
+
+```rust
+#[derive(Component)]
+#[relationship(relationship_target = PeopleILike, allow_self_referential)]
+pub struct LikedBy(pub Entity);
+
+#[derive(Component)]
+#[relationship_target(relationship = LikedBy)]
+pub struct PeopleILike(Vec<Entity>);
+```
+
+The `allow_self_referential` attribute will set an internal bool value to `true`, which will allow the relationship to point to its own `Entity`.
+Now if we want to create a new `Entity` with our self-relationship, the setup can be as simple as this:
+
+```rust
+// Create an empty Entity.
+let entity = world.spawn_empty().id();
+// Insert a LikedBy relationship on the Entity pointing towards itself.
+world.entity_mut(entity).insert(LikedBy(entity));
+```
