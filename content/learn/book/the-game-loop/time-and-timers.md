@@ -333,7 +333,7 @@ within a single frame, or spawn an async task which you periodically poll for co
 ## Delaying Commands
 
 When developing your game, you might encounter some functionality that you'll want to run at a later point.
-Using [`Commands`] would work for delaying the functionality until the end of a schedule, but what if you need to delay even further?
+Using [`Commands`] would work for delaying the functionality until after the end of the system, but what if you need to delay it for a particular number of seconds?
 Fortunately we have [`DelayedCommands`], a wrapper over the regular `Commands` struct which will store a queue of commands that will be applied after a specified delay.
 
 Using `DelayedCommands` will look very similar to using the regular `Commands`, although we have to insert the [`.delayed`] method and an amount of time to delay in between our `Commands` struct and the command we want to execute.
