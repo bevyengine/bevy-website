@@ -91,7 +91,7 @@ Entities are usually spawned using [Commands](../control-flow/commands), which q
 ## The S: Systems
 
 Systems interact with and update the data in the ECS.
-Each system is ran every frame by default, and repeats in a loop (specifically, in a [Schedule](../the-game-loop/schedules)).
+Each system is run every frame by default, and repeats in a loop (specifically, in a [Schedule](../the-game-loop/schedules)).
 In Bevy, systems are "just Rust functions".
 These can fetch data from the ECS, make updates, call external APIs, and anything else that a function can do.
 

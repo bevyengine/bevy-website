@@ -67,7 +67,7 @@ fn hook_function(world: DeferredWorld, component_hook: HookContext) {
 }
 ```
 
-By deriving the `component` attribute on `MyComponent` and pointing to the function that should be run when `MyComponent` is modified, we can ensure that our lifecycle event is ran every time `MyComponent` is added.
+By deriving the `component` attribute on `MyComponent` and pointing to the function that should be run when `MyComponent` is modified, we can ensure that our lifecycle event is run every time `MyComponent` is added.
 Using an attribute can also be further extended through closures if we want to avoid repeating similar code:
 
 ```rust

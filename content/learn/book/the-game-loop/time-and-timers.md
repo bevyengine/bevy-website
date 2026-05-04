@@ -345,7 +345,7 @@ fn delayed_spawn(mut commands: Commands) {
 ```
 
 `DelayedCommands` can be set using either seconds (using [`.secs`]) or a duration (using [`.duration`]), much like `Timer`s and `Stopwatch`s can.
-However, instead of needing to manually tick our `DelayedCommands`, Bevy will automatically tick them in a system ran in the `PreUpdate` schedule.
+However, instead of needing to manually tick our `DelayedCommands`, Bevy will automatically tick them in a system run in the `PreUpdate` schedule.
 All we have to do is provide the amount of time to delay our command by, and Bevy will handle the rest.
 
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Commands.html
