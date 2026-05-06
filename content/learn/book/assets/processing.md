@@ -11,14 +11,15 @@ the internet, from your artists, etc), and the "processed", game-ready assets. F
 these are the same thing - you just ship whatever asset files you get. However, some assets need to
 be converted into a form that is more appropriate for use in a game.
 
-This is what asset processing was created to do. When enabled, assets in your `assets` folder are
-automatically processed by the registered processors to produce the game-ready versions of assets.
-Your game will automatically use the processed assets (without needing to change anything else).
-
 As an example, using an ultra-high resolution texture in your game is (probably) not what you want.
 This increases download sizes, slows down loading speeds, and likely reduces rendering performance.
-Usually, these high-quality versions are compressed, downscaled, etc, before being used in a game.
-This final form is our game-ready version.
+This would be your "raw" file. Usually, these high-quality versions are compressed, downscaled, etc,
+before being used in a game. This final form is our game-ready version.
+
+We can enable **asset processing** to perform this conversion. When enabled, assets in your `assets`
+folder are automatically processed by the registered processors to produce the game-ready versions
+of assets. Your game will automatically use the processed assets (without needing to change anything
+else).
 
 [% callout(type="important") %]
 
@@ -32,7 +33,7 @@ as an **import process**: importing a file could import it as another type entir
 
 {% end %}
 
-To enable asset processing, first set the `AssetPlugin::mode`:
+The first step to enable asset processing is to set the `AssetPlugin::mode` accordingly:
 
 ```rust
 fn main() {
@@ -57,7 +58,7 @@ compress and write them (internally) as the `.basisu` file format.
 
 By default, processed assets are written to `imported_assets/` (as opposed to the "regular" assets
 directory of `assets/`). **Do not** check in the processed assets as to your version control. The
-`imported_assets/` directory *should be totally ephemeral*. You should be able to delete it and Bevy
+`imported_assets/` directory _should be totally ephemeral_. You should be able to delete it and Bevy
 will automatically reprocess the assets. In other words, the "source of truth" for your assets
 during development are those in the `assets/` directory.
 
@@ -67,15 +68,17 @@ game should use!
 
 {% end %}
 
-## Writing your own processors
+## Writing your own Asset Processors
 
 Bevy provides some common processors, but there are plenty of game-specific (or even asset-specific)
-processors that may be needed by users. If you need a processor, you can make one!
+processors that may be needed by users. If you need a processor that Bevy doesn't provide, you can
+make one!
 
-The fundamental trait is the [`Process`] trait. Essentially it takes a `&mut dyn Reader` and writes
-the processed asset to a `&mut dyn Writer`. This is the most flexible (if cumbersome) version of
-this interface. This enables implementations to optimize for all sorts of use cases (for example,
-processing small chunks of the reader to avoid needing to load the entire file into memory).
+The [`Process`] trait is the most low-level trait for asset processing. The [`Process`]
+implementation is given a `&mut dyn Reader` and must write the processed asset to a `&mut dyn Writer`.
+This is the most flexible (if cumbersome) version of this interface. Implementing [`Process`]
+directly can allow you to optimize for all sorts of use cases (for example, processing small chunks
+of the reader to avoid needing to load the entire file into memory).
 
 In practice though, most users just need the simplest sort of processing: load the file, change the
 asset in some way (even maybe changing its type), then save it back out. For this, we have the
@@ -114,7 +117,9 @@ This is exactly the same asset loader as discussed in [`Custom Assets`](custom_a
 
 ### AssetTransformer
 
-This trait takes an [`AssetInput`] type and converts it into an [`AssetOutput`] type.
+This trait takes an [`AssetInput`] type and converts it into an [`AssetOutput`] type. How you do
+this conversion is totally up to you! In the example below, we just call the `NewAssetType::new`
+method with the original asset value:
 
 ```rust
 #[derive(TypePath)]
@@ -185,7 +190,7 @@ Just as with [`AssetLoader`]s, your type needs to be "encoded" somehow, whether 
 whatever else. It may be necessary to create a "serializable" version of your asset. This is
 described in more detail in [`Custom Assets`](custom_assets.md).
 
-## Meta files
+## Meta Files
 
 Throughout the description of our [`LoadTransformAndSave`] implementation, we've skipped over the
 various `Settings` associated types. These allow your processor to expose settings that can change
@@ -222,7 +227,7 @@ As mentioned earlier, we can use **any** processor that has been registered, not
 been registered as a default processor for some file extension. This allows you to create processors
 that target individual assets, rather than all assets of a particular extension.
 
-### "Load" meta files
+### "Load" Meta Files
 
 Meta files can also be used to configure settings of [`AssetLoader`]s during loading rather than
 processing. This also adds a way to "opt out" of processing a particular asset, by specifying that
