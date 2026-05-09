@@ -72,7 +72,7 @@ this can improve dead code detection, reducing binary size.
 Setting `lto = "thin"` for release builds is a good default as it provides performance gains similar to `lto = "fat"` while
 taking substantially less time due to being parallelizable. In Cargo `lto = true` and `lto = "fat"` are the same thing.
 
-By default, release builds will use `lto = false` which is "thin local LTO", performing LTO with the crate.
+By default, release builds will use `lto = false` which is "thin local LTO", performing LTO within the crate.
 This level of LTO is there to offset
 the losses incurred by codegen units above 1. This level of LTO is skipped if codegen units is 1.
 
