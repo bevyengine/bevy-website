@@ -74,7 +74,7 @@ taking substantially less time due to being parallelizable. In Cargo `lto = true
 
 By default, release builds will use `lto = false` which is "thin local LTO", performing LTO within the crate.
 This level of LTO is there to offset
-the losses incurred by codegen units above 1. This level of LTO is skipped if codegen units is 1.
+the losses incurred by codegen units above 1. It is skipped if codegen units is 1.
 
 You may wish to experiment with full/"fat" LTO for final published builds, but be prepared for much longer builds and
 a higher peak memory usage during compilation.
