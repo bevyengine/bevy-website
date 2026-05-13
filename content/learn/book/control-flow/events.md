@@ -105,7 +105,7 @@ world.add_observer(|event: On<DespawnEnemyUnits>, commands: Commands, enemy_unit
 
 In the above example, we've created an `Observer` that will run its `ObserverSystem` when a `DespawnEnemyUnits` event is triggered. Additionally, we've accessed `Commands` and `Query` as parameters to gain access to the data we need. Within the `ObserverSystem`, we use a `for` loop to despawn every `Enemy` entity that is given in the `enemy_units` query.
 
-It is also worth noting that we can trigger an `Event` within an `ObserverSystem`. Instead of triggering immediately (as is the case when using `World::trigger`), triggering an `Event` inside an `Observer` with `Commands::trigger` will run the newly triggered `ObserverSystem` at the end of the `Command` queue. Once all of the other `Observer` commands that are currently in the queue are ran, then the new `ObserverSystem` will be run. Be aware that these events are evaluated *recursively*, and will exit once there are no more events left.
+It is also worth noting that we can trigger an `Event` within an `ObserverSystem`. Instead of triggering immediately (as is the case when using `World::trigger`), triggering an `Event` inside an `Observer` with `Commands::trigger` will run the newly triggered `ObserverSystem` at the end of the `Command` queue. Once all of the other `Observer` commands that are currently in the queue are run, then the new `ObserverSystem` will be run. Be aware that these events are evaluated *recursively*, and will exit once there are no more events left.
 
 ```rust
 // When Event `A` is triggered, it in turn will trigger Event `B`.

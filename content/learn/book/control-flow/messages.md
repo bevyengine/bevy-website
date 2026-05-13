@@ -179,7 +179,7 @@ fn read_scoreboard_update(
 ```
 
 Finally, we can add our systems into their respective schedules.
-Keep in mind that the system which updates our `ScoreboardUpdate` message resource is going to be ran in the `First` schedule, which is the first thing ran on every new frame.
+Keep in mind that the system which updates our `ScoreboardUpdate` message resource is going to be run in the `First` schedule, which is the first thing run on every new frame.
 As a result we'll want to schedule `read_scoreboard_update` *before* `write_scoreboard_update`, but after the `First` schedule completes.
 The `PreUpdate` schedule fits nicely for `read_scoreboard_update`, running before `Update` and well before `PostUpdate` which is where we'll place `write_scoreboard_update`.
 This prevents multiple `ScoreboardUpdate` messages being read at once and allows our gameplay systems to run with a freshly updated `Scoreboard` resource.
@@ -192,7 +192,7 @@ fn main() {
         // The `First` schedule runs before PreUpdate, which allows our messages to be 
         // updated.
         .add_systems(PreUpdate, read_scoreboard_update)
-        // Once all of our gameplay systems ran in Update, then we can accurately write
+        // Once all of our gameplay systems run in Update, then we can accurately write
         // a new ScoreboardUpdate message, which will be updated in the next frame.
         .add_systems(PostUpdate, write_scoreboard_update)
     ;
@@ -392,7 +392,7 @@ fn main() {
 }
 ```
 
-By placing `warn_tick_damage_update` in `Update`, it gets ran every frame. In contrast, `deal_tick_damage_update` is placed in `FixedUpdate`, meaning that it will run at a consistent interval instead of every frame.
+By placing `warn_tick_damage_update` in `Update`, it gets run every frame. In contrast, `deal_tick_damage_update` is placed in `FixedUpdate`, meaning that it will run at a consistent interval instead of every frame.
 
 [`FixedUpdate`]: https://docs.rs/bevy/latest/bevy/prelude/struct.FixedUpdate.html
 [`FixedMain`]: https://docs.rs/bevy/latest/bevy/app/struct.FixedMain.html

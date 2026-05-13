@@ -91,7 +91,7 @@ If you're interested, you can check the [`SystemParam`] page for more details.
 ## Accessing Data In Systems
 
 One of the major benefits of Bevy's system abstraction is that it easily and efficiently ["splits the borrow"] of a `World`.
-When a system is ran, the requested data is automatically fetched from the `World`.
+When a system is run, the requested data is automatically fetched from the `World`.
 Other systems are prevented from accessing the requested data if their access would violate the rules of the borrow checker.
 The prime directive of Rust still applies: accessing `World` data can be mutable *or* shared, but never both at once.
 
@@ -183,7 +183,7 @@ See the section on [local system state] for more details.
 
 ## Running Systems In Schedules
 
-Systems are usually repeatedly ran throughout the life of your application.
+Systems are usually repeatedly run throughout the life of your application.
 We are able to control when systems run and how systems are ordered by placing them into a [`Schedule`].
 The [`App::add_system`] method is the simplest way to do this, allowing us to specify a `System` that we want to insert into a specific `Schedule` running in our application.
 
@@ -244,12 +244,12 @@ fn register_one_shot_systems(mut world: &mut World) {
 
 // System that runs on command.
 fn one_shot_system() {
-    println!("This is a one-shot system that is ran on demand.");
+    println!("This is a one-shot system that is run on demand.");
 }
 
 // System that runs on command and takes a usize input.
 fn one_shot_system_with_input(In(input): In<usize>) {
-    println!("This is a one-shot system ran on demand with input: {}", input);
+    println!("This is a one-shot system run on demand with input: {}", input);
 }
 ```
 
@@ -261,10 +261,10 @@ Any internal state (such as [locals] or [change detection] information) will be 
 ```rust
 fn run_one_shot_systems(mut world: &mut World) {
     // This will print a `local_value: 1` since this is the first time
-    // the system is ran.
+    // the system is run.
     world.run_system_cached(one_shot_system);
     // This will print a `local_value: 2` since this is the second time 
-    // the system is ran, and `local_value` is cached from the first run 
+    // the system is run, and `local_value` is cached from the first run 
     // of the system.
     world.run_system_cached(one_shot_system);
 }
@@ -304,7 +304,7 @@ commands.run_system(SystemId);
 commands.run_system_with(SystemId, SystemInput);
 ```
 
-Note that an entire [`Schedule`] can be ran on demand in much the same way,
+Note that an entire [`Schedule`] can be run on demand in much the same way,
 which can be valuable when trying to evaluate complex blocks of logic in response to specific triggers,
 or at a rate other than "once per frame".
 
@@ -348,7 +348,7 @@ fn exclusive_system(mut world: &mut World) {
     world.register_system(SystemdId);
     // This removes all entities from the World.
     world.clear_entities();
-    // This adds a custom schedule to be ran in the World.
+    // This adds a custom schedule to be run in the World.
     world.add_schedule(MySchedule);
 }
 ```
@@ -357,7 +357,7 @@ Exclusive systems are useful for operations that require making large or unique 
 Spawning large numbers of entities at once is one example of this, as there is no additional overhead incurred from *queueing* these changes like there is when using `Commands`.
 They are also extremely useful for unusually complex game logic or control flow and can be used to immediately run schedules and one-shot systems (including other exclusive systems).
 
-That said, exclusive systems are harder to schedule, both because they prevent any other system from running at the same time and because their scheduling order is ambiguous with any other systems in the same schedule. Remember that all systems in a specific `Schedule` are ran in parallel by default unless explicitly ordered.
+That said, exclusive systems are harder to schedule, both because they prevent any other system from running at the same time and because their scheduling order is ambiguous with any other systems in the same schedule. Remember that all systems in a specific `Schedule` are run in parallel by default unless explicitly ordered.
 
 ## System Input and Output
 

@@ -10,7 +10,7 @@ When we want to make structural changes to our application, we require mutable a
 Since only one system can mutably access the `World` at a time, we need a way to organize that access.
 **Commands** allow us to do just that.
 Each [`Command`] represents an instruction for manipulations to be performed on the world, and when we call a `Command` it gets placed in the **Command Queue**.
-All [`Commands`] in this queue are then ran at a specific time when we're safely able to mutably access the `World`.
+All [`Commands`] in this queue are then run at a specific time when we're safely able to mutably access the `World`.
 
 Many operations in the ECS can *only* be done via exclusive world access, such as:
 
@@ -119,13 +119,13 @@ fn update_system(mut commands: Commands) {
 ```
 
 In the above example, we have two systems: `insert_observer_system` running in the `Startup` schedule, and `update_system` running in the `Update` schedule.
-Since the `Startup` schedule only runs once, the `add_observer()` command is only ran when our application is launched.
-However a `trigger()` command is queued everytime the `Update` schedule runs, meaning that a `trigger()` command is ran every time the `Update` schedule completes.
+Since the `Startup` schedule only runs once, the `add_observer()` command is only run when our application is launched.
+However a `trigger()` command is queued everytime the `Update` schedule runs, meaning that a `trigger()` command is run every time the `Update` schedule completes.
 
 We mentioned above that by default `Commands` are applied at the *end* of a `Schedule`.
 While correct, what really happens is that all of the `Commands` we queue are placed into a special `System` known as [`ApplyDeferred`].
 This system will run at the end of every `Schedule` that has a system which uses `Commands` as a `SystemParameter`.
-Since `ApplyDeferred` is ran after all of systems in a given schedule, all of the changes made by the `ApplyDeferred` system are able to be seen by the systems in other schedules.
+Since `ApplyDeferred` is run after all of systems in a given schedule, all of the changes made by the `ApplyDeferred` system are able to be seen by the systems in other schedules.
 
 In addition, if a system accessing `Commands` is ordered before another system also accessing `Commands` in the same `Schedule`, the second system will always see the effects of `Commands` run in the first system.
 Bevy ensures this occurs by dynamically inserting synchronization points, during which all `Commands` are applied.
@@ -187,8 +187,8 @@ player_commands.insert_if_new((Health(10)));
 ```
 
 Like `Commands`, `EntityCommands` aren't run immediately.
-This means that it is possible for the `Entity` you want to modify to have despawned before the `EntityCommand` can be ran.
-All `EntityCommands` will check whether the `Entity` exists when the `EntityCommand` is ran and will return an error if it doesn't.
+This means that it is possible for the `Entity` you want to modify to have despawned before the `EntityCommand` can be run.
+All `EntityCommands` will check whether the `Entity` exists when the `EntityCommand` is run and will return an error if it doesn't.
 
 [`EntityCommands`]: https://docs.rs/bevy/latest/bevy/prelude/struct.EntityCommands.html
 [`Commands::entity`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Commands.html#method.entity
