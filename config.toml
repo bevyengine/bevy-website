@@ -18,14 +18,16 @@ feed_limit = 1000
 
 taxonomies = [{ name = "news", feed = true }]
 
-[markdown]
-# Whether to do syntax highlighting
-# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
-highlight_code = true
-highlight_theme = "css"
+[markdown.highlighting]
+style = "class"
+# "github-dark" is not actually used by bevy. The field is required to be set
+# and in the future bevy's custom CSS syntax theming will need to be defined 
+# as a vscode theme
+# https://github.com/getzola/zola/issues/3075#issuecomment-4189396022
+theme = "github-dark"
 
 # Load extra syntaxes (e.g. WGSL) for syntax highlighting
-extra_syntaxes_and_themes = ["syntaxes"]
+extra_grammars = ["syntaxes/ron.json"]
 
 [extra]
 # Put all your custom variables here
