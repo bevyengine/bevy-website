@@ -1,3 +1,4 @@
+#![expect(unused_variables)]
 use bevy::prelude::*;
 
 // ANCHOR: hello_plugin

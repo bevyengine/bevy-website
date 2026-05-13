@@ -14,7 +14,7 @@ pub fn check(dir: &Path) -> Result<Vec<PathBuf>> {
     let mut unformatted_files = Vec::new();
 
     visit_dir_md_files(dir, &mut |path| {
-        println!("- {:?}", path);
+        println!("- {path:?}");
 
         let src = fs::read_to_string(path)?;
 
@@ -35,7 +35,7 @@ pub fn check(dir: &Path) -> Result<Vec<PathBuf>> {
 /// Formats the given directory, automatically adding `hide_lines` annotations to code blocks.
 pub fn format(dir: &Path) -> Result<()> {
     visit_dir_md_files(dir, &mut |path| {
-        println!("- {:?}", path);
+        println!("- {path:?}");
 
         let src = fs::read_to_string(path)?;
 
@@ -101,7 +101,7 @@ fn format_file(src: &str) -> Result<String> {
 
         // Pass through non-rust code block contents and contents outside of code blocks.
         if !is_rust {
-            writeln!(&mut contents, "{}", line)?;
+            writeln!(&mut contents, "{line}")?;
             continue;
         }
 

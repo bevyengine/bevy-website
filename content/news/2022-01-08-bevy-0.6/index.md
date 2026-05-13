@@ -13,7 +13,7 @@ image_subtitle_link = ""
 
 Thanks to **170** contributors, **623** pull requests, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.6** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/quick-start/introduction) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out [The Quick Start Guide](/learn/quick-start/introduction) to get started. Bevy is also free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.6**, check out our [0.5 to 0.6 Migration Guide](/learn/migration-guides/0.5-0.6/).
 
@@ -561,7 +561,7 @@ We are also in the process of adding "compressed texture loading", which will su
 
 <div class="release-feature-authors">authors: @DJMcNab, @Ratysz</div>
 
-One of our highest priorities for Bevy ECS is "ergonomics". In the past I have made wild claims that Bevy ECS is the [most ergonomic ECS in existence](https://bevyengine.org/news/introducing-bevy/#ergonomics). We've spent gratuitous amounts of R&D pioneering new API techniques and I believe the results speak for themselves:
+One of our highest priorities for Bevy ECS is "ergonomics". In the past I have made wild claims that Bevy ECS is the [most ergonomic ECS in existence](https://bevy.org/news/introducing-bevy/#ergonomics). We've spent gratuitous amounts of R&D pioneering new API techniques and I believe the results speak for themselves:
 
 ```rust
 // This is a standalone Bevy 0.5 App that adds a simple `gravity` system to the App's schedule
@@ -1012,7 +1012,7 @@ Bevy development continues to pick up steam, and we have no intention to slow do
 
 In the last two Bevy releases we made massive, sweeping changes to core systems. **Bevy 0.5** was "the one where we rewrote Bevy ECS". **Bevy 0.6** was "the one where we rewrote Bevy Render". These massive reworks took time, and as a result held back a bunch of other useful features and bug fixes. They also created pressure to "crunch" and finish big features quickly to unblock releases. Crunching is unhealthy and should be avoided at all costs!
 
-[The Bevy Community](https://bevyengine.org/community/) has reached relative consensus that we should have a more regular, more predictable release schedule. One where large features can't gum up the system.
+[The Bevy Community](https://bevy.org/community/) has reached relative consensus that we should have a more regular, more predictable release schedule. One where large features can't gum up the system.
 
 From now on, we will cut releases _approximately_ once every three months (as an upper bound ... sometimes we might release early if it makes sense). After the end of a release cycle, we will start preparing to cut a release. If there are small tweaks that need to be made or "life happens" ... we will happily postpone releases. But we won't hold releases back for "big ticket" items anymore.
 

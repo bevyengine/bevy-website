@@ -2,7 +2,7 @@
 title = "Release Process"
 insert_anchor_links = "right"
 [extra]
-weight = 3
+weight = 100
 +++
 
 Bevy uses three-months-long development cycles, delimited by a weeks-long rolling release process.
@@ -52,14 +52,15 @@ When making a release, the Maintainers follow these checklists:
 6. Bump version number for all crates, using the "Release" workflow.
    1. Change the commit message to be nicer.
 7. Create tag on GitHub.
-8. Edit GitHub Release. Add links to the `Release announcement` and `Migration Guide`.
+8. Edit [GitHub Release]. Add links to the `Release announcement` and `Migration Guide`.
 9. Bump `latest` tag to most recent release.
+    - `git tag -d latest && git push origin :refs/tags/latest && git tag -f latest && git push origin --tags`
 10. Run the [`update-screenshots` workflow] to update screenshots. *This will block blog post releases (and take ~40 minutes) so do it early*.
 11. Run the [`build-wasm-examples` workflow] to update Wasm examples.
 
 #### Minor Release
 
-1. Release on crates.io using `bash tools/publish.sh`
+1. Release on crates.io using `cargo publish --workspace --no-verify`
 2. Announce on:
     1. HackerNews
     2. Bluesky / Mastodon
@@ -70,7 +71,7 @@ When making a release, the Maintainers follow these checklists:
 
 #### Minor Post-release
 
-1. Bump version number for all crates to next versions, as `0.X-dev`, using the "Post-release version bump" workflow, to ensure properly displayed version for [Dev Docs](https://dev-docs.bevyengine.org/bevy/index.html).
+1. Bump version number for all crates to next versions, as `0.X-dev`, using the "Post-release version bump" workflow, to ensure properly displayed version for [Dev Docs](https://dev-docs.bevy.org/bevy/index.html).
 2. Update Bevy version used for Bevy's website's `learning-code-examples` tool (code example validation and formatting for the learning materials) to latest release.
 
 ### Patch
@@ -79,7 +80,10 @@ When making a release, the Maintainers follow these checklists:
 
 1. Check appropriate milestone.
 2. Close the milestone, open the next one if anything remains and transfer them.
-3. Create a new branch `release-0.X.Y` from the `latest` tag, and cherry pick all PRs from the milestone to the new branch
+3. Create a new branch `release-0.X.Y` from the `latest` tag, and cherry pick all PRs from the milestone to the new branch by running the following `bash` shell script.
+
+To do so, create a `cherrypick_release.sh` file in your `bevy` project, and ensure that it can be executed using `chmod +x release_cherrypick.sh`. Copy-paste the snippet below, then update the `version` variable to the correct tag. Run the script using `./cherrypick_releases.sh`. You may need to resolve merge conflicts; think carefully about whether or not a PR actually needs to be backported before doing so.
+
 ```sh
 version="0.X.Y"
 
@@ -89,27 +93,31 @@ echo
 
 prs=`gh pr list --repo bevyengine/bevy --search "milestone:$version" --state merged --json mergeCommit,mergedAt,title,number --limit 100`
 while read -r commit number title <&3; do
-    echo "PR #$number: $title (https://github.com/bevyengine/bevy/pull/$number)"    
+    echo "PR #$number: $title (https://github.com/bevyengine/bevy/pull/$number)"
     if git cherry-pick $commit; then
       echo
     else
       echo "please resolve conflict then press enter"
       read
     fi
-done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeCommit.oid) \(.number) \(.title)"')
+done 3< <(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeCommit.oid) \(.number) \(.title)"')
 ```
-4. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `patch` for the new version.
+
+Once all merge conflicts are resolved, double check that everything works. Go back and fix the commit responsible for a merge to correct any issues. Then:
+
+1. Bump version number for all crates, using [the Update Command] locally, with `patch` for the new version.
     - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.Y`
-5. Create tag on GitHub.
-6. Edit GitHub Release. Add link to the comparison between this patch and the previous version.
-7. Bump `latest` tag to most recent release.
-8. Run the [`update-screenshots` workflow] to update screenshots.
-9. Run this [`build-wasm-examples` workflow] to update Wasm examples.
+2. Create tag on GitHub.
+3. Edit [GitHub Release]. Add link to the comparison between this patch and the previous version.
+4. Bump `latest` tag to most recent release.
+    - `git tag -d latest && git push origin :refs/tags/latest && git tag -f latest && git push origin --tags`
+5. Run the [`update-screenshots` workflow] to update screenshots.
+6. Run this [`build-wasm-examples` workflow] to update Wasm examples.
 
 #### Patch Release
 
 1. Release on crates.io
-    - `bash tools/publish.sh`
+    - `cargo publish --workspace --no-verify`
 2. Announce on:
     1. Discord: Bevy, #announcements
 
@@ -125,10 +133,11 @@ done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeC
 ```sh
 version="0.X"
 
-git checkout release-$version.0
+git checkout main && git pull
+git checkout release-$version.0 && git pull
 
-# List the last 100 PRs merged in the milestone
-prs=`gh pr list --repo bevyengine/bevy --search "milestone:$version" --state merged --json mergeCommit,mergedAt,title,number --limit 100`
+# List the last 1000 PRs merged in the milestone
+prs=`gh pr list --repo bevyengine/bevy --search "milestone:$version" --state merged --json mergeCommit,mergedAt,title,number --limit 1000`
 while read -r commit number title <&3; do
     # Ignore commits that are already present by sha
     if git merge-base --is-ancestor $commit HEAD; then
@@ -148,15 +157,15 @@ while read -r commit number title <&3; do
     fi
 done 3<<(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.mergeCommit.oid) \(.number) \(.title)"')
 ```
-4. Bump version number for all crates, using [the command from the "Release" workflow] locally, with `rc` for the new version.
+4. Bump version number for all crates, using [the Update Command] locally, with `rc` for the new version.
     - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.0-rc.Y`
 5. Create tag on GitHub.
-6. Edit GitHub Release. Add link to the comparison between this release candidate (rc) and the previous version.
+6. Edit [GitHub Release]. Add link to the comparison between this release candidate (rc) and the previous version.
 
 #### RC Release
 
 1. Release on crates.io
-    - `bash tools/publish.sh`
+    - `cargo publish --workspace --no-verify`
 2. Announce on:
     1. Discord: Bevy, #dev-announcements
 
@@ -172,6 +181,15 @@ do
 done
 ```
 
+## Update Command
+
+This command will update the version of all the published Bevy crates in the workspace:
+
+```
+cargo release <patch|rc> --workspace --no-publish --execute --no-tag --no-confirm --no-push --dependent-version upgrade --exclude ci --exclude errors --exclude bevy_mobile_example --exclude build-wasm-example --exclude no_std_library --exclude auto_register_static --exclude export-content
+```
+
 [`update-screenshots` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/update-screenshots.yml
 [`build-wasm-examples` workflow]: https://github.com/bevyengine/bevy-website/actions/workflows/build-wasm-examples.yml
-[the command from the "Release" workflow]: https://github.com/bevyengine/bevy/blob/main/.github/workflows/release.yml
+[the Update Command]: https://bevy.org/learn/contribute/project-information/release-process/#update-command
+[Github Release]: https://github.com/bevyengine/bevy/releases

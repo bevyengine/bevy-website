@@ -106,7 +106,7 @@ Before we can start work on the Bevy Editor, we need a solid UI implementation. 
 * "Interaction" and "focus" events
 * Translation-friendly. We can't be anglo-centric here
 
-Suggesting other UI frameworks or stacks is out of scope. The Bevy Editor _will be_ built on top of Bevy UI. See the [Introducing Bevy](https://bevyengine.org/news/introducing-bevy/) blog post for my rationale.
+Suggesting other UI frameworks or stacks is out of scope. The Bevy Editor _will be_ built on top of Bevy UI. See the [Introducing Bevy](https://bevy.org/news/introducing-bevy/) blog post for my rationale.
 
 ### [Physically Based Rendering (PBR)](https://github.com/bevyengine/bevy/issues/179)
 

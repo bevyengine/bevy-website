@@ -144,7 +144,7 @@ pub fn generate_release_notes(
         let file =
             std::fs::File::create(&file_path).context(format!("Failed to create {file_path:?}"))?;
 
-        writeln!(&file, "<!-- {} -->", title)?;
+        writeln!(&file, "<!-- {title} -->")?;
         writeln!(
             &file,
             "<!-- https://github.com/bevyengine/bevy/pull/{} -->",
@@ -247,7 +247,7 @@ fn generate_and_open_issue(
     // Check if this issue already exists
     // If it does, we don't want to spam the repo with duplicate issues
     if existing_issue_titles.contains(&issue_title) {
-        println!("Issue already exists for PR #{}: {}", pr_number, title);
+        println!("Issue already exists for PR #{pr_number}: {title}");
         return;
     }
 
@@ -281,19 +281,19 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
 
     if !create_issues {
         println!("Would open issue on GitHub:");
-        println!("Title: {}", issue_title);
-        println!("Body: {}", issue_body);
-        println!("Labels: {:?}\n\n", labels);
+        println!("Title: {issue_title}");
+        println!("Body: {issue_body}");
+        println!("Labels: {labels:?}\n\n");
     } else {
         // Open an issue on the `bevy-website` repo
         let response = client
             .open_issue(BevyRepo::BevyWebsite, &issue_title, &issue_body, labels)
             .unwrap_or_else(|err| {
-                eprintln!("Failed to open issue for PR #{}: {}", pr_number, title);
-                eprintln!("Error: {:?}", err);
+                eprintln!("Failed to open issue for PR #{pr_number}: {title}");
+                eprintln!("Error: {err:?}");
                 std::process::exit(1);
             });
-        println!("Opened issue for PR #{}: {}", pr_number, title);
+        println!("Opened issue for PR #{pr_number}: {title}");
         // Pause between opening issues to avoid getting rate-limited.
         // See https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#pause-between-mutative-requests
         std::thread::sleep(std::time::Duration::from_secs(2));
@@ -307,8 +307,8 @@ In that PR, please mention this issue with the `Fixes #ISSUE_NUMBER` keyphrase s
         client
             .leave_comment(BevyRepo::Bevy, pr_number, &comment)
             .unwrap_or_else(|err| {
-                eprintln!("Failed to leave a comment on PR #{}: {}", pr_number, title);
-                eprintln!("Error: {:?}", err);
+                eprintln!("Failed to leave a comment on PR #{pr_number}: {title}");
+                eprintln!("Error: {err:?}");
                 std::process::exit(1);
             });
     }

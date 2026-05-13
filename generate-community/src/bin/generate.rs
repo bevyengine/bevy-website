@@ -1,4 +1,4 @@
-use rand::{prelude::SliceRandom, thread_rng};
+use rand::{prelude::SliceRandom, rng};
 use serde::Serialize;
 use std::{
     collections::BTreeMap,
@@ -93,6 +93,7 @@ struct FrontMatterMemberExtra {
     mastodon_user: Option<String>,
     mastodon_instance: Option<String>,
     twitter: Option<String>,
+    bluesky: Option<String>,
     instagram: Option<String>,
     itch_io: Option<String>,
     steam_developer: Option<String>,
@@ -122,6 +123,7 @@ impl From<&Member> for FrontMatterMember {
                 mastodon_user: member.mastodon.as_ref().map(|m| m.username.clone()),
                 mastodon_instance: member.mastodon.as_ref().map(|m| m.instance.clone()),
                 twitter: member.twitter.clone(),
+                bluesky: member.bluesky.clone(),
                 instagram: member.instagram.clone(),
                 itch_io: member.itch_io.clone(),
                 steam_developer: member.steam_developer.clone(),
@@ -159,7 +161,7 @@ impl FrontMatterWriter for Member {
             .and_then(|f| f.file_name())
             .map(|f| f.to_string_lossy().replace(".toml", ""))
             .expect("Failed to get file_name");
-        let mut file = File::create(path.join(format!("{}.md", file_name)))?;
+        let mut file = File::create(path.join(format!("{file_name}.md")))?;
         file.write_all(
             format!(
                 r#"+++
@@ -265,7 +267,7 @@ impl FrontMatterWriter for Section {
         }
 
         for members in order_groups.values_mut() {
-            members.shuffle(&mut thread_rng());
+            members.shuffle(&mut rng());
         }
 
         let mut ordered_members = Vec::new();

@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Get current date
         id: date
@@ -45,6 +45,9 @@ jobs:
         run: cd content/donate && ./sync_donors.sh
 
       - name: "Build Website"
+        if: github.repository_owner == 'bevyengine'
+        # When updating to a newer version, remember to also update it
+        # in the contribution guide & readme
         uses: shalzz/zola-deploy-action@v0.19.2
         env:
           BUILD_ONLY: true

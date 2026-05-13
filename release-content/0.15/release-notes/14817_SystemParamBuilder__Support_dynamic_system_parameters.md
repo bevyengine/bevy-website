@@ -1,7 +1,7 @@
 <!-- SystemParamBuilder - Support dynamic system parameters -->
 <!-- https://github.com/bevyengine/bevy/pull/14817 -->
 
-Bevy 0.14 introduced [the `SystemBuilder` type](https://bevyengine.org/news/bevy-0-14/#systembuilder) to allow systems to be created with dynamic queries.
+Bevy 0.14 introduced [the `SystemBuilder` type](https://bevy.org/news/bevy-0-14/#systembuilder) to allow systems to be created with dynamic queries.
 In Bevy 0.15, this has been extended to many more types of system parameters!
 
 The `SystemBuilder` type has been replaced with a `SystemParamBuilder<P>` trait to make it easier to compose builders.

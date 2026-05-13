@@ -1186,11 +1186,11 @@ There are plenty of areas that need more design work or features. For example, I
 
 ### Documentation
 
-Bevy's APIs are still quite unstable, so documentation is spotty. [The Bevy Book](https://bevyengine.org/learn/book/welcome/) only covers relatively mature areas of the engine and the [Rust API Docs](https://docs.rs/bevy) have plenty of gaps. In general I subscribe to the idea of "documentation proportional to stability". As features stabilize and design patterns emerge, we will increase efforts in both of those areas.
+Bevy's APIs are still quite unstable, so documentation is spotty. [The Bevy Book](https://bevy.org/learn/book/welcome/) only covers relatively mature areas of the engine and the [Rust API Docs](https://docs.rs/bevy) have plenty of gaps. In general I subscribe to the idea of "documentation proportional to stability". As features stabilize and design patterns emerge, we will increase efforts in both of those areas.
 
 ## Join the Bevy!
 
-If any of this sounds interesting to you, I encourage you to check out [Bevy on GitHub](https://github.com/bevyengine/bevy), read [The Quick Start Guide](/learn/quick-start/introduction), and [join the Bevy community](https://bevyengine.org/community/). Currently Bevy is 100% built by volunteers, so if you want to help us build the next great game engine, [please reach out](https://discord.com/invite/gMUk5Ph)! We need all the help we can get, especially if you are a:
+If any of this sounds interesting to you, I encourage you to check out [Bevy on GitHub](https://github.com/bevyengine/bevy), read [The Quick Start Guide](/learn/quick-start/introduction), and [join the Bevy community](https://bevy.org/community/). Currently Bevy is 100% built by volunteers, so if you want to help us build the next great game engine, [please reach out](https://discord.com/invite/gMUk5Ph)! We need all the help we can get, especially if you are a:
 
 * <b class="fun-list">Software Developer</b>: check out the [Contributing Code](/learn/quick-start/contributing/code) section of The Bevy Book.
 * <b class="fun-list">Technical Writer</b>: check out the [Contributing Docs](/learn/quick-start/contributing/docs) section of The Bevy Book.

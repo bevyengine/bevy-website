@@ -262,7 +262,7 @@ Each director and officer shall periodically sign a statement that affirms such 
 
 ### 8.8 The Bevy Sponsorship Pledge
 
-Each director that receives money for their work on Bevy must sign and adhere to the Bevy Sponsorship Pledge. A copy is available on the Bevy website: <https://bevyengine.org/sponsorship-pledge>.
+Each director that receives money for their work on Bevy must sign and adhere to the Bevy Sponsorship Pledge. A copy is available on the Bevy website: <https://bevy.org/sponsorship-pledge>.
 
 ## Article 9. Amendments
 

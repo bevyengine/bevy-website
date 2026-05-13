@@ -13,7 +13,7 @@ image_subtitle_link = "https://codeberg.org/rmemr/w3.terrain-texturing"
 
 Thanks to **130** contributors, **461** pull requests, community reviewers, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.8** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.8**, check out our [0.7 to 0.8 Migration Guide](/learn/migration-guides/0.7-0.8/).
 
@@ -580,7 +580,7 @@ commands.spawn_bundle(ColorMesh2dBundle {
 
 Bevy officially only supports Rust as the "one true way to define app logic". We have [very good reasons for this](https://github.com/bevyengine/bevy/issues/114#issuecomment-672397351) and that philosophy likely won't change any time soon. But we _do_ want to provide the tools needed for the community to build 3rd party scripting / modding plugins for their languages of choice.
 
-When we [released Bevy ECS V2](https://bevyengine.org/news/bevy-0-5/#bevy-ecs-v2), we intentionally built our internal ECS storage with these cases in mind. But we didn't expose public APIs that made it possible to interact with ECS data without normal Rust types.
+When we [released Bevy ECS V2](https://bevy.org/news/bevy-0-5/#bevy-ecs-v2), we intentionally built our internal ECS storage with these cases in mind. But we didn't expose public APIs that made it possible to interact with ECS data without normal Rust types.
 
 **Bevy 0.8** adds public "untyped" ECS APIs that enable retrieving [lifetimed pointers](#ecs-lifetimed-pointers) to component and resource data using [`ComponentId`] instead of actual Rust types.
 

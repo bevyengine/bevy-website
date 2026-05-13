@@ -30,10 +30,12 @@ Once again run `cargo run`.
 
 You should hopefully notice two things:
 
-* **A window should pop up**. This is because we now have [`WindowPlugin`], which defines the window interface (but doesn't actually know how to make windows), and [`WinitPlugin`] which uses the [winit library](https://github.com/rust-windowing/winit) to create a window using your OS's native window API.
-* **Your console is now full of "hello" messages**: This is because [`DefaultPlugins`] adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
+- **A window should pop up**.
+  - This is because we now have [`WindowPlugin`], which defines the window interface (but doesn't actually know how to make windows), and [`WinitPlugin`] which uses the [winit library](https://github.com/rust-windowing/winit) to create a window using your OS's native window API.
+- **Your console is now full of "hello" messages**.
+  - This is because [`DefaultPlugins`] adds an "event loop" to our application. Our App's ECS Schedule now runs in a loop once per "frame". We will resolve the console spam in a moment.
 
-## Creating your first plugin
+## Creating Your First Plugin
 
 For better organization, let's move all of our "hello" logic to a plugin. To create a plugin we just need to implement the [`Plugin`] interface. Add the following code to your `main.rs` file:
 
@@ -53,7 +55,7 @@ Try running the app again. It should do exactly what it did before. In the next 
 [`UiPlugin`]: https://docs.rs/bevy/latest/bevy/ui/struct.UiPlugin.html
 [`RenderPlugin`]: https://docs.rs/bevy/latest/bevy/render/struct.RenderPlugin.html
 [`WindowPlugin`]: https://docs.rs/bevy/latest/bevy/window/struct.WindowPlugin.html
-[`WininitPlugin`]: https://docs.rs/bevy/latest/bevy/winit/struct.WinitPlugin.html
+[`WinitPlugin`]: https://docs.rs/bevy/latest/bevy/winit/struct.WinitPlugin.html
 [`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
 [`PluginGroup`]: https://docs.rs/bevy/latest/bevy/app/trait.PluginGroup.html
 [`MinimalPlugins`]: https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html

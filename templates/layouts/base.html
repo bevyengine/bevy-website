@@ -83,11 +83,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:title" content="{{ page_title }}" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://bevyengine.org{{ path }}" />
+    <meta property="og:url" content="https://bevy.org{{ path }}" />
+    {% if page.extra.image %}
     <meta property="og:image"
-          content="https://bevyengine.org/assets/bevy_logo_fill.png" />
+          content="{{ "https://bevy.org" ~ current_path ~ page.extra.image }}" />
+    {% else %}
+    <meta property="og:image"
+          content="https://bevy.org/assets/bevy_logo_fill.png" />
+    {% endif %}
     <meta property="og:description"
-          content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" />
+      {% if page.description %}
+        content="{{ page.description }}"
+      {% elif page.content %}
+        content="{{ page.content | striptags | truncate(length=150) }}"
+      {% else %}
+        content="Bevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!" 
+      {% endif %}
+    />
     <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
     <noscript><style>.js-only { display: none; }</style></noscript>
     <link rel="stylesheet" href="/site.css" />
@@ -100,6 +112,11 @@
 
     <script type="module" src="/search.mjs"></script>
     {% block head_extensions %}{% endblock head_extensions %}
+    <script async src="https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js"></script>
+    <script>
+      window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()
+    </script>
   </head>
   <body>
     <div class="layout">
@@ -169,7 +186,7 @@
                 {{ header_macros::header_item(name="Assets", current_path=current_path) }}
                 {{ header_macros::header_item(name="Examples", current_path=current_path) }}
                 {# <li class="main-menu__entry">
-                <a class="main-menu__link" href="https://merch.bevyengine.org">Merch</a>
+                <a class="main-menu__link" href="https://merch.bevy.org">Merch</a>
               </li> #}
               </ul>
             </div>

@@ -3,12 +3,15 @@ title = "Assets"
 template = "docs.html"
 insert_anchor_links = "right"
 [extra]
-weight = 5
+weight = 15
 status = 'hidden'
 +++
 
-{% todo() %}
+A complete game needs to load and use all sorts of files.
+Most of these are tangible pieces of art that you may be familiar with: sounds, sprites, models, or fonts.
+But the same machinery can be used for more abstract bits of data loaded from disk:
+level layouts, enemy statistics, or even scripts.
 
-* Explain what an asset is.
-* Give a high-level overview of asset loading in Bevy. Make sure to describe how handles work.
-{% end %}
+In game development, these are called **assets.**
+This chapter covers the underlying machinery of assets in Bevy,
+helping you structure your game to work with them effectively.

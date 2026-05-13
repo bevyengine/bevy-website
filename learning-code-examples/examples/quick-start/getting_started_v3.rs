@@ -5,6 +5,7 @@ use bevy::prelude::*;
 struct Person;
 // ANCHOR_END: person_component
 
+#[expect(dead_code)]
 // ANCHOR: name_component
 #[derive(Component)]
 struct Name(String);

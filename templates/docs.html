@@ -16,6 +16,7 @@
 
   <script type="module" src="/optional-helpers.js"></script>
   <script defer src="/highlight-intrapage-link.js"></script>
+  <script defer src="/clipboard.js"></script>
 {% endblock head_extensions %}
 
 {% block mobile_page_menu %}
@@ -130,6 +131,13 @@
               href="https://github.com/bevyengine/bevy-website/edit/main/content/{{ section_or_page.relative_path }}">
             <i class="icon icon--pencil"></i>
             Improve this page
+          </a>
+          <a
+            class="docs-footer__edit"
+            href="https://github.com/bevyengine/bevy-website/issues/new?template=docs.md&title=Issue%20on%20page%20{{ section_or_page.title | urlencode | safe }}"
+          >
+            <i class="icon icon--github"></i>
+            Report issue
           </a>
         </div>
       </div>

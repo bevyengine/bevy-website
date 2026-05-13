@@ -34,6 +34,14 @@ $asset-card-padding: 0.4rem;
     }
   }
 
+  &__blur-overlay {
+    backdrop-filter: blur(16px);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+  }
+
   &__title {
     position: absolute;
     width: 100%;

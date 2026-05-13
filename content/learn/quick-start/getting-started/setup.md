@@ -6,70 +6,79 @@ aliases = ["learn/book/getting-started/setup"]
 weight = 1
 +++
 
-I know you are itching to start making games, but we need to do a _small_ amount of setup first.
+We know you're itching to start making games, but Bevy requires us to do a _small_ amount of setup first.
 
-## Rust Setup
+## Setting Up Your Development Environment
 
-All Bevy app and engine code is written in Rust. This means that before we begin, we need to set up our Rust development environment.
+While all Bevy app and engine code is written in Rust, there are still a number of additional tools we need to configure before we can begin developing.
 
-### Installing Rust
+### Ensuring Rust Is Up To Date
 
 Bevy relies heavily on improvements in the Rust language and compiler.
 As a result, the Minimum Supported Rust Version (MSRV) is "the latest stable release" of Rust.
 
-Install Rust by following the [Rust Getting Started Guide](https://www.rust-lang.org/learn/get-started).
+If you haven't done so already, make sure to install Rust by following the [Rust Getting Started Guide](https://www.rust-lang.org/learn/get-started).
 
-Once this is done, you should have the ```rustc``` compiler and the ```cargo``` build system installed in your path.
+Once this is done, you should have the `rustc` compiler and the `cargo` build system installed in your path.
+
+#### Rust Learning Resources
+
+The goal of this guide is to get started learning Bevy quickly, so it won't serve as a full Rust education.
+If you would like to learn more about the Rust language, check out the following resources:
+
+- [**The Rust Book**]: The best place to learn Rust from scratch.
+- [**Rust by Example**]: Learn Rust by exploring interactive Rust snippets.
+- [**Rustlings**]: Learn Rust through a series of fun and interactive exercises.
+
+[**The Rust Book**]: https://doc.rust-lang.org/book/
+[**Rust by Example**]: https://doc.rust-lang.org/rust-by-example/
+[**Rustlings**]: https://rustlings.rust-lang.org/
 
 ### Installing OS Dependencies
 
 <details>
   <summary>
 
-  #### Linux
+#### Linux
+
   </summary>
 
-  Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/bevy/blob/latest/docs/linux_dependencies.md)
+  Follow the instructions at [Linux Dependencies](https://github.com/bevyengine/bevy/blob/latest/docs/linux_dependencies.md).
 </details>
 
 <details>
   <summary>
 
-  #### Windows
+#### Windows
+
   </summary>
 
-  * Run the [Visual Studio C++ Build Tools installer](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
-  * For easy setup, select the ```Desktop development with C++``` workload in the installer.
-  * For a minimal setup, follow these steps:
+  - Run the [Visual Studio C++ Build Tools installer](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+  - For easy setup, select the `Desktop development with C++` workload in the installer.
+  - For a minimal setup, follow these steps:
       1. In the installer, navigate to `Individual components`
       2. Select the latest `MSVC` for your architecture and version of Windows
       3. Select the latest `Windows SDK` for your version of Windows
       4. Select the `C++ CMake tools` for Windows component
       5. Install the components
+
 </details>
 
 <details>
   <summary>
 
-  #### MacOS
+#### MacOS
+
   </summary>
 
-  Install the Xcode command line tools with `xcode-select --install` or the [Xcode app](https://apps.apple.com/en/app/xcode/id497799835)
+  Install the Xcode command line tools with `xcode-select --install` or the [Xcode app](https://apps.apple.com/en/app/xcode/id497799835).
 </details>
 
 ### Code Editor / IDE
 
-You can use any code editor you want, but we highly recommend one that has a [rust-analyzer](https://github.com/rust-lang/rust-analyzer) plugin. It's still in development, but it already provides top-tier autocomplete and code intelligence. [Visual Studio Code](https://code.visualstudio.com/) has an officially supported [rust-analyzer extension](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+You can use any code editor you want, but we highly recommend one that supports Language Server Protocol in order to use [rust-analyzer](https://github.com/rust-lang/rust-analyzer). [Visual Studio Code](https://code.visualstudio.com/) has an officially supported [rust-analyzer extension](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
 
-### Rust Learning Resources
-
-The goal of this guide is to get started learning Bevy quickly, so it won't serve as a full Rust education. If you would like to learn more about the Rust language, check out the following resources:
-
-* [**The Rust Book**](https://doc.rust-lang.org/book/): the best place to learn Rust from scratch
-* [**Rust by Example**](https://doc.rust-lang.org/rust-by-example/): learn Rust by working through live coding examples
-* [**Rustlings**](https://github.com/rust-lang/rustlings): learn Rust through a series of fun and interactive exercises
-
-## Create a new Bevy Project
+## Create A New Bevy Project
 
 Now we are ready to set up a Bevy project! Bevy is just a normal Rust dependency. You can either add it to an existing Rust project or create a new one. For completeness we will assume you are starting from scratch.
 
@@ -82,9 +91,9 @@ cargo new my_bevy_game
 cd my_bevy_game
 ```
 
-Now run ```cargo run``` to build and run your project. You should see ```Hello, world!``` printed to your terminal. Open the ```my_bevy_game``` folder in your code editor of choice and take some time to look through the files.
+Now run `cargo run` to build and run your project. You should see `Hello, world!` printed to your terminal. Open the `my_bevy_game` folder in your code editor of choice and take some time to look through the files.
 
-```main.rs``` is the entry point of your program:
+`main.rs` is the entry point of your program:
 
 ```rs
 fn main() {
@@ -98,7 +107,7 @@ fn main() {
 [package]
 name = "my_bevy_game"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 ```
@@ -121,28 +130,15 @@ cargo add bevy
   [package]
   name = "my_bevy_game"
   version = "0.1.0"
-  edition = "2021" # this needs to be 2021, or you need to set "resolver=2"
+  edition = "2024"
 
   [dependencies]
-  bevy = "0.15" # make sure this is the latest version
+  bevy = "0.18.1" # make sure this is the latest version
   ```
+
 </details>
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
-
-<details>
-  <summary>
-
-  ### Cargo Workspaces
-  </summary>
-
-  If you are using [Cargo Workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html), you will also need to add the resolver to your Cargo.toml file in the root directory:
-
-  ```toml
-  [workspace]
-  resolver = "2" # Important! wgpu/Bevy needs this!
-  ```
-</details>
 
 ### Compile with Performance Optimizations
 
@@ -189,14 +185,15 @@ You might think to simply develop in release mode instead, but we recommend agai
   # Strip all debugging information from the binary to slightly reduce file size.
   strip = "debuginfo"
   ```
-</details>
 
-When releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
+  When releasing for web, you can pass `--profile wasm-release` to `cargo` instead of `--release`.
+</details>
 
 <details>
   <summary>
 
-  #### Advanced Wasm optimizations (Optional)
+#### Advanced Wasm optimizations (Optional)
+
   </summary>
 
   [Binaryen](https://github.com/WebAssembly/binaryen) is a Wasm compiler toolchain
@@ -225,7 +222,8 @@ This section explains how to speed up iterative compiles: the amount of time it 
 <details>
   <summary>
 
-  #### Dynamic Linking
+#### Dynamic Linking
+
   </summary>
 
   This is the most impactful compilation time decrease!
@@ -256,7 +254,8 @@ This section explains how to speed up iterative compiles: the amount of time it 
 <details>
   <summary>
 
-  #### Alternative Linkers
+#### Alternative Linkers
+
   </summary>
 
   The Rust compiler spends a lot of time in the final "link" step, especially with a massive library like Bevy.
@@ -323,7 +322,8 @@ This section explains how to speed up iterative compiles: the amount of time it 
 <details>
   <summary>
   
-  #### Nightly Rust Compiler
+#### Nightly Rust Compiler
+
   </summary>
 
   This gives access to the latest performance improvements and "unstable" optimizations, including [generic sharing](#generic-sharing) below.
@@ -341,18 +341,21 @@ This section explains how to speed up iterative compiles: the amount of time it 
 <details>
   <summary>
   
-  #### Cranelift
+#### Cranelift
+
   </summary>
 
-  This uses a new nightly-only codegen that is about 30% faster at compiling than LLVM. 
+  This uses a new nightly-only codegen that is about 30% faster at compiling than LLVM.
   It currently works best on Linux.
 
   To install cranelift, run the following.
+
   ```
   rustup component add rustc-codegen-cranelift-preview --toolchain nightly
   ```
 
   To activate it for your project, add the following to your `.cargo/config.toml`.
+
   ```toml
   [unstable]
   codegen-backend = true
@@ -368,7 +371,7 @@ This section explains how to speed up iterative compiles: the amount of time it 
   details on other ways in which cranelift can be enabled. The installation process for Windows is a bit more involved. Consult the linked documentation for help.
   MacOS builds can currently crash on Bevy applications, so you should still wait a bit before using cranelift on that system.
 
-  While cranelift is very fast to compile, the generated binaries are not optimized for speed. Additionally, it is generally still immature, so you may run into issues with it. 
+  While cranelift is very fast to compile, the generated binaries are not optimized for speed to the same extent. Additionally, it is generally still immature, so you may run into issues with it.
   Notably, Wasm builds do not work yet.
 
   When shipping your game, you should still compile it with LLVM.
@@ -377,14 +380,15 @@ This section explains how to speed up iterative compiles: the amount of time it 
 <details>
   <summary>
 
-  #### Generic Sharing
+#### Generic Sharing
+
   </summary>
 
   Allows crates to share monomorphized generic code instead of duplicating it.
   In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles.
   This is currently only available on nightly Rust ([see above](#nightly-rust-compiler)).
 
-  ##### Generic sharing setup
+##### Generic sharing setup
 
   See [this file](https://github.com/bevyengine/bevy/blob/latest/.cargo/config_fast_builds.toml) for a more comprehensive, cross-platform example.
 
@@ -396,21 +400,24 @@ This section explains how to speed up iterative compiles: the amount of time it 
     "-Zshare-generics=y",
   ]
   ```
+
 </details>
 
 <details>
   <summary>
   
-  ### Improve Runtime Performance (Optional)
+### Improve Runtime Performance (Optional)
+
   </summary>
 
-  Bevy's dependencies do a lot of trace logging that is not relevant for an end user. 
-  To improve your runtime performance, you can add the following to the `[dependencies]` section of your Cargo.toml. 
+  Bevy's dependencies do a lot of trace logging that is not relevant for an end user.
+  To improve your runtime performance, you can add the following to the `[dependencies]` section of your Cargo.toml.
   It will disable detailed log levels on compile time so that they do not need to be filtered out while your app is running.
 
   ```toml
   log = { version = "*", features = ["max_level_debug", "release_max_level_warn"] }
   ```
+
 </details>
 
 ### Build Bevy

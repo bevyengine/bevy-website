@@ -11,7 +11,7 @@ show_image = true
 
 Thanks to **159** contributors, **430** pull requests, community reviewers, and our [**generous sponsors**](https://github.com/sponsors/cart), I'm happy to announce the **Bevy 0.9** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.9**, check out our [0.8 to 0.9 Migration Guide](/learn/migration-guides/0.8-0.9/).
 
@@ -716,7 +716,7 @@ This change was made on the tail of [making the same decision](/news/bevy-0-6/#t
 
 Bevy ECS schedules systems to run in parallel by default. It will safely schedule systems in parallel, honoring dependencies between systems and enforcing Rust's mutability rules. By default, this means that if System A reads a resource and System B writes the resource (and they have no order defined between them), then System A might execute before _or_ after System B. We call these systems "ambiguous". In some situations this ambiguity might matter, in other situations it might not.
 
-Bevy already has a [system ambiguity detection system](https://bevyengine.org/news/bevy-0-5/#ambiguity-detection-and-resolution) which enables users to detect ambiguous systems and resolve the ambiguity (either by adding ordering constraints or ignoring the ambiguity). Users could add systems to "ambiguity sets" to ignore ambiguities between systems in these sets:
+Bevy already has a [system ambiguity detection system](https://bevy.org/news/bevy-0-5/#ambiguity-detection-and-resolution) which enables users to detect ambiguous systems and resolve the ambiguity (either by adding ordering constraints or ignoring the ambiguity). Users could add systems to "ambiguity sets" to ignore ambiguities between systems in these sets:
 
 ```rust
 #[derive(AmbiguitySet)]

@@ -204,7 +204,7 @@ fn get_prs_by_areas(
             count += 1;
         }
     }
-    println!("\nFound {} breaking PRs merged", count);
+    println!("\nFound {count} breaking PRs merged");
 
     Ok(areas)
 }
@@ -265,6 +265,6 @@ fn write_migration_file(
         return Ok(false);
     }
 
-    write!(file, "{}", section)?;
+    write!(file, "{section}")?;
     Ok(true)
 }

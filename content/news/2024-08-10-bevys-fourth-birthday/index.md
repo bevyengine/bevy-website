@@ -214,7 +214,7 @@ We're finally starting to reach consensus and make serious progress on the next 
 
 Bevy uses a [Subject Matter Expert](https://github.com/bevyengine/bevy/blob/main/docs/the_bevy_organization.md#subject-matter-expert-sme) (SME) system to empower developers that have proven themselves within a given development area to shape the future of their area in Bevy. This has generally proven to be a great way to scale out our development capacity. We've seen it work for ECS, Rendering, and to an extent Animation and Input.
 
-If you pull up the [Bevy People](https://bevyengine.org/community/people/) page, you will notice that there are no SMEs listed for Audio, UI, or Assets. Each of which is a major pillar of Bevy (or any game engine really). This means that the Maintainers and the Project Lead (me) are back to being the bottleneck. This is inefficient, and it is also an indicator that knowledge in these areas is too consolidated across too few people.
+If you pull up the [Bevy People](https://bevy.org/community/people/) page, you will notice that there are no SMEs listed for Audio, UI, or Assets. Each of which is a major pillar of Bevy (or any game engine really). This means that the Maintainers and the Project Lead (me) are back to being the bottleneck. This is inefficient, and it is also an indicator that knowledge in these areas is too consolidated across too few people.
 
 The following are all true:
 

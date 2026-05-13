@@ -17,12 +17,12 @@ Inline-closure-constructor requires should use the inline value syntax where pos
 ```rust
 // 0.15
 #[derive(Component)]
-#[require(A(|| A(10))]
+#[require(A(|| A(10)))]
 struct Foo;
 
 // 0.16
 #[derive(Component)]
-#[require(A(10)]
+#[require(A(10))]
 struct Foo;
 ```
 
@@ -31,11 +31,11 @@ In cases where that is not possible, use the expression-style syntax:
 ```rust
 // 0.15
 #[derive(Component)]
-#[require(A(|| A(10))]
+#[require(A(|| A(10)))]
 struct Foo;
 
 // 0.16
 #[derive(Component)]
-#[require(A = A(10)]
+#[require(A = A(10))]
 struct Foo;
 ```

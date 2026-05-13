@@ -19,4 +19,4 @@ Chime in at [issue #14062] (and read our [Contributing Guide]) and we can help y
 [`OcclusionCulling`]: https://docs.rs/bevy/0.16/bevy/render/experimental/occlusion_culling/struct.OcclusionCulling.html
 [issue #14062]: https://github.com/bevyengine/bevy/issues/14062
 [Granite]: https://github.com/Themaister/Granite
-[Contributing Guide]: https://bevyengine.org/learn/contribute/introduction/
+[Contributing Guide]: https://bevy.org/learn/contribute/introduction/

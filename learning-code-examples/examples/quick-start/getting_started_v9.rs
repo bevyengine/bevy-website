@@ -1,3 +1,4 @@
+#![expect(unused_variables)]
 use bevy::prelude::*;
 
 #[derive(Component)]

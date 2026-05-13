@@ -30,8 +30,8 @@ App::new()
 
 If you are unable to do that, you may temporarily silence the deprecation warnings by annotating all usage with `#[allow(deprecated)]`. Please note that the current dynamic plugin system will be removed by the next major Bevy release, so you will have to migrate eventually. You may be interested in these safer, related links:
 
-- [Bevy Assets - Scripting](https://bevyengine.org/assets/#scripting): Scripting and modding libraries for Bevy
-- [Bevy Assets - Development tools](https://bevyengine.org/assets/#development-tools): Hot reloading and other development functionality
+- [Bevy Assets - Scripting](https://bevy.org/assets/#scripting): Scripting and modding libraries for Bevy
+- [Bevy Assets - Development tools](https://bevy.org/assets/#development-tools): Hot reloading and other development functionality
 - [`stabby`](https://github.com/ZettaScaleLabs/stabby): Stable Rust ABI
 
 If you truly cannot go without dynamic plugins, you may copy the code from Bevy and add it to your project locally.

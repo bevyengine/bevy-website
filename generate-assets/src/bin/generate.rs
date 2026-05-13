@@ -1,4 +1,4 @@
-use rand::{prelude::SliceRandom, thread_rng};
+use rand::{prelude::SliceRandom, rng};
 use serde::Serialize;
 use std::{
     fs::{self, File},
@@ -127,6 +127,7 @@ struct FrontMatterAssetExtra {
     image: Option<String>,
     licenses: Option<Vec<String>>,
     bevy_versions: Option<Vec<String>>,
+    nsfw: Option<bool>,
 }
 
 impl From<&Asset> for FrontMatterAsset {
@@ -140,6 +141,7 @@ impl From<&Asset> for FrontMatterAsset {
                 image: asset.image.clone(),
                 licenses: asset.licenses.clone(),
                 bevy_versions: asset.bevy_versions.clone(),
+                nsfw: asset.nsfw,
             },
         }
     }
@@ -290,7 +292,7 @@ impl FrontMatterWriter for Section {
             }
         }
         manually_sorted_assets.sort_by_key(AssetNode::order);
-        randomized_assets.shuffle(&mut thread_rng());
+        randomized_assets.shuffle(&mut rng());
 
         for (i, content) in sorted_section
             .iter()

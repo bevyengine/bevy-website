@@ -1,7 +1,7 @@
 <!-- Component Lifecycle Hook & Observer Trigger for replaced values -->
 <!-- https://github.com/bevyengine/bevy/pull/14212 -->
 
-Bevy 0.14 introduced [Component Lifecycle Hooks and Observers](https://bevyengine.org/news/bevy-0-14/#ecs-hooks-and-observers),
+Bevy 0.14 introduced [Component Lifecycle Hooks and Observers](https://bevy.org/news/bevy-0-14/#ecs-hooks-and-observers),
 and included several built-in observer triggers for each way that components could be added to or removed from entities: `OnAdd`, `OnInsert` and `OnRemove`.
 However, there was a hole in this API. While `OnRemove` is a counterpart to `OnAdd`, `OnInsert` had no such counterpart,
 meaning certain operations had no corresponding lifecycle hook or observer trigger:

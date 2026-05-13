@@ -11,7 +11,7 @@ image_subtitle_link = "https://github.com/coreh/bevy-demo-ruins"
 
 Thanks to **173** contributors, **689** pull requests, community reviewers, and our [**generous sponsors**](/donate), we're happy to announce the **Bevy 0.10** release on [crates.io](https://crates.io/crates/bevy)!
 
-For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevyengine.org/assets) for a collection of community-developed plugins, games, and learning resources.
+For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start/introduction) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
 To update an existing Bevy App or Plugin to **Bevy 0.10**, check out our [0.9 to 0.10 Migration Guide](/learn/migration-guides/0.9-0.10/).
 
@@ -857,7 +857,7 @@ We've added some basic control over color grading parameters such as exposure, g
 ![Trace with Pipelined Rendering](pipelined-rendering-trace.png)
 
 On multithreaded platforms, **Bevy 0.10** will now run significantly faster by running simulation and
-rendering in parallel. The renderer was rearchitected in [Bevy 0.6](https://bevyengine.org/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render)
+rendering in parallel. The renderer was rearchitected in [Bevy 0.6](https://bevy.org/news/bevy-0-6/#pipelined-rendering-extract-prepare-queue-render)
 to enable this, but the final step of actually running them in parallel was not done until now.
 There was a bit of tricky work to figure out. The render world has a system that has to run on
 the main thread, but the task pool only had the ability to run on the world's thread. So, when we send

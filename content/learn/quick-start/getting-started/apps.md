@@ -12,20 +12,17 @@ Every Bevy program can be referred to as an [`App`]. The simplest Bevy app looks
 
 The `use bevy::prelude::*` statement brings in the essential things from Bevy. For brevity, this guide may omit it in later steps.
 
-Nice and simple right? Copy the code above into your `main.rs` file, then run:
+Nice and simple right? Copy the code above into your `main.rs` file, then run `cargo run` in the command line while in your project folder.
 
-```sh
-cargo run
-```
+You will notice that... nothing happens. This is because we haven't told our app to do anything yet! Apps are just empty shells capable of running our application logic.
 
-in your project folder. You will notice that... nothing happens. This is because we haven't told our app to do anything yet! Apps are just empty shells capable of running our application logic. If you'd like to learn more, then continue reading. Otherwise you can head to the next page to learn how to add logic to our App!
+## What Makes An App?
 
-## What Makes an App?
+So, what sort of data does our [`App`] _actually_ store? An `App` contains our `World`, and our `World` contains our game's data. An `App` also contains the logic for controlling the outer loop of our game, allowing us to orchestrate the data in our `World` into the gameplay we want to create.
 
-So, what sort of data does our [`App`] really store? Looking at the docs linked, we find three fields: `world`, `schedule`, and `runner`. The `world` field stores all of our game's data, the `schedule` holds the systems that operate on this data (and the order in which they do so) and the `runner` interprets the schedule to control the broad execution strategy. You can read more about these by exploring the reference documentation linked just above.
+Generally, you'll be building your game at a more granular level than this. `App` is typically only used to setup the structure of your game, which is done by chaining its methods with the [builder pattern](https://doc.rust-lang.org/1.0.0/style/ownership/builders.html). Using these `App` methods, you'll be able to add systems, insert unique resources, and create the entities and components needed for your gameplay.
 
-Generally, you'll be operating at a more granular level than these basic primitives: controlling data in terms of specific resources or components and adding systems to an existing schedule. To do so, customize your own [`App`] by chaining its methods with the [builder pattern](https://doc.rust-lang.org/1.0.0/style/ownership/builders.html).
-The most basic tools are:
+[`App`] provides us with tools for:
 
   1. Initializing resources in the [`World`] to store globally available data that we only need a single copy of.
   2. Adding systems to our [`Schedule`], which can read and modify resources and our entities' components, according to our game logic.

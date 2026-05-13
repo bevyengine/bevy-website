@@ -17,7 +17,7 @@ jobs:
       pages: ${{ steps.pages.outputs.pages }}
     steps:
       - name: Checkout Bevy main branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: 'bevyengine/bevy'
           ref: 'latest'
@@ -38,7 +38,7 @@ jobs:
     steps:
 
       - name: Checkout Bevy latest tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: 'bevyengine/bevy'
           ref: 'latest'
@@ -50,7 +50,7 @@ jobs:
         run: |
           sudo apt-get update;
           DEBIAN_FRONTEND=noninteractive sudo apt-get install --no-install-recommends -yq \
-            libasound2-dev libudev-dev libxkbcommon-x11-0;
+            libasound2-dev libudev-dev libxkbcommon-x11-0 libwayland-dev;
 
       - name: Install xvfb, llvmpipe and lavapipe
         run: |
@@ -65,7 +65,7 @@ jobs:
 
       - name: Take Screenshots
         run: |
-          xvfb-run cargo run -p example-showcase -- --page ${{ matrix.page }} --per-page ${{ env.PER_PAGE }} run --screenshot --in-ci
+          xvfb-run cargo run -p example-showcase -- --page ${{ matrix.page }} --per-page ${{ env.PER_PAGE }} run --screenshot-frame 400 --fixed-frame-time 0.0125 --auto-stop-frame --in-ci
 
       - name: Optimize PNGs
         run: |
@@ -87,10 +87,10 @@ jobs:
     steps:
 
       - name: Clone bevy-website repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
 
       - name: Move examples to the correct folder
         run: |

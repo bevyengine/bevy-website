@@ -468,7 +468,7 @@ We now use a clever "world tick" design that allows systems to detect changes th
 
 <div class="release-feature-authors">authors: @TheRawMeatball</div>
 
-The [last Bevy release](https://bevyengine.org/news/bevy-0-4) added States, which enabled developers to run groups of ECS systems according to the value of a `State<T>` resource. Systems could be run according to "state lifecycle events", such as on_enter, on_update, and on_exit. States make things like separate "loading screen" and "in game" logic easier to encode in Bevy ECS.
+The [last Bevy release](https://bevy.org/news/bevy-0-4) added States, which enabled developers to run groups of ECS systems according to the value of a `State<T>` resource. Systems could be run according to "state lifecycle events", such as on_enter, on_update, and on_exit. States make things like separate "loading screen" and "in game" logic easier to encode in Bevy ECS.
 
 The old implementation largely worked, but it had a number of quirks and limitations. First and foremost, it required adding a new `StateStage`, which cut down on parallelism, increased boilerplate, and forced ordering where it wasn't required. Additionally, some of the lifecycle events didn't always behave as expected.
 

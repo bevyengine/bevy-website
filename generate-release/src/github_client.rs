@@ -189,6 +189,11 @@ impl GithubClient {
         // The github rest API is limited to 100 prs per page,
         // so to get all the prs we need to iterate on every page available.
         loop {
+            if page == 100 {
+                // We can't fetch more than 99 pages of data or GitHub will
+                // fail with a 422.
+                break;
+            }
             let mut prs_in_page =
                 self.get_issues_and_prs_by_page(page, repo, state, since, label)?;
             println!("Page: {} ({} prs)", page, prs_in_page.len());
@@ -202,10 +207,7 @@ impl GithubClient {
 
         // Make sure the older PRs from the last page aren't returned
         if let Some(datetime_utc) = datetime_utc {
-            println!(
-                "Filtering PRs closed before the target datetime {}",
-                datetime_utc
-            );
+            println!("Filtering PRs closed before the target datetime {datetime_utc}");
 
             prs.retain(|pr| {
                 pr.closed_at

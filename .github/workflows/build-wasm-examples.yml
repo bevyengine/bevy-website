@@ -26,7 +26,7 @@ jobs:
       pages: ${{ steps.pages.outputs.pages }}
     steps:
       - name: Checkout Bevy main branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: 'bevyengine/bevy'
           ref: ${{ inputs.ref }}
@@ -48,7 +48,7 @@ jobs:
     steps:
 
       - name: Checkout Bevy latest tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: 'bevyengine/bevy'
           ref: ${{ inputs.ref }}
@@ -62,7 +62,7 @@ jobs:
         run: |
           cargo install --force wasm-bindgen-cli
           mkdir ./binaryen
-          wget -qO- https://github.com/WebAssembly/binaryen/releases/download/version_114/binaryen-version_114-x86_64-macos.tar.gz | tar xvz --strip-components 1 -C ./binaryen binaryen-version_114
+          wget -qO- https://github.com/WebAssembly/binaryen/releases/download/version_126/binaryen-version_126-arm64-macos.tar.gz | tar xvz --strip-components 1 -C ./binaryen binaryen-version_126
 
       - name: Build WASM Examples
         run: |
@@ -88,7 +88,7 @@ jobs:
       steps:
 
         - name: Download all artifacts
-          uses: actions/download-artifact@v4
+          uses: actions/download-artifact@v6
 
         - name: Group examples in one folder
           run: |

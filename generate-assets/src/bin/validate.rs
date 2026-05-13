@@ -27,7 +27,7 @@ fn main() -> Result<()> {
 
     eprintln!();
     for error in &errors {
-        eprintln!("{}", error);
+        eprintln!("{error}");
     }
 
     Err(anyhow!("{} asset(s) are invalid.", errors.len()))
@@ -42,7 +42,7 @@ impl Display for AssetError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "{}", self.asset_name)?;
         for error in &self.errors {
-            writeln!(f, "  {}", error)?;
+            writeln!(f, "  {error}")?;
         }
         Ok(())
     }
@@ -61,8 +61,7 @@ impl Display for ValidationError {
         match self {
             ValidationError::DescriptionTooLong => write!(
                 f,
-                "Description must be at most {} chars in length.",
-                MAX_DESCRIPTION_LENGTH
+                "Description must be at most {MAX_DESCRIPTION_LENGTH} chars in length."
             ),
             ValidationError::DescriptionWithFormatting => {
                 write!(f, "Description must not contain formatting.")
@@ -76,8 +75,7 @@ impl Display for ValidationError {
             ValidationError::ImageFileSizeTooLarge(size) => {
                 write!(
                     f,
-                    "Image file size {} exceeds maximum {} bytes.",
-                    size, MAX_IMAGE_BYTES
+                    "Image file size {size} exceeds maximum {MAX_IMAGE_BYTES} bytes."
                 )
             }
         }

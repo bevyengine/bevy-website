@@ -30,4 +30,4 @@ We have plans for future improvements: enable using shadows to create an inset /
 
 [`BoxShadow`]: https://docs.rs/bevy/0.15/bevy/prelude/struct.BoxShadow.html
 [`Node`]: https://docs.rs/bevy/0.15/bevy/prelude/struct.Node.html
-[new contributors]: https://bevyengine.org/learn/contribute/introduction/
+[new contributors]: https://bevy.org/learn/contribute/introduction/

@@ -72,7 +72,7 @@ world.spawn((
     Name::new("Root"),
     Children::spawn((
         Spawn(Name::new("Child1")),   
-        SpawnIter(["Child2", "Child3"].into_iter().map(Name::new),
+        SpawnIter(["Child2", "Child3"].into_iter().map(Name::new)),
         SpawnWith(|parent: &mut ChildSpawner| {
             parent.spawn(Name::new("Child4"));
             parent.spawn(Name::new("Child5"));

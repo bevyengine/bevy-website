@@ -42,5 +42,5 @@ world.run_system_with_input(&mut value, square_mut);
 We're excited to see what you do with this newfound power.
 
 [error handling]: https://github.com/bevyengine/bevy/blob/main/examples/ecs/system_piping.rs
-[one-shot systems]: https://bevyengine.org/news/bevy-0-12/#one-shot-systems
+[one-shot systems]: https://bevy.org/news/bevy-0-12/#one-shot-systems
 [`World::run_system_with_input`]: https://docs.rs/bevy/0.15.0/bevy/ecs/prelude/struct.World.html#method.run_system_with_input
