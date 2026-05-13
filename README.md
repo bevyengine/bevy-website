@@ -51,3 +51,4 @@ zola build
 
 This will create the `/static/pagefind` folder which contains the index and JS library.
 You can access `http://127.0.0.1:1111/pagefind/playground/` to debug search issues.
+Once the index is built you can run `zola serve` to view the website.
