@@ -69,14 +69,23 @@ by allowing the linker to take a more global view.
 In addition to performance gains,
 this can improve dead code detection, reducing binary size.
 
-Setting `lto = "fat"` enables better optimization than the basic "thin" LTO provided by `lto = true`.
+Setting `lto = "thin"` for release builds is a good default as it provides performance gains similar to `lto = "fat"` while
+taking substantially less time due to being parallelizable. In Cargo `lto = true` and `lto = "fat"` are the same thing.
+
+By default, release builds will use `lto = false` which is "thin local LTO", performing LTO within the crate.
+This level of LTO is there to offset
+the losses incurred by codegen units above 1. It is skipped if codegen units is 1.
+
+You may wish to experiment with full/"fat" LTO for final published builds, but be prepared for much longer builds and
+a higher peak memory usage during compilation.
 
 Modifying this setting will slow down compilation.
 
 ### Code-Gen Units
 
-Similarly, we can eliminate parallelism during compilation by setting `codegen-units = 1`.
-This will allow the compiler to find additional optimizations in much the same way.
+Similarly, we can eliminate intra-crate parallelism during compilation by setting `codegen-units = 1`.
+Spreading crate compilation across multiple codegen units speeds up compilation at the cost of increased
+build size and lost optimisation opportunities.
 
 Modifying this setting will slow down compilation.
 
