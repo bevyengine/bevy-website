@@ -42,9 +42,9 @@ Any ECS system can make queries by adding the appropriate `Query`-typed argument
 
 ```rs
 #[derive(Component)]
-struct Poison{
-    stacks: u32
-};
+struct Poison {
+    stacks: u32,
+}
 
 #[derive(Component)]
 struct Life {
@@ -52,14 +52,14 @@ struct Life {
     max: u32,
 }
 
-fn apply_poison(mut query: Query<(&Poison, &mut Life)>){
-    for (poison, mut life) in query.iter_mut(){
-        life.current.saturating_sub(poison.stacks);
+fn apply_poison(mut query: Query<(&Poison, &mut Life)>) {
+    for (poison, mut life) in query.iter_mut() {
+        life.current = life.current.saturating_sub(poison.stacks);
     }
 }
 
-fn tick_down_poison(mut query: Query<&mut Poison>){
-    for poison in query.iter_mut(){
+fn tick_down_poison(mut query: Query<&mut Poison>) {
+    for mut poison in query.iter_mut() {
         if poison.stacks > 0 {
             poison.stacks -= 1;
         }
