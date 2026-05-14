@@ -12,7 +12,8 @@
       <input class="assets-search__input"
               type="text"
               id="assets-search"
-              placeholder="Search Example">
+              placeholder="Search Example"
+              aria-label="Search Example" />
     </div>
     {% for subsection in section.subsections %}
       {% set section = get_section(path=subsection) %}
