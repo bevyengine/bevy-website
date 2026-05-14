@@ -38,9 +38,11 @@ pub struct GithubClient {
 
 impl GithubClient {
     pub fn new(token: String) -> Self {
-        let agent: ureq::Agent = ureq::AgentBuilder::new()
+        let config = ureq::Agent::config_builder()
             .user_agent("bevy-website-generate-assets")
             .build();
+
+        let agent: ureq::Agent = config.into();
 
         Self { agent, token }
     }
@@ -57,10 +59,11 @@ impl GithubClient {
             .get(&format!(
                 "{BASE_URL}/repos/{username}/{repository_name}/contents/{content_path}"
             ))
-            .set("Accept", "application/json")
-            .set("Authorization", &format!("Bearer {}", self.token))
+            .header("Accept", "application/json")
+            .header("Authorization", &format!("Bearer {}", self.token))
             .call()?
-            .into_json()?;
+            .body_mut()
+            .read_json()?;
 
         if response.encoding == "base64" {
             use base64::Engine;
@@ -82,10 +85,11 @@ impl GithubClient {
             .get(&format!(
                 "{BASE_URL}/repos/{username}/{repository_name}/license"
             ))
-            .set("Accept", "application/json")
-            .set("Authorization", &format!("Bearer {}", self.token))
+            .header("Accept", "application/json")
+            .header("Authorization", &format!("Bearer {}", self.token))
             .call()?
-            .into_json()?;
+            .body_mut()
+            .read_json()?;
 
         let license = response.license.spdx_id;
 
@@ -108,10 +112,11 @@ impl GithubClient {
             .get(&format!(
                 "{BASE_URL}/search/code?q=repo:{username}/{repository_name}+filename:{file_name}"
             ))
-            .set("Accept", "application/json")
-            .set("Authorization", &format!("Bearer {}", self.token))
+            .header("Accept", "application/json")
+            .header("Authorization", &format!("Bearer {}", self.token))
             .call()?
-            .into_json()?;
+            .body_mut()
+            .read_json()?;
 
         if response.incomplete_results {
             println!(
