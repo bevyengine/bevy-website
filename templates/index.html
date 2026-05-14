@@ -29,6 +29,30 @@
       <br />
       <a class="button button--big" href="/learn/quick-start/introduction/">Get Started</a>
     </div>
+
+    <!-- Latest blog articles section -->
+    {% set blog_section = get_section(path="news/_index.md") %}
+    {% if blog_section.pages %}
+    <h2 class="news-homepage-title">From the blog</h2>
+    <div class="news-list">
+      {% for post in blog_section.pages | slice(end=3) %}
+      <div class="news-card">
+        <a href="{{ post.permalink }}" class="news-card__card-link"></a>
+        <img src="{{ post.permalink }}/{{ post.extra.image }}" alt="" class="news-card__image">
+        <div class="news-card__text-wrapper">
+          <h2 class="news-card__title">{{ post.title }}</h2>
+          <div class="news-card__post-date">{{ post.date | date(format="%B %d, %Y") }}</div>
+          {% if post.extra.short_excerpt %}
+          <div class="news-card__details-wrapper">
+            <p class="news-card__excerpt">{{ post.extra.short_excerpt }}</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
     <div class="feature-list">
       <div class="feature-container">
         <div class="feature-text">
