@@ -5,30 +5,85 @@
   <link href="https://mastodon.social/@bevy" rel="me" />
 {% endblock head_extensions %}
 {% block content %}
-  <div>
-    <picture class="themed-picture">
-      <img
-        class="bevy-logo-header themed-picture__light"
-        src="/assets/bevy_logo_dark-inverted.svg"
-        alt="Bevy logo"
-        width="520"
-        height="130"
-      />
-      <img
-        class="bevy-logo-header themed-picture__dark"
-        src="/assets/bevy_logo_dark.svg"
-        alt="Bevy logo"
-        width="520"
-        height="130"
-      />
-    </picture>
-    <div class="bevy-description">
-      A refreshingly simple data-driven game engine built in Rust
-      <br />
-      Free and Open Source Forever!
-      <br />
-      <a class="button button--big" href="/learn/quick-start/introduction/">Get Started</a>
-    </div>
+    <!-- Hero section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Build games faster</p>
+
+        <h1 class="hero-title">A better workflow</h1>
+
+        <p class="hero-description">
+          Bevy is a refreshingly simple data-driven game engine built in Rust.
+          Free and open source forever.
+        </p>
+
+        <div class="features-list">
+          <article class="feature-item">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks-icon lucide-blocks"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"/><rect x="14" y="2" width="8" height="8" rx="1"/></svg>
+            </div>
+            <div>
+              <h3>Data Driven</h3>
+              <p>
+                All engine and game logic uses Bevy ECS, a custom Entity Component
+                System.
+              </p>
+            </div>
+          </article>
+
+          <article class="feature-item">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate3d-icon lucide-rotate-3d"><path d="m15.194 13.707 3.814 1.86-1.86 3.814"/><path d="M16.47214 7.52786 A 5 10 0 1 0 13 21.79796"/><path d="M21.79796 11 A 10 5 0 1 0 19 15.57071"/></svg>
+            </div>
+            <div>
+              <h3>2D and 3D renderer</h3>
+              <p>
+                Modern, flexible and real-time 2D and 3D renderer for games and apps.
+              </p>
+            </div>
+          </article>
+
+          <article class="feature-item">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad2-icon lucide-gamepad-2"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></svg>
+            </div>
+            <div>
+              <h3>Cross Platform</h3>
+              <p>
+                Support for all major platforms: Windows, macOS, Linux, Web, iOS,
+                Android.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="media-card">
+          <div class="image-placeholder">
+            Image placeholder
+          </div>
+
+          <div class="code-card">
+            <div class="window-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <pre><code style="display: block; overflow-x: auto; padding: 3px 5px; color: rgb(255, 255, 255);"><span style="color: rgb(136, 174, 206);">use</span> bevy::prelude::*;
+
+<span style="color: rgb(136, 174, 206);">fn</span> <span style="color: rgb(240, 141, 73);">main</span>() {
+    App::<span style="color: rgb(240, 141, 73);">new</span>().<span style="color: rgb(240, 141, 73);">run</span>();
+}</code></pre>
+          </div>
+          <div class="hero-cta-container">
+            <a class="button" href="/learn/quick-start/getting-started/">Get Started</a>
+            <a class="button button--neutral" href="/examples/#2d-rendering">View Examples</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="feature-list">
       <div class="feature-container">
         <div class="feature-text">
