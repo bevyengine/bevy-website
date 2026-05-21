@@ -3,12 +3,6 @@
 
   position: relative;
   cursor: pointer;
-  color: var(--button-square-color);
-
-  * {
-    // Don't capture events on sub-elements
-    pointer-events: none;
-  }
 
   &:hover {
     &:before {
