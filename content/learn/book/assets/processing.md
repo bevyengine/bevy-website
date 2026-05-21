@@ -21,7 +21,7 @@ folder are automatically processed by the registered processors to produce the g
 of assets. Your game will automatically use the processed assets (without needing to change anything
 else).
 
-[% callout(type="important") %]
+{% callout(type="important") %}
 
 While it is possible to enable asset processing just before publishing to do steps like compression,
 we **strongly** recommend users choose at the beginning of their project whether to use processing
