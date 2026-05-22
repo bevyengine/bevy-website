@@ -61,10 +61,10 @@ If you have only one tree dependency on `getrandom`, then adding
 `getrandom = { version = "*", features = ["wasm_js"] }` might solve the issue.
 
 However, if your crate depends on multiple versions of `getrandom`, then this will not be enough:
-The wilcard version pattern still ends up reflecting only a single version of the crate you want to add a feature for.
+The wildcard version pattern still ends up reflecting only a single version of the crate you want to add a feature for.
 
 Since you cannot specify two dependencies with the same name, and since cargo does not know that you want the feature to apply to every instance of the crate
-(what if a cargo feature only exists for some versions of the dependency?), you might have to use this workaround sometimes refered to as 'renaming' the
+(what if a cargo feature only exists for some versions of the dependency?), you might have to use this workaround sometimes referred to as 'renaming' the
 dependency:
 
 ```toml
