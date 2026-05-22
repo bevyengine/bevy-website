@@ -11,7 +11,7 @@ As described in previous pages, assets allow you to access data that doesn't hav
 For example, if you're making a deck builder you may want to define each card as an asset, including its stats and any special effects it has.
 Since these cards are not compiled into the app, changing stats is as simple as changing the file.
 
-## Defining An Asset Type
+## Defining an Asset Type
 
 Creating an asset type starts with defining the type and deriving the [`Asset`] trait:
 
@@ -88,7 +88,7 @@ These assets can be `add`ed just like any other, and accessed just like any othe
 [`AssetServer::is_loaded_with_dependencies`]: https://docs.rs/bevy/latest/bevy/asset/struct.AssetServer.html#method.is_loaded_with_dependencies
 
 
-## Creating An Asset Loader
+## Creating an Asset Loader
 
 At this point our custom asset type _is_ completely usable, however most of the time you'll want to create a custom asset type in order to load it from files.
 For this, we need to define an asset loader: Bevy needs to know how it should read the bytes on disk and turn them into your asset type.

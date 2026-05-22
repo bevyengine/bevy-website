@@ -1,5 +1,5 @@
 +++
-title = "Loading Assets In Advance"
+title = "Loading Assets in Advance"
 insert_anchor_links = "right"
 [extra]
 weight = 2
