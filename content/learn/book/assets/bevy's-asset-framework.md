@@ -32,7 +32,7 @@ these calls are deduplicated by [`AssetPath`].
 Various systems then read these component-storing handles, look up the asset they're pointing to, and then use that information to do things like "render them" or "determine collisions".
 
 This explanation serves as an excellent mental model for the core data flow of assets in Bevy. 
-However there are still a few subtleties that are worth getting into in this chapter, like how to mutate assets and the fact that handles are reference counted.
+However, there are still a few subtleties that are worth getting into in this chapter, like how to mutate assets and the fact that handles are reference counted.
 
 But before we get into that, let's load our first assets!
 
@@ -104,7 +104,7 @@ This allows us to change the asset file during testing and see those changes ref
 [`AssetServer::load_state`]: https://docs.rs/bevy/latest/bevy/asset/struct.AssetServer.html#method.load_state
 [`Handle::id`]: https://docs.rs/bevy/latest/bevy/asset/struct.Handle.html#method.id
 
-## Mutating Handles vs Mutating Assets
+## Mutating Handles Vs Mutating Assets
 
 Understanding the [`Handle<A>`] / [`Assets<A>`] distinction becomes quite important when you want to mutate assets.
 Should you change the handle that your sprite holds, or the asset that the handle points to?
@@ -168,12 +168,12 @@ This behavior can be configured by setting [`RenderAssetUsages`] when loading as
 
 {% end %}
 
-## Handles are Reference-Counted
+## Handles Are Reference-Counted
 
 The [`Handle`] type can be thought of as a [smart pointer] with two key properties:
 
 1. It uses an [`AssetId`] to reference the asset it's pointing to, rather than a true pointer.
-2. It is [reference-counted]: when all of the handles to a given asset are dropped, the asset will be unloaded.
+2. It is [reference-counted]: when all the handles to a given asset are dropped, the asset will be unloaded.
 
 Whenever a handle is created (or cloned), the counter of "how many handles reference this asset" goes up by one.
 When it is dropped (via replacement, despawning or removing a component, or deleting a resource that stores the handle),
@@ -183,7 +183,7 @@ If this causes the number of handles referencing the asset to hit zero, the data
 This behavior is quite useful, as it allows you to dynamically spawn and despawn entities that rely on different asset data without holding onto all of their assets forever.
 If unused asset data was never unloaded, it would be, in effect, a memory leak.
 
-However, this behavior needs to be considered when trying to pre-load assets.
+However, this behavior needs to be considered when trying to preload assets.
 Loading all of your assets ahead of time simply won't work if you immediately drop the handles, since this tells the asset system you don't need the assets anymore!
 Instead, you need to hold onto them somehow.
 A resource storing something like a `HashMap<String, Handle<Image>>` can work well for this, but some games choose to create a collection of hidden, loaded entities or scenes that they can quickly clone into your game as needed.

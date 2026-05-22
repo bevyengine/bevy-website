@@ -124,7 +124,7 @@ In essence, we need a loading screen - or at least a way to know when our assets
 
 There are all sorts of ways to implement a loading screen (even some that may be controversial to call loading screens, like the infamous "crawl through a narrow gap" animation).
 These are generally game specific, and it would be impossible to cover every possible situation.
-Instead we'll focus on how to tell when the assets have been loaded instead.
+Instead, we'll focus on how to tell when the assets have been loaded instead.
 
 {% end %}
 
@@ -147,7 +147,7 @@ impl EnemyAssets {
 ```
 
 Now, all we need is to prevent our `enemy_spawner` system from running until `EnemyAssets` is loaded.
-The most straight-forward approach is to use a [state](learn/book/control-flow/states/) to control for if our gameplay systems should run.
+A straight-forward approach is to use a [state](learn/book/control-flow/states/) to control for if our gameplay systems should run.
 
 ```rust
 fn main() {
