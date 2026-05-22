@@ -64,16 +64,12 @@
   &__cta {
     flex-shrink: 0;
 
-    &--search {
-      @media #{$bp-phone-landscape-down} {
-        display: none;
-      }
+    &:not(:last-child) {
+      margin-right: 8px;
     }
 
     &--github {
       @include flex-center;
-
-      margin-left: 12px;
 
       img {
         height: 30px;
