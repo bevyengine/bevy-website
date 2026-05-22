@@ -82,6 +82,7 @@
     &__header {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding-left: $padding;
       height: var(--layout-header-height);
       background-color: var(--layout-header-bg-color);
@@ -91,10 +92,6 @@
         display: flex;
         align-items: center;
       }
-    }
-
-    &__logo {
-      margin-right: auto;
     }
 
     &__page-menu-switch {
