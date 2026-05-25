@@ -31,10 +31,10 @@ The CPU is responsible for doing this, ensuring that the `RenderWorld` always re
 
 {% end %}
 
-We'll look at how each [`RenderSystem`] is setup in a separate page, but for now we'll just do an overview of the whole process.
+We'll look at how each [`RenderSystem`] is set up in a separate page, but for now we'll just do an overview of the whole process.
 Specifically, we can look at the main five steps that occur during rendering:
 
-1. Extract
+ **1. Extract**
 
 To render an image to the screen, we first have to figure out what is happening in our game!
 We use the Extract step to copy information from the main app `World` into the `RenderWorld`.
@@ -46,22 +46,22 @@ However, we have to be careful about what we copy over.
 If every component in the main `World` is copied over, your game might become **Render-bound**: a situation that occurs when rendering takes longer to finish than the game logic, and thus the game starts to lag.
 However, if the opposite occurs (the game logic takes longer to finish than the rendering process), then your game becomes **App-bound**. 
 
-Neither situation is inherently bad, as it is usually unnecessary to perfectly line up the total time that both computing the game logic and rendering a single frame will take.
+Neither situation is inherently bad, as it is usually unnecessary to perfectly align the time that computing both the game logic and rendering within a single frame will take.
 The ideal situation is to try to balance both processes, while aiming to keep both as fast as possible.
 Remember that because Bevy uses a split world setup for rendering, neither the `World` or `RenderWorld` can progress until the other is finished computing.
 
-2. Prepare
+**2. Prepare**
 
 The Prepare step is used to set up the GPU resources needed for rendering.
-This is where assets and meshes are setup for the GPU to use, along with creating [`BindGroup`]s that hold the data needed for rendering.
+This is where assets and meshes are set up for the GPU to use, along with creating [`BindGroup`]s that hold the data needed for rendering.
 
-3. Queue
+**3. Queue**
 
-This is where we begin to setup the actual jobs that have to be done by the renderer.
+This is where we begin to set up the actual jobs that have to be done by the renderer.
 Once our mesh data and bind groups have been set up, we can start queuing the individual items ([`PhaseItem`]s) that the GPU has to render.
 This step can also include an optional sorting step ([`RenderSystems::PhaseSort`]) depending on how each item is queued.
 
-4. Render
+**4. Render**
 
 This is where the magic finally happens!
 Using [`RenderGraph`]s, we execute each [`PhaseItem`] that we queued in the previous step, incorporating the specified [`RenderPipeline`]s and [`BindGroup`]s that help us get the desired look.
@@ -76,11 +76,12 @@ Nodes are responsible for generating draw calls and operating on input and outpu
 Edges specify the order of execution for nodes and connect input and output slots together.
 Slots describe the render resources created or used by the nodes.
 
-5. Cleanup
+**5. Cleanup**
 
 Once all [`RenderGraph`]s have finished executing, the `RenderWorld` is cleared of all entities and the data is reset.
 If you need data to persist in the `RenderWorld`, you can use a [`Resource`] to store it in between frames.
 
+[`RenderSystem`]: https://docs.rs/bevy/latest/bevy/render/enum.RenderSystems.html
 [`ExtractComponent`]: https://docs.rs/bevy/latest/bevy/render/extract_component/trait.ExtractComponent.html
 [`BindGroup`]: https://docs.rs/bevy/latest/bevy/render/render_resource/struct.BindGroup.html
 [`PhaseItem`]: https://docs.rs/bevy/latest/bevy/render/render_phase/trait.PhaseItem.html
@@ -108,19 +109,32 @@ The full stack looks something like this, starting with the higher level interac
 
 Most layers in this stack can be interacted with if desired, however for practical purposes it's likely you'll only ever
 directly work with the Bevy Renderer, WGPU, or the underlying graphics API for a computer system.
-For the purposes of the information we will present in this chapter, we won't be detailing how WGPU or the individual graphics API work. However, we can point you towards
+For the purposes of the information we will present in this chapter, we won't be detailing how WGPU or the individual graphics API work.
+However, if you are interested in learning more about WGPU, we can point you towards [Learn WGPU](https://sotrh.github.io/learn-wgpu/), a series of tutorials that can help you learn more about working with WGPU and graphics programming concepts in general.
 
 ### WGPU
 
-[WGPU](https://wgpu.rs/) is a Rust implementation of the WebGPU specification, allowing for easy access to cross-platform GPU rendering.
-Instead of needing to manually interface with graphics APIs like DirectX, Metal, or Vulkan, WGPU abstracts away these details and provides a simple, platform-independent interface.
+Bevy is built on top of the [wgpu](https://wgpu.rs/) library, which is a modern low-level GPU API that can target pretty much every popular graphics API: Vulkan, Direct3D 12, Metal, OpenGL, WebGL2, and WebGPU.
+The best backend API is selected for a given platform.
+It is a "native" rendering API, but it generally follows the WebGPU terminology and API design.
 
-Bevy's renderer is designed to allow the user as much control over the rendering process as they want.
-If 
 {% callout(type="info") %}
 #### Why WGPU?
 
+Bevy has always used WGPU to power our rendering technology.
+While there would be some benefit in creating our own rendering solution, the truth of the matter is that WGPU already occupies exactly the space that Bevy currently needs:
+
+- Multiple supported backends by default, with the goal to support as many platforms as possible.
+- A "baseline" feature set that works almost everywhere with a consistent API.
+- A "limits" and "features" system that enables turning on arbitrary, sometimes backend-specific features and detecting when those features are available.
+- A modern GPU API, but without the pain and complexity of raw Vulkan.
+  - Perfect for user-facing Bevy renderer extensions!
+
 #### Replacing WGPU
+
+Bevy's renderer is designed to allow the user as much control over the rendering process as they want.
+Even though we'll recommend to stick with WGPU for your projects, it isn't impossible to replace if you really want to.
+We'll cover the process of replacing WGPU in a future page.
 
 {% end %}
 
