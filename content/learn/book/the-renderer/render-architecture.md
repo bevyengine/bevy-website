@@ -21,13 +21,19 @@ This extraction happens once per frame, and can be delayed if either the game lo
 
 #### GPU Vs CPU Rendering 
 
-Bevy used to perform its rendering setup on the CPU, choosing which objects needed to be rendered by performing frustum and occlusion-based culling before passing that information to the GPU.
+CPU-driven rendering is where draw commands are created on the CPU.
+Bevy used to perform its rendering setup this way, choosing which objects needed to be rendered and how they needed to be rendered before passing that information to the GPU.
 However, this process was inefficient and did not align with modern rendering standards.
-Eventually the task of calculating what objects are visible (and thus are actually rendered) was moved to the GPU, which is both more efficient and is more inline with modern rendering practices.
+Eventually the task of calculating what objects needed to be rendered was moved to the GPU, which is both more efficient and is more inline with modern rendering practices.
+
+With GPU-driven rendering, draw commands are encoded on the GPU by compute shaders.
+This leverages GPU parallelism, and unlocks more advanced culling optimizations that are infeasible to do on the CPU, among many other methods that bring large performance benefits.
 
 However, the CPU still plays an important role in rendering.
 Since Bevy uses a separate `RenderWorld` to perform the rendering, information about the main app `World` still has to be copied and moved to the `RenderWorld`.
 The CPU is responsible for doing this, ensuring that the `RenderWorld` always reflects the previous state of the app `World`.
+
+CPU / GPU in 0.16
 
 {% end %}
 
@@ -149,8 +155,29 @@ We'll cover the process of replacing WGPU in a future page.
 {% callout(type="info") %}
 #### Why Not Use Rust?
 
-Rust is a great language for writing low-level systems code, but it is not suitable for interfacing with GPU hardware.
-Working with a domain specific language designed to be run on GPUs allows you to create shaders and other GPU-specific code without needing to worry about the constraints that Rust imposes.
+When you compile Rust code, the Rust compiler works to build and optimize the code to be run on the CPU, a device which will usually only have a couple dozen cores and threads to use for processing.
+CPUs are designed to switch between multiple single processes sequentially.
+Think of the individual programs on your computer: internet browsers, email clients, and media players are all separate processes that aren't very intensive to individually run.
+
+Meanwhile, modern GPUs contain upwards of multiple billions of processing units.
+Each GPU processing unit is generally slower than a CPU's, but are able to handle exponentially more tasks at the same time.
+Take outputting video to a display, for example.
+Standard 1080p HD computer monitors will have 2,073,600 pixels, and each pixel will have a red, green, and blue value.
+These values have to be repeatedly updated and calculated multiple times per second.
+While the CPU could do the calculations, constantly changing and updating those values (like when playing a video game, for example) would cause the CPU struggle to both update the application itself and update each pixel at the same time.
+
+It's the difference in device capability which requires us to use a specific shading language to help modify our rendering pipelines.
+
 {% end %}
 
 ## 2D Vs 3D Rendering
+
+You might be wondering why we've gone into detail about "Render Pipelines", "Shaders", and "Graphs" when all you want to do is make a simple 2D game with image sprites.
+Well, we've outlined everything above because when you look behind the scenes at Bevy's renderer, it turns out that 2D rendering is actually just "flattened" 3D rendering.
+Specifically, 2D scenes are really 3D scenes with the _layering_ of objects in a scene represented by their Z axis value.
+All scenes in Bevy use +Y up scene coordinates, but with +Z extending out of the screen (towards the player) and -Z moving into the screen.
+
+Bevy makes use of a unified 2D / 3D rendering system, which both reduces the burden on our maintainers while also allowing users to benefit from features that might seem like they're only designed for one game type.
+This means that 2D games can benefit from the full power of render pipelines and shader effects, while 3D games can use image sprites and other 2D objects if needed.
+
+Mesh info in 0.13
