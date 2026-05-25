@@ -10,7 +10,51 @@ Understanding these concepts will allow you to get a bird's eye view of the rend
 
 ## Render Architecture Overview
 
-### Pipelined Rendering
+### The Graphics Stack
+
+In order to take advantage of the power that modern GPUs have, Bevy uses [WGPU](https://wgpu.rs/) (via the [`wgpu`](https://crates.io/crates/wgpu) crate) to handle the low-level graphics API calls.
+`wgpu` acts as an intermediary between Bevy and the underlying graphics API for each computer system.
+Depending on whether you're using Windows, MacOS, or Linux (or Android or iOS), WGPU translates your requests into the appropriate graphics API calls, namely DirectX, Metal, or Vulkan for the previous respective platforms.
+Finally, these calls are processed by the GPU driver and then executed on the GPU hardware itself.
+The full stack looks something like this, starting with the higher level interactions on top and moving down the stack to the GPU itself:
+
+1. Bevy Rendering
+2. WGPU
+3. Graphics API (Vulkan, Metal, DirectX, OpenGL, etc.)
+4. GPU Driver (AMD, NVIDIA, Intel, Apple, etc.)
+5. GPU Hardware (The actual graphics card)
+
+For practical purposes it's likely you'll only ever directly work with the Bevy Renderer, WGPU, or the underlying graphics API for a computer system.
+However, detailing how WGPU or the individual graphics API work is well beyond the scope of this chapter.
+If you are interested in learning more about WGPU, we can point you towards [Learn WGPU](https://sotrh.github.io/learn-wgpu/), a series of tutorials that can help you learn more about working with WGPU and graphics programming concepts in general.
+
+### WGPU
+
+Bevy is built on top of the [wgpu](https://wgpu.rs/) library, which is a modern low-level GPU API that can target pretty much every popular graphics API: Vulkan, Direct3D 12, Metal, OpenGL, WebGL2, and WebGPU.
+The best backend API is selected for a given platform.
+It is a "native" rendering API, but it generally follows the WebGPU terminology and API design.
+
+{% callout(type="info") %}
+#### Why WGPU?
+
+Bevy has always used WGPU to power our rendering technology.
+While there would be some benefit in creating our own rendering solution, the truth of the matter is that WGPU already occupies exactly the space that Bevy currently needs:
+
+- Multiple supported backends by default, with the goal to support as many platforms as possible.
+- A "baseline" feature set that works almost everywhere with a consistent API.
+- A "limits" and "features" system that enables turning on arbitrary, sometimes backend-specific features and detecting when those features are available.
+- A modern GPU API, but without the pain and complexity of raw Vulkan.
+  - Perfect for user-facing Bevy renderer extensions!
+
+#### Replacing WGPU
+
+Bevy's renderer is designed to allow the user as much control over the rendering process as they want.
+Even though we'll recommend to stick with WGPU for your projects, it isn't impossible to replace if you really want to.
+We'll cover the process of replacing WGPU in a future page.
+
+{% end %}
+
+## Pipelined Rendering
 
 Bevy uses a pipelined rendering process that exists and operates on a separate CPU thread from the main app `World`.
 Information about each scene is extracted from the main app `World` and into a `RenderWorld` that is then rendered to the screen using the GPU.
@@ -22,18 +66,13 @@ This extraction happens once per frame, and can be delayed if either the game lo
 #### GPU Vs CPU Rendering 
 
 CPU-driven rendering is where draw commands are created on the CPU.
-Bevy used to perform its rendering setup this way, choosing which objects needed to be rendered and how they needed to be rendered before passing that information to the GPU.
+Bevy used to perform its rendering setup this way, using the CPU to choose which objects needed to be rendered and how they needed to be rendered before passing that information to the GPU.
 However, this process was inefficient and did not align with modern rendering standards.
 Eventually the task of calculating what objects needed to be rendered was moved to the GPU, which is both more efficient and is more inline with modern rendering practices.
 
-With GPU-driven rendering, draw commands are encoded on the GPU by compute shaders.
+With GPU-driven rendering, the CPU is only responsible for passing data to the GPU.
+Draw commands are encoded on the GPU by compute shaders, and the GPU determines which objects need to be rendered.
 This leverages GPU parallelism, and unlocks more advanced culling optimizations that are infeasible to do on the CPU, among many other methods that bring large performance benefits.
-
-However, the CPU still plays an important role in rendering.
-Since Bevy uses a separate `RenderWorld` to perform the rendering, information about the main app `World` still has to be copied and moved to the `RenderWorld`.
-The CPU is responsible for doing this, ensuring that the `RenderWorld` always reflects the previous state of the app `World`.
-
-CPU / GPU in 0.16
 
 {% end %}
 
@@ -99,58 +138,17 @@ If you need data to persist in the `RenderWorld`, you can use a [`Resource`] to 
 [`Slot`]: https://docs.rs/bevy/latest/bevy/render/render_graph/enum.SlotType.html
 [`Resource`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/trait.Resource.html
 
-### The Graphics Stack
+### Using Shader Languages
 
-In order to take advantage of the power that modern GPUs have, Bevy uses [WGPU](https://wgpu.rs/) (via the [`wgpu`](https://crates.io/crates/wgpu) crate) to handle the low-level graphics API calls.
-`wgpu` acts as an intermediary between Bevy and the underlying graphics API for each computer system.
-Depending on whether you're using Windows, MacOS, or Linux (or Android or iOS), WGPU translates your requests into the appropriate graphics API calls, namely DirectX, Metal, or Vulkan for the previous respective platforms.
-Finally, these calls are processed by the GPU driver and then executed on the GPU hardware itself.
-The full stack looks something like this, starting with the higher level interactions on top and moving down the stack to the GPU itself:
+Within a [`RenderPipeline`], we can use shading language scripts to help modify the final look of our renders.
+Specifically, Bevy uses the [WGSL] language (and soon the [WESL] language as well!) to write these scripts, which are made available in the pipeline for any specified [`RenderGraph`] to use.
+WGSL was built specifically for WGPU rendering; if you choose to replace WGPU with another rendering solution, you'll have to look at what shading language to use instead.
 
-1. Bevy Rendering
-2. WGPU
-3. Graphics API (Vulkan, Metal, DirectX, OpenGL, etc.)
-4. GPU Driver (AMD, NVIDIA, Intel, Apple, etc.)
-5. GPU Hardware (The actual graphics card)
-
-Most layers in this stack can be interacted with if desired, however for practical purposes it's likely you'll only ever
-directly work with the Bevy Renderer, WGPU, or the underlying graphics API for a computer system.
-For the purposes of the information we will present in this chapter, we won't be detailing how WGPU or the individual graphics API work.
-However, if you are interested in learning more about WGPU, we can point you towards [Learn WGPU](https://sotrh.github.io/learn-wgpu/), a series of tutorials that can help you learn more about working with WGPU and graphics programming concepts in general.
-
-### WGPU
-
-Bevy is built on top of the [wgpu](https://wgpu.rs/) library, which is a modern low-level GPU API that can target pretty much every popular graphics API: Vulkan, Direct3D 12, Metal, OpenGL, WebGL2, and WebGPU.
-The best backend API is selected for a given platform.
-It is a "native" rendering API, but it generally follows the WebGPU terminology and API design.
-
-{% callout(type="info") %}
-#### Why WGPU?
-
-Bevy has always used WGPU to power our rendering technology.
-While there would be some benefit in creating our own rendering solution, the truth of the matter is that WGPU already occupies exactly the space that Bevy currently needs:
-
-- Multiple supported backends by default, with the goal to support as many platforms as possible.
-- A "baseline" feature set that works almost everywhere with a consistent API.
-- A "limits" and "features" system that enables turning on arbitrary, sometimes backend-specific features and detecting when those features are available.
-- A modern GPU API, but without the pain and complexity of raw Vulkan.
-  - Perfect for user-facing Bevy renderer extensions!
-
-#### Replacing WGPU
-
-Bevy's renderer is designed to allow the user as much control over the rendering process as they want.
-Even though we'll recommend to stick with WGPU for your projects, it isn't impossible to replace if you really want to.
-We'll cover the process of replacing WGPU in a future page.
-
-{% end %}
-
-## Render Pipelines
-
-
-
-### Shaders
-
-
+Much like the other non-Bevy topics, we won't be showcasing how to write WGSL (or WESL) code, however we will be showcasing how you can provide scripts to be used in your rendering pipelines.
+To start learning WGSL, we recommend going to _.
+For WESL, we recommend learning WGSL first, and then investigating WESL.
+This is because WESL is an extension of the WGSL language, which means that you'll wind up learning WGSL anyways.
+To read more about the WESL specifications, check out _.
 
 {% callout(type="info") %}
 #### Why Not Use Rust?
@@ -159,8 +157,8 @@ When you compile Rust code, the Rust compiler works to build and optimize the co
 CPUs are designed to switch between multiple single processes sequentially.
 Think of the individual programs on your computer: internet browsers, email clients, and media players are all separate processes that aren't very intensive to individually run.
 
-Meanwhile, modern GPUs contain upwards of multiple billions of processing units.
-Each GPU processing unit is generally slower than a CPU's, but are able to handle exponentially more tasks at the same time.
+Meanwhile, modern GPUs contain upwards of hundreds of millions (even billions!) of processing units.
+Each GPU processing unit is generally slower than a CPU's, but when all processing units are used together they're able to handle exponentially more smaller tasks at the same time.
 Take outputting video to a display, for example.
 Standard 1080p HD computer monitors will have 2,073,600 pixels, and each pixel will have a red, green, and blue value.
 These values have to be repeatedly updated and calculated multiple times per second.
@@ -170,14 +168,24 @@ It's the difference in device capability which requires us to use a specific sha
 
 {% end %}
 
+[WGSL]:
+[WESL]:
+
 ## 2D Vs 3D Rendering
 
 You might be wondering why we've gone into detail about "Render Pipelines", "Shaders", and "Graphs" when all you want to do is make a simple 2D game with image sprites.
-Well, we've outlined everything above because when you look behind the scenes at Bevy's renderer, it turns out that 2D rendering is actually just "flattened" 3D rendering.
-Specifically, 2D scenes are really 3D scenes with the _layering_ of objects in a scene represented by their Z axis value.
-All scenes in Bevy use +Y up scene coordinates, but with +Z extending out of the screen (towards the player) and -Z moving into the screen.
+Well, we've outlined everything above because when you look at a Bevy scene, it turns out that a 2D scene is actually just a "flattened" 3D scene.
+Specifically, in Bevy 2D scenes are 3D scenes with the _layering_ of objects in a scene represented by their Z axis value.
 
-Bevy makes use of a unified 2D / 3D rendering system, which both reduces the burden on our maintainers while also allowing users to benefit from features that might seem like they're only designed for one game type.
-This means that 2D games can benefit from the full power of render pipelines and shader effects, while 3D games can use image sprites and other 2D objects if needed.
+With this, Bevy is now working towards unifying its 2D and 3D rendering systems.
+This helps reduce the burden on our maintainers while also allowing users to benefit from features that might seem like they're only designed for one game type.
+2D games can benefit from the full power of render pipelines and shader effects, while 3D games can use image sprites and other simpler objects when needed.
 
-Mesh info in 0.13
+To illustrate why unifying these systems are beneficial, consider the [`Mesh`] type.
+It appeared in Bevy 0.13 in order to help unify and streamline using primitive shapes, which previously were all independently created.
+Now all primitive shapes share the [`Mesh`] type, and are all created using the same builder pattern, which makes the experience of using primitives simpler and cohesive.
+
+The same principle is in the process for being implemented for the 2D and 3D render processes.
+The goal is to eventually unify the systems so that both 2D and 3D developers are using the same tools, making it easier to swap between both game types and for all users to seamlessly learn about Bevy's renderer.
+
+[`Mesh`]:
