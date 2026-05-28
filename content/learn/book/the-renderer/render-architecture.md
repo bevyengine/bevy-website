@@ -5,12 +5,17 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-The goal of Bevy's renderer is provide a simple, fast, and modular series of tools.
+The goal of Bevy's renderer is provide a series of modular, performant, and cross-platform-compatible tools.
 It has to provide industry standard features and capabilities while still remaining accessible and approachable to users who are not very familiar with graphics programming.
-And of course, it has to produce the visuals that users want to see: if the rendering output isn't pretty (or intentionally _not_ pretty), then what is even the point!
+And of course, it has to produce the visuals that Bevy users want: if the rendering output isn't pretty (or intentionally _not_ pretty), then what is even the point!
+
+Even though Bevy's core audience is game developers, we know that Bevy is used much more broadly.
+While we aren't going to be able to satisfy everyone, our goal is to make the renderer flexible enough for users to feel that they can always work with it.
+If some feature isn't implemented directly, you should be able to build on what already exists, or have the space to create that functionality yourself.
+We want Bevy's renderer to be useful when making pixel art, stylized 2D, high-end PBR, CAD visualizations, and anything else you can think of.
 
 Before we start detailing _how_ you can start using the many features of Bevy's renderer, it'll help to understand _what_ the renderer is doing and _why_ it's set up the way it is.
-Understanding these concepts will allow you to get a bird's eye view of the rendering process and let you know where to look for a specific feature.
+Understanding these concepts will allow you to get a bird's eye view of the rendering process and let you know where to look when you start working with the renderer.
 
 ## The Graphics Stack
 
@@ -39,8 +44,8 @@ Finally, these calls are processed by the GPU driver and then executed on the GP
 ## WGPU
 
 In order to take advantage of the power that modern GPUs are capable of while avoiding the complexity of using raw graphics APIs, Bevy uses [WGPU](https://wgpu.rs/) (via the [`wgpu`](https://crates.io/crates/wgpu) crate) to handle the low-level graphics API calls.
-WGPU is the Rust implementation of [the WebGPU specification](https://webgpu.org/), a modern, low-level graphics library that can natively target pretty much every popular graphics API: Vulkan, DirectX 12, Metal, OpenGL, WebGL2, and WebGPU.
-Depending on whether you're using Windows, MacOS, or Linux (or Android or iOS), WGPU translates your requests into the appropriate graphics API calls before sending them to the GPU to be rendered.
+WGPU is a modern, low-level graphics library that can natively target pretty much every popular graphics API: Vulkan, DirectX 12, Metal, OpenGL, WebGL2, and WebGPU.
+Regardless of whether you're using Windows, MacOS, or Linux (or Android or iOS), WGPU translates your requests into the appropriate graphics API calls before sending them to the GPU to be rendered.
 
 {% callout(type="info") %}
 ### Why WGPU?
@@ -104,7 +109,7 @@ Specifically, a buffer of component data is sent to `RenderWorld` every frame.
 How do we know what data is actually sent to `RenderWorld` though?
 One way of accomplishing this is to derive the [`ExtractComponent`] trait on the components that we want to transfer to the `RenderWorld`.
 Other ways including manually setting up systems specifically designed to send component data based on input or other events.
-It's worth noting though that some Bevy components will automatically be sent, like assets, meshes, and textures, and thus you do not have to manually specify that they need to be extracted.
+Some Bevy components will also be sent automatically, like assets, meshes, and textures, and thus you do not have to manually specify that they need to be extracted.
 
 **2. Prepare**
 
@@ -153,10 +158,10 @@ If you need data to persist in the `RenderWorld`, you can use a [`Resource`] to 
 
 Within a [`RenderPipeline`], we can use shading language scripts to help modify the final look of our renders.
 Specifically, Bevy uses the [WGSL] language (and soon the [WESL] language as well!) to write these scripts, which are made available in the pipeline for any specified [`RenderGraph`] to use.
-WGSL was built specifically for WebGPU (WGPU) rendering; if you choose to replace WGPU with another rendering solution, you'll have to look at what shading language to use instead.
+WGSL is the shading language used by WGPU; if you choose to replace WGPU with another rendering solution, you'll have to look at what shading language to use instead.
 
-Much like the other non-Bevy topics, we won't be showcasing how to write WGSL (or WESL) code, however we will be showcasing how you can provide scripts to be used in your rendering pipelines.
-To start learning WGSL, we recommend [the WebGPU Fundamentals series](https://webgpufundamentals.org/webgpu/lessons/webgpu-wgsl.html).
+Much like the other non-Bevy topics, we won't be showcasing how to write WGSL (or WESL) code, however we will show how you can provide scripts to be used in your rendering pipelines.
+To start learning WGSL, we recommend [the WebGPU Fundamentals page on WGSL](https://webgpufundamentals.org/webgpu/lessons/webgpu-wgsl.html).
 For WESL, we recommend learning WGSL first, and then investigating WESL.
 This is because WESL is an extension of the WGSL language, which means that you'll wind up learning WGSL anyways.
 To read more about the WESL specifications, check out [the WESL feature list](https://wesl-lang.dev/docs/WESL-Extensions).
@@ -168,14 +173,14 @@ When you compile Rust code, the Rust compiler works to build and optimize the co
 CPUs are designed to switch between multiple single processes sequentially.
 Think of the individual programs on your computer: internet browsers, email clients, and media players are all separate processes that aren't very intensive to individually run.
 
-Meanwhile, modern GPUs contain upwards of hundreds of millions (even billions!) of processing units.
+Meanwhile, shading languages are specially designed to run on the GPU, a device which can contain upwards of hundreds of millions (even billions!) of processing units.
 Each GPU processing unit is generally slower than a CPU's, but when all processing units are used together they're able to handle exponentially more, less intensive tasks at the same time.
 Take outputting video to a display, for example.
 Standard 1080p HD computer monitors will have 2,073,600 pixels, and each pixel will have a red, green, and blue value.
 These values have to be repeatedly updated and calculated multiple times per second.
-While the CPU could do the calculations, constantly changing and updating those values (like when playing a video game, for example) would cause the CPU struggle to update both the application itself and each pixel at the same time.
+While the CPU could do the calculations, it's likely it would struggle to both constantly update the display and keep the application running smoothly.
 
-It's the difference in device capability which requires us to use a specific shading language to help modify our rendering pipelines.
+It's this difference in device capabilities which requires us to use a specific shading language to help modify our rendering pipelines.
 
 {% end %}
 
