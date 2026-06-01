@@ -13,7 +13,7 @@ This is incredibly valuable, and easily distributed, work that requires a bit of
 * Code documentation (doc examples and in the examples folder) is easier to maintain because the compiler will tell us when it breaks.
 * Inline documentation should be technical and to the point. Link relevant examples or other explanations if broader context is useful.
 * The Bevy Book is hosted on the `bevy-website` repository and targeted towards beginners who are just getting to know Bevy (and perhaps even Rust!).
-* Accepted RFCs are not documentation; they serve only as a record of accepted decisions.
+* Accepted design docs are not documentation; they serve only as a record of accepted decisions and a blueprint for what to build.
 
 ## Documentation Sources
 
