@@ -58,13 +58,15 @@ As long as you're targeting a supported platform (Windows, MacOS, Linux, Android
 {% callout(type="info") %}
 ### Why WGPU?
 
-While there would be some benefit in creating our own rendering solution, the truth of the matter is that WGPU already occupies exactly the space that Bevy currently needs:
+Now that we've gone over what Bevy uses for its rendering setup, you might be wondering why Bevy chooses to rely on a third-party tool instead of creating our own solution.
+After all, we know what type of rendering setup we want, what platforms we want to support, and what features we want to implement.
+We could write our own abstractions over the individual graphics APIs, and expose those features through a custom API.
+A Bevy-native rendering solution might even give us better performance by integrating core engine features more closely.
 
-- Multiple supported backends by default, with the goal to support as many platforms as possible.
-- A "baseline" feature set that works almost everywhere with a consistent API.
-- A "limits" and "features" system that enables turning on arbitrary, sometimes backend-specific features and detecting when those features are available.
-- A modern GPU API, but without the pain and complexity of raw Vulkan/DirectX/Metal.
-  - Perfect for user-facing Bevy renderer extensions!
+While there would be benefits to creating a Bevy-native setup, the truth of the matter is that WGPU already occupies the space that Bevy currently needs.
+By choosing to rely on WGPU, we're removing several burdens: supporting multiple graphics APIs, implementing unified features across those APIs, detecting hardware-specific limitations, etc.
+We also gain quite a lot by sharing knowledge and learning resources with WGPU rather than having to create our own bespoke material.
+Ultimately, it's about finding a solution that meets Bevy's needs while removing unnecessary burdens from our maintainers: WGPU is currently the best fit for those goals.
 
 {% end %}
 
