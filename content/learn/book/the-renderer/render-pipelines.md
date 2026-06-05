@@ -45,16 +45,42 @@ However, it's also possible to skip certain steps if their function isn't explic
 
 Let's look at the main five steps that occur during rendering:
 
- **1. Extract**
+**1. Extract**
 
 To render an image to the screen, we first have to figure out what is happening in our game!
-We use the Extract step to copy information from the main app `World` into the `RenderWorld`.
-Specifically, a buffer of component data is sent to `RenderWorld` every frame.
+We use the Extract step to copy information from the Main `App` and send it into the Render `App`.
+This is the first thing to occur on every frame, so reducing the amount of information that is copied can be beneficial for improving the performance of your game.
 
 How do we know what data is actually sent to `RenderWorld` though?
 One way of accomplishing this is to derive the [`ExtractComponent`] trait on the components that we want to transfer to the `RenderWorld`.
-Other ways including manually setting up systems specifically designed to send component data based on input or other events.
-Some Bevy components will also be sent automatically, like assets, meshes, and textures, and thus you do not have to manually specify that they need to be extracted.
+This will automatically insert a [`SyncToRenderWorld`] component on an entity that receives the specified component.
+During the [`ExtractSchedule`], entities with the `SyncToRenderWorld` component are copied over into the Render `World`.
+
+```rust
+// Derive `ExtractComponent` on a component.
+#[derive(Component, ExtractComponent)]
+struct ImageHandle {
+    handle: Handle<Image>,
+}
+
+// Or, manually insert `SyncToRenderWorld` on an entity.
+fn transfer_to_render_world(
+    mut commands: Commands, 
+    mut entity_query: Query<Entity, With<ImageHandle>>
+) {
+    for entity in entity_query.iter_mut() {
+        commands.entity(entity).insert((SyncToRenderWorld));
+    }
+}
+```
+
+A connection between the entity copied into the Render `App` and their Main `App` counterpart is created by storing a component with their counterparts entity ID.
+[`RenderEntity`] is inserted into the entity residing in the Main `App`, while [`MainEntity`] is inserted into the entity residing in the Render `App`.
+
+Alternatively, if you only need a specific type of asset (like a texture or a mesh), you can load an [`Asset`].
+`Asset`s that are loaded in your Main `App` are automatically copied over in the `ExtractSchedule`.
+Bevy is able to do this by reading the associated [`AssetEvent`] messages that the `Asset` type emits when registered and loaded.
+You can read more about how `Asset`s are loaded and handled by Bevy in the [dedicated Assets chapter](/learn/book/assets).
 
 **2. Prepare**
 
@@ -88,6 +114,13 @@ Once all [`RenderGraph`]s have finished executing, the `RenderWorld` is cleared 
 If you need data to persist in the `RenderWorld`, you can use a [`Resource`] to store it in between frames.
 
 [`ExtractComponent`]: https://docs.rs/bevy/latest/bevy/render/extract_component/trait.ExtractComponent.html
+[`SyncToRenderWorld`]: https://docs.rs/bevy/latest/bevy/render/sync_world/struct.SyncToRenderWorld.html
+[`ExtractSchedule`]: https://docs.rs/bevy/latest/bevy/prelude/struct.ExtractSchedule.html
+[`RenderEntity`]: https://docs.rs/bevy/latest/bevy/render/sync_world/struct.RenderEntity.html
+[`MainEntity`]: https://docs.rs/bevy/latest/bevy/render/sync_world/struct.MainEntity.html
+[`Asset`]: https://docs.rs/bevy/latest/bevy/asset/trait.Asset.html
+[`AssetEvent`]: https://docs.rs/bevy/latest/bevy/asset/enum.AssetEvent.html
+
 [`BindGroup`]: https://docs.rs/bevy/latest/bevy/render/render_resource/struct.BindGroup.html
 [`PhaseItem`]: https://docs.rs/bevy/latest/bevy/render/render_phase/trait.PhaseItem.html
 [`RenderSystems::PhaseSort`]: https://docs.rs/bevy/latest/bevy/render/enum.RenderSystems.html#variant.PhaseSort
