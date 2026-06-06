@@ -1,16 +1,17 @@
 +++
-title = "Render Pipelines"
+title = "Pipelined Rendering"
 insert_anchor_links = "right"
 [extra]
 weight = 2
 +++
 
-Traditional rendering methods usually rely on the "simulation" logic (game state, path-finding, physics, etc.)being computed and then "rendered" to the screen after.
-This is a linear process though: the simulation can't progress until the render is finished, and the render can't start until the simulation is complete.
-Modern rendering has outgrown this approach, as the task of rendering has moved from the CPU to dedicated GPU hardware.
+Traditional rendering methods usually rely on the "simulation" logic (game state, path-finding, physics, etc.) being computed and then "rendered" to the screen after.
+This is a linear process, and can be restrictive: the simulation can't progress until the render is finished, and the render can't start until the simulation is complete.
+While this does still work for less intensive or older games, the abilities of modern computer hardware have outgrown this approach.
+Both simulations and rendering logic have become more complicated in recent years, meaning that it isn't performant for one process to wait for the other to finish.
 
 **Pipeline Rendering** is an alternative approach that sees the main simulation logic decoupled from the render logic.
-Instead of waiting for either process to complete, the simulation logic is run on one thread while the render logic is first copied and then moved over and executed on a separate thread.
+Instead of waiting on each other, the simulation logic is run on one CPU thread while the render logic is copied to a separate thread before being passed to the GPU to be rendered.
 This allows the simulation to execute concurrently with the render, meaning less "idle" time for both processes.
 
 Bevy uses pipelined rendering, having a Main `App` that computes the simulation logic before then extracting that info into a separate Render `App`.
@@ -28,7 +29,7 @@ Instead of relying on the CPU (as was done in the past), modern rendering setups
 
 This can be thought of as CPU-driven rendering versus GPU-driven rendering.
 CPU-driven rendering is where the draw commands that determine how objects are rendered are created on the CPU, and only passed to the GPU to eventually be rendered.
-On the other hand, GPU-driven rendering sees the GPU perform those computations itself; the CPU is only responsible for passing data to the GPU.
+On the other hand, GPU-driven rendering sees the GPU perform those computations itself; the CPU is only responsible for passing the data to the GPU.
 
 Bevy used to use CPU-driven rendering, using the CPU to choose which objects needed to be rendered and how they needed to be rendered before passing that information to the GPU.
 However, this process was proving to be inefficient and was eventually changed to be GPU-driven.
@@ -43,16 +44,16 @@ The Render `App` follows a series of steps to carry out the rendering process.
 Each step has a specific purpose in arranging and converting your games data into rendered frames.
 However, it's also possible to skip certain steps if their function isn't explicitly required.
 
-Let's look at the main five steps that occur during rendering:
+Let's look at the main four steps that occur during rendering:
 
-**1. Extract**
+### Extract
 
 To render an image to the screen, we first have to figure out what is happening in our game!
 We use the Extract step to copy information from the Main `App` and send it into the Render `App`.
 This is the first thing to occur on every frame, so reducing the amount of information that is copied can be beneficial for improving the performance of your game.
 
-How do we know what data is actually sent to `RenderWorld` though?
-One way of accomplishing this is to derive the [`ExtractComponent`] trait on the components that we want to transfer to the `RenderWorld`.
+How do we actually send data to the Render `App`?
+One way is to derive the [`ExtractComponent`] trait on a component that we want to transfer.
 This will automatically insert a [`SyncToRenderWorld`] component on an entity that receives the specified component.
 During the [`ExtractSchedule`], entities with the `SyncToRenderWorld` component are copied over into the Render `World`.
 
@@ -74,44 +75,55 @@ fn transfer_to_render_world(
 }
 ```
 
-A connection between the entity copied into the Render `App` and their Main `App` counterpart is created by storing a component with their counterparts entity ID.
-[`RenderEntity`] is inserted into the entity residing in the Main `App`, while [`MainEntity`] is inserted into the entity residing in the Render `App`.
+Once copied over, a connection between the Render `App` entity and their Main `App` counterpart is created by storing a component with their counterparts entity ID.
+[`RenderEntity`] is inserted into the entity residing in the Main `App` and contains the Render `App` entity ID, while [`MainEntity`] is inserted into the entity residing in the Render `App` and contains the Main `App` entity ID.
 
 Alternatively, if you only need a specific type of asset (like a texture or a mesh), you can load an [`Asset`].
 `Asset`s that are loaded in your Main `App` are automatically copied over in the `ExtractSchedule`.
 Bevy is able to do this by reading the associated [`AssetEvent`] messages that the `Asset` type emits when registered and loaded.
 You can read more about how `Asset`s are loaded and handled by Bevy in the [dedicated Assets chapter](/learn/book/assets).
 
-**2. Prepare**
+### Prepare & Queue
 
-The Prepare step is used to set up the GPU resources needed for rendering.
-This is where assets and meshes are set up for the GPU to use, along with creating [`BindGroup`]s that hold the data needed for rendering.
+All the data that we just copied is just that - data.
+We need to prepare the data by organizing it into [`BindGroup`]s, collections that point to an objects data stored in [`Buffer`]s.
+Bevy is able to perform this for us, setting up each `BindGroup` using a [`BindGroupLayout`] to make accessing that data more convenient.
 
-**3. Queue**
+After our initial data is organized, the actual jobs that the renderer has to do are created.
+It might be overwhelming to think about everything that has to be queued, but you can think of it as arranging a group of objects onto different layers (called a render "phase") using "instructions".
+The data we copied contains the descriptions for each object in a scene (like a `Transform` component for where it's located in a scene).
+Each render phase we set up contains the "instructions" for how a part of those objects should look when viewed from a specific camera.
+For example, an opaque phase describes how the objects are arranged relative to each other from the camera's perspective, and a transparency phase describes if some objects can be seen through other objects.
 
-This is where we begin to set up the actual jobs that have to be done by the renderer.
-Once our mesh data and bind groups have been set up, we can start queuing the individual items ([`PhaseItem`]s) that the GPU has to render.
-This step can also include an optional sorting step ([`RenderSystems::PhaseSort`]) depending on how each item is queued.
+Remember that data that's been assigned into [`BindGroup`]s?
+We use these groupings to represent the individual objects that the camera sees in each render phase (aptly called [`PhaseItem`]s).
+Each `PhaseItem` is assigned a [`Draw`] function, which is the final combination of instructions for how that item will be displayed on screen.
+Finally, for each `Draw` function, a draw call is created which will tell the GPU what to display on the screen.
 
-**4. Render**
+### Render
 
 This is where the magic finally happens!
-Using [`RenderGraph`]s, we execute each [`PhaseItem`] that we queued in the previous step, incorporating the specified [`RenderPipeline`]s and [`BindGroup`]s that help us get the desired look.
-Again, we'll go into more detail in a future page, but it's important to briefly cover what exactly a [`RenderGraph`] is and what it does.
+All the queued [`Draw`] functions for every [`PhaseItem`]s are executed, incorporating the specified [`RenderPipeline`]s and [`BindGroup`]s that help us get the desired look.
 
-A [`RenderGraph`] is exactly what it sounds like, a graph!
-Its used to create the commands that are eventually sent to the GPU to render the game to the screen.
-Textures and buffers (and occasionally Entities) are passed along the `RenderGraph` to construct the draw calls that are sent to the GPU.
+Since the Render `App` abides by the ECS principles, we can leverage systems to perform the actual task of rendering.
+Each system that accesses the [`RenderContext`] system parameter can be used to create the commands that are sent to the GPU to render the game.
+Using systems allows us to structure the execution of each system with a [`Schedule`], either those provided by Bevy by default ([`Core2d`] and [`Core3d`]), or by creating a custom render schedule.
 
-`RenderGraph`s consists of [`Node`]s, [`Edge`]s, and [`Slot`]s.
-Nodes are responsible for generating draw calls and operating on input and output slots.
-Edges specify the order of execution for nodes and connect input and output slots together.
-Slots describe the render resources created or used by the nodes.
+### Cleanup
 
-**5. Cleanup**
+It should go without saying that the amount of data we copy into the Render `App` could quickly get out of hand if not managed carefully.
+Therefore, the Render `App` does a little bit of cleaning once a frame has been fully rendered.
 
-Once all [`RenderGraph`]s have finished executing, the `RenderWorld` is cleared of all entities and the data is reset.
-If you need data to persist in the `RenderWorld`, you can use a [`Resource`] to store it in between frames.
+We don't want data that isn't needed sticking around when we could use that space for new textures or meshes.
+However, we also don't want to completely wipe the Render `App`.
+If we have entities and assets that persist in the Main `App`, it doesn't make sense to keep copying them over every frame.
+Therefore, Bevy synchronizes the Render `App` to the current state of the Main `App`.
+
+Remember [`RenderEntity`] and [`MainEntity`]?
+These two components are the keys to keeping this synchronization process running.
+If an entity is despawned in the Main `App`, it's subsequently removed from the Render `App` using the entity ID stored in these components.
+The same is done for loaded assets, although once again the [`AssetEvent`]s are read to determine whether an asset should be unloaded from the Render `App`.
+However, if you do need data to persist in the Render `App`, you can create and use a [`Resource`] to store it in the Render `App`.
 
 [`ExtractComponent`]: https://docs.rs/bevy/latest/bevy/render/extract_component/trait.ExtractComponent.html
 [`SyncToRenderWorld`]: https://docs.rs/bevy/latest/bevy/render/sync_world/struct.SyncToRenderWorld.html
@@ -120,13 +132,14 @@ If you need data to persist in the `RenderWorld`, you can use a [`Resource`] to 
 [`MainEntity`]: https://docs.rs/bevy/latest/bevy/render/sync_world/struct.MainEntity.html
 [`Asset`]: https://docs.rs/bevy/latest/bevy/asset/trait.Asset.html
 [`AssetEvent`]: https://docs.rs/bevy/latest/bevy/asset/enum.AssetEvent.html
-
 [`BindGroup`]: https://docs.rs/bevy/latest/bevy/render/render_resource/struct.BindGroup.html
+[`Buffer`]: https://docs.rs/bevy/latest/bevy/render/render_resource/struct.Buffer.html
+[`BindGroupLayout`]: https://docs.rs/bevy/latest/bevy/render/render_resource/struct.BindGroupLayout.html
 [`PhaseItem`]: https://docs.rs/bevy/latest/bevy/render/render_phase/trait.PhaseItem.html
-[`RenderSystems::PhaseSort`]: https://docs.rs/bevy/latest/bevy/render/enum.RenderSystems.html#variant.PhaseSort
-[`RenderGraph`]: https://docs.rs/bevy/latest/bevy/render/render_graph/struct.RenderGraph.html
+[`Draw`]: https://docs.rs/bevy/latest/bevy/render/render_phase/trait.Draw.html
 [`RenderPipeline`]: https://docs.rs/bevy/latest/bevy/render/render_resource/struct.RenderPipeline.html
-[`Node`]: https://docs.rs/bevy/latest/bevy/render/render_graph/trait.Node.html
-[`Edge`]: https://docs.rs/bevy/latest/bevy/render/render_graph/enum.Edge.html
-[`Slot`]: https://docs.rs/bevy/latest/bevy/render/render_graph/enum.SlotType.html
+[`RenderContext`]: https://docs.rs/bevy/latest/bevy/render/renderer/struct.RenderContext.html
+[`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Schedule.html
+[`Core2d`]: https://docs.rs/bevy/latest/bevy/core_pipeline/schedule/struct.Core2d.html
+[`Core3d`]: https://docs.rs/bevy/latest/bevy/core_pipeline/schedule/struct.Core3d.html
 [`Resource`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/trait.Resource.html
