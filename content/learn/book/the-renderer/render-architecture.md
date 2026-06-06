@@ -35,7 +35,7 @@ At a high level, those layers (affectionately called "the stack") looks somethin
 
 1. Bevy's Renderer
 2. Abstraction Layer (WGPU)
-3. Graphics API (Vulkan, Metal, DirectX, OpenGL, etc.)
+3. Graphics API (Vulkan, Metal, DirectX12, WebGPU, etc.)
 4. GPU Driver (AMD, NVIDIA, Intel, Apple, etc.)
 5. GPU Hardware (The actual graphics card)
 
