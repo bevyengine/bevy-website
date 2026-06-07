@@ -27,10 +27,10 @@ Each schedule runs at a different point during the life-cycle of a Bevy app, so 
 Let's look at the other schedules provided by Bevy by default.
 When a Bevy [app] starts, it typically executes several schedules in order:
 
-+ [`StateTransition`]: Part of Bevy's [state machine abstraction].
-+ [`PreStartup`]: Library setup which must precede application setup.
-+ [`Startup`]: Setup for the application itself.
-+ [`PostStartup`]: Stuff that must follow application setup.
+1. [`StateTransition`]: Part of Bevy's [state machine abstraction].
+2. [`PreStartup`]: Library setup which must precede application setup.
+3. [`Startup`]: Setup for the application itself.
+4. [`PostStartup`]: Stuff that must follow application setup.
 
 These schedules are run only once, after [plugins] are initialized but before the game loop itself starts.
 As the names imply, they are intended for initial setup tasks.
@@ -41,13 +41,13 @@ Likewise, [`PostStartup`] should be used to react or respond to things the user 
 After the [`PostStartup`] schedule completes, the app shifts into the main game loop.
 The following schedules are then executed in order each "tick":
 
-+ [`First`]: Logic that needs to run before everything else each tick.
-+ [`PreUpdate`]: Library updates that must proceed application updates.
-+ [`StateTransition`]: Part of Bevy's [state machine abstraction].
-+ The [fixed update loop] may run multiple schedules before progressing.
-+ [`Update`]: Updates for the application itself.
-+ [`PostUpdate`]: Library updates that must follow application updates.
-+ [`Last`]: Logic that needs to run after everything else each tick.
+1. [`First`]: Logic that needs to run before everything else each tick.
+2. [`PreUpdate`]: Library updates that must proceed application updates.
+3. [`StateTransition`]: Part of Bevy's [state machine abstraction].
+4. The [fixed update loop] may run multiple schedules before progressing.
+5. [`Update`]: Updates for the application itself.
+6. [`PostUpdate`]: Library updates that must follow application updates.
+7. [`Last`]: Logic that needs to run after everything else each tick.
 
 [`PreUpdate`] and [`PostUpdate`] (like [`PreStartup`] and [`PostStartup`]) allow library code to "sandwich" user code.
 [`First`] and [`Last`] extend this further, allowing running before and after the majority of other logic.
