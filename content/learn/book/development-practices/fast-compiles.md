@@ -86,6 +86,9 @@ For more information, see [The rustup book: Overrides](https://rust-lang.github.
 
 ## Cranelift
 
+> [!WARNING]
+> Enabling cranelift is known to break variable inspection while debugging.
+
 This uses a new nightly-only codegen that is about 30% faster at compiling than LLVM.
 It currently works best on Linux.
 
