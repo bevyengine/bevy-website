@@ -86,9 +86,6 @@ For more information, see [The rustup book: Overrides](https://rust-lang.github.
 
 ## Cranelift
 
-> [!WARNING]
-> Enabling cranelift is known to break variable inspection while debugging.
-
 This uses a new nightly-only codegen that is about 30% faster at compiling than LLVM.
 It currently works best on Linux.
 
@@ -119,6 +116,11 @@ While Cranelift is very fast to compile, the generated binaries are not optimize
 Notably, Wasm builds do not work yet.
 
 When shipping your game, you should still compile it with LLVM.
+
+{% callout(type="caution") %}
+Enabling cranelift is known to break variable inspection while debugging.
+{% end %}
+
 
 ## Generic Sharing
 
