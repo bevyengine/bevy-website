@@ -99,7 +99,7 @@ For even more control over your game loop, read the [custom loops] chapter!
 [app]: /learn/book/the-game-loop/app
 [plugins]: /learn/book/modular-architecture/plugins
 [state machine abstraction]: /learn/book/control-flow/states
-[fixed update loop]: /learn/book/the-game-loop/fixed-time
+[fixed update loop]: /learn/book/the-game-loop/time-and-timers#fixing-your-timestep
 [custom loops]: /learn/book/the-game-loop/custom-loops
 [`ScheduleRunnerPlugin`]: https://docs.rs/bevy/latest/bevy/app/struct.ScheduleRunnerPlugin.html
 [`MinimalPlugins`]: https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html
