@@ -876,7 +876,12 @@ Two new post-processing effects were added in this cycle, both classic tools for
 
 ### Vignette
 
-*TODO: Add a before/after image showing the vignette effect.*
+{{ compare_slider(
+    left_title="Without Vignette",
+    left_image="post_processing_base.jpg",
+    right_title="With Vignette",
+    right_image="post_processing_vignette.jpg"
+) }}
 
 Vignette reduces image brightness towards the periphery of the frame, drawing the viewer's eye to the center.
 It's a classic tool for simulating the look of a camera lens or adding cinematic tension — but its real power in games is as a dynamic effect.
@@ -902,7 +907,19 @@ commands.spawn((
 
 ### Lens Distortion
 
-*TODO: Add a before/after image showing the barrel/pincushion warping effect.*
+{{ compare_slider(
+    left_title="No Distortion",
+    left_image="post_processing_base.jpg",
+    right_title="Barrel Distortion",
+    right_image="post_processing_barrel_distortion.jpg"
+) }}
+
+{{ compare_slider(
+    left_title="No Distortion",
+    left_image="post_processing_base.jpg",
+    right_title="Pincushion Distortion",
+    right_image="post_processing_pincushion_distortion.jpg"
+) }}
 
 Lens distortion warps the image spatially — positive `intensity` pushes the edges outward (barrel distortion), negative pulls them inward (pincushion distortion).
 Racing games ramp up barrel distortion as speed increases, making the world feel like it's bending around the player; push it further and you get a fisheye look, useful for diegetic security cameras, wide-angle surveillance aesthetic or that classic GoPro bodycam look.
@@ -1291,7 +1308,12 @@ If you want to color each section of characters separately, reach for `text_sect
 
 {{ heading_metadata(authors=["@pcwalton"] prs=[22582]) }}
 
-*TODO: Add a before/after screenshot from the `pccm` example showing reflections with and without parallax correction.*
+{{ compare_slider(
+    left_title="Correction Off",
+    left_image="parallax_correction_off.jpg",
+    right_title="Correction On",
+    right_image="parallax_correction_on.jpg"
+) }}
 
 Bevy previously rendered cubemap reflections as though the environment were infinitely far away.
 For outdoor scenes this was often fine, but for indoor scenes and dense environments the result looked wrong —
