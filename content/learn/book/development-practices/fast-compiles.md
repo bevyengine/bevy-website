@@ -117,6 +117,14 @@ Notably, Wasm builds do not work yet.
 
 When shipping your game, you should still compile it with LLVM.
 
+{% callout(type="caution") %}
+Enabling cranelift is known to break local variable inspection while debugging.
+You can only inspect statics.
+This is caused by the fact that `rustc_codegen_cranelift` is missing DWARF support.
+See [`cranelift #166](https://github.com/rust-lang/rustc_codegen_cranelift/issues/166) for more information.
+{% end %}
+
+
 ## Generic Sharing
 
 Allows crates to share monomorphized generic code instead of duplicating it.
