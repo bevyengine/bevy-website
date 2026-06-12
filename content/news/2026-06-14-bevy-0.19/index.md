@@ -32,7 +32,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 BSN is an ergonomic Rust-like scene syntax which can be defined in Rust code via the `bsn!` macro _and_ in `.bsn` asset files. If you were ever bothered by the verbosity and complexity of spawning complex collections of entities in Bevy, you will probably enjoy what BSN has to offer. BSN can be used to spawn anything in the ECS. This benefits all scenarios, but it is worth calling out explicitly that this makes Bevy UI code significantly easier to read and write.
 
-Note that while **Bevy 0.19** supports scene assets, we aren't yet shipping a first-party `.bsn` asset loader. **Bevy 0.19** focuses on the code-driven workflow, and we plan to roll out the asset driven workflow in the next release.
+Note that while **Bevy 0.19** supports scene assets, we aren't yet shipping a first-party `.bsn` asset loader. **Bevy 0.19** focuses on the code-driven workflow, and we plan to roll out the asset driven workflow soon.
 
 The new scene system is flexible and format-independent: BSN is our recommended default format, but third parties are free to build their own, and we plan to make formats like `glTF` directly compatible.
 
@@ -172,7 +172,7 @@ This (if there was a `.bsn` asset loader) would spawn a scene that includes the 
 
 Also note the `:`, which is "caching" syntax. When first loaded, this will resolve the `"player.bsn"` scene and cache the results for reuse. This makes spawning multiple instances of the scene much cheaper, as it only needs to resolve whatever is layered "on top" of the cached scene.
 
-We're [working](https://github.com/bevyengine/bevy/pull/23576) on an official `.bsn` asset loader, and we also plan on porting Bevy's glTF loader to the new scene system (so you can depend on `"my_scene.gltf"` just like you would a `my_scene.bsn` file). The `bsn!` macro and spawning system already supports scene assets, so if you're feeling adventurous you can try implementing your own Bevy scene format while you wait for ours!
+We're [working](https://github.com/bevyengine/bevy/pull/23576) on an official `.bsn` asset loader, and we also plan on porting Bevy's glTF loader to the new scene system (so you can depend on `"my_scene.gltf"` just like you would a `my_scene.bsn` file). The `bsn!` macro and spawning system already supports scene assets, so if you're feeling adventurous you can try implementing your own Bevy scene asset format while you wait for ours!
 
 ### Scene Lists
 
@@ -511,15 +511,17 @@ fn level() -> impl SceneList {
 
 {{ heading_metadata(authors=["@JMS55", "@dylansechet"] prs=[22348, 22459, 22468, 22618, 22671, 23442, 23809, 23813, 23898, 23948, 23968]) }}
 
+![solari](solari.jpg)
+
 Solari, Bevy's realtime pathtraced renderer, has gained several improvements and fixes for mirrors and non-metallic materials, performance improvements, and greatly increased temporal stability.
 
 For more details, read [JMS55's blog post](https://jms55.github.io/posts/2026-04-12-solari-bevy-0-19).
 
-## More Feathers widgets
+## More Feathers Widgets
 
 {{ heading_metadata(authors=["@viridia", "@jordanhalase"] prs=[23645, 23707, 23788, 23787, 23804, 23817, 23842, 23744, 23820, 23830, 23869, 23883, 23890, 23993]) }}
 
-*TODO: Add screenshots of the new Feathers widgets (text input, number input, dropdown, pane/group decorators).*
+![feathers widgets](feathers.jpg)
 
 Bevy Feathers, our opinionated UI widget collection designed with the Bevy editor in mind, has added several new widgets this cycle:
 
@@ -541,26 +543,26 @@ For full usage and an interactive demo, try out the [`feathers_gallery`] example
 
 ### Feathers + BSN = ❤️
 
-The Feathers widgets are migrating to BSN, Bevy's next-generation scene system.
+The Feathers widgets have migrated to BSN, Bevy's next-generation scene system.
 The new widgets above are BSN-only from the start; the older widgets (button, checkbox, slider, and friends) now have a `bsn!` definition (their original APIs have been deprecated).
 
 BSN is a better foundation for widgets than the old spawn-function approach.
 UI controls are inherently multi-entity assemblages — a slider isn't one node, it's a track, a fill, a thumb, and a label wired together.
-BSN describes all of that in one place, reduces boilerplate, and lets you compose widgets together, attach props, reference font/image assets and register observers in the same declaration.
+BSN describes all of that in one place, reduces boilerplate, lets you compose widgets together, attach props, reference font/image assets, and register observers in the same declaration.
 
 ```rust
 // Before: label children passed as a generic argument, observer wired separately
 commands.spawn(checkbox_bundle(
     MyCheckbox,
     children![(Text::new("Enable shadows"), ThemedText)],
-)).observe(|trigger: Trigger<ValueChange<bool>>, mut config: ResMut<ShadowConfig>| {
-    config.enabled = trigger.value;
+)).observe(|change: On<ValueChange<bool>>, mut config: ResMut<ShadowConfig>| {
+    config.enabled = change.value;
 });
 
 // After: caption, extra components, and observer all defined in one call
 bsn! {
-    :FeathersCheckbox {
-        @caption: { bsn! { Text("Enable shadows") ThemedText } }
+    @FeathersCheckbox {
+        @caption: bsn! { Text("Enable shadows") ThemedText }
     }
     MyCheckbox
     on(|change: On<ValueChange<bool>>, mut config: ResMut<ShadowConfig>| {
@@ -571,16 +573,16 @@ bsn! {
 
 In the future, the same BSN syntax used in the `bsn!` macro will be portable to `.bsn` files, letting devs choose and rapidly swap between code-first and asset-driven workflows when defining UI.
 
-## Text input
+## Text Input
 
 {{ heading_metadata(authors=["@ickshonpe", "@Zeophlite", "@alice-i-cecile", "@chronicl"] prs=[19106, 23282, 23455, 23475, 23479, 23496, 23679, 23704, 23841, 23947, 23960, 23969, 24023, 24028, 24032]) }}
 
-*TODO: Add a GIF of the EditableText widget with cursor and selection.*
+<video controls loop><source  src="editable_text.mp4" type="video/mp4"/></video>
 
 While the ability to capture text is a core requirement for game dev tooling, it's a common task even in games themselves.
 Player names, search bars and chat all rely on the ability to enter and submit plain text.
 
-In Bevy 0.19, we've added basic support for text entry, in the form of the `EditableText` widget.
+In Bevy 0.19, we've added basic support for text entry, in the form of the `EditableText` component.
 Spawning an entity with this component will create a simple unstyled rectangle of editable text.
 Our initial text entry supports:
 
@@ -652,7 +654,7 @@ fn on_submit(
 
 The event `TextEditChange` is emitted *after* changes have been applied to the `EditableText`.
 
-### Feathers text input
+### Feathers Text Input
 
 If you're building editor tooling with Bevy Feathers, there's a pre-built alternative: `FeathersTextInput`.
 It wraps `EditableText` and handles several things for you automatically:
@@ -668,10 +670,10 @@ This widget is structured as a container/inner pair:
 
 ```rust
 bsn! {
-    :FeathersTextInputContainer
+    @FeathersTextInputContainer
     Children [
         (
-            :FeathersTextInput {
+            @FeathersTextInput {
                 @max_characters: 20usize,
             }
             MyMarker
@@ -681,7 +683,7 @@ bsn! {
 }
 
 fn on_text_change(
-    _trigger: On<TextEditChange>,
+    _event: On<TextEditChange>,
     input: Single<&EditableText, With<MyMarker>>,
 ) {
     println!("{}", input.value());
@@ -711,7 +713,7 @@ Not anymore.
 
 ```rust
 // By asset handle — same behavior as before, now wrapped in FontSource
-TextFont::default().with_font(asset_server.load("fonts/FiraMono.ttf"))
+TextFont { font: FontSource::Handle(asset_server.load("fonts/FiraMono.ttf")), ..default() )
 
 // By family name — resolved from the font database
 TextFont { font: FontSource::Family("FiraMono".into()), ..default() }
@@ -1153,11 +1155,11 @@ it's lovely to see those performance gains, and to know that Bevy itself is no l
 
 [Bistro]: https://developer.nvidia.com/orca/amazon-lumberyard-bistro
 
-## Diagnostics overlay
+## Diagnostics Overlay
 
-{{ heading_metadata(authors=["@hukasu"] prs=[22486]) }}
+{{ heading_metadata(authors=["@hukasu", "@cart"] prs=[22486]) }}
 
-*TODO: Add a screenshot of the DiagnosticsOverlay in a real app.*
+![overlay](overlay.jpg)
 
 Bevy's diagnostics have always been easy to dump to the terminal, but displaying them in-game meant wiring up your own UI.
 `DiagnosticsOverlayPlugin` adds a built-in overlay for this, with presets for common cases:
@@ -1470,7 +1472,7 @@ Thanks again to Foresight Spatial Labs for their generous open source contributi
 
 {{ heading_metadata(authors=["@IceSentry"] prs=[23482]) }}
 
-*TODO: Add a screenshot of the infinite grid with a real model.*
+![infinite grid](infinite_grid.jpg)
 
 A transparent ground-plane grid is a staple of 3D editor tooling: it marks the major axes, orients the scene, and makes scale immediately legible.
 
