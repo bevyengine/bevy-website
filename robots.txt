@@ -1,0 +1,21 @@
+User-agent: *
+Sitemap: https://bevy.org/sitemap.xml
+Disallow: /learn/book/
+Disallow: /learn/book/development-practices/
+Disallow: /learn/book/control-flow/
+Disallow: /learn/book/assets/
+Disallow: /learn/book/is-bevy-right-for-your-project/
+Disallow: /learn/book/the-renderer/
+Disallow: /learn/book/modular-architecture/
+Disallow: /learn/book/further-reading/
+Disallow: /learn/book/the-game-loop/
+Disallow: /learn/book/intro/
+Disallow: /learn/book/storing-data/
+Disallow: /learn/book/releasing-projects/
+Disallow: /learn/advanced-examples/
+Disallow: /learn/advanced-examples/sudoku/
+Disallow: /learn/advanced-examples/text-adventure/
+Disallow: /learn/quick-start/falling-sand/
+Disallow: /learn/quick-start/3d-puzzle-game/
+Disallow: /learn/quick-start/breakout/
+
