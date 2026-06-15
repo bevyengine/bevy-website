@@ -697,8 +697,6 @@ Use `FeathersTextInput` when you want a polished, Feathers-themed widget out of 
 
 {{ heading_metadata(authors=["@ickshonpe", "@alice-i-cecile", "@gregcsokas"] prs=[22156, 22396, 22614, 22879, 23380]) }}
 
-TODO: screenshot showing generic families, weights, and responsive sizing in action
-
 Bevy's text system has historically been sparse: pick a font by asset handle, set a size in pixels, done.
 Want bold? Load a separate bold font asset.
 Want italic? Another asset.
@@ -708,6 +706,8 @@ Want text that scales with the viewport? Roll it yourself.
 Not anymore.
 
 ### Better font selection
+
+![generic fonts](generic_fonts.jpg)
 
 `FontSource` now offers three ways to identify a font:
 
@@ -738,6 +738,8 @@ Enable the `bevy/system_font_discovery` feature to make installed system fonts a
 
 ### Variable font properties
 
+![variable font properties](variable_font_properties.jpg)
+
 `TextFont` has gained the `weight`, `width`, and `style` fields. Pick a variable font, and say goodbye to separate assets for every variant of a typeface:
 
 ```rust
@@ -755,6 +757,8 @@ TextFont {
 
 ### Responsive font sizing
 
+*TODO: video of responsive sizing in action*
+
 `font_size` is now a `FontSize` enum rather than a bare `f32`:
 
 ```rust
@@ -766,6 +770,8 @@ TextFont::from_font_size(FontSize::Rem(1.5))   // relative to the RemSize resour
 The full set of variants mirrors CSS: `Px`, `Vw`, `Vh`, `VMin`, `VMax`, and `Rem`. `Rem` values scale with the `RemSize` resource, giving you a single knob to resize all relative text at once. Note that `Text2d` resolves viewport units against the primary window, not the render target — a deliberate compromise for entities that can render to multiple viewports.
 
 ### Letter spacing
+
+<video controls loop><source src="letter_spacing.mp4" type="video/mp4"/></video>
 
 A new `LetterSpacing` component controls the spacing between characters:
 
@@ -1282,7 +1288,7 @@ payload of the `AccessibleLabel` component, satisfying the needs of `accesskit`.
 
 {{ heading_metadata(authors=["@ickshonpe", "@nuts-rice"] prs=[22732, 23120]) }}
 
-*TODO: Add a screenshot showing text gizmos rendered in a 3D scene.*
+![text gizmos](text_gizmos.jpg)
 
 Sometimes you just want to slap a label on something while debugging.
 Text gizmos are for exactly that: a zero-setup way to draw world-space text anywhere in your scene using a built-in stroke font.
@@ -1448,7 +1454,7 @@ We don't intend to ever support:
 
 {{ heading_metadata(authors=["@jbuehler23", "@aevyrie"] prs=[23435]) }}
 
-*TODO: Add a screenshot or GIF of the transform gizmo in use in the viewport.*
+<video controls loop><source src="transform_gizmo.mp4" type="video/mp4"/></video>
 
 A transform gizmo — the click-and-drag handles for translating, rotating, and scaling objects in a 3D viewport — is one of the first things anyone reaches for when building a level editor. Bevy now has one built in, for your use today and our own use in the future.
 
@@ -1528,7 +1534,12 @@ This is an upstreamed version of the [`bevy_infinite_grid` crate], created and m
 
 {{ heading_metadata(authors=["@dylansechet"] prs=[23194, 23203]) }}
 
-*TODO: Add a before/after image showing the seam artifacts and/or the metallic energy absorption bug.*
+{{ compare_slider(
+    left_title="Before",
+    left_image="white_furnace_before.jpg",
+    right_title="After",
+    right_image="white_furnace_after.jpg"
+) }}
 
 The [white furnace test](https://lousodrome.net/blog/light/2023/10/21/the-white-furnace-test/) is a classic sanity check for physically-based renderers. Place a perfectly reflective object inside a uniform white environment, and it should be indistinguishable from the background, no matter how metallic and rough. Any object that remains visible is a sign that the shader is creating or absorbing energy it shouldn't.
 
