@@ -769,7 +769,7 @@ The full set of variants mirrors CSS: `Px`, `Vw`, `Vh`, `VMin`, `VMax`, and `Rem
 
 ### Letter spacing
 
-<video controls loop><source src="letter_spacing.webm" type="video/webm"/></video>
+<video controls loop><source src="letter_spacing.mp4" type="video/mp4"/></video>
 
 A new `LetterSpacing` component controls the spacing between characters:
 
