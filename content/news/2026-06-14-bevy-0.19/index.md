@@ -539,7 +539,7 @@ Bevy Feathers, our opinionated UI widget collection designed with the Bevy edito
 
 We've improved the existing widgets! For full usage and an interactive demo, try out the [`feathers_gallery`] example.
 
-[`feathers_gallery`]: https://github.com/bevyengine/bevy/blob/main/examples/ui/widgets/feathers_gallery.rs
+[`feathers_gallery`]: https://github.com/bevyengine/bevy/blob/v0.19.0/examples/ui/widgets/feathers_gallery.rs
 
 ### Feathers + BSN = ❤️
 
@@ -739,7 +739,7 @@ See the [`settings.rs`](https://github.com/bevyengine/bevy/blob/v0.19.0/examples
 
 ---
 
-A special thanks to Andhrimnir (@tecbeast42) for giving Bevy ownership of the `bevy_settings` crate name on `crates.io`. We built our own brand new settings crate, but we're re-using the `bevy_settings` crate name because it fits the best.
+A special thanks to Andhrimnir (@tecbeast42) for giving Bevy ownership of the `bevy-settings` crate name on `crates.io`. We built our own brand new settings crate, but we're re-using the `bevy-settings` crate name because it fits the best.
 
 ## More Post-Processing Effects
 
@@ -755,6 +755,9 @@ Two new post-processing effects were added in this cycle, both classic tools for
     right_title="With Vignette",
     right_image="post_processing_vignette.jpg"
 ) }}
+
+
+Vignette reduces image brightness towards the periphery of the frame, drawing the viewer's eye to the center.
 
 ```rust
 commands.spawn((
@@ -786,6 +789,8 @@ commands.spawn((
     right_title="Pincushion Distortion",
     right_image="post_processing_pincushion_distortion.jpg"
 ) }}
+
+Lens distortion warps the image spatially. Positive `intensity` pushes the edges outward (barrel distortion), negative pulls them inward (pincushion distortion).
 
 ```rust
 commands.spawn((
@@ -1292,7 +1297,7 @@ fn setup(mut commands: Commands) {
 }
 ```
 
-Grid appearance — colors, fade distance, line scale — is controlled by `InfiniteGridSettings`, which can be placed on the grid entity or on a specific camera to override it per-view.
+Grid appearance — colors, fade distance, line scale — is controlled by `InfiniteGridSettings`, which can be placed on the grid entity or on a specific camera to override it per-view. You can see how this works in the new [`infinite_grid.rs`](https://github.com/bevyengine/bevy/blob/v0.19.0/examples/dev_tools/infinite_grid.rs) example.
 
 This is an upstreamed version of the [`bevy_infinite_grid` crate], created and maintained by Foresight Spatial Labs — thank you for building it and generously contributing it to Bevy!
 
