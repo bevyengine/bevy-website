@@ -26,17 +26,17 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 {{ heading_metadata(authors=["@cart"] prs=[23413, 23880, 23808, 23905, 24008]) }}
 
-**Bevy 0.19** introduces our brand new, massively improved scene system for Bevy. We've been working on this for a _long time_ (years now!), and we are excited to finally get it in the hands of Bevy developers. It makes defining scenes in code (and ultimately in assets produced by the upcoming Bevy Editor) much nicer.
+![bsn](bsn.png)
+
+**Bevy 0.19** introduces our brand new, massively improved scene system for Bevy. We've been working on this for a _long time_ (years now!), and we are excited to finally get it in the hands of Bevy developers. It makes defining scenes in code (and ultimately in assets produced by the upcoming Bevy Editor) much nicer. It will also be used to _build_ the upcoming Bevy Editor!
 
 ### BSN (Bevy Scene Notation)
 
 BSN is an ergonomic Rust-like scene syntax which can be defined in Rust code via the `bsn!` macro _and_ in `.bsn` asset files. If you were ever bothered by the verbosity and complexity of spawning complex collections of entities in Bevy, you will probably enjoy what BSN has to offer. BSN can be used to spawn anything in the ECS. This benefits all scenarios, but it is worth calling out explicitly that this makes Bevy UI code significantly easier to read and write.
 
-Note that while **Bevy 0.19** supports scene assets, we aren't yet shipping a first-party `.bsn` asset loader. **Bevy 0.19** focuses on the code-driven workflow, and we plan to roll out the asset driven workflow soon.
+Some quick caveats: while **Bevy 0.19** technically supports scene assets, we aren't yet shipping a first-party `.bsn` asset loader. This release focuses on the code-driven workflow, and we plan to roll out the asset driven workflow in a future release. Additionally, BSN is still hot off the presses and it will likely take a few releases for us to iron out the experience. It is plenty useful now, but expect some rough edges and missing features.
 
-The new scene system is flexible and format-independent: BSN is our recommended default format, but third parties are free to build their own, and we plan to make formats like `glTF` directly compatible.
-
-A `bsn!` expression is essentially a list of components to add to an entity:
+In Rust, a `bsn!` expression is essentially a list of components to add to an entity:
 
 ```rust
 bsn! {
@@ -47,7 +47,10 @@ bsn! {
 }
 ```
 
-So far this looks and behaves much like Bevy's existing `Bundle` (which is _just_ a collection of components). But BSN has a ton of additional superpowers.
+So far this looks and behaves much like Bevy's existing `Bundle` (which is _just_ a collection of components). But BSN has a ton of additional superpowers!
+
+<details>
+    <summary><b>Click here to see everything BSN has to offer!</b></summary>
 
 ### Optional Fields
 
@@ -135,7 +138,7 @@ fn player(name: &str) -> impl Scene {
 
 ### Scenes are Composable Patches
 
-A BSN expression is a "patch", it does not write a "full" instance of every type it defines. This means you can layer scenes on top of each other:
+A BSN expression is a "patch"; it does not write a "full" instance of every type it defines. This means you can layer scenes on top of each other:
 
 ```rust
 fn button() -> impl Scene {
@@ -507,6 +510,8 @@ fn level() -> impl SceneList {
 
 `.spawn()` will turn any function that returns a `Scene` or a `SceneList` into a system that spawns that scene.
 
+</details>
+
 ## Solari Improvements
 
 {{ heading_metadata(authors=["@JMS55", "@dylansechet"] prs=[22348, 22459, 22468, 22618, 22671, 23442, 23809, 23813, 23898, 23948, 23968]) }}
@@ -525,30 +530,20 @@ For more details, read [JMS55's blog post](https://jms55.github.io/posts/2026-04
 
 Bevy Feathers, our opinionated UI widget collection designed with the Bevy editor in mind, has added several new widgets this cycle:
 
-- Text input (see the dedicated release note for far more details)
+- Text input
 - Number input
 - Dropdown menu button and menu divider
 - Disclosure toggle (chevron expand/collapse)
 - Icon and label (display primitives)
 - Pane, subpane, and group (decorative frames for editors)
 
-Existing widgets have also been polished for readability and functionality.
-Style tokens are added for mouse pressed in checked and unchecked states, multiple radio groups are now easier to manage with
-`radio_self_update`, and a new `FocusCause` field has been added to the `FocusGained` event to let widgets distinguish whether a user
-clicked or navigated into it.
+We've improved the existing widgets! For full usage and an interactive demo, try out the [`feathers_gallery`] example.
 
-For full usage and an interactive demo, try out the [`feathers_gallery`] example.
-
-[`feathers_gallery`]: https://github.com/bevyengine/bevy/blob/main/examples/ui/widgets/feathers_gallery.rs
+[`feathers_gallery`]: https://github.com/bevyengine/bevy/blob/v0.19.0/examples/ui/widgets/feathers_gallery.rs
 
 ### Feathers + BSN = ❤️
 
-The Feathers widgets have migrated to BSN, Bevy's next-generation scene system.
-The new widgets above are BSN-only from the start; the older widgets (button, checkbox, slider, and friends) now have a `bsn!` definition (their original APIs have been deprecated).
-
-BSN is a better foundation for widgets than the old spawn-function approach.
-UI controls are inherently multi-entity assemblages — a slider isn't one node, it's a track, a fill, a thumb, and a label wired together.
-BSN describes all of that in one place, reduces boilerplate, lets you compose widgets together, attach props, reference font/image assets, and register observers in the same declaration.
+The Feathers widgets have migrated to BSN, Bevy's next-generation scene system. BSN is a better foundation for widgets than the old spawn-function approach: it reduces boilerplate, lets you compose widgets together, parameterize widgets with SceneComponent props, reference font/image assets, and register observers in the same declaration.
 
 ```rust
 // Before: label children passed as a generic argument, observer wired separately
@@ -579,119 +574,31 @@ In the future, the same BSN syntax used in the `bsn!` macro will be portable to 
 
 <video controls loop><source  src="editable_text.mp4" type="video/mp4"/></video>
 
-While the ability to capture text is a core requirement for game dev tooling, it's a common task even in games themselves.
-Player names, search bars and chat all rely on the ability to enter and submit plain text.
-
-In Bevy 0.19, we've added basic support for text entry, in the form of the `EditableText` component.
+In **Bevy 0.19**, we've added basic support for text entry, in the form of the `EditableText` component.
 Spawning an entity with this component will create a simple unstyled rectangle of editable text.
 Our initial text entry supports:
 
-- Press keys on your keyboard, get text (wow!).
-- Cursor navigation: arrow keys, Home/End, and word-level shortcuts (Ctrl/Alt+arrow).
-- Selection: Shift+arrow extends by character or word; click and drag with the pointer.
-- Multi-click: double-click to select a word, triple-click to select the whole line.
-- Backspace and Delete, both for single characters and words.
-- Clipboard: uses the OS clipboard with the `system_clipboard` feature enabled, or an in-app buffer without it.
-- Unicode-aware navigation and editing: 1 byte/char != 1 character.
-- Bidirectional text support, allowing both left-to-right and right-to-left scripts.
-- IME (Input Method Editor) support for CJK and other composing scripts.
-- Multiline support: newlines, soft-wrapping, and vertical scrolling.
-- Horizontal scrolling when content exceeds the visible width.
-- Per-character input filtering via `EditableTextFilter`.
-- Optional select-all on focus with the `SelectAllOnFocus` component.
-- Max character limits via `EditableText::max_characters`.
+- **Typing**: Press keys on your keyboard, get text (wow!)
+- **Cursor navigation**: arrow keys, Home/End, and word-level shortcuts (Ctrl/Alt+arrow)
+- **Selection**: Shift+arrow extends by character or word; click and drag with the pointer
+- **Multi-click**: double-click to select a word, triple-click to select the whole line
+- **Backspace and Delete**: Both for single characters and words
+- **Clipboard**: uses the OS clipboard with the `system_clipboard` feature enabled, or an in-app buffer without it
+- **Unicode-aware navigation and editing**: 1 byte/char != 1 character
+- **Bidirectional text**: allows both left-to-right and right-to-left scripts
+- **IME (Input Method Editor) support**: for CJK and other composing scripts
+- **Multiline support**: newlines, soft-wrapping, and vertical scrolling
+- **Horizontal scrolling**: when content exceeds the visible width
+- **Per-character input filtering**: via `EditableTextFilter`
+- **Optional select-all on focus**: via the `SelectAllOnFocus` component
+- **Max character limits**: via `EditableText::max_characters`
 
 Many important features are currently unimplemented (placeholder text, undo-redo, password masking...).
 While we've been careful to expose and document the internals so that you can readily implement these features in your own projects,
 we would like to continue to expand the functionality of the base widget.
 Please consider making a PR!
 
-### Usage
-
-To get started, spawn an entity with the `EditableText` component.
-
-```rust
-commands.spawn((
-    Node {
-        width: px(200),
-        border: px(2).all(),
-        padding: px(8).all(),
-        ..default()
-    },
-    BorderColor::from(Color::WHITE),
-    BackgroundColor(Color::srgb(0.1, 0.1, 0.1)),
-    EditableText::default(),
-    TextFont {
-        font_size: FontSize::Px(24.0),
-        ..default()
-    },
-    TextCursorStyle::default(),
-));
-```
-
-When working with text input, you'll probably want to add the pre-existing `TabNavigationPlugin` as well, to allow users to easily swap input focus.
-
-To read and clear the input on submission:
-
-```rust
-fn on_submit(
-    input_focus: Res<InputFocus>,
-    keyboard: Res<ButtonInput<KeyCode>>,
-    mut inputs: Query<&mut EditableText>,
-) {
-    if keyboard.just_pressed(KeyCode::Enter)
-        && let Some(entity) = input_focus.get()
-        && let Ok(mut input) = inputs.get_mut(entity)
-    {
-        println!("Submitted: {}", input.value());
-        input.clear();
-    }
-}
-```
-
-`EditableText` integrates with Bevy's `InputFocus` resource, accepting keyboard inputs only when the selected
-`EditableText` entity is focused.
-
-The event `TextEditChange` is emitted *after* changes have been applied to the `EditableText`.
-
-### Feathers Text Input
-
-If you're building editor tooling with Bevy Feathers, there's a pre-built alternative: `FeathersTextInput`.
-It wraps `EditableText` and handles several things for you automatically:
-
-- A focus ring appears on the container when the input is focused, and disappears when it isn't.
-- Cursor and selection colors update to match the active `UiTheme`.
-- The mouse cursor changes to a text beam on hover.
-- `TabIndex` is set so keyboard tab navigation works without any extra setup.
-
-You still subscribe to `On<TextEditChange>` to react to the text value — like all Feather's widgets, it handles presentation, not your application logic.
-
-This widget is structured as a container/inner pair:
-
-```rust
-bsn! {
-    @FeathersTextInputContainer
-    Children [
-        (
-            @FeathersTextInput {
-                @max_characters: 20usize,
-            }
-            MyMarker
-            on(on_text_change)
-        )
-    ]
-}
-
-fn on_text_change(
-    _event: On<TextEditChange>,
-    input: Single<&EditableText, With<MyMarker>>,
-) {
-    println!("{}", input.value());
-}
-```
-
-Use `EditableText` directly when you need full control over appearance — a way to get the player's name, a styled chat box, or a search bar in your game's UI.
-Use `FeathersTextInput` when you want a polished, Feathers-themed widget out of the box.
+To see how to use it in practice, check out our new [`text_input.rs`](https://github.com/bevyengine/bevy/blob/v0.19.0/examples/ui/text/text_input.rs) example.
 
 ## Richer text
 
@@ -712,14 +619,14 @@ Not anymore.
 `FontSource` now offers three ways to identify a font:
 
 ```rust
-// By asset handle — same behavior as before, now wrapped in FontSource
-TextFont { font: FontSource::Handle(asset_server.load("fonts/FiraMono.ttf")), ..default() )
+// Asset handle
+FontSource::Handle(asset_server.load("fonts/FiraMono.ttf")
 
-// By family name — resolved from the font database
-TextFont { font: FontSource::Family("FiraMono".into()), ..default() }
+// Family name
+FontSource::Family("FiraMono".into())
 
-// By semantic category
-TextFont { font: FontSource::Monospace, ..default() }
+// Semantic category
+FontSource::Monospace
 ```
 
 The generic variants — `Serif`, `SansSerif`, `Cursive`, `Fantasy`, `Monospace`, and several UI-specific ones (`SystemUi`, `Emoji`, `Math`, and others) — resolve to configurable defaults. Override them via `FontCx`:
@@ -752,12 +659,7 @@ TextFont {
 }
 ```
 
-`FontWeight` accepts any value from 1–1000. `FontStyle` is `Normal`, `Italic`, or `Oblique`.
-`FontWidth` covers the full OpenType stretch range from `ULTRA_CONDENSED` (50%) to `ULTRA_EXPANDED` (200%).
-
 ### Responsive font sizing
-
-*TODO: video of responsive sizing in action*
 
 `font_size` is now a `FontSize` enum rather than a bare `f32`:
 
@@ -767,7 +669,7 @@ TextFont::from_font_size(FontSize::Vh(5.0))    // 5% of viewport height
 TextFont::from_font_size(FontSize::Rem(1.5))   // relative to the RemSize resource
 ```
 
-The full set of variants mirrors CSS: `Px`, `Vw`, `Vh`, `VMin`, `VMax`, and `Rem`. `Rem` values scale with the `RemSize` resource, giving you a single knob to resize all relative text at once. Note that `Text2d` resolves viewport units against the primary window, not the render target — a deliberate compromise for entities that can render to multiple viewports.
+The full set of variants mirrors CSS: `Px`, `Vw`, `Vh`, `VMin`, `VMax`, and `Rem`. `Rem` values scale with the `RemSize` resource, giving you a single knob to resize all relative text at once.
 
 ### Letter spacing
 
@@ -782,8 +684,6 @@ commands.spawn((
 ));
 ```
 
-It follows the same pattern as `LineHeight`, so negative values bring characters closer together. Note that LetterSpacing currently only supports `Px` — `Rem` support remains planned.
-
 While all of these features would have been possible in [`cosmic_text`],
 we've chosen to migrate to [`parley`] during this cycle.
 Both are solid, modern choices, but we found `parley` had meaningfully better documentation and was somewhat nicer to use.
@@ -791,21 +691,19 @@ Both are solid, modern choices, but we found `parley` had meaningfully better do
 [`cosmic_text`]: https://github.com/pop-os/cosmic-text
 [`Parley`]: https://github.com/linebender/parley
 
-## User settings
+## App Settings
 
 {{ heading_metadata(authors=["@viridia", "@mpowell90"] prs=[22891, 23034, 23719, 23812]) }}
 
-The Bevy editor needs a settings system — for layout preferences, tool configuration, and everything else that should persist between sessions. We've built `bevy_settings` as a proper standalone crate so that both the editor and your own games can share a solid, easy-to-use foundation.
+Bevy now has a built in general-purpose "app settings" system, which Bevy apps can use to load and save arbitrary settings such as:
 
-You might want to persist:
-
-- Editor panel layouts and tool preferences
-- Music and sound volume controls
 - Graphics options
+- Panel layouts and tool preferences
+- Music and sound volume controls
 - Window position and size
 - "Don't show this dialog again"
 
-### Defining settings
+Notably, the Bevy Editor needs a settings system for layout preferences, tool configuration, and everything else that should persist between sessions. Because the Bevy Editor is being built _as_ a Bevy app, it can make use of this new settings system! 
 
 Settings groups are plain Rust structs that derive `Resource`, `SettingsGroup`, and `Reflect`:
 
@@ -818,14 +716,14 @@ struct AudioSettings {
 }
 ```
 
-Adding `PreferencesPlugin` with a unique [reverse-domain] app name will automatically load your settings groups
+Adding `SettingsPlugin` with a unique [reverse-domain] app name will automatically load your settings groups
 on startup and insert them as resources:
 
 ```rust
-app.add_plugins(PreferencesPlugin::new("com.example.mygame"));
+app.add_plugins(SettingsPlugin::new("com.example.mygame"));
 ```
 
-Once the settings groups are added, you can read them like any other resource:
+You can then read them like any other resource:
 
 ```rust
 fn adjust_volume(audio: Res<AudioSettings>, mut music: ResMut<AudioSink>) {
@@ -833,48 +731,15 @@ fn adjust_volume(audio: Res<AudioSettings>, mut music: ResMut<AudioSink>) {
 }
 ```
 
+Settings can then be saved via the `SaveSettingsDeferred` or `SaveSettingsSync` command.
+
 [reverse-domain]: https://en.wikipedia.org/wiki/Reverse_domain_name_notation
 
-### Saving
-
-To save after a change, queue a `SavePreferencesDeferred` command with a short debounce delay
-so rapid changes don't hammer the filesystem:
-
-```rust
-fn save_settings_on_volume_changed(
-    settings: Res<AudioSettings>,
-    mut commands: Commands,
-) {
-    if !settings.is_changed(){
-        return;
-    }
-
-    commands.queue(SavePreferencesDeferred(Duration::from_secs_f32(0.5)));
-}
-```
-
-For save-on-quit (e.g., when the window closes), use `SavePreferencesSync::IfChanged` instead,
-which blocks until the write completes before the app exits.
-
-See the [`examples/app/persisting_preferences`](https://github.com/bevyengine/bevy/blob/latest/examples/app/persisting_preferences.rs) example for a complete walkthrough.
-
-### Where files are stored
-
-Settings are saved as TOML files in a folder named after your app's provided name (conventionally a reverse domain name),
-inside the OS-specific preferences directory:
-
-- **Linux**: `$XDG_CONFIG_HOME/<app_name>/` (typically `~/.config/<app_name>/`), following the [XDG Base Directory specification](https://specifications.freedesktop.org/basedir-spec/latest/)
-- **macOS**: `~/Library/Preferences/<app_name>/`
-- **Windows**: `%LOCALAPPDATA%\<app_name>\`
-- **WASM**: browser `localStorage` (no filesystem)
-- **Other platforms**: preferences are not persisted (`preferences_dir()` returns `None`)
-
-This directory handling comes from the new `dirs` module in `bevy_platform`, which provides
-`preferences_dir()` and other standard OS directory locations in a cross-platform way.
+See the [`settings.rs`](https://github.com/bevyengine/bevy/blob/v0.19.0/examples/app/settings.rs) example for a complete walkthrough.
 
 ---
 
-A special thanks to Andhrimnir (@tecbeast42) for giving Bevy ownership of the `bevy_settings` crate name on `crates.io`.
+A special thanks to Andhrimnir (@tecbeast42) for giving Bevy ownership of the `bevy-settings` crate name on `crates.io`. We built our own brand new settings crate, but we're re-using the `bevy-settings` crate name because it fits the best.
 
 ## More Post-Processing Effects
 
@@ -891,12 +756,8 @@ Two new post-processing effects were added in this cycle, both classic tools for
     right_image="post_processing_vignette.jpg"
 ) }}
 
-Vignette reduces image brightness towards the periphery of the frame, drawing the viewer's eye to the center.
-It's a classic tool for simulating the look of a camera lens or adding cinematic tension — but its real power in games is as a dynamic effect.
-Think pulsing red on damage (a first-person shooter staple), a low uneven dim for horror dread, or a subtle ease-in on cutscene transitions.
-The `intensity` of a vignette is a float value; you can change the vignettes effect by animating it.
 
-To use it, add the `Vignette` component to your camera:
+Vignette reduces image brightness towards the periphery of the frame, drawing the viewer's eye to the center.
 
 ```rust
 commands.spawn((
@@ -929,11 +790,7 @@ commands.spawn((
     right_image="post_processing_pincushion_distortion.jpg"
 ) }}
 
-Lens distortion warps the image spatially — positive `intensity` pushes the edges outward (barrel distortion), negative pulls them inward (pincushion distortion).
-Racing games ramp up barrel distortion as speed increases, making the world feel like it's bending around the player; push it further and you get a fisheye look, useful for diegetic security cameras, wide-angle surveillance aesthetic or that classic GoPro bodycam look.
-Negative values lend themselves to impairment states — drunk, poisoned, or concussed — where you want the world to feel compressed and wrong.
-
-To use it, add the `LensDistortion` component to your camera:
+Lens distortion warps the image spatially. Positive `intensity` pushes the edges outward (barrel distortion), negative pulls them inward (pincushion distortion).
 
 ```rust
 commands.spawn((
@@ -983,12 +840,14 @@ If you don't configure a `RenderErrorHandler`, behavior is similar to but not id
 
 {{ heading_metadata(authors=["@tychedelia"] prs=[22144]) }}
 
-Bevy's `RenderGraph` architecture has been replaced with schedules. Render passes are now regular systems that run in
-the `Core3d`, `Core2d`, or custom rendering schedules and executed within the render world.
+Bevy's `RenderGraph` architecture has been replaced with ECS schedules. Render passes are now regular systems that run in schedules such as `Core3d`, `Core2d`, which are executed on the render world.
 
-The render graph was originally designed when Bevy's ECS was less mature. In order to add custom rendering
+The old render graph was originally designed when Bevy's ECS was less mature. In order to add custom rendering
 functionality, we required users to implement a trait `Node`, derive a `RenderLabel`, and use a targeted API for ordering
-this rendering work relative to other tasks:
+this rendering work relative to other tasks. This required a lot of boilerplate!
+
+<details>
+    <summary>Click here to see what it used to look like!</summary>
 
 ```rust
 pub struct MyCustomRenderNode;
@@ -1034,8 +893,10 @@ impl Plugin for MyRenderPlugin {
 }
 ```
 
-As our APIs have evolved, `Schedule` has become capable of expressing the core render graph pattern. This change lets
-rendering better leverage familiar Bevy patterns, allowing the above to be expressed as:
+</details>
+
+As Bevy ECS has evolved, `Schedule` has become capable of expressing the "render graph" pattern. Using the ECS directly lets
+rendering better leverage familiar Bevy patterns, allowing the above to be expressed much more succinctly:
 
 ```rust
 fn my_custom_render_system(mut ctx: RenderContext, res_a: Res<A>) {
@@ -1066,6 +927,8 @@ rendering inside Bevy!
 
 {{ heading_metadata(authors=["@greeble-dev"] prs=[21837]) }}
 
+<video controls loop><source src="animated_bounds.mp4" type="video/mp4"/></video>
+
 In earlier Bevy versions, animated characters and creatures would sometimes vanish mid-animation.
 This happened because Bevy used the skeleton's resting position to decide which meshes were on-screen, rather than their actual animated pose.
 A character raising their arms could have those arms literally outside the bounding box Bevy used for culling.
@@ -1084,56 +947,45 @@ entity.insert((
 ));
 ```
 
-### Limitations
+## Parallax Corrected Cubemaps
 
-Joint-based bounds only account for skinning. If your mesh uses morph targets, vertex shaders, or anything else that moves vertices independently of joints, the computed bounds may still be wrong and meshes may still cull incorrectly. You should precompute a permissive bounding box,
-or disable culling completely.
+{{ heading_metadata(authors=["@pcwalton"] prs=[22582]) }}
 
-### Opting out
+{{ compare_slider(
+    left_title="Correction Off",
+    left_image="parallax_correction_off.jpg",
+    right_title="Correction On",
+    right_image="parallax_correction_on.jpg"
+) }}
 
-If you load skinned meshes from glTFs and want the old behavior, set `GltfPlugin::skinned_mesh_bounds_policy`:
+Bevy previously rendered cubemap reflections as though the environment were infinitely far away.
+For outdoor scenes this was often fine, but for indoor scenes and dense environments the result looked wrong —
+reflections didn't line up with the actual geometry around the viewer.
+
+The standard fix is parallax correction: each reflection probe gets its own bounding box, and a raytrace against that box determines the correct sampling direction for the cubemap.
+Bevy now applies this automatically for light probes, using the probe's influence bounding box as the correction volume.
+This is a reasonable default for a cubemap capturing a rectangular room interior, and matches Blender's approach.
+
+Parallax correction is enabled by default. To opt out on a specific probe, add `NoParallaxCorrection`:
 
 ```rust
-app.add_plugins(DefaultPlugins.set(GltfPlugin {
-    skinned_mesh_bounds_policy: GltfSkinnedMeshBoundsPolicy::BindPose,
-    ..default()
-}))
+commands.spawn((
+    LightProbe,
+    EnvironmentMapLight { .. },
+    NoParallaxCorrection,
+));
 ```
 
-There's also `GltfSkinnedMeshBoundsPolicy::NoFrustumCulling` if you'd rather disable culling for skinned meshes entirely.
+A new `pccm` example demonstrates the effect, with parallax correction toggleable at runtime.
 
-### Debugging
-
-To visualize the bounds, enable these gizmos:
-
-```rust
-fn toggle_skinned_mesh_bounds(mut config: ResMut<GizmoConfigStore>) {
-    config.config_mut::<AabbGizmoConfigGroup>().1.draw_all ^= true;
-    config.config_mut::<SkinnedMeshBoundsGizmoConfigGroup>().1.draw_all ^= true;
-}
-```
-
-Or load a glTF in the scene viewer and press `j` and `b`:
-
-```sh
-cargo run --example scene_viewer --features "free_camera" -- "path/to/your.gltf"
-```
-
-If you were using [`bevy_mod_skinned_aabb`](https://github.com/greeble-dev/bevy_mod_skinned_aabb), see [Bevy 0.19 and `bevy_mod_skinned_aabb`](https://github.com/greeble-dev/bevy_mod_skinned_aabb/blob/main/notes/bevy_0_19.md) for migration notes.
-
-## Partial Bindless and Reduced Bind Group Overhead
+## Partial Bindless / Reduced Bind Group Overhead
 
 {{ heading_metadata(authors=["@holg"] prs=[23436]) }}
 
-In an ideal world, Bevy users could write a single application and ship it everywhere, with every last one of the messy cross-platform differences beautifully abstracted away.
+Bindless rendering is how modern engines handle scenes with many different materials efficiently: shaders index into shared pools of textures and buffers rather than rebinding them each draw call.
 
-However, users were reporting that rendering complex scenes on Mac and iOS was markedly slower than on comparable non-Apple hardware.
+Metal (Apple's GPU API) has partial bindless support. They permit texture binding arrays but not buffer binding arrays.
 
-The reason for this was straightforward enough: no bindless rendering support.
-Bindless rendering is how modern engines handle scenes with many different materials efficiently: shaders index into shared pools of textures and buffers rather than rebinding them per draw call.
-
-Metal (Apple's GPU API) has partial bindless support:
-they permit texture binding arrays but not buffer binding arrays.
 Historically, Bevy required support for both features before it would use bindless, which excluded Metal entirely, even for materials that never use buffer arrays.
 
 Most materials, including `StandardMaterial`, do not need buffer array support.
@@ -1141,19 +993,19 @@ To ensure those materials take the fast path, Bevy now checks the actual needs o
 If you only need texture arrays, your material can be rendered efficiently across Bevy's desktop platforms.
 If you use `#[uniform(..., binding_array(...))]`, expect performance degradation on Metal.
 
-We've also fixed two important correctness bugs in the process.
-First, we discovered that the sampler limit check was testing the wrong metric: `max_samplers_per_shader_stage` counts binding slots, but the relevant limit is `max_binding_array_sampler_elements_per_shader_stage`, the array element count (a mismatch that could incorrectly disable bindless).
-Second, Bevy now also skips creating binding array slots for resource types a material doesn't use, staying within Metal's hard 31 argument buffer slot limit and reducing overhead on all platforms.
+We've also fixed two important correctness bugs in the process:
+1. We discovered that the sampler limit check was testing the wrong metric: `max_samplers_per_shader_stage` counts binding slots, but the relevant limit is `max_binding_array_sampler_elements_per_shader_stage`, the array element count (a mismatch that could incorrectly disable bindless).
+2. Bevy now also skips creating binding array slots for resource types a material doesn't use, staying within Metal's hard 31 argument buffer slot limit and reducing overhead on all platforms.
 
-Benchmarked on Bistro Exterior (698 materials), 5-minute runs:
+Benchmarked on Bistro Exterior (698 materials) we saw significant frame time improvements (and sometimes memory improvements) across many hardware configurations:
 
-| GPU                      | Avg FPS improvement | Min FPS improvement | Memory      |
-| ------------------------ | ------------------- | ------------------- | ----------- |
-| Apple M2 Max (Metal)     | +18%                | +77%                | −57 MB RAM  |
-| NVIDIA 5060 Ti           | +84%                | +174%               | Same        |
-| AMD Vega 8 / Ryzen 4800U | Same                | Same                | −88 MB VRAM |
-| Intel i360P              | +15%                | Same                | Same        |
-| Intel Iris XE            | Same                | Same                | Same        |
+| GPU                      | Frame Time Speedup         | Memory      |
+| ------------------------ | ------------------- | ----------- |
+| Apple M2 Max (Metal)     | +15%                | −57 MB RAM  |
+| NVIDIA 5060 Ti           | +46%                | Same        |
+| AMD Vega 8 / Ryzen 4800U | Same                | −88 MB VRAM |
+| Intel i360P              | +14%                | Same        |
+| Intel Iris XE            | Same                | Same        |
 
 [Bistro] is a demanding, fairly realistic scene.
 While bindless limitations remain frustrating, especially on Mac where Vulkan isn't an option,
@@ -1175,13 +1027,13 @@ commands.spawn(DiagnosticsOverlay::fps());
 commands.spawn(DiagnosticsOverlay::mesh_and_standard_materials());
 ```
 
-You can also build a custom overlay from any [`DiagnosticPath`] list:
+You can also build a custom overlay from any [`DiagnosticPath`](https://dev-docs.bevy.org/bevy/diagnostic/struct.DiagnosticPath.html) list:
 
 ```rust
 commands.spawn(DiagnosticsOverlay::new("MyDiagnostics", vec![MyDiagnostics::COUNTER.into()]));
 ```
 
-By default the overlay shows the smoothed moving average. You can switch to the latest value or the raw moving average via [`DiagnosticsOverlayStatistic`], and configure floating-point precision with [`DiagnosticsOverlayItem::precision`]:
+By default the overlay shows the smoothed moving average. You can switch to the latest value or the raw moving average via [`DiagnosticsOverlayStatistic`](https://dev-docs.bevy.org/bevy/dev_tools/diagnostics_overlay/enum.DiagnosticsOverlayStatistic.html), and configure floating-point precision with [`DiagnosticsOverlayItem::precision`](https://dev-docs.bevy.org/bevy/dev_tools/diagnostics_overlay/struct.DiagnosticsOverlayItem.html#structfield.precision):
 
 ```rust
 commands.spawn(DiagnosticsOverlay::new("MyDiagnostics", vec![DiagnosticsOverlayItem {
@@ -1191,11 +1043,11 @@ commands.spawn(DiagnosticsOverlay::new("MyDiagnostics", vec![DiagnosticsOverlayI
 }]));
 ```
 
-## Contiguous query access
+## Contiguous Query Access
 
 {{ heading_metadata(authors=["@Jenya705"] prs=[21984, 24181]) }}
 
-[SIMD] is a critical modern tool for performance optimization, but using it in Bevy has always been harder than it needed to be.
+[SIMD] is a critical tool for performance optimization, but using it in Bevy has always been harder than it needed to be.
 Table components in Bevy are already laid out flat in memory — all `Transform` components are stored as values in a contiguous table, exactly what SIMD wants.
 The `Query` iterator just wasn't exposing that structure: it handed you one entity's component at a time, and the compiler had no way to know the underlying data was a contiguous array.
 
@@ -1265,25 +1117,6 @@ fn delayed_spawn_then_insert(mut commands: Commands) {
 Note that this does not have a built-in, blessed cancellation mechanism yet.
 We recommend embedding the originating `Entity` into the command if you want to cancel the action if that entity dies or is despawned.
 
-## Accessible Label Component
-
-{{ heading_metadata(authors=["@viridia"] prs=[24308]) }}
-
-The `AccessibleLabel` component allows the a11y `label` property to be specified separately from
-other a11y properties.
-
-In most apps, the `label` property comes from application code rather than library code.
-However, the design of `accesskit` requires that all a11y properties be stored in a single
-large data structure contained in the `AccessibilityNode` component. This creates a usability
-conflict with BSN and other methods of spawning complex hierarchies, where composing multiple
-components is the primary means of behavioral reuse.
-
-By putting the label in its own component, it can be used as a mixin within BSN templates, allowing
-the label to be added by the widget user rather than the widget author.
-
-Internally, this uses component hooks to sync the `AccessibilityNode` properties with the
-payload of the `AccessibleLabel` component, satisfying the needs of `accesskit`.
-
 ## Text Gizmos
 
 {{ heading_metadata(authors=["@ickshonpe", "@nuts-rice"] prs=[22732, 23120]) }}
@@ -1293,8 +1126,8 @@ payload of the `AccessibleLabel` component, satisfying the needs of `accesskit`.
 Sometimes you just want to slap a label on something while debugging.
 Text gizmos are for exactly that: a zero-setup way to draw world-space text anywhere in your scene using a built-in stroke font.
 
-Unlike Bevy's `Text2D` — the right choice for damage numbers, nameplates, and in-game labels — text gizmos are *strictly* for dev tools.
-The font is fixed and only supports ASCII; the value is entirely in "text now plz".
+Unlike Bevy's `Text2D` — the right choice for damage numbers, nameplates, and in-game labels — text gizmos are *strictly* for dev tools and debugging.
+The font is fixed and only supports ASCII.
 
 Use `Gizmos::text` and `text_2d` to quickly draw text:
 
@@ -1311,37 +1144,6 @@ fn draw_text(mut gizmos: Gizmos) {
 ```
 
 If you want to color each section of characters separately, reach for `text_sections` and `text_sections_2d`.
-
-## Parallax Corrected Cubemaps
-
-{{ heading_metadata(authors=["@pcwalton"] prs=[22582]) }}
-
-{{ compare_slider(
-    left_title="Correction Off",
-    left_image="parallax_correction_off.jpg",
-    right_title="Correction On",
-    right_image="parallax_correction_on.jpg"
-) }}
-
-Bevy previously rendered cubemap reflections as though the environment were infinitely far away.
-For outdoor scenes this was often fine, but for indoor scenes and dense environments the result looked wrong —
-reflections didn't line up with the actual geometry around the viewer.
-
-The standard fix is parallax correction: each reflection probe gets its own bounding box, and a raytrace against that box determines the correct sampling direction for the cubemap.
-Bevy now applies this automatically for light probes, using the probe's influence bounding box as the correction volume.
-This is a reasonable default for a cubemap capturing a rectangular room interior, and matches Blender's approach.
-
-Parallax correction is enabled by default. To opt out on a specific probe, add `NoParallaxCorrection`:
-
-```rust
-commands.spawn((
-    LightProbe,
-    EnvironmentMapLight { .. },
-    NoParallaxCorrection,
-));
-```
-
-A new `pccm` example demonstrates the effect, with parallax correction toggleable at runtime.
 
 ## Cancellable Web Tasks
 
@@ -1426,29 +1228,22 @@ You'll also need to implement `AssetSaver` for `MyAssetSaver` to define the seri
 
 {{ heading_metadata(authors=["@Trashtalk217", "@cart", "@SpecificProtagonist"] prs=[20934, 22910, 22911, 22919, 22930, 23616, 23716, 24077, 24164]) }}
 
-Resources and components have always been separate concepts in Bevy's ECS, even though they're fundamentally the same thing: data stored in the world. While the simple `Res<Time>` sugar is nice, the only real distinction is cardinality — a resource is a component of which at most one exists at any time.
+Resources and components have always been separate concepts in Bevy's ECS. While the simple `Res<Time>` sugar is nice, the only real distinction is cardinality — a resource is a component of which at most one exists at any time.
 
 That separation has been a persistent source of friction.
-Many of our tools for components (like hooks, observers and relations) simply weren't available for resources,
+Many of our tools for components (like hooks, observers, and relations) simply weren't available for resources,
 and the engine carried a significant amount of duplicated internal machinery to keep the two mechanisms in sync.
 
 In Bevy 0.19, resources are now stored as components on singleton entities,
-unifying our internals.
-
-You can now:
+unifying our internals and giving resources more capabilities. You can now:
 
 - Simplify networking and dev-tools code by assuming that entities + components are the only form of data you need to worry about
 - Query over both resources and components to support flexible usage patterns
-- Add relationships pointing to resource entities
+- Add relationships pointing to and from resource entities
 - Add additional components to your resource entities
 - Add lifecycle observers to your resource types
 - Add your own hooks to resources
 - Mark resources as immutable
-
-We don't intend to ever support:
-
-- Changing the storage type of resources.
-  - Resources have consistent insertion and access patterns: this is not a useful performance lever to expose.
 
 ## Interactive Transform Gizmo
 
@@ -1502,29 +1297,7 @@ fn setup(mut commands: Commands) {
 }
 ```
 
-Grid appearance — colors, fade distance, line scale — is controlled by `InfiniteGridSettings`, which can be placed on the grid entity or on a specific camera to override it per-view:
-
-```rust
-use bevy::dev_tools::infinite_grid::{InfiniteGrid, InfiniteGridSettings};
-
-// On the grid entity (applies to all cameras)
-commands.spawn((
-    InfiniteGrid,
-    InfiniteGridSettings {
-        fadeout_distance: 200.0,
-        ..default()
-    },
-));
-
-// On a camera (overrides settings for that camera only)
-commands.spawn((
-    Camera3d::default(),
-    InfiniteGridSettings {
-        scale: 0.5,
-        ..default()
-    },
-));
-```
+Grid appearance — colors, fade distance, line scale — is controlled by `InfiniteGridSettings`, which can be placed on the grid entity or on a specific camera to override it per-view. You can see how this works in the new [`infinite_grid.rs`](https://github.com/bevyengine/bevy/blob/v0.19.0/examples/dev_tools/infinite_grid.rs) example.
 
 This is an upstreamed version of the [`bevy_infinite_grid` crate], created and maintained by Foresight Spatial Labs — thank you for building it and generously contributing it to Bevy!
 
@@ -1571,7 +1344,7 @@ app.add_observer(
     on_damage.run_if(|paused: Res<GamePaused>| !paused.0)
 );
 
-// Multiple conditions can be chained (AND semantics)
+// Multiple conditions can be chained
 app.add_observer(
     on_damage
         .run_if(|paused: Res<GamePaused>| !paused.0)
@@ -1581,7 +1354,7 @@ app.add_observer(
 
 This works with `add_observer`, entity `.observe()`, and the `Observer` builder pattern.
 
-## Serializing and deserializing asset handles
+## Serializing and Deserializing Asset Handles
 
 {{ heading_metadata(authors=["@andriyDev"] prs=[23329]) }}
 
@@ -1633,3 +1406,22 @@ pub struct PeopleILike(Vec<Entity>);
 ```
 
 With the attribute set, inserting a self-referential relationship is accepted without warning.
+
+## Accessible Label Component
+
+{{ heading_metadata(authors=["@viridia"] prs=[24308]) }}
+
+The `AccessibleLabel` component allows the a11y `label` property to be specified separately from
+other a11y properties.
+
+In most apps, the `label` property comes from application code rather than library code.
+However, the design of `accesskit` requires that all a11y properties be stored in a single
+large data structure contained in the `AccessibilityNode` component. This creates a usability
+conflict with BSN and other methods of spawning complex hierarchies, where composing multiple
+components is the primary means of behavioral reuse.
+
+By putting the label in its own component, it can be used as a mixin within BSN templates, allowing
+the label to be added by the widget user rather than the widget author.
+
+Internally, this uses component hooks to sync the `AccessibilityNode` properties with the
+payload of the `AccessibleLabel` component, satisfying the needs of `accesskit`.
