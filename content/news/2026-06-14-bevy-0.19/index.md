@@ -1028,13 +1028,13 @@ commands.spawn(DiagnosticsOverlay::fps());
 commands.spawn(DiagnosticsOverlay::mesh_and_standard_material());
 ```
 
-You can also build a custom overlay from any [`DiagnosticPath`](https://dev-docs.bevy.org/bevy/diagnostic/struct.DiagnosticPath.html) list:
+You can also build a custom overlay from any [`DiagnosticPath`](https://docs.rs/bevy/0.19.0-rc.3/bevy/diagnostic/struct.DiagnosticPath.html) list:
 
 ```rust
 commands.spawn(DiagnosticsOverlay::new("MyDiagnostics", vec![MyDiagnostics::COUNTER.into()]));
 ```
 
-By default the overlay shows the smoothed moving average. You can switch to the latest value or the raw moving average via [`DiagnosticsOverlayStatistic`](https://dev-docs.bevy.org/bevy/dev_tools/diagnostics_overlay/enum.DiagnosticsOverlayStatistic.html), and configure floating-point precision with [`DiagnosticsOverlayItem::precision`](https://dev-docs.bevy.org/bevy/dev_tools/diagnostics_overlay/struct.DiagnosticsOverlayItem.html#structfield.precision):
+By default the overlay shows the smoothed moving average. You can switch to the latest value or the raw moving average via [`DiagnosticsOverlayStatistic`](https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/diagnostics_overlay/enum.DiagnosticsOverlayStatistic.html), and configure floating-point precision with [`DiagnosticsOverlayItem::precision`](https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/diagnostics_overlay/struct.DiagnosticsOverlayItem.html#structfield.precision):
 
 ```rust
 commands.spawn(DiagnosticsOverlay::new("MyDiagnostics", vec![DiagnosticsOverlayItem {
@@ -1427,54 +1427,54 @@ the label to be added by the widget user rather than the widget author.
 Internally, this uses component hooks to sync the [`AccessibilityNode`] properties with the
 payload of the [`AccessibleLabel`] component, satisfying the needs of `accesskit`.
 
-[`bsn!`]: https://dev-docs.bevy.org/bevy_scene/macro.bsn.html
-[`bsn_list!`]: https://dev-docs.bevy.org/bevy/prelude/macro.bsn_list.html
-[`Bundle`]: https://dev-docs.bevy.org/bevy/ecs/bundle/trait.Bundle.html
-[`Scene`]: https://dev-docs.bevy.org/bevy/prelude/trait.Scene.html
-[`SceneList`]: https://dev-docs.bevy.org/bevy/prelude/trait.SceneList.html
-[`Template`]: https://dev-docs.bevy.org/bevy/ecs/prelude/trait.Template.html
-[`World`]: https://dev-docs.bevy.org/bevy/ecs/prelude/struct.World.html
-[`FromTemplate`]: https://dev-docs.bevy.org/bevy/ecs/prelude/trait.FromTemplate.html
-[`Component`]: https://dev-docs.bevy.org/bevy/ecs/component/trait.Component.html
-[`Sprite`]: https://dev-docs.bevy.org/bevy/prelude/struct.Sprite.html
-[`Name`]: https://dev-docs.bevy.org/bevy/ecs/name/struct.Name.html
-[`SceneComponent`]: https://dev-docs.bevy.org/bevy/prelude/trait.SceneComponent.html
-[`EditableText`]: https://dev-docs.bevy.org/bevy/text/struct.EditableText.html
-[`FontSource`]: https://dev-docs.bevy.org/bevy/prelude/enum.FontSource.html
-[`TextFont`]: https://dev-docs.bevy.org/bevy/prelude/struct.TextFont.html
-[`FontSize`]: https://dev-docs.bevy.org/bevy/prelude/enum.FontSize.html
-[`LetterSpacing`]: https://dev-docs.bevy.org/bevy/text/enum.LetterSpacing.html
-[`Resource`]: https://dev-docs.bevy.org/bevy/ecs/prelude/trait.Resource.html
-[`SettingsGroup`]: https://dev-docs.bevy.org/bevy/settings/trait.SettingsGroup.html
-[`Reflect`]: https://dev-docs.bevy.org/bevy/prelude/trait.Reflect.html
-[`SettingsPlugin`]: https://dev-docs.bevy.org/bevy/settings/struct.SettingsPlugin.html
-[`SaveSettingsDeferred`]: https://dev-docs.bevy.org/bevy/settings/struct.SaveSettingsDeferred.html
-[`SaveSettingsSync`]: https://dev-docs.bevy.org/bevy/settings/enum.SaveSettingsSync.html
-[`RenderErrorHandler`]: https://dev-docs.bevy.org/bevy/render/error_handler/struct.RenderErrorHandler.html
-[`Core3d`]: https://dev-docs.bevy.org/bevy/core_pipeline/struct.Core3d.html
-[`Core2d`]: https://dev-docs.bevy.org/bevy/core_pipeline/struct.Core2d.html
-[`Schedule`]: https://dev-docs.bevy.org/bevy/ecs/prelude/struct.Schedule.html
-[`StandardMaterial`]: https://dev-docs.bevy.org/bevy/pbr/struct.StandardMaterial.html
-[`DiagnosticsOverlayPlugin`]: https://dev-docs.bevy.org/bevy/dev_tools/diagnostics_overlay/struct.DiagnosticsOverlayPlugin.html
-[`DiagnosticPath`]: https://dev-docs.bevy.org/bevy/diagnostic/struct.DiagnosticPath.html
-[`DiagnosticsOverlayStatistic`]: https://dev-docs.bevy.org/bevy/dev_tools/diagnostics_overlay/enum.DiagnosticsOverlayStatistic.html
-[`Transform`]: https://dev-docs.bevy.org/bevy/prelude/struct.Transform.html
-[`Query`]: https://dev-docs.bevy.org/bevy/ecs/prelude/struct.Query.html
-[`contiguous_iter`]: https://dev-docs.bevy.org/bevy/prelude/struct.QueryState.html#method.contiguous_iter
-[`contiguous_iter_mut`]: https://dev-docs.bevy.org/bevy/prelude/struct.QueryState.html#method.contiguous_iter_mut
-[`Entity`]: https://dev-docs.bevy.org/bevy/ecs/entity/struct.Entity.html
-[`Text2D`]: https://dev-docs.bevy.org/bevy/prelude/struct.Text2d.html
-[`Task`]: https://dev-docs.bevy.org/bevy/tasks/struct.Task.html
-[`AssetSaver`]: https://dev-docs.bevy.org/bevy/asset/saver/trait.AssetSaver.html
-[`TransformGizmoPlugin`]: https://dev-docs.bevy.org/bevy/gizmos/prelude/struct.TransformGizmoPlugin.html
-[`TransformGizmoCamera`]: https://dev-docs.bevy.org/bevy/gizmos/prelude/struct.TransformGizmoCamera.html
-[`TransformGizmoFocus`]: https://dev-docs.bevy.org/bevy/gizmos/prelude/struct.TransformGizmoFocus.html
-[`TransformGizmoSettings`]: https://dev-docs.bevy.org/bevy/gizmos/prelude/struct.TransformGizmoSettings.html
-[`TransformGizmoMode`]: https://dev-docs.bevy.org/bevy/gizmos/prelude/enum.TransformGizmoMode.html
-[`InfiniteGridPlugin`]: https://dev-docs.bevy.org/bevy/dev_tools/infinite_grid/struct.InfiniteGridPlugin.html
-[`InfiniteGrid`]: https://dev-docs.bevy.org/bevy/dev_tools/infinite_grid/struct.InfiniteGrid.html
-[`InfiniteGridSettings`]: https://dev-docs.bevy.org/bevy/dev_tools/infinite_grid/struct.InfiniteGridSettings.html
-[`GeneratedEnvironmentMapLight`]: https://dev-docs.bevy.org/bevy/light/struct.GeneratedEnvironmentMapLight.html
-[`ChildOf`]: https://dev-docs.bevy.org/bevy/ecs/hierarchy/struct.ChildOf.html
-[`AccessibleLabel`]: https://dev-docs.bevy.org/bevy/prelude/struct.AccessibleLabel.html
-[`AccessibilityNode`]:  https://dev-docs.bevy.org/bevy/a11y/struct.AccessibilityNode.html
+[`bsn!`]: https://docs.rs/bevy_scene/0.19.0-rc.3/bevy_scene/macro.bsn.html
+[`bsn_list!`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/macro.bsn_list.html
+[`Bundle`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/bundle/trait.Bundle.html
+[`Scene`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/trait.Scene.html
+[`SceneList`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/trait.SceneList.html
+[`Template`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/trait.Template.html
+[`World`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/struct.World.html
+[`FromTemplate`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/trait.FromTemplate.html
+[`Component`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/component/trait.Component.html
+[`Sprite`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.Sprite.html
+[`Name`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/name/struct.Name.html
+[`SceneComponent`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/trait.SceneComponent.html
+[`EditableText`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/text/struct.EditableText.html
+[`FontSource`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/enum.FontSource.html
+[`TextFont`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.TextFont.html
+[`FontSize`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/enum.FontSize.html
+[`LetterSpacing`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/text/enum.LetterSpacing.html
+[`Resource`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/trait.Resource.html
+[`SettingsGroup`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/settings/trait.SettingsGroup.html
+[`Reflect`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/trait.Reflect.html
+[`SettingsPlugin`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/settings/struct.SettingsPlugin.html
+[`SaveSettingsDeferred`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/settings/struct.SaveSettingsDeferred.html
+[`SaveSettingsSync`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/settings/enum.SaveSettingsSync.html
+[`RenderErrorHandler`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/render/error_handler/struct.RenderErrorHandler.html
+[`Core3d`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/core_pipeline/struct.Core3d.html
+[`Core2d`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/core_pipeline/struct.Core2d.html
+[`Schedule`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/struct.Schedule.html
+[`StandardMaterial`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/pbr/struct.StandardMaterial.html
+[`DiagnosticsOverlayPlugin`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/diagnostics_overlay/struct.DiagnosticsOverlayPlugin.html
+[`DiagnosticPath`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/diagnostic/struct.DiagnosticPath.html
+[`DiagnosticsOverlayStatistic`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/diagnostics_overlay/enum.DiagnosticsOverlayStatistic.html
+[`Transform`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.Transform.html
+[`Query`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/struct.Query.html
+[`contiguous_iter`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.QueryState.html#method.contiguous_iter
+[`contiguous_iter_mut`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.QueryState.html#method.contiguous_iter_mut
+[`Entity`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/entity/struct.Entity.html
+[`Text2D`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.Text2d.html
+[`Task`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/tasks/struct.Task.html
+[`AssetSaver`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/asset/saver/trait.AssetSaver.html
+[`TransformGizmoPlugin`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/gizmos/prelude/struct.TransformGizmoPlugin.html
+[`TransformGizmoCamera`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/gizmos/prelude/struct.TransformGizmoCamera.html
+[`TransformGizmoFocus`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/gizmos/prelude/struct.TransformGizmoFocus.html
+[`TransformGizmoSettings`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/gizmos/prelude/struct.TransformGizmoSettings.html
+[`TransformGizmoMode`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/gizmos/prelude/enum.TransformGizmoMode.html
+[`InfiniteGridPlugin`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/infinite_grid/struct.InfiniteGridPlugin.html
+[`InfiniteGrid`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/infinite_grid/struct.InfiniteGrid.html
+[`InfiniteGridSettings`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/infinite_grid/struct.InfiniteGridSettings.html
+[`GeneratedEnvironmentMapLight`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/light/struct.GeneratedEnvironmentMapLight.html
+[`ChildOf`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/hierarchy/struct.ChildOf.html
+[`AccessibleLabel`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.AccessibleLabel.html
+[`AccessibilityNode`]:  https://docs.rs/bevy/0.19.0-rc.3/bevy/a11y/struct.AccessibilityNode.html
