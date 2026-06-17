@@ -1264,7 +1264,7 @@ commands.spawn((Mesh3d(mesh), TransformGizmoFocus));
 ```
 
 The plugin is deliberately not connected to user input.
-This keeps the gizmo composable for editor authors who already have opinions about input handling. Sensitivity, snapping, and screen-space scaling are all configurable via `TransformGizmoConfig`,
+This keeps the gizmo composable for editor authors who already have opinions about input handling. Sensitivity, snapping, and screen-space scaling are all configurable via `TransformGizmoSettings`,
 while modes are controlled via the `TransformGizmoMode` resource.
 
 Much of the math and implementation strategy for this widget comes from the [`bevy_transform_gizmo`](https://github.com/fslabs/bevy_transform_gizmo) crate.
