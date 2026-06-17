@@ -1025,7 +1025,7 @@ Bevy's diagnostics have always been easy to dump to the terminal, but displaying
 
 ```rust
 commands.spawn(DiagnosticsOverlay::fps());
-commands.spawn(DiagnosticsOverlay::mesh_and_standard_materials());
+commands.spawn(DiagnosticsOverlay::mesh_and_standard_material());
 ```
 
 You can also build a custom overlay from any [`DiagnosticPath`](https://dev-docs.bevy.org/bevy/diagnostic/struct.DiagnosticPath.html) list:
