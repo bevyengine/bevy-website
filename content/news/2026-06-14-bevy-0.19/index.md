@@ -1,6 +1,6 @@
 +++
 title = "Bevy 0.19"
-date = 2026-06-14
+date = 2026-06-17
 [extra]
 show_image = true
 image = "fields_of_aaru.jpg"
