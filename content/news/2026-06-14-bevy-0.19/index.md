@@ -1,6 +1,6 @@
 +++
 title = "Bevy 0.19"
-date = 2026-06-14
+date = 2026-06-17
 [extra]
 show_image = true
 image = "fields_of_aaru.jpg"
@@ -86,7 +86,7 @@ bsn! {
 }
 ```
 
-Fields values can be arbitrary Rust expressions via `{}` syntax:
+Field values can be arbitrary Rust expressions via `{}` syntax:
 
 ```rust
 bsn! {
@@ -300,7 +300,7 @@ fn cube() -> impl Scene {
 Compare that to what was necessary before!
 
 ```rust
-fn setup(meshes: Res<Assets<Meshes>>) -> impl Bundle {
+fn setup(meshes: Res<Assets<Mesh>>) -> impl Bundle {
     let handle = meshes.add(Cuboid::new(1., 1., 1.));
     Mesh3d(handle)
 }
@@ -383,7 +383,7 @@ This works because `"hello"` is a `&str`, which has an `Into<String>` implementa
 ```rust
 // Raw Rust
 Node {
-    border: UiRect::all(Val::Px(2.0))
+    border: UiRect::all(Val::Px(2.0)),
     ..Default::default()
 }
 
@@ -630,7 +630,7 @@ Not anymore.
 
 ```rust
 // Asset handle
-FontSource::Handle(asset_server.load("fonts/FiraMono.ttf")
+FontSource::Handle(asset_server.load("fonts/FiraMono.ttf"))
 
 // Family name
 FontSource::Family("FiraMono".into())
@@ -862,7 +862,7 @@ this rendering work relative to other tasks. This required a lot of boilerplate!
 ```rust
 pub struct MyCustomRenderNode;
 
-impl Node for MyCustomNode {
+impl Node for MyCustomRenderNode {
     fn run(
         &self,
         _graph: &mut RenderGraphContext,
