@@ -1426,3 +1426,21 @@ the label to be added by the widget user rather than the widget author.
 
 Internally, this uses component hooks to sync the `AccessibilityNode` properties with the
 payload of the `AccessibleLabel` component, satisfying the needs of `accesskit`.
+
+## What's Next?
+
+No matter how many features we add, the flock will always demand *more*.
+Game engines, unfortunately, are never *done*.
+
+Returning by popular demand, let us peer deep into the mists of time,
+and see what other features Bevy has in flight!
+
+- **.bsn scene format:** Bet you didn't see that one coming. Actually loading and saving BSN-flavored asset files to disk remains a top priority. `.bsn` is the thing that our fabled editor will actually edit, allowing you to create and compose characters, game objects and levels.
+- **Unified 2D and 3D rendering internals:** Bevy's 2D rendering is plenty fast, but it's started to lag behind our 3D rendering in terms of both performance and features. We're hoping to unify its internal architecture to avoid duplicating work, keeping the high-level `Sprite` API completely untouched.
+- **Entity inspector:** Examine trees of entities, inside your game, and inside of the eventual editor. The framework has been prototyped and widgets continue apace. Now it's time to put it all together!
+- **Assets-as-entities:** As projects scale, asset processing and management become increasingly imporant. We have the tools needed to move assets into the ECS as first-class objects now, making them much easier to manipulate.
+- **WESL shader language:** WGSL is an adequate shader language, but it's missing some important niceties. Bevy has been working together with a cross-project group to extend it, in the form of [WESL]. We've [supported WESL for more than a year], but we're planning to port our existing internal shaders to use WESL, and endorse it as the shader language of choice for Bevy.
+- **A much more complete Bevy book:** Wish the Bevy Book was longer? We do too! We've substantially extended it, covering a much wider range of topics in more depth, and are hoping to release what we have soon, during the 0.20 development cycle. Expect a steady stream of new chapters as more of the engine reaches a "stable enough" status.
+
+[WESL]: https://github.com/webgpu-tools/wesl-spec
+[supported WESL for more than a year]: https://github.com/bevyengine/bevy/pull/17953
