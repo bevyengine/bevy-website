@@ -1435,7 +1435,7 @@ Game engines, unfortunately, are never *done*.
 Returning by popular demand, let us peer deep into the mists of time,
 and see what other features Bevy has in flight!
 
-- **.bsn scene format:** Bet you didn't see that one coming. Actually loading and saving BSN-flavored asset files to disk remains a top priority. `.bsn` is the thing that our fabled editor will actually edit, allowing you to create and compose characters, game objects and levels.
+- **`.bsn` scene format:** Bet you didn't see that one coming. Actually loading and saving BSN-flavored asset files to disk remains a top priority. `.bsn` is the thing that our fabled editor will actually edit, allowing you to create and compose characters, game objects, and levels.
 - **Unified 2D and 3D rendering internals:** Bevy's 2D rendering is plenty fast, but it's started to lag behind our 3D rendering in terms of both performance and features. We're hoping to unify its internal architecture to avoid duplicating work, keeping the high-level `Sprite` API completely untouched.
 - **Entity inspector:** Examine trees of entities, inside your game, and inside of the eventual editor. The framework has been prototyped and widgets continue apace. Now it's time to put it all together!
 - **Assets-as-entities:** As projects scale, asset processing and management become increasingly important. We have the tools needed to move assets into the ECS as first-class objects now, making them much easier to manipulate.
