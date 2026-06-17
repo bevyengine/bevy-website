@@ -967,13 +967,13 @@ The standard fix is parallax correction: each reflection probe gets its own boun
 Bevy now applies this automatically for light probes, using the probe's influence bounding box as the correction volume.
 This is a reasonable default for a cubemap capturing a rectangular room interior, and matches Blender's approach.
 
-Parallax correction is enabled by default. To opt out on a specific probe, add `NoParallaxCorrection`:
+Parallax correction is enabled by default. To opt out on a specific probe, add `ParallaxCorrection::None`:
 
 ```rust
 commands.spawn((
     LightProbe,
     EnvironmentMapLight { .. },
-    NoParallaxCorrection,
+    ParallaxCorrection::None,
 ));
 ```
 
