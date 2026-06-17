@@ -61,7 +61,7 @@ jobs:
 
       - name: Install oxipng
         run: |
-          cargo install oxipng --version ^9.1.1
+          cargo install oxipng --version ^10.1.1
 
       - name: Take Screenshots
         run: |

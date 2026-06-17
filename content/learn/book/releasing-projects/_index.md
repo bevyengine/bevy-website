@@ -3,7 +3,7 @@ title = "Releasing Projects"
 template = "docs.html"
 insert_anchor_links = "right"
 [extra]
-weight = 16
+weight = 19
 +++
 
 Ready to release your Bevy project?

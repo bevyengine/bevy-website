@@ -1,17 +1,19 @@
 +++
-title = "Loading assets in advance"
+title = "Loading Assets in Advance"
 insert_anchor_links = "right"
 [extra]
 weight = 2
 +++
 
-Assets are automatically removed whenever all their handles have been dropped. This is done by
-tracking every reference created for a specific asset. Creating or cloning a handle increments the
-asset's reference count, while dropping a handle decrements the asset's reference count. When the
-reference count hits zero, the asset is removed (aka unloaded).
+Assets are automatically removed whenever all their handles have been dropped.
+This is done by tracking every reference created for a specific asset.
+Creating or cloning a handle increments the asset's reference count, while dropping a handle decrements the asset's reference count.
+When the reference count hits zero, the asset is removed (a.k.a. unloaded).
+While this process is straightforward, it can cause issues if handles are dropped before they are finished being used.
 
-While this strategy is straightforward, it can cause issues if handles are dropped before they are
-finished being used. Imagine the following part of a game:
+To see this, imagine we have an `enemy_spawner` system that will spawn an enemy whenever a timer finishes.
+The timer is set to [`TimerMode::Repeating`], which means an enemy will spawn at a regular interval.
+This could look something like this:
 
 ```rust
 #[derive(Component)]
@@ -25,7 +27,7 @@ fn enemy_spawner(
 ) {
     for mut spawner in spawner.iter_mut() {
         // Tick every spawner. We only want to spawn the enemy if the timer has finished
-        // this frame. We are assuming that the Timer uses [`TimerMode::Repeating`].
+        // this frame. We are assuming that the Timer uses `TimerMode::Repeating`.
         if !spawner.tick(time.delta()).just_finished() {
             continue;
         }
@@ -37,35 +39,28 @@ fn enemy_spawner(
 }
 ```
 
-The `enemy_spawner` system spawns an enemy whenever the spawner's timer finishes. If the timer is
-[`TimerMode::Repeating`], this would spawn an enemy at a regular interval.
+Now imagine that the player goes and kills all the enemies, despawning them.
+Since all the enemies have been despawned, their [`Sprite`] components will be dropped, and therefore the `"enemy.png"` handles will be dropped.
+With no existing `"enemy.png"` handles, the image corresponding to `"enemy.png"` will be removed due to being unused.
 
-Now imagine that the player goes and kills all the enemies, despawning them. Since all the enemies
-have been despawned, their [`Sprite`] components will be dropped, and therefore the `"enemy.png"`
-handles will be dropped. Since there are no more handles to this asset, the image corresponding to
-`"enemy.png"` will be removed due to being unused. When the spawner then tries to spawn the enemy
-**it will trigger a reload of the asset**. In this case, the enemy may temporarily become invisible
-while the asset is reloading. The rendering system will "gracefully" avoid rendering missing assets.
-However, less flexible systems (e.g., third-party plugins) may not handle missing data as
-gracefully: some systems may even **panic** if the asset data isn't available. In addition, you have
-to pay the cost of loading the asset from disk again.
+The next time the spawner tries to spawn a new enemy **it will trigger a reload of the asset**.
+In this case, the enemy may temporarily become invisible while the asset is reloading since the rendering system will "gracefully" avoid rendering missing assets.
+However, less flexible systems (e.g., third-party plugins) may not handle missing data as gracefully: some systems may even **panic** if the asset data isn't available.
+In addition, you have to pay the cost of loading the asset from disk again.
 
-Now, this is not **necessarily** wrong. Your game may be able to tolerate this, and being able to
-dynamically load and unload data as it's needed can reduce your memory footprint!
+Now, this is not necessarily wrong.
+Your game may be able to tolerate this, and being able to dynamically load and unload data as it's needed can reduce your memory footprint!
 
-However, for many use cases, having asset data take a few frames to load can degrade the experience.
-In the case of our enemy spawner, maybe we want to play a nice animation when the enemy is spawned.
-If we need to load the data _after_ the enemy is spawned, we may miss part of the animation, or the
-animation will be delayed while the enemy is still loading. In either case this introduces differing
-gameplay behavior for when the asset is loaded or when it isn't.
+However, for many use cases having asset data take a few frames to load can degrade the experience.
+In the case of our enemy spawner, we might want to play a specific animation when the enemy is spawned.
+If we need to load the data _after_ the enemy is spawned, we may miss part of the animation, or the animation will be delayed while the enemy is still loading.
+In either case this introduces differing gameplay behavior for when the asset is loaded or when it isn't.
 
 ## Preloading
 
-Preloading is the strategy of loading data that you expect to need ahead of time, and then caching
-that handle. Since the handle is being held, we won't unload the data, so the enemy spawner will be
-able to spawn the enemy and have its data already available!
-
-Updating our example from above:
+Preloading is the strategy of loading data that you expect to need ahead of time, and then caching those newly created handles.
+Since the handle is being cached, the data won't be unloaded.
+We can update our previous example to use preloading so that the enemy spawner can immediately access the image handle when spawning a new enemy:
 
 ```rust
 #[derive(Resource)]
@@ -73,7 +68,10 @@ struct EnemyAssets {
     sprite: Handle<Image>,
 }
 
-fn load_enemy_assets_in_startup(asset_server: Res<AssetServer>, mut commands: AssetCommands) {
+fn load_enemy_assets_in_startup(
+    asset_server: Res<AssetServer>,
+    mut commands: AssetCommands
+) {
     commands.insert_resource(EnemyAssets {
         sprite: asset_server.load("enemy.png"),
     });
@@ -100,47 +98,42 @@ fn enemy_spawner(
 }
 ```
 
-In the `load_enemy_assets_in_startup` system, we do the initial [`AssetServer::load`], and insert
-that handle into a resource. Our `enemy_spawner` system is basically the same, except now we just
-use the `EnemyAssets` resource, instead of loading directly.
+Now we're calling the initial [`AssetServer::load`] and storing that handle in a resource in the `load_enemy_assets_in_startup` system.
+Our `enemy_spawner` system essentially stays the same, except now we're using the handle stored in the `EnemyAssets` resource instead of calling the `load` directly.
 
-How does this handle the previous case where the player kills all the enemies? Well, since the
-handle is still stored in `EnemyAssets`, the enemy sprite doesn't unload! The next time we spawn, it
-clones the handle again, and the asset data is immediately ready.
+How is the previous case where the player kills all the enemies affected?
+The enemy sprite won't be unloaded since the handle is still stored in `EnemyAssets`.
+The next time an enemy is spawned, it will simply clone the handle again from `EnemyAssets` and immediately access the asset data!
 
-The disadvantage of course is that while there are no enemies, that sprite remains loaded. This can
-use up memory if the sprite turns out to not be needed at all (for example, there are no enemy
-spawners). Despite this, **our standard recommendation is to do this preloading**. This makes
-gameplay logic simpler and more reliable.
+The disadvantage of course is that the sprite image will always be loaded.
+This will take up memory even if the sprite image isn't being used (for example, if there are no enemy spawners).
+Despite this, **our general recommendation is to use asset preloading**.
+This makes gameplay logic simpler and more reliable.
 
 ## Waiting for Asset Loading
 
-Loading assets is not instantaneous, and it's also not blocking. This means that systems will not
-pause and wait for the assets to load. In our `load_enemy_assets_in_startup` system, we called
-[`AssetServer::load`] and stored the asset handle in a resource, but the asset will not be loaded
-yet. So despite the term "preloading", the first few frames of our game may still have missing
-assets - which is not ideal!
+Despite the term "preloading", your game will not wait for assets to finish loading.
+This means that systems will not pause and wait for assets to load.
+Its entirely possible that the first few frames of your game may still have missing assets.
+Even though we called [`AssetServer::load`] and stored the asset handle in a resource in our previous example, the asset is not guaranteed to be loaded.
 
-To address this, we need to wait for our assets to load **before** starting our game. In essence, we
-need a loading screen - or at least a way to know when our assets are loaded.
+To address this, we need to wait for our assets to load **before** starting our game.
+In essence, we need a loading screen - or at least a way to know when our assets are loaded.
 
 {% callout(type="info") %}
 
-There are all sorts of ways to implement a loading screen (even some that may be controversial to
-call loading screens, like the infamous "crawl through a narrow gap" animation). These are generally
-game specific, so we will be ignoring all that and focusing on how to actually tell when the assets
-have been loaded.
+There are all sorts of ways to implement a loading screen (even some that may be controversial to call loading screens, like the infamous "crawl through a narrow gap" animation).
+These are generally game specific, and it would be impossible to cover every possible situation.
+Instead, we'll focus on how to tell when the assets have been loaded instead.
 
 {% end %}
 
-The fundamental tools for this are [`AssetServer::is_loaded`],
-[`AssetServer::is_loaded_with_dependencies`], and
-[`AssetServer::is_loaded_with_direct_dependencies`]. These allow you to query the current load state
-of a handle. In particular, [`AssetServer::is_loaded`] checks if the asset itself is loaded.
-[`AssetServer::is_loaded_with_direct_dependencies`] checks if the asset is loaded and its direct
-dependencies are loaded. [`AssetServer::is_loaded_with_dependencies`] checks if the asset is loaded
-and **all** its dependencies are loaded, including recursive ones. To use this in our previous
-example, we could implement an `is_loaded` method for our `EnemyAssets` struct:
+The fundamental tools for this are [`AssetServer::is_loaded`], [`AssetServer::is_loaded_with_dependencies`], and [`AssetServer::is_loaded_with_direct_dependencies`].
+These allow you to query the current load state of a handle.
+In particular, [`AssetServer::is_loaded`] checks if the asset itself is loaded.
+[`AssetServer::is_loaded_with_direct_dependencies`] checks if the asset is loaded and its direct dependencies are loaded.
+[`AssetServer::is_loaded_with_dependencies`] checks if the asset is loaded and **all** its dependencies are loaded, including recursive ones.
+To use this in our previous example, we could implement an `is_loaded` method for our `EnemyAssets` struct:
 
 ```rust
 impl EnemyAssets {
@@ -153,8 +146,8 @@ impl EnemyAssets {
 }
 ```
 
-Now, all we need is to prevent our `enemy_spawner` system from running until `EnemyAssets` is
-loaded. The most straight-forward approach is to use states.
+Now, all we need is to prevent our `enemy_spawner` system from running until `EnemyAssets` is loaded.
+A straight-forward approach is to use a [state](learn/book/control-flow/states/) to control for if our gameplay systems should run.
 
 ```rust
 fn main() {
@@ -182,7 +175,8 @@ enum AssetsState {
 fn wait_until_enemy_assets_loaded(
     enemy_assets: Res<EnemyAssets>,
     asset_server: Res<AssetServer>,
-    mut next_state: ResMut<NextState<AssetsState>>) {
+    mut next_state: ResMut<NextState<AssetsState>>
+) {
     if !enemy_assets.is_loaded(&asset_server) {
         return;
     }
@@ -192,11 +186,11 @@ fn wait_until_enemy_assets_loaded(
 
 ### Automated Load Checking
 
-Writing our `EnemyAssets::is_loaded` is cumbersome and error-prone. For example, if we add a
-`weapon: Handle<Image>` to `EnemyAssets`, we may forget to update our `EnemyAssets::is_loaded`
-function. Thankfully, we have tools to entirely replace our `EnemyAssets::is_loaded`. In
-particular, [`VisitAssetDependencies`] is a trait (and derive macro) that allows defining types that
-report all referenced assets. For example, we can do this for our `EnemyAssets`:
+Manually writing a `EnemyAssets::is_loaded` method can be cumbersome (and potentially error-prone).
+For example, if we add another field to `EnemyAssets`, we may forget to update our `EnemyAssets::is_loaded` function.
+Thankfully, Bevy provides some tools that can entirely replace our `EnemyAssets::is_loaded`.
+In particular, [`VisitAssetDependencies`] is a trait (and derive macro) that allows defining types that report all referenced assets.
+For example, we can do this for our `EnemyAssets`:
 
 ```rust
 #[derive(Resource, VisitAssetDependencies)]
@@ -208,15 +202,14 @@ struct EnemyAssets {
 }
 ```
 
-Now we can delete `EnemyAssets::is_loaded` and instead just call
-`asset_server.are_dependencies_loaded(&enemy_assets)`. As long as we annotate all handles (and
-fields containing handles) with `#[dependency]`, this function will immediately tell us whether all
-our assets are loaded or not.
+Now we can delete `EnemyAssets::is_loaded` and instead call `asset_server.are_dependencies_loaded(&enemy_assets)`.
+As long as we annotate all handles (and fields containing handles) with `#[dependency]`, this function will immediately tell us whether all our assets are loaded or not.
 
 {% callout(type="warning") %}
 
-The `#[dependency]` attribute supports any type that implements [`VisitAssetDependencies`], whether
-it's a single handle, or a whole struct. This can be used to create complex structures. For example:
+The `#[dependency]` attribute supports any type that implements [`VisitAssetDependencies`], whether it's a single handle, or a whole struct.
+This can be used to create complex structures.
+For example:
 
 ```rust
 #[derive(Resource, VisitAssetDependencies)]
@@ -236,6 +229,7 @@ struct CharacterSounds {
 }
 ```
 
+[`VisitAssetDependencies`]: https://docs.rs/bevy/latest/bevy/asset/trait.VisitAssetDependencies.html
 {% end %}
 
 [`TimerMode::Repeating`]: https://docs.rs/bevy/latest/bevy/prelude/enum.TimerMode.html#variant.Repeating
@@ -244,4 +238,4 @@ struct CharacterSounds {
 [`AssetServer::is_loaded`]: https://docs.rs/bevy/latest/bevy/prelude/struct.AssetServer.html#method.is_loaded
 [`AssetServer::is_loaded_with_dependencies`]: https://docs.rs/bevy/latest/bevy/prelude/struct.AssetServer.html#method.is_loaded_with_dependencies
 [`AssetServer::is_loaded_with_direct_dependencies`]: https://docs.rs/bevy/latest/bevy/prelude/struct.AssetServer.html#method.is_loaded_with_direct_dependencies
-[`VisitAssetDependencies`]: https://dev-docs.bevy.org/bevy/asset/trait.VisitAssetDependencies.html
+[`VisitAssetDependencies`]: https://docs.rs/bevy/latest/bevy/asset/trait.VisitAssetDependencies.html
