@@ -1,6 +1,6 @@
 +++
 title = "Bevy 0.19"
-date = 2026-06-14
+date = 2026-06-17
 [extra]
 show_image = true
 image = "fields_of_aaru.jpg"
@@ -14,11 +14,19 @@ Thanks to **X** contributors, **X** pull requests, community reviewers, and our 
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
-To update an existing Bevy App or Plugin to **Bevy 0.19**, check out our [0.17 to 0.18 Migration Guide](/learn/migration-guides/0-18-to-0-19/).
+To update an existing Bevy App or Plugin to **Bevy 0.19**, check out our [0.18 to 0.19 Migration Guide](/learn/migration-guides/0-18-to-0-19/).
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- **X**: X
+- **Next Generation Scenes**: Our brand new, massively improved scene system for Bevy has finally landed! Ergonomically define scenes in our new BSN (Bevy Scene Notation) format in code via the `bsn!` macro or (in a future release) in assets. Scenes are composable, patchable, and dependency aware. No more manually pulling in all of the ECS and asset dependencies required to spawn something! 
+- **Solari Improvements**: Bevy's realtime pathtraced renderer has gained several improvements and fixes for mirrors and non-metallic materials. Its performance has improved and it has greatly increased temporal stability.
+- **More Feathers Widgets**: Bevy's opinionated "editor tooling" widget collection got a ton of new widgets. It was also ported to BSN, making it much more pleasant to use!
+- **Text Input**: Bevy UI _finally_ has upstream support for text entry via the new `EditableText` component.
+- **Richer Text**: Bevy now has more flexible font selection, with support for higher level features like "font families" and variable font properties.
+- **App Settings**: We've added an official "app settings" framework, which can load and save settings from files and expose them as ECS resources.
+- **Renderer Recovery**: You can now configure error handler / recovery behavior when a GPU becomes unavailable.
+- **Post Processing Effects**: We've added built in "vignette" and "lens distortion" post processing effects.
+- **Improved Skinned Mesh Culling**: Skinned meshes can now take their animations into account when they are being culled. 
 
 <!-- more -->
 
@@ -32,11 +40,11 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ### BSN (Bevy Scene Notation)
 
-BSN is an ergonomic Rust-like scene syntax which can be defined in Rust code via the `bsn!` macro _and_ in `.bsn` asset files. If you were ever bothered by the verbosity and complexity of spawning complex collections of entities in Bevy, you will probably enjoy what BSN has to offer. BSN can be used to spawn anything in the ECS. This benefits all scenarios, but it is worth calling out explicitly that this makes Bevy UI code significantly easier to read and write.
+BSN is an ergonomic Rust-like scene syntax which can be defined in Rust code via the [`bsn!`] macro _and_ in `.bsn` asset files. If you were ever bothered by the verbosity and complexity of spawning complex collections of entities in Bevy, you will probably enjoy what BSN has to offer. BSN can be used to spawn anything in the ECS. This benefits all scenarios, but it is worth calling out explicitly that this makes Bevy UI code significantly easier to read and write.
 
 Some quick caveats: while **Bevy 0.19** technically supports scene assets, we aren't yet shipping a first-party `.bsn` asset loader. This release focuses on the code-driven workflow, and we plan to roll out the asset driven workflow in a future release. Additionally, BSN is still hot off the presses and it will likely take a few releases for us to iron out the experience. It is plenty useful now, but expect some rough edges and missing features.
 
-In Rust, a `bsn!` expression is essentially a list of components to add to an entity:
+In Rust, a [`bsn!`] expression is essentially a list of components to add to an entity:
 
 ```rust
 bsn! {
@@ -47,7 +55,7 @@ bsn! {
 }
 ```
 
-So far this looks and behaves much like Bevy's existing `Bundle` (which is _just_ a collection of components). But BSN has a ton of additional superpowers!
+So far this looks and behaves much like Bevy's existing [`Bundle`] (which is _just_ a collection of components). But BSN has a ton of additional superpowers!
 
 <details>
     <summary><b>Click here to see everything BSN has to offer!</b></summary>
@@ -78,7 +86,7 @@ bsn! {
 }
 ```
 
-Fields values can be arbitrary Rust expressions via `{}` syntax:
+Field values can be arbitrary Rust expressions via `{}` syntax:
 
 ```rust
 bsn! {
@@ -114,7 +122,7 @@ bsn! {
 
 ### Scene Functions
 
-You can define reusable BSN functions like this:
+[`bsn!`] returns a type that implements the [`Scene`] trait, meaning you can define reusable BSN functions like this:
 
 ```rust
 fn player() -> impl Scene {
@@ -179,7 +187,7 @@ We're [working](https://github.com/bevyengine/bevy/pull/23576) on an official `.
 
 ### Scene Lists
 
-`bsn!` / `Scene` corresponds to a single entity. `bsn_list!` / `SceneList` is the same idea, but applied to lists of entities:
+[`bsn!`] / [`Scene`] corresponds to a single entity. [`bsn_list!`] / [`SceneList`] is the same idea, but applied to lists of entities:
 
 ```rust
 fn players() -> impl SceneList {
@@ -190,7 +198,7 @@ fn players() -> impl SceneList {
 }
 ```
 
-Entities in a `bsn_list!` are comma separated, and the parentheses to visually indicate entity boundaries are optional:
+Entities in a [`bsn_list!`] are comma separated, and the parentheses to visually indicate entity boundaries are optional:
 
 ```rust
 fn players() -> impl SceneList {
@@ -201,7 +209,7 @@ fn players() -> impl SceneList {
 }
 ```
 
-The "BSN relationship syntax" seen above (ex: `Children []`) uses `SceneList`. This means you can pass scene lists as arguments to your scenes:
+The "BSN relationship syntax" seen above (ex: `Children []`) uses [`SceneList`]. This means you can pass scene lists as arguments to your scenes:
 
 ```rust
 fn widget(children: impl SceneList) -> impl Scene {
@@ -214,7 +222,7 @@ fn widget(children: impl SceneList) -> impl Scene {
 
 ### Observing Events
 
-`bsn!` entities can easily observe events, making it easy to embed "callback-style" behaviors in your scenes:
+[`bsn!`] entities can easily observe events, making it easy to embed "callback-style" behaviors in your scenes:
 
 ```rust
 fn button() -> impl Scene {
@@ -229,7 +237,7 @@ fn button() -> impl Scene {
 
 ### Templates
 
-A BSN expression actually defines "templates" for components rather than the actual components themselves. A `Template` is essentially a fancy constructor for a type, which produces an output type (such as a Component). Critically, `Template` has access to the `World`, the current entity, and the "scene spawn context". This enables powerful behaviors, such as loading assets from a given asset path and producing asset handles (ex: `Handle<Image>`).
+A BSN expression actually defines "templates" for components rather than the actual components themselves. A [`Template`] is essentially a fancy constructor for a type, which produces an output type (such as a Component). Critically, [`Template`] has access to the [`World`], the current entity, and the "scene spawn context". This enables powerful behaviors, such as loading assets from a given asset path and producing asset handles (ex: `Handle<Image>`).
 
 The "old" approach to spawning via bundles required passing in every ECS dependency into a bundle function and manually using that dependency to produce the final value:
 
@@ -275,7 +283,7 @@ fn setup(mut commands: Commands) {
 
 Spawning a scene no longer requires knowing every little dependency it requires internally, and common actions like loading and assigning assets via their paths is simple!
 
-This does mean that BSN requires types to have a `Template`. This is accomplished via the `FromTemplate` trait, which tells BSN what `Template` type it should use for a given `Component`. `FromTemplate` can be derived, which will also generate a `Template` type for your type. Fortunately, most types _do not_ need to derive or implement `FromTemplate` manually. This is because `FromTemplate` and `Template` is automatically implemented for every type that implements `Default` and `Clone`. These types are "templates of themselves" and are just "passed through". You only need to derive `FromTemplate` if you need template features (such as the `Sprite` use case above, which uses a `Handle<Image>` template to accept `"player.png"`).
+This does mean that BSN requires types to have a [`Template`]. This is accomplished via the [`FromTemplate`] trait, which tells BSN what [`Template`] type it should use for a given [`Component`]. [`FromTemplate`] can be derived, which will also generate a [`Template`] type for your type. Fortunately, most types _do not_ need to derive or implement [`FromTemplate`] manually. This is because [`FromTemplate`] and [`Template`] is automatically implemented for every type that implements `Default` and `Clone`. These types are "templates of themselves" and are just "passed through". You only need to derive [`FromTemplate`] if you need template features (such as the [`Sprite`] use case above, which uses a `Handle<Image>` template to accept `"player.png"`).
 
 ### Inline Asset Templates
 
@@ -292,7 +300,7 @@ fn cube() -> impl Scene {
 Compare that to what was necessary before!
 
 ```rust
-fn setup(meshes: Res<Assets<Meshes>>) -> impl Bundle {
+fn setup(meshes: Res<Assets<Mesh>>) -> impl Bundle {
     let handle = meshes.add(Cuboid::new(1., 1., 1.));
     Mesh3d(handle)
 }
@@ -300,7 +308,7 @@ fn setup(meshes: Res<Assets<Meshes>>) -> impl Bundle {
 
 ### Entity Reference Syntax
 
-BSN has special "entity reference syntax" to define an Entity's `Name` component:
+BSN has special "entity reference syntax" to define an Entity's [`Name`] component:
 
 ```rust
 bsn! {
@@ -348,7 +356,7 @@ bsn! {
 }
 ```
 
-In the context of `bsn_list!`, this enables defining graph structures:
+In the context of [`bsn_list!`], this enables defining graph structures:
 
 ```rust
 bsn_list! [
@@ -375,7 +383,7 @@ This works because `"hello"` is a `&str`, which has an `Into<String>` implementa
 ```rust
 // Raw Rust
 Node {
-    border: UiRect::all(Val::Px(2.0))
+    border: UiRect::all(Val::Px(2.0)),
     ..Default::default()
 }
 
@@ -389,7 +397,7 @@ Node { border: px(2) }
 
 It has almost been a Bevy developer rite of passage to define something like a `Player` component, which has complex behaviors that rely on some larger "scene", and then ask questions like "how do I spawn this all together?" and "how do I write code that can safely assume the whole scene is present?". Bevy developers have solved these problems in a variety of creative ways, but there has never been an easy recommended / idiomatic upstream solution.
 
-BSN solves this problem by making it possible to associate a `Scene` with a `Component` via the `SceneComponent` derive:
+BSN solves this problem by making it possible to associate a [`Scene`] with a [`Component`] via the [`SceneComponent`] derive:
 
 ```rust
 #[derive(SceneComponent, Default, Clone)]
@@ -460,7 +468,7 @@ bsn! {
 
 "Props" are evaluated first (before component field patches). Logically, they are evaluated immediately / in-place and the SceneComponent's scene is immediately applied to the current scene. This means the scene they produce can be patched. This _also_ means that you cannot patch "props", as they do not exist later in the scene.
 
-The `SceneComponent` derive also supports shorthand for scene assets:
+The [`SceneComponent`] derive also supports shorthand for scene assets:
 
 ```rust
 #[derive(SceneComponent, Default, Clone)]
@@ -472,7 +480,7 @@ struct Player {
 
 Again, note that **Bevy 0.19** does not ship with a `.bsn` asset loader. We're working on it!
 
-The `SceneComponent` derive looks for the `Player::scene` function by default, but you can specify a custom function too:
+The [`SceneComponent`] derive looks for the `Player::scene` function by default, but you can specify a custom function too:
 
 ```rust
 #[derive(SceneComponent, Default, Clone)]
@@ -508,7 +516,7 @@ fn level() -> impl SceneList {
 }
 ```
 
-`.spawn()` will turn any function that returns a `Scene` or a `SceneList` into a system that spawns that scene.
+`.spawn()` will turn any function that returns a [`Scene`] or a [`SceneList`] into a system that spawns that scene.
 
 </details>
 
@@ -536,7 +544,8 @@ Bevy Feathers, our opinionated UI widget collection designed with the Bevy edito
 - Disclosure toggle (chevron expand/collapse)
 - Icon and label (display primitives)
 - Pane, subpane, and group (decorative frames for editors)
-- List view, with a scrollbar that can be used separately
+- List view
+- Scrollbar
 
 We've improved the existing widgets! For full usage and an interactive demo, try out the [`feathers_gallery`] example.
 
@@ -575,7 +584,7 @@ In the future, the same BSN syntax used in the `bsn!` macro will be portable to 
 
 <video controls loop><source  src="editable_text.mp4" type="video/mp4"/></video>
 
-In **Bevy 0.19**, we've added basic support for text entry, in the form of the `EditableText` component.
+In **Bevy 0.19**, we've added basic support for text entry, in the form of the [`EditableText`] component.
 Spawning an entity with this component will create a simple unstyled rectangle of editable text.
 Our initial text entry supports:
 
@@ -617,11 +626,11 @@ Not anymore.
 
 ![generic fonts](generic_fonts.jpg)
 
-`FontSource` now offers three ways to identify a font:
+[`FontSource`] now offers three ways to identify a font:
 
 ```rust
 // Asset handle
-FontSource::Handle(asset_server.load("fonts/FiraMono.ttf")
+FontSource::Handle(asset_server.load("fonts/FiraMono.ttf"))
 
 // Family name
 FontSource::Family("FiraMono".into())
@@ -648,7 +657,7 @@ Enable the `bevy/system_font_discovery` feature to make installed system fonts a
 
 ![variable font properties](variable_font_properties.jpg)
 
-`TextFont` has gained the `weight`, `width`, and `style` fields. Pick a variable font, and say goodbye to separate assets for every variant of a typeface:
+[`TextFont`] has gained the `weight`, `width`, and `style` fields. Pick a variable font, and say goodbye to separate assets for every variant of a typeface:
 
 ```rust
 TextFont {
@@ -662,7 +671,7 @@ TextFont {
 
 ### Responsive font sizing
 
-`font_size` is now a `FontSize` enum rather than a bare `f32`:
+`font_size` is now a [`FontSize`] enum rather than a bare `f32`:
 
 ```rust
 TextFont::from_font_size(FontSize::Px(24.0))   // fixed pixels — unchanged behavior
@@ -676,7 +685,7 @@ The full set of variants mirrors CSS: `Px`, `Vw`, `Vh`, `VMin`, `VMax`, and `Rem
 
 <video controls loop><source src="letter_spacing.mp4" type="video/mp4"/></video>
 
-A new `LetterSpacing` component controls the spacing between characters:
+A new [`LetterSpacing`] component controls the spacing between characters:
 
 ```rust
 commands.spawn((
@@ -690,7 +699,7 @@ we've chosen to migrate to [`parley`] during this cycle.
 Both are solid, modern choices, but we found `parley` had meaningfully better documentation and was somewhat nicer to use.
 
 [`cosmic_text`]: https://github.com/pop-os/cosmic-text
-[`Parley`]: https://github.com/linebender/parley
+[`parley`]: https://github.com/linebender/parley
 
 ## App Settings
 
@@ -706,7 +715,7 @@ Bevy now has a built in general-purpose "app settings" system, which Bevy apps c
 
 Notably, the Bevy Editor needs a settings system for layout preferences, tool configuration, and everything else that should persist between sessions. Because the Bevy Editor is being built _as_ a Bevy app, it can make use of this new settings system! 
 
-Settings groups are plain Rust structs that derive `Resource`, `SettingsGroup`, and `Reflect`:
+Settings groups are plain Rust structs that derive [`Resource`], [`SettingsGroup`], and [`Reflect`]:
 
 ```rust
 #[derive(Resource, SettingsGroup, Reflect, Default)]
@@ -717,7 +726,7 @@ struct AudioSettings {
 }
 ```
 
-Adding `SettingsPlugin` with a unique [reverse-domain] app name will automatically load your settings groups
+Adding [`SettingsPlugin`] with a unique [reverse-domain] app name will automatically load your settings groups
 on startup and insert them as resources:
 
 ```rust
@@ -732,7 +741,7 @@ fn adjust_volume(audio: Res<AudioSettings>, mut music: ResMut<AudioSink>) {
 }
 ```
 
-Settings can then be saved via the `SaveSettingsDeferred` or `SaveSettingsSync` command.
+Settings can then be saved via the [`SaveSettingsDeferred`] or [`SaveSettingsSync`] command.
 
 [reverse-domain]: https://en.wikipedia.org/wiki/Reverse_domain_name_notation
 
@@ -835,13 +844,13 @@ app.insert_resource(RenderErrorHandler(
 
 Be sure to test your error recovery carefully in your games; we've seen hardware-specific cases of flickering during repeated failures (as might be caused by an out-of-memory problem), which are a serious accessibility risk for people with photosensitive epilepsy.
 While we're looking to solve that problem for good in later releases, we've currently opted for a conservative default.
-If you don't configure a `RenderErrorHandler`, behavior is similar to but not identical to before: Vulkan validation errors are ignored, everything else sends an `AppExit` event to gracefully shut down.
+If you don't configure a [`RenderErrorHandler`], behavior is similar to but not identical to before: Vulkan validation errors are ignored, everything else sends an `AppExit` event to gracefully shut down.
 
 ## Render Graph as Systems
 
 {{ heading_metadata(authors=["@tychedelia"] prs=[22144]) }}
 
-Bevy's `RenderGraph` architecture has been replaced with ECS schedules. Render passes are now regular systems that run in schedules such as `Core3d`, `Core2d`, which are executed on the render world.
+Bevy's `RenderGraph` architecture has been replaced with ECS schedules. Render passes are now regular systems that run in schedules such as [`Core3d`], [`Core2d`], which are executed on the render world.
 
 The old render graph was originally designed when Bevy's ECS was less mature. In order to add custom rendering
 functionality, we required users to implement a trait `Node`, derive a `RenderLabel`, and use a targeted API for ordering
@@ -853,7 +862,7 @@ this rendering work relative to other tasks. This required a lot of boilerplate!
 ```rust
 pub struct MyCustomRenderNode;
 
-impl Node for MyCustomNode {
+impl Node for MyCustomRenderNode {
     fn run(
         &self,
         _graph: &mut RenderGraphContext,
@@ -896,7 +905,7 @@ impl Plugin for MyRenderPlugin {
 
 </details>
 
-As Bevy ECS has evolved, `Schedule` has become capable of expressing the "render graph" pattern. Using the ECS directly lets
+As Bevy ECS has evolved, [`Schedule`] has become capable of expressing the "render graph" pattern. Using the ECS directly lets
 rendering better leverage familiar Bevy patterns, allowing the above to be expressed much more succinctly:
 
 ```rust
@@ -989,7 +998,7 @@ Metal (Apple's GPU API) has partial bindless support. They permit texture bindin
 
 Historically, Bevy required support for both features before it would use bindless, which excluded Metal entirely, even for materials that never use buffer arrays.
 
-Most materials, including `StandardMaterial`, do not need buffer array support.
+Most materials, including [`StandardMaterial`], do not need buffer array support.
 To ensure those materials take the fast path, Bevy now checks the actual needs of each material.
 If you only need texture arrays, your material can be rendered efficiently across Bevy's desktop platforms.
 If you use `#[uniform(..., binding_array(...))]`, expect performance degradation on Metal.
@@ -1021,23 +1030,25 @@ it's lovely to see those performance gains, and to know that Bevy itself is no l
 ![overlay](overlay.jpg)
 
 Bevy's diagnostics have always been easy to dump to the terminal, but displaying them in-game meant wiring up your own UI.
-`DiagnosticsOverlayPlugin` adds a built-in overlay for this, with presets for common cases:
+[`DiagnosticsOverlayPlugin`] adds a built-in overlay for this, with presets for common cases:
 
 ```rust
 commands.spawn(DiagnosticsOverlay::fps());
 commands.spawn(DiagnosticsOverlay::mesh_and_standard_material());
 ```
 
-You can also build a custom overlay from any [`DiagnosticPath`](https://dev-docs.bevy.org/bevy/diagnostic/struct.DiagnosticPath.html) list:
+You can also build a custom overlay from any [`DiagnosticPath`](https://docs.rs/bevy/0.19.0-rc.3/bevy/diagnostic/struct.DiagnosticPath.html) list:
 
 ```rust
-commands.spawn(DiagnosticsOverlay::new("MyDiagnostics", vec![MyDiagnostics::COUNTER.into()]));
+commands.spawn(DiagnosticsOverlay::new("Diagnostics", vec![
+    MyDiagnostics::COUNTER.into()
+]));
 ```
 
-By default the overlay shows the smoothed moving average. You can switch to the latest value or the raw moving average via [`DiagnosticsOverlayStatistic`](https://dev-docs.bevy.org/bevy/dev_tools/diagnostics_overlay/enum.DiagnosticsOverlayStatistic.html), and configure floating-point precision with [`DiagnosticsOverlayItem::precision`](https://dev-docs.bevy.org/bevy/dev_tools/diagnostics_overlay/struct.DiagnosticsOverlayItem.html#structfield.precision):
+By default the overlay shows the smoothed moving average. You can switch to the latest value or the raw moving average via [`DiagnosticsOverlayStatistic`](https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/diagnostics_overlay/enum.DiagnosticsOverlayStatistic.html), and configure floating-point precision with [`DiagnosticsOverlayItem::precision`](https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/diagnostics_overlay/struct.DiagnosticsOverlayItem.html#structfield.precision):
 
 ```rust
-commands.spawn(DiagnosticsOverlay::new("MyDiagnostics", vec![DiagnosticsOverlayItem {
+commands.spawn(DiagnosticsOverlay::new("Diagnostics", vec![DiagnosticsOverlayItem {
     path: MyDiagnostics::COUNTER,
     statistic: DiagnosticsOverlayStatistic::Value,
     precision: 4,
@@ -1049,10 +1060,10 @@ commands.spawn(DiagnosticsOverlay::new("MyDiagnostics", vec![DiagnosticsOverlayI
 {{ heading_metadata(authors=["@Jenya705"] prs=[21984, 24181]) }}
 
 [SIMD] is a critical tool for performance optimization, but using it in Bevy has always been harder than it needed to be.
-Table components in Bevy are already laid out flat in memory — all `Transform` components are stored as values in a contiguous table, exactly what SIMD wants.
-The `Query` iterator just wasn't exposing that structure: it handed you one entity's component at a time, and the compiler had no way to know the underlying data was a contiguous array.
+Table components in Bevy are already laid out flat in memory — all [`Transform`] components are stored as values in a contiguous table, exactly what SIMD wants.
+The [`Query`] iterator just wasn't exposing that structure: it handed you one entity's component at a time, and the compiler had no way to know the underlying data was a contiguous array.
 
-`contiguous_iter` and `contiguous_iter_mut` hand you the whole table slice at once. LLVM can see the contiguous array and auto-vectorize — or you can reach for explicit SIMD yourself.
+[`contiguous_iter`] and [`contiguous_iter_mut`] hand you the whole table slice at once. LLVM can see the contiguous array and auto-vectorize — or you can reach for explicit SIMD yourself.
 
 On a bulk `position += velocity` update over 10,000 entities, this gives some serious speedups:
 
@@ -1074,7 +1085,7 @@ fn apply_health_decay(mut query: Query<(&mut Health, &HealthDecay)>) {
 }
 ```
 
-The `contiguous_iter` family of methods only returns `Ok` if the query is dense. That means:
+The [`contiguous_iter`] family of methods only returns `Ok` if the query is dense. That means:
 
 - All of the fetched components must use the default "table" storage strategy.
 - The query filters cannot disrupt the returned query data. "Archetypal filters" like `With<T>` and `Without<T>` are fine; `Changed<T>` and `Added<T>` are not, since they require a per-entity check that makes it impossible to return raw table slices.
@@ -1084,7 +1095,7 @@ or working with dynamic components.
 
 You may have noticed that the table above had *three* rows.
 While change detection is a generally useful feature, it does incur measurable performance overhead.
-By default, `contiguous_iter_mut` returns `ContiguousMut<T>`.
+By default, [`contiguous_iter_mut`] returns `ContiguousMut<T>`.
 Just like the ordinary `Mut<T>`, it triggers change detection automatically on dereference.
 If you don't care about that, `bypass_change_detection()` gives you the raw `&mut [T]` directly for even faster access.
 Vroom!
@@ -1116,7 +1127,7 @@ fn delayed_spawn_then_insert(mut commands: Commands) {
 ```
 
 Note that this does not have a built-in, blessed cancellation mechanism yet.
-We recommend embedding the originating `Entity` into the command if you want to cancel the action if that entity dies or is despawned.
+We recommend embedding the originating [`Entity`] into the command if you want to cancel the action if that entity dies or is despawned.
 
 ## Text Gizmos
 
@@ -1127,10 +1138,10 @@ We recommend embedding the originating `Entity` into the command if you want to 
 Sometimes you just want to slap a label on something while debugging.
 Text gizmos are for exactly that: a zero-setup way to draw world-space text anywhere in your scene using a built-in stroke font.
 
-Unlike Bevy's `Text2D` — the right choice for damage numbers, nameplates, and in-game labels — text gizmos are *strictly* for dev tools and debugging.
+Unlike Bevy's [`Text2D`] — the right choice for damage numbers, nameplates, and in-game labels — text gizmos are *strictly* for dev tools and debugging.
 The font is fixed and only supports ASCII.
 
-Use `Gizmos::text` and `text_2d` to quickly draw text:
+Use [`Gizmos::text`] and `text_2d` to quickly draw text:
 
 ```rust
 fn draw_text(mut gizmos: Gizmos) {
@@ -1150,7 +1161,7 @@ If you want to color each section of characters separately, reach for `text_sect
 
 {{ heading_metadata(authors=["@NthTensor", "@Gingeh"] prs=[21795]) }}
 
-When a `Task` in Bevy is dropped, it's supposed to be cancelled, stopping the underlying work at the next yield point.
+When a [`Task`] in Bevy is dropped, it's supposed to be cancelled, stopping the underlying work at the next yield point.
 On web, this never worked. `wasm_bindgen_futures::spawn_local` hands your future directly to the JS event loop with no handle to take it back, so Bevy's task wrapper was just a receipt with no power to cancel.
 
 As a result, code that correctly managed task lifetimes on native desktop and mobile platforms silently leaked work on web.
@@ -1164,13 +1175,13 @@ fn update_background_task(mut task_handle: ResMut<CurrentTask>) {
 ```
 
 Fixing this required a new approach to the WASM executor. The [`web-task`](https://crates.io/crates/web-task) crate, built by our very own `@NthTensor`, builds cooperative cancellation on top of the JS event loop: spawned tasks check an abort flag at every yield point.
-Bevy now uses it on WASM, so `Task` drop semantics are finally identical on all platforms.
+Bevy now uses it on WASM, so [`Task`] drop semantics are finally identical on all platforms.
 
 ## Asset Saving
 
 {{ heading_metadata(authors=["@andriyDev"] prs=[22622]) }}
 
-Bevy has had an `AssetSaver` trait since 0.12.
+Bevy has had an [`AssetSaver`] trait since 0.12.
 However, it was only ever intended for use inside asset processing pipelines, not for saving assets at runtime.
 This left a frustrating gap: if you wanted to save a procedurally generated mesh, a baked lightmap, or the output of an in-editor workflow, there was no supported path to do it.
 
@@ -1235,7 +1246,7 @@ That separation has been a persistent source of friction.
 Many of our tools for components (like hooks, observers, and relations) simply weren't available for resources,
 and the engine carried a significant amount of duplicated internal machinery to keep the two mechanisms in sync.
 
-In Bevy 0.19, resources are now stored as components on singleton entities,
+In **Bevy 0.19**, resources are now stored as components on singleton entities,
 unifying our internals and giving resources more capabilities. You can now:
 
 - Simplify networking and dev-tools code by assuming that entities + components are the only form of data you need to worry about
@@ -1254,7 +1265,7 @@ unifying our internals and giving resources more capabilities. You can now:
 
 A transform gizmo — the click-and-drag handles for translating, rotating, and scaling objects in a 3D viewport — is one of the first things anyone reaches for when building a level editor. Bevy now has one built in, for your use today and our own use in the future.
 
-Add `TransformGizmoPlugin`, mark a camera with `TransformGizmoCamera`, and tag entities with `TransformGizmoFocus`:
+Add [`TransformGizmoPlugin`], mark a camera with [`TransformGizmoCamera`], and tag entities with [`TransformGizmoFocus`]:
 
 ```rust
 app.add_plugins(TransformGizmoPlugin);
@@ -1264,8 +1275,8 @@ commands.spawn((Mesh3d(mesh), TransformGizmoFocus));
 ```
 
 The plugin is deliberately not connected to user input.
-This keeps the gizmo composable for editor authors who already have opinions about input handling. Sensitivity, snapping, and screen-space scaling are all configurable via `TransformGizmoSettings`,
-while modes are controlled via the `TransformGizmoMode` resource.
+This keeps the gizmo composable for editor authors who already have opinions about input handling. Sensitivity, snapping, and screen-space scaling are all configurable via [`TransformGizmoSettings`],
+while modes are controlled via the [`TransformGizmoMode`] resource.
 
 Much of the math and implementation strategy for this widget comes from the [`bevy_transform_gizmo`](https://github.com/fslabs/bevy_transform_gizmo) crate.
 Thanks again to Foresight Spatial Labs for their generous open source contributions!
@@ -1282,7 +1293,7 @@ Simply drawing lines doesn't work well: the mesh has to end somewhere, and the l
 
 Our implementation renders the grid as a fullscreen shader: the grid is computed per-pixel in screen space from the camera's perspective, and fades out with distance to eliminate aliasing at the horizon.
 
-To add an infinite grid to your app, register `InfiniteGridPlugin` and spawn the `InfiniteGrid` component:
+To add an infinite grid to your app, register [`InfiniteGridPlugin`] and spawn the [`InfiniteGrid`] component:
 
 ```rust
 use bevy::dev_tools::infinite_grid::{InfiniteGrid, InfiniteGridPlugin};
@@ -1298,13 +1309,13 @@ fn setup(mut commands: Commands) {
 }
 ```
 
-Grid appearance — colors, fade distance, line scale — is controlled by `InfiniteGridSettings`, which can be placed on the grid entity or on a specific camera to override it per-view. You can see how this works in the new [`infinite_grid.rs`](https://github.com/bevyengine/bevy/blob/v0.19.0/examples/dev_tools/infinite_grid.rs) example.
+Grid appearance — colors, fade distance, line scale — is controlled by [`InfiniteGridSettings`], which can be placed on the grid entity or on a specific camera to override it per-view. You can see how this works in the new [`infinite_grid.rs`](https://github.com/bevyengine/bevy/blob/v0.19.0/examples/dev_tools/infinite_grid.rs) example.
 
 This is an upstreamed version of the [`bevy_infinite_grid` crate], created and maintained by Foresight Spatial Labs — thank you for building it and generously contributing it to Bevy!
 
 [`bevy_infinite_grid` crate]: https://github.com/fslabs/bevy_infinite_grid
 
-## White furnace test
+## White Furnace Test
 
 {{ heading_metadata(authors=["@dylansechet"] prs=[23194, 23203]) }}
 
@@ -1319,7 +1330,7 @@ The [white furnace test](https://lousodrome.net/blog/light/2023/10/21/the-white-
 
 Bevy used to fail this test, meaning something was wrong with our shader math. Two bugs were responsible:
 
-- Seams were visible when using `GeneratedEnvironmentMapLight` for certain surface orientations.
+- Seams were visible when using [`GeneratedEnvironmentMapLight`] for certain surface orientations.
 - Partially metallic materials absorbed energy, appearing darker than they should be.
 
 After fixing those, Bevy passes the test. That means your materials will behave more correctly under image-based lighting.
@@ -1360,7 +1371,7 @@ This works with `add_observer`, entity `.observe()`, and the `Observer` builder 
 {{ heading_metadata(authors=["@andriyDev"] prs=[23329]) }}
 
 Asset handles can now be round-tripped successfully during serialization and deserialization.
-This is particularly important for world assets — the serialization format written through `DynamicWorld::serialize`, previously called scenes.
+This is particularly important for world assets — the serialization format written through [`DynamicWorld::serialize`], previously called scenes.
 
 This wasn't a matter of just slapping on some derives, because handles aren't raw data: they're a pointer to the actual loaded asset.
 As a result, there was no clear way to either persist or reconstruct one.
@@ -1392,7 +1403,7 @@ struct MyAsset {
 {{ heading_metadata(authors=["@mrchantey"] prs=[22269]) }}
 
 By default, Bevy rejects relationship components that point to the entity they live on. If you insert one, Bevy will log a warning and remove it.
-This default exists for good reason: structural relationships like `ChildOf` form hierarchies that Bevy traverses recursively — a self-referential `ChildOf` would produce an infinite loop.
+This default exists for good reason: structural relationships like [`ChildOf`] form hierarchies that Bevy traverses recursively — a self-referential [`ChildOf`] would produce an infinite loop.
 
 But many relationships are purely semantic. `Likes(self)`, `EmployedBy(self)`, `Healing(self)` — these don't imply any traversal, and self-reference is perfectly valid. You can now opt in with `allow_self_referential`:
 
@@ -1412,20 +1423,20 @@ With the attribute set, inserting a self-referential relationship is accepted wi
 
 {{ heading_metadata(authors=["@viridia"] prs=[24308]) }}
 
-The `AccessibleLabel` component allows the a11y `label` property to be specified separately from
+The [`AccessibleLabel`] component allows the a11y `label` property to be specified separately from
 other a11y properties.
 
 In most apps, the `label` property comes from application code rather than library code.
 However, the design of `accesskit` requires that all a11y properties be stored in a single
-large data structure contained in the `AccessibilityNode` component. This creates a usability
+large data structure contained in the [`AccessibilityNode`] component. This creates a usability
 conflict with BSN and other methods of spawning complex hierarchies, where composing multiple
 components is the primary means of behavioral reuse.
 
 By putting the label in its own component, it can be used as a mixin within BSN templates, allowing
 the label to be added by the widget user rather than the widget author.
 
-Internally, this uses component hooks to sync the `AccessibilityNode` properties with the
-payload of the `AccessibleLabel` component, satisfying the needs of `accesskit`.
+Internally, this uses component hooks to sync the [`AccessibilityNode`] properties with the
+payload of the [`AccessibleLabel`] component, satisfying the needs of `accesskit`.
 
 ## What's Next?
 
@@ -1446,4 +1457,55 @@ and polish them while we put it all together.
 - **A much more complete Bevy book:** Wish the Bevy Book was longer? We do too! We've substantially extended it, covering a much wider range of topics in more depth, and are hoping to release what we have soon, during the 0.20 development cycle. Expect a steady stream of new chapters as more of the engine reaches a "stable enough" status.
 
 [WESL]: https://github.com/webgpu-tools/wesl-spec
-[supported WESL for more than a year]: https://github.com/bevyengine/bevy/pull/17953
+
+[`bsn!`]: https://docs.rs/bevy_scene/0.19.0-rc.3/bevy_scene/macro.bsn.html
+[`bsn_list!`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/macro.bsn_list.html
+[`Bundle`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/bundle/trait.Bundle.html
+[`Scene`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/trait.Scene.html
+[`SceneList`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/trait.SceneList.html
+[`Template`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/trait.Template.html
+[`World`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/struct.World.html
+[`FromTemplate`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/trait.FromTemplate.html
+[`Component`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/component/trait.Component.html
+[`Sprite`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.Sprite.html
+[`Name`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/name/struct.Name.html
+[`SceneComponent`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/trait.SceneComponent.html
+[`EditableText`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/text/struct.EditableText.html
+[`FontSource`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/enum.FontSource.html
+[`TextFont`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.TextFont.html
+[`FontSize`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/enum.FontSize.html
+[`LetterSpacing`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/text/enum.LetterSpacing.html
+[`Resource`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/trait.Resource.html
+[`SettingsGroup`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/settings/trait.SettingsGroup.html
+[`Reflect`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/trait.Reflect.html
+[`SettingsPlugin`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/settings/struct.SettingsPlugin.html
+[`SaveSettingsDeferred`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/settings/struct.SaveSettingsDeferred.html
+[`SaveSettingsSync`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/settings/enum.SaveSettingsSync.html
+[`RenderErrorHandler`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/render/error_handler/struct.RenderErrorHandler.html
+[`Core3d`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/core_pipeline/struct.Core3d.html
+[`Core2d`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/core_pipeline/struct.Core2d.html
+[`Schedule`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/struct.Schedule.html
+[`StandardMaterial`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/pbr/struct.StandardMaterial.html
+[`DiagnosticsOverlayPlugin`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/diagnostics_overlay/struct.DiagnosticsOverlayPlugin.html
+[`DiagnosticPath`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/diagnostic/struct.DiagnosticPath.html
+[`DiagnosticsOverlayStatistic`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/diagnostics_overlay/enum.DiagnosticsOverlayStatistic.html
+[`Transform`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.Transform.html
+[`Query`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/prelude/struct.Query.html
+[`contiguous_iter`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.QueryState.html#method.contiguous_iter
+[`contiguous_iter_mut`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.QueryState.html#method.contiguous_iter_mut
+[`Entity`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/entity/struct.Entity.html
+[`Text2D`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.Text2d.html
+[`Task`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/tasks/struct.Task.html
+[`AssetSaver`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/asset/saver/trait.AssetSaver.html
+[`TransformGizmoPlugin`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/gizmos/prelude/struct.TransformGizmoPlugin.html
+[`TransformGizmoCamera`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/gizmos/prelude/struct.TransformGizmoCamera.html
+[`TransformGizmoFocus`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/gizmos/prelude/struct.TransformGizmoFocus.html
+[`TransformGizmoSettings`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/gizmos/prelude/struct.TransformGizmoSettings.html
+[`TransformGizmoMode`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/gizmos/prelude/enum.TransformGizmoMode.html
+[`InfiniteGridPlugin`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/infinite_grid/struct.InfiniteGridPlugin.html
+[`InfiniteGrid`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/infinite_grid/struct.InfiniteGrid.html
+[`InfiniteGridSettings`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/dev_tools/infinite_grid/struct.InfiniteGridSettings.html
+[`GeneratedEnvironmentMapLight`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/light/struct.GeneratedEnvironmentMapLight.html
+[`ChildOf`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/hierarchy/struct.ChildOf.html
+[`AccessibleLabel`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/prelude/struct.AccessibleLabel.html
+[`AccessibilityNode`]:  https://docs.rs/bevy/0.19.0-rc.3/bevy/a11y/struct.AccessibilityNode.html
