@@ -853,7 +853,7 @@ this rendering work relative to other tasks. This required a lot of boilerplate!
 ```rust
 pub struct MyCustomRenderNode;
 
-impl Node for MyCustomNode {
+impl Node for MyCustomRenderNode {
     fn run(
         &self,
         _graph: &mut RenderGraphContext,
