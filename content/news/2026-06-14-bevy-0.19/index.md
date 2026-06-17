@@ -292,7 +292,7 @@ fn cube() -> impl Scene {
 Compare that to what was necessary before!
 
 ```rust
-fn setup(meshes: Res<Assets<Meshes>>) -> impl Bundle {
+fn setup(meshes: Res<Assets<Mesh>>) -> impl Bundle {
     let handle = meshes.add(Cuboid::new(1., 1., 1.));
     Mesh3d(handle)
 }
