@@ -536,7 +536,7 @@ Bevy Feathers, our opinionated UI widget collection designed with the Bevy edito
 - Disclosure toggle (chevron expand/collapse)
 - Icon and label (display primitives)
 - Pane, subpane, and group (decorative frames for editors)
-- List view, with a scrollbar that can be used seperately
+- List view, with a scrollbar that can be used separately
 
 We've improved the existing widgets! For full usage and an interactive demo, try out the [`feathers_gallery`] example.
 
