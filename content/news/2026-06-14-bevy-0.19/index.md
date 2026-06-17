@@ -524,7 +524,7 @@ For more details, read [JMS55's blog post](https://jms55.github.io/posts/2026-04
 
 ## More Feathers Widgets
 
-{{ heading_metadata(authors=["@viridia", "@jordanhalase"] prs=[23645, 23707, 23788, 23787, 23804, 23817, 23842, 23744, 23820, 23830, 23869, 23883, 23890, 23993]) }}
+{{ heading_metadata(authors=["@viridia", "@jordanhalase"] prs=[23645, 23707, 23788, 23787, 23804, 23817, 23842, 23744, 23820, 23830, 23869, 23883, 23890, 23993, 24092]) }}
 
 ![feathers widgets](feathers.jpg)
 
@@ -536,6 +536,7 @@ Bevy Feathers, our opinionated UI widget collection designed with the Bevy edito
 - Disclosure toggle (chevron expand/collapse)
 - Icon and label (display primitives)
 - Pane, subpane, and group (decorative frames for editors)
+- List view, with a scrollbar that can be used seperately
 
 We've improved the existing widgets! For full usage and an interactive demo, try out the [`feathers_gallery`] example.
 
@@ -999,13 +1000,13 @@ We've also fixed two important correctness bugs in the process:
 
 Benchmarked on Bistro Exterior (698 materials) we saw significant frame time improvements (and sometimes memory improvements) across many hardware configurations:
 
-| GPU                      | Frame Time Speedup         | Memory      |
-| ------------------------ | ------------------- | ----------- |
-| Apple M2 Max (Metal)     | +15%                | −57 MB RAM  |
-| NVIDIA 5060 Ti           | +46%                | Same        |
-| AMD Vega 8 / Ryzen 4800U | Same                | −88 MB VRAM |
-| Intel i360P              | +14%                | Same        |
-| Intel Iris XE            | Same                | Same        |
+| GPU                      | Frame Time Speedup | Memory      |
+| ------------------------ | ------------------ | ----------- |
+| Apple M2 Max (Metal)     | +15%               | −57 MB RAM  |
+| NVIDIA 5060 Ti           | +46%               | Same        |
+| AMD Vega 8 / Ryzen 4800U | Same               | −88 MB VRAM |
+| Intel i360P              | +14%               | Same        |
+| Intel Iris XE            | Same               | Same        |
 
 [Bistro] is a demanding, fairly realistic scene.
 While bindless limitations remain frustrating, especially on Mac where Vulkan isn't an option,
