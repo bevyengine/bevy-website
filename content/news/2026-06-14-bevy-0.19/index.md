@@ -78,7 +78,7 @@ bsn! {
 }
 ```
 
-Fields values can be arbitrary Rust expressions via `{}` syntax:
+Field values can be arbitrary Rust expressions via `{}` syntax:
 
 ```rust
 bsn! {
