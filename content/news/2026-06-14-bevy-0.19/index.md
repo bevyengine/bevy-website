@@ -18,7 +18,15 @@ To update an existing Bevy App or Plugin to **Bevy 0.19**, check out our [0.17 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- **X**: X
+- **Next Generation Scenes**: Our brand new, massively improved scene system for Bevy has finally landed! Ergonomically define scenes in our new BSN (Bevy Scene Notation) format in code via the `bsn!` macro or (in a future release) in assets. Scenes are composable, patchable, and dependency aware. No more manually pulling in all of the ECS and asset dependencies required to spawn something! 
+- **Solari Improvements**: Bevy's realtime pathtraced renderer has gained several improvements and fixes for mirrors and non-metallic materials, its performance improved, and it has greatly increased temporal stability.
+- **More Feathers Widgets**: Bevy's opinionated "editor tooling" widget collection got a ton of new widgets. It was also ported to BSN, making it much more pleasant to use!
+- **Text Input**: Bevy UI now _finally_ has upstream support for text entry via the new `EditableText` component.
+- **Richer Text**: Bevy now has more flexible font selection, with support for higher level features like "font families", and variable font properties.
+- **App Settings**: We've added an official "app settings" framework, which can load and save settings from files and expose them as ECS resources.
+- **Renderer Recovery**: You can now configure error handler / recovery behavior when a GPU becomes unavailable.
+- **Post Processing Effects**: We've added built in "vignette" and "lens distortion" post processing effects.
+- **Improved Skinned Mesh Culling**: Skinned meshes can now take their animations into account when they are being culled. 
 
 <!-- more -->
 
@@ -536,6 +544,8 @@ Bevy Feathers, our opinionated UI widget collection designed with the Bevy edito
 - Disclosure toggle (chevron expand/collapse)
 - Icon and label (display primitives)
 - Pane, subpane, and group (decorative frames for editors)
+- List view
+- Scrollbar
 
 We've improved the existing widgets! For full usage and an interactive demo, try out the [`feathers_gallery`] example.
 
@@ -966,13 +976,13 @@ The standard fix is parallax correction: each reflection probe gets its own boun
 Bevy now applies this automatically for light probes, using the probe's influence bounding box as the correction volume.
 This is a reasonable default for a cubemap capturing a rectangular room interior, and matches Blender's approach.
 
-Parallax correction is enabled by default. To opt out on a specific probe, add `NoParallaxCorrection`:
+Parallax correction is enabled by default. To opt out on a specific probe, add `ParallaxCorrection::None`:
 
 ```rust
 commands.spawn((
     LightProbe,
     EnvironmentMapLight { .. },
-    NoParallaxCorrection,
+    ParallaxCorrection::None,
 ));
 ```
 
@@ -1024,19 +1034,21 @@ Bevy's diagnostics have always been easy to dump to the terminal, but displaying
 
 ```rust
 commands.spawn(DiagnosticsOverlay::fps());
-commands.spawn(DiagnosticsOverlay::mesh_and_standard_materials());
+commands.spawn(DiagnosticsOverlay::mesh_and_standard_material());
 ```
 
 You can also build a custom overlay from any [`DiagnosticPath`](https://dev-docs.bevy.org/bevy/diagnostic/struct.DiagnosticPath.html) list:
 
 ```rust
-commands.spawn(DiagnosticsOverlay::new("MyDiagnostics", vec![MyDiagnostics::COUNTER.into()]));
+commands.spawn(DiagnosticsOverlay::new("Diagnostics", vec![
+    MyDiagnostics::COUNTER.into()
+]));
 ```
 
 By default the overlay shows the smoothed moving average. You can switch to the latest value or the raw moving average via [`DiagnosticsOverlayStatistic`](https://dev-docs.bevy.org/bevy/dev_tools/diagnostics_overlay/enum.DiagnosticsOverlayStatistic.html), and configure floating-point precision with [`DiagnosticsOverlayItem::precision`](https://dev-docs.bevy.org/bevy/dev_tools/diagnostics_overlay/struct.DiagnosticsOverlayItem.html#structfield.precision):
 
 ```rust
-commands.spawn(DiagnosticsOverlay::new("MyDiagnostics", vec![DiagnosticsOverlayItem {
+commands.spawn(DiagnosticsOverlay::new("Diagnostics", vec![DiagnosticsOverlayItem {
     path: MyDiagnostics::COUNTER,
     statistic: DiagnosticsOverlayStatistic::Value,
     precision: 4,
@@ -1263,7 +1275,7 @@ commands.spawn((Mesh3d(mesh), TransformGizmoFocus));
 ```
 
 The plugin is deliberately not connected to user input.
-This keeps the gizmo composable for editor authors who already have opinions about input handling. Sensitivity, snapping, and screen-space scaling are all configurable via `TransformGizmoConfig`,
+This keeps the gizmo composable for editor authors who already have opinions about input handling. Sensitivity, snapping, and screen-space scaling are all configurable via `TransformGizmoSettings`,
 while modes are controlled via the `TransformGizmoMode` resource.
 
 Much of the math and implementation strategy for this widget comes from the [`bevy_transform_gizmo`](https://github.com/fslabs/bevy_transform_gizmo) crate.
@@ -1303,7 +1315,7 @@ This is an upstreamed version of the [`bevy_infinite_grid` crate], created and m
 
 [`bevy_infinite_grid` crate]: https://github.com/fslabs/bevy_infinite_grid
 
-## White furnace test
+## White Furnace Test
 
 {{ heading_metadata(authors=["@dylansechet"] prs=[23194, 23203]) }}
 
