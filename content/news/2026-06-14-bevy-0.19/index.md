@@ -621,7 +621,7 @@ Not anymore.
 
 ```rust
 // Asset handle
-FontSource::Handle(asset_server.load("fonts/FiraMono.ttf")
+FontSource::Handle(asset_server.load("fonts/FiraMono.ttf"))
 
 // Family name
 FontSource::Family("FiraMono".into())
