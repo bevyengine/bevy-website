@@ -524,7 +524,7 @@ For more details, read [JMS55's blog post](https://jms55.github.io/posts/2026-04
 
 ## More Feathers Widgets
 
-{{ heading_metadata(authors=["@viridia", "@jordanhalase"] prs=[23645, 23707, 23788, 23787, 23804, 23817, 23842, 23744, 23820, 23830, 23869, 23883, 23890, 23993]) }}
+{{ heading_metadata(authors=["@viridia", "@jordanhalase"] prs=[23645, 23707, 23788, 23787, 23804, 23817, 23842, 23744, 23820, 23830, 23869, 23883, 23890, 23993, 24092]) }}
 
 ![feathers widgets](feathers.jpg)
 
@@ -536,6 +536,7 @@ Bevy Feathers, our opinionated UI widget collection designed with the Bevy edito
 - Disclosure toggle (chevron expand/collapse)
 - Icon and label (display primitives)
 - Pane, subpane, and group (decorative frames for editors)
+- List view, with a scrollbar that can be used separately
 
 We've improved the existing widgets! For full usage and an interactive demo, try out the [`feathers_gallery`] example.
 
@@ -966,13 +967,13 @@ The standard fix is parallax correction: each reflection probe gets its own boun
 Bevy now applies this automatically for light probes, using the probe's influence bounding box as the correction volume.
 This is a reasonable default for a cubemap capturing a rectangular room interior, and matches Blender's approach.
 
-Parallax correction is enabled by default. To opt out on a specific probe, add `NoParallaxCorrection`:
+Parallax correction is enabled by default. To opt out on a specific probe, add `ParallaxCorrection::None`:
 
 ```rust
 commands.spawn((
     LightProbe,
     EnvironmentMapLight { .. },
-    NoParallaxCorrection,
+    ParallaxCorrection::None,
 ));
 ```
 
@@ -999,13 +1000,13 @@ We've also fixed two important correctness bugs in the process:
 
 Benchmarked on Bistro Exterior (698 materials) we saw significant frame time improvements (and sometimes memory improvements) across many hardware configurations:
 
-| GPU                      | Frame Time Speedup         | Memory      |
-| ------------------------ | ------------------- | ----------- |
-| Apple M2 Max (Metal)     | +15%                | −57 MB RAM  |
-| NVIDIA 5060 Ti           | +46%                | Same        |
-| AMD Vega 8 / Ryzen 4800U | Same                | −88 MB VRAM |
-| Intel i360P              | +14%                | Same        |
-| Intel Iris XE            | Same                | Same        |
+| GPU                      | Frame Time Speedup | Memory      |
+| ------------------------ | ------------------ | ----------- |
+| Apple M2 Max (Metal)     | +15%               | −57 MB RAM  |
+| NVIDIA 5060 Ti           | +46%               | Same        |
+| AMD Vega 8 / Ryzen 4800U | Same               | −88 MB VRAM |
+| Intel i360P              | +14%               | Same        |
+| Intel Iris XE            | Same               | Same        |
 
 [Bistro] is a demanding, fairly realistic scene.
 While bindless limitations remain frustrating, especially on Mac where Vulkan isn't an option,
@@ -1024,7 +1025,7 @@ Bevy's diagnostics have always been easy to dump to the terminal, but displaying
 
 ```rust
 commands.spawn(DiagnosticsOverlay::fps());
-commands.spawn(DiagnosticsOverlay::mesh_and_standard_materials());
+commands.spawn(DiagnosticsOverlay::mesh_and_standard_material());
 ```
 
 You can also build a custom overlay from any [`DiagnosticPath`](https://dev-docs.bevy.org/bevy/diagnostic/struct.DiagnosticPath.html) list:
@@ -1263,7 +1264,7 @@ commands.spawn((Mesh3d(mesh), TransformGizmoFocus));
 ```
 
 The plugin is deliberately not connected to user input.
-This keeps the gizmo composable for editor authors who already have opinions about input handling. Sensitivity, snapping, and screen-space scaling are all configurable via `TransformGizmoConfig`,
+This keeps the gizmo composable for editor authors who already have opinions about input handling. Sensitivity, snapping, and screen-space scaling are all configurable via `TransformGizmoSettings`,
 while modes are controlled via the `TransformGizmoMode` resource.
 
 Much of the math and implementation strategy for this widget comes from the [`bevy_transform_gizmo`](https://github.com/fslabs/bevy_transform_gizmo) crate.
