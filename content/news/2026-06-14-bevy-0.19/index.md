@@ -375,7 +375,7 @@ This works because `"hello"` is a `&str`, which has an `Into<String>` implementa
 ```rust
 // Raw Rust
 Node {
-    border: UiRect::all(Val::Px(2.0))
+    border: UiRect::all(Val::Px(2.0)),
     ..Default::default()
 }
 
