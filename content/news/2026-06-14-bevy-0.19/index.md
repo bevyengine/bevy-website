@@ -1285,6 +1285,16 @@ unifying our internals and giving resources more capabilities. You can now:
 - Add your own hooks to resources
 - Mark resources as immutable
 
+## Remote Entity Reservation
+
+{{ heading_metadata(authors=["@ElliottjPierce", "@alice-i-cecile", "@cart"] prs=[18670, 22658]) }}
+
+Bevy has historically required a [`World`] reference to allocate entity IDs. This works in most scenarios, but it means that if you want to do work in parallel that initializes entities, you need to block your app's execution! This is problematic for things like our upcoming "assets as entities" work, which will involve preparing entity contents in the background while the app continues to run.
+
+**Bevy 0.19** introduces a new entity allocation strategy that enables reserving entity IDs from any thread without a [`World`] reference _and_ without compromising on performance. This involved splitting the [entity lifecycle] into five stages: unallocated, allocated, spawned, despawned, and freed.
+
+[entity lifecycle]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/entity/index.html#entity-life-cycle
+
 ## Interactive Transform Gizmo
 
 {{ heading_metadata(authors=["@jbuehler23", "@aevyrie"] prs=[23435]) }}
