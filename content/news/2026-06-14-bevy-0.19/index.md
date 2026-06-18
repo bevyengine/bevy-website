@@ -610,6 +610,34 @@ Please consider making a PR!
 
 To see how to use it in practice, check out our new [`text_input.rs`](https://github.com/bevyengine/bevy/blob/v0.19.0/examples/ui/text/text_input.rs) example.
 
+## Physically Based Screen Space Reflections
+
+{{ heading_metadata(authors=["@aevyrie"] prs=[22379]) }}
+
+<video controls loop><source src="physical_reflections.mp4" type="video/mp4"/></video>
+
+Bevy's screen space reflections now use an improved "physically based" algorithm, which improves the quality of our reflections significantly!
+
+![physical_reflections](physical_reflections.png)
+
+Note the rough specular reflections of the hose on the wood base, and overall occlusion improvements.
+
+## Rectangular Area Lights
+
+{{ heading_metadata(authors=["@dylansechet"] prs=[23288]) }}
+
+![rectangular area lights](rect_area_lights.png)
+
+Bevy's lighting toolkit just got a new addition: rectangular area lights!
+
+The implementation uses [Linearly Transformed Cosines](https://eheitzresearch.wordpress.com/415-2/), which is the standard method for real-time area lights and should also help make our spherical area lights more accurate in the near future.
+
+Rectangular lights currently don't cast shadows or have support for anisotropic materials.
+
+You need to enable the `area_light_luts` cargo feature to use it.
+
+Check out [the new example](https://github.com/bevyengine/bevy/tree/latest/examples/3d/rect_light.rs) to see them in action.
+
 ## Richer text
 
 {{ heading_metadata(authors=["@ickshonpe", "@alice-i-cecile", "@gregcsokas"] prs=[22156, 22396, 22614, 22879, 23380]) }}
