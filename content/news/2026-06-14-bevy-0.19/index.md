@@ -1291,7 +1291,7 @@ unifying our internals and giving resources more capabilities. You can now:
 
 Bevy has historically required a [`World`] reference to allocate entity IDs. This works in most scenarios, but it means that if you want to do work in parallel that intializes entities, you need to block your app's execution! This is problematic for things like our upcoming "assets as entities" work, which will involve preparing entity contents in the background while the app continues to run.
 
-**Bevy 0.19** introduces a new entity allocation strategy that enables reserving entity IDs from any thread without compromising on performance. This involved splitting the [entity lifecycle] into five stages: unallocated, allocated, spawned, despawned, and freed.
+**Bevy 0.19** introduces a new entity allocation strategy that enables reserving entity IDs from any thread without a [`World`] reference _and_ without compromising on performance. This involved splitting the [entity lifecycle] into five stages: unallocated, allocated, spawned, despawned, and freed.
 
 [entity lifecycle]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/entity/index.html#entity-life-cycle
 
