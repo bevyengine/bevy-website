@@ -10,7 +10,7 @@ public_draft = 2474
 status = 'hidden'
 +++
 
-Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.19** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **261** contributors, **1185** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.19** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
@@ -1455,6 +1455,13 @@ and polish them while we put it all together.
 - **Assets-as-entities:** Bevy's asset system is a bespoke ball of code, with its own unique idioms and complex API surface. We're ready to move this into the ECS itself, allowing engine internals and end users to leverage the powerful features they already use everywhere else.
 - **WESL shader language:** WGSL is an adequate shader language, but it's missing some important niceties. Bevy has been working together with a cross-project group to extend it, in the form of [WESL]. We've [supported WESL for more than a year], but we're planning to port our existing internal shaders to use WESL, and endorse it as the shader language of choice for Bevy.
 - **A much more complete Bevy book:** Wish the Bevy Book was longer? We do too! We've substantially extended it, covering a much wider range of topics in more depth, and are hoping to release what we have soon, during the 0.20 development cycle. Expect a steady stream of new chapters as more of the engine reaches a "stable enough" status.
+
+{{ support_bevy() }}
+
+{{ contributors(version="0.19") }}
+
+For those interested in a complete changelog, you can see the entire log (and linked pull requests) via the [relevant commit history](https://github.com/bevyengine/bevy/compare/v0.18.0...v0.19.0).
+
 
 [WESL]: https://github.com/webgpu-tools/wesl-spec
 
