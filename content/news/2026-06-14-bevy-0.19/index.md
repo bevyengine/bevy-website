@@ -1293,7 +1293,6 @@ Bevy has historically required a [`World`] reference to allocate entity IDs. Thi
 
 **Bevy 0.19** introduces a new entity allocation strategy that enables reserving entity IDs from any thread without compromising on performance. This involved splitting the [entity lifecycle] into five stages: unallocated, allocated, spawned, despawned, and freed.
 
-[all sorts of interesting optimizations]: https://github.com/bevyengine/bevy-website/issues/2505#issuecomment-4744110351
 [entity lifecycle]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/entity/index.html#entity-life-cycle
 
 ## Interactive Transform Gizmo
