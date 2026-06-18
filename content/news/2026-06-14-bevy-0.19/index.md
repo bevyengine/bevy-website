@@ -616,7 +616,7 @@ To see how to use it in practice, check out our new [`text_input.rs`](https://gi
 
 <video controls loop><source src="physical_reflections.mp4" type="video/mp4"/></video>
 
-Bevy's screen space reflections now use an improved "physically based" algorithm, which improves the quality of our reflections significantly!
+Bevy's screen space reflections now use a "physically based" algorithm, which improves the quality of our reflections significantly!
 
 ![physical_reflections](physical_reflections.png)
 
@@ -636,7 +636,7 @@ Rectangular lights currently don't cast shadows or have support for anisotropic 
 
 You need to enable the `area_light_luts` cargo feature to use it.
 
-Check out [the new example](https://github.com/bevyengine/bevy/tree/latest/examples/3d/rect_light.rs) to see them in action.
+Check out [the new example](https://github.com/bevyengine/bevy/blob/v0.19.0/examples/3d/rect_light.rs) to see them in action.
 
 ## Richer text
 
