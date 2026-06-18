@@ -24,7 +24,6 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 - **Text Input**: Bevy UI _finally_ has upstream support for text entry via the new `EditableText` component.
 - **Richer Text**: Bevy now has more flexible font selection, with support for higher level features like "font families" and variable font properties.
 - **App Settings**: We've added an official "app settings" framework, which can load and save settings from files and expose them as ECS resources.
-- **Renderer Recovery**: You can now configure error handler / recovery behavior when a GPU becomes unavailable.
 - **Post Processing Effects**: We've added built in "vignette" and "lens distortion" post processing effects.
 - **Improved Skinned Mesh Culling**: Skinned meshes can now take their animations into account when they are being culled. 
 
