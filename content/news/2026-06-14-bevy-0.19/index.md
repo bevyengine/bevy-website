@@ -1289,40 +1289,9 @@ unifying our internals and giving resources more capabilities. You can now:
 
 {{ heading_metadata(authors=["@ElliottjPierce", "@alice-i-cecile", "@cart"] prs=[18670, 22658]) }}
 
-Spawning entities well is surprisingly complicated.
-The first approach you might try, to simply call `World::spawn` and allocate some memory for an entity and its components, is completely incompatible with multithreading, especially in Rust.
-Adding new component types requires mutating some *very* central data structures, because of the very thing that makes ECS fast: archetypal struct-of-arrays arrangements.
-Everything else wants to read from that data at the same time,
-so "structural changes" in Bevy require exclusive access.
+Bevy has historically required a [`World`] reference to allocate entity IDs. This works in most scenarios, but it means that if you want to do work in parallel that intializes entities, you need to block your app's execution! This is problematic for things like our upcoming "assets as entities" work, which will involve preparing entity contents in the background while the app continues to run.
 
-No problem, you say.
-I'll simply queue up that work to be done later, using `Commands`.
-And that works: spawning is deferred and then finalized later,
-when it's convenient.
-
-And then the user asks for one *little* feature:
-"it sure would be nice to have the id of the entity I was about to spawn,
-so I can store it in a resource, log it, or use it to form a relationship between entities."
-
-So you sigh, and go back to drawing board.
-We can allocate the entity *identifiers* cheaply ahead of time,
-using atomics.
-Just defer the tricky bit of actually adding components.
-That lets us safely hand out entity ids without collisions, even if multiple threads are trying to spawn entities at once.
-The contention isn't too bad there, so the performance is great in practice.
-
-And *then* the user says "oh, actually, I would like to be able to allocate these entities from any thread."
-They promise it's important, claiming that it's a blocker to assets-as-entities,
-and would allow [all sorts of interesting optimizations] in multiplayer games.
-
-*Nine* rounds of prototyping later, and you've come up with a solution.
-It's just as fast as the original solution, unlocks future performance improvements, doesn't compromise `no_std` support and critically, works on any thread (i.e. "remotely").
-
-All we needed to do was write a few custom data structures, then split the [entity lifecycle] into five stages: unallocated, allocated, spawned, despawned and freed.
-
-Easy.
-
-The result is an entity-allocator that looks exactly the same for the 99% of users who didn't even know Bevy had one, and unlocks all sorts of exciting possibilities for the 1% who were pushing the frontier.
+**Bevy 0.19** introduces a new entity allocation strategy that enables reserving entity IDs from any thread without compromising on performance. This involved splitting the [entity lifecycle] into five stages: unallocated, allocated, spawned, despawned, and freed.
 
 [all sorts of interesting optimizations]: https://github.com/bevyengine/bevy-website/issues/2505#issuecomment-4744110351
 [entity lifecycle]: https://docs.rs/bevy/0.19.0-rc.3/bevy/ecs/entity/index.html#entity-life-cycle
