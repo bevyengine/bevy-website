@@ -26,7 +26,13 @@ pub fn get_merged_prs(
 
     // We also get the list of merged PRs in batches instead of getting them separately for each commit
     // We can't set a `since` date, as the PRs requested are filtered by date opened, not date merged
-    let prs = client.get_issues_and_prs(BevyRepo::Bevy, IssueState::Merged, None, label)?;
+    let prs = client.get_issues_and_prs(
+        BevyRepo::Bevy,
+        IssueState::Merged,
+        // Use this date to cut off old PRs, as github maxes at out 100 pages
+        Some("2025-01-01"),
+        label,
+    )?;
     println!(
         "Found {} commits since {} (the base commit date)",
         commits.len(),

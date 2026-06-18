@@ -375,6 +375,7 @@ This section explains how to speed up iterative compiles: the amount of time it 
   Notably, Wasm builds do not work yet.
 
   When shipping your game, you should still compile it with LLVM.
+
 </details>
 
 <details>

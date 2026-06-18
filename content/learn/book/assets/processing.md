@@ -7,13 +7,13 @@ weight = 4
 
 So far, we've conceptualized assets as just "stuff on disk you want to put in memory". In practice
 though there are two "states" of assets: the "raw" files you acquire during development (from
-the internet, from your artists, etc), and the "processed", game-ready assets. For some assets,
+the internet, from your artists, etc.), and the "processed", game-ready assets. For some assets,
 these are the same thing - you just ship whatever asset files you get. However, some assets need to
 be converted into a form that is more appropriate for use in a game.
 
-As an example, using an ultra-high resolution texture in your game is (probably) not what you want.
+As an example, using an ultrahigh resolution texture in your game is (probably) not what you want.
 This increases download sizes, slows down loading speeds, and likely reduces rendering performance.
-This would be your "raw" file. Usually, these high-quality versions are compressed, downscaled, etc,
+This would be your "raw" file. Usually, these high-quality versions are compressed, downscaled, etc.,
 before being used in a game. This final form is our game-ready version.
 
 We can enable **asset processing** to perform this conversion. When enabled, assets in your `assets`
@@ -21,7 +21,7 @@ folder are automatically processed by the registered processors to produce the g
 of assets. Your game will automatically use the processed assets (without needing to change anything
 else).
 
-[% callout(type="important") %]
+{% callout(type="important") %}
 
 While it is possible to enable asset processing just before publishing to do steps like compression,
 we **strongly** recommend users choose at the beginning of their project whether to use processing
@@ -68,13 +68,13 @@ game should use!
 
 {% end %}
 
-## Writing your own Asset Processors
+## Writing Your Own Asset Processors
 
 Bevy provides some common processors, but there are plenty of game-specific (or even asset-specific)
 processors that may be needed by users. If you need a processor that Bevy doesn't provide, you can
 make one!
 
-The [`Process`] trait is the most low-level trait for asset processing. The [`Process`]
+The [`Process`] trait is the lowest-level trait for asset processing. The [`Process`]
 implementation is given a `&mut dyn Reader` and must write the processed asset to a `&mut dyn Writer`.
 This is the most flexible (if cumbersome) version of this interface. Implementing [`Process`]
 directly can allow you to optimize for all sorts of use cases (for example, processing small chunks
@@ -252,7 +252,7 @@ combined with configurable [`AssetLoader`]s.
 
 {% callout(type="info") %}
 
-A common usecase for these "load" meta files is to set the [`RenderAssetUsages`] for an asset.
+A common use case for these "load" meta files is to set the [`RenderAssetUsages`] for an asset.
 Setting render assets like meshes or textures to use [`RenderAssetUsages::RENDER_WORLD`] only allows
 mesh and texture data to only exist in the GPU, freeing RAM on the CPU to do whatever else. **This
 can be a very worthwhile optimization**. Of course this comes with caveats: since the data is no

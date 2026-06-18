@@ -37,7 +37,7 @@ The app is responsible for scheduling and executing your systems, and passing th
 
 Apps can be used to combine code that's been broken down into modular, reusable pieces, called [plugins](../modular-architecture/plugins).
 
-## Off you go now
+## Next Steps
 
 With that, you should have everything you need to start [exploring our examples](https://github.com/bevyengine/bevy/tree/latest/examples#examples),
 or diving into the rest of the book.
