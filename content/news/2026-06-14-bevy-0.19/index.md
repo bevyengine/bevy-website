@@ -1371,7 +1371,10 @@ For simple assets with no sub-assets, use `SavedAsset::from_asset`:
 
 ```rust
 let main_asset = InlinedBook {
-    lines: vec!["Save me!".to_string(), "Please!".to_string()],
+    lines: vec![
+        "Waiting? So you were waiting for him?".to_string(), 
+        "Well you see-".to_string()
+    ],
 };
 let saved_asset = SavedAsset::from_asset(&main_asset);
 ```
@@ -1379,7 +1382,7 @@ let saved_asset = SavedAsset::from_asset(&main_asset);
 For assets that reference other assets (sub-assets), use `SavedAssetBuilder`:
 
 ```rust
-let asset_path: AssetPath<'static> = "my/file/path.godot".into();
+let asset_path: AssetPath<'static> = "my/file/path.whatever".into();
 let mut builder = SavedAssetBuilder::new(asset_server.clone(), asset_path.clone());
 
 let subasset_1 = Line("howdy".into());
