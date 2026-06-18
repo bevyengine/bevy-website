@@ -613,7 +613,12 @@ To see how to use it in practice, check out our new [`text_input.rs`](https://gi
 
 {{ heading_metadata(authors=["@aevyrie"] prs=[22382]) }}
 
-<video controls loop><source src="contact_shadows.mp4" type="video/mp4"/></video>
+{{ compare_slider(
+    left_title="Contact Shadows Off",
+    left_image="no_contact_shadows.jpg",
+    right_title="Contact Shadows On",
+    right_image="contact_shadows.jpg"
+) }}
 
 Bevy 0.19 introduces **contact shadows**, which help shadows capture the details of objects and attach properly to nearby surfaces.
 
