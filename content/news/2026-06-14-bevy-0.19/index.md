@@ -610,6 +610,44 @@ Please consider making a PR!
 
 To see how to use it in practice, check out our new [`text_input.rs`](https://github.com/bevyengine/bevy/blob/v0.19.0/examples/ui/text/text_input.rs) example.
 
+## Contact Shadows
+
+{{ heading_metadata(authors=["@aevyrie"] prs=[22382]) }}
+
+<video controls loop><source src="contact_shadows.mp4" type="video/mp4"/></video>
+
+Bevy 0.19 introduces **contact shadows**, which help shadows capture the details of objects and attach properly to nearby surfaces.
+
+Previously, Bevy's shadows (outside of Solari) were rendered entirely using (cascaded) [shadow maps].
+Shadow mapping is a solid, standard technique that works by looking at objects in the scene from the perspective of the light, creating a depth map, then using that to determine which objects should be in shadow.
+Unfortunately, this technique is fundamentally limited by the resolution of the shadow map textures created, and it only produces good results when the distance between the shadow casting object and the surface it is casting a shadow on is relatively large.
+
+Up close, you either get peter-panning (where the object seems to float above the ground due to a disconnected shadow), or shadow acne (where the shadows self-intersect in unrealistic ways),
+depending on what your [depth bias] is set to.
+Increasing the resolution of the shadow maps changes what "close" means,
+but the memory cost is prohibitive.
+You simply cannot get good short-range shadows with shadow maps alone.
+You need a complementary solution.
+
+[Contact shadows] fill that gap.
+The core idea here is to perform a short-range (and thus affordable) screen-space [raycast],
+tracing a line from surfaces towards lights, checking for nearby occluding objects.
+
+The results are striking: shadows *cling* to surfaces properly,
+emphasizing subtle curves in a way that brings objects and characters to life.
+
+Contact shadows are currently supported for directional, point and spot lights.
+They are toggled per light, and the cost of rendering contact shadows scales with the number of pixels on screen lit by lights with contact shadows enabled, multiplied by the number of such lights.
+To enable contact shadows for a light, set the `contact_shadows_enabled` field on your light components
+to `true`, and add the [`ContactShadows`] component to your camera.
+Tuning values on that component controls how contact shadows are computed across the scene.
+
+[shadow maps]: https://en.wikipedia.org/wiki/Shadow_mapping
+[depth bias]: https://renderdiagrams.org/2024/12/18/shadowmap-bias/
+[contact shadows]: https://www.bendstudio.com/blog/inside-bend-screen-space-shadows/
+[raycast]: https://en.wikipedia.org/wiki/Ray_casting
+[`ContactShadows`]: https://docs.rs/bevy/0.19.0-rc.3/bevy/pbr/struct.ContactShadows.html
+
 ## Physically Based Screen Space Reflections
 
 {{ heading_metadata(authors=["@aevyrie"] prs=[22379]) }}
