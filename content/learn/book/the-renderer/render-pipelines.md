@@ -14,9 +14,11 @@ Both simulations and rendering logic have become more complicated in recent year
 Instead of waiting on each other, the simulation logic is run on one CPU thread while the render logic is copied to a separate thread before being passed to the GPU to be rendered.
 This allows the simulation to execute concurrently with the render, meaning less "idle" time for both processes.
 
-Bevy uses pipelined rendering, having a Main `App` that computes the simulation logic before then extracting that info into a separate Render `App`.
-This extraction happens once per frame, and can delay the game if either the game logic in the Main `App` or the render process in the Render `App` takes longer than the other.
-However, the Render `App` still abides by ECS principles and even has its own `World`, schedules, and systems to control how the scene is rendered.
+Bevy implements a version of pipelined rendering using two separate `SubApp`s to track the compute and render logic separately.
+Both `SubApp`s abide by ECS principles and have their own `World`s, schedules, and systems to control how their respective logic is executed.
+Specifically, the Compute `SubApp` (where our Main `World` lives) calculates the simulation logic.
+Then, the freshly computed info in the Compute `SubApp` is copied and extracted into a Render `SubApp`.
+This extraction happens once per frame, and can delay the game if either the game logic in the Main `SubApp` or the render process in the Render `SubApp` takes longer than the other.
 
 {% callout(type="info") %}
 
@@ -31,16 +33,13 @@ This can be thought of as CPU-driven rendering versus GPU-driven rendering.
 CPU-driven rendering is where the draw commands that determine how objects are rendered are created on the CPU, and only passed to the GPU to eventually be rendered.
 On the other hand, GPU-driven rendering sees the GPU perform those computations itself; the CPU is only responsible for passing the data to the GPU.
 
-Bevy used to use CPU-driven rendering, using the CPU to choose which objects needed to be rendered and how they needed to be rendered before passing that information to the GPU.
-However, this process was proving to be inefficient and was eventually changed to be GPU-driven.
-Now instead of relying on the CPU to sequentially calculate each object to render, Bevy leverages GPU parallelism to perform these calculations in batches.
-This helps speed up renders a lot, and reduces potential bottlenecks that might impede performance.
+By default, Bevy uses GPU driven rendering, however the CPU is still available to be used if desired.
 
 {% end %}
 
 ## The Rendering Process
 
-The Render `App` follows a series of steps to carry out the rendering process.
+The Render `SubApp` follows a series of steps to carry out the rendering process.
 Each step has a specific purpose in arranging and converting your games data into rendered frames.
 However, it's also possible to skip certain steps if their function isn't explicitly required.
 
@@ -49,10 +48,10 @@ Let's look at the main four steps that occur during rendering:
 ### Extract
 
 To render an image to the screen, we first have to figure out what is happening in our game!
-We use the Extract step to copy information from the Main `App` and send it into the Render `App`.
-This is the first thing to occur on every frame, so reducing the amount of information that is copied can be beneficial for improving the performance of your game.
+We use the Extract step to copy information from the Main `SubApp` and send it into the Render `SubApp`.
+This happens every frame, so reducing the amount of data that is copied can help improve the performance of your game.
 
-How do we actually send data to the Render `App`?
+How do we actually send data to the Render `SubApp`?
 One way is to derive the [`ExtractComponent`] trait on a component that we want to transfer.
 This will automatically insert a [`SyncToRenderWorld`] component on an entity that receives the specified component.
 During the [`ExtractSchedule`], entities with the `SyncToRenderWorld` component are copied over into the Render `World`.
@@ -75,11 +74,11 @@ fn transfer_to_render_world(
 }
 ```
 
-Once copied over, a connection between the Render `App` entity and their Main `App` counterpart is created by storing a component with their counterparts entity ID.
-[`RenderEntity`] is inserted into the entity residing in the Main `App` and contains the Render `App` entity ID, while [`MainEntity`] is inserted into the entity residing in the Render `App` and contains the Main `App` entity ID.
+Once copied over, a connection between the Render `SubApp` entity and their Main `SubApp` counterpart is created by storing a component with their counterparts entity ID.
+[`RenderEntity`] is inserted into the entity residing in the Main `SubApp` and contains the Render `SubApp` entity ID, while [`MainEntity`] is inserted into the entity residing in the Render `SubApp` and contains the Main `SubApp` entity ID.
 
 Alternatively, if you only need a specific type of asset (like a texture or a mesh), you can load an [`Asset`].
-`Asset`s that are loaded in your Main `App` are automatically copied over in the `ExtractSchedule`.
+`Asset`s that are loaded in your Main `SubApp` are automatically copied over in the `ExtractSchedule`.
 Bevy is able to do this by reading the associated [`AssetEvent`] messages that the `Asset` type emits when registered and loaded.
 You can read more about how `Asset`s are loaded and handled by Bevy in the [dedicated Assets chapter](/learn/book/assets).
 
@@ -105,25 +104,25 @@ Finally, for each `Draw` function, a draw call is created which will tell the GP
 This is where the magic finally happens!
 All the queued [`Draw`] functions for every [`PhaseItem`]s are executed, incorporating the specified [`RenderPipeline`]s and [`BindGroup`]s that help us get the desired look.
 
-Since the Render `App` abides by the ECS principles, we can leverage systems to perform the actual task of rendering.
+Since the Render `SubApp` abides by the ECS principles, we can leverage systems to perform the actual task of rendering.
 Each system that accesses the [`RenderContext`] system parameter can be used to create the commands that are sent to the GPU to render the game.
 Using systems allows us to structure the execution of each system with a [`Schedule`], either those provided by Bevy by default ([`Core2d`] and [`Core3d`]), or by creating a custom render schedule.
 
 ### Cleanup
 
-It should go without saying that the amount of data we copy into the Render `App` could quickly get out of hand if not managed carefully.
-Therefore, the Render `App` does a little bit of cleaning once a frame has been fully rendered.
+A lot of data can get copied into the Render `SubApp`, which can quickly get out of hand if not managed.
+To help us out, the Render `SubApp` does a bit of cleaning once a frame has finished rendering.
 
 We don't want data that isn't needed sticking around when we could use that space for new textures or meshes.
-However, we also don't want to completely wipe the Render `App`.
-If we have entities and assets that persist in the Main `App`, it doesn't make sense to keep copying them over every frame.
-Therefore, Bevy synchronizes the Render `App` to the current state of the Main `App`.
+However, we also don't want to completely wipe the Render `SubApp`.
+If we have entities and assets that persist in the Main `SubApp`, it doesn't make sense to keep copying them over every frame.
+Therefore, Bevy synchronizes the Render `SubApp` to the current state of the Main `SubApp`.
 
 Remember [`RenderEntity`] and [`MainEntity`]?
 These two components are the keys to keeping this synchronization process running.
-If an entity is despawned in the Main `App`, it's subsequently removed from the Render `App` using the entity ID stored in these components.
-The same is done for loaded assets, although once again the [`AssetEvent`]s are read to determine whether an asset should be unloaded from the Render `App`.
-However, if you do need data to persist in the Render `App`, you can create and use a [`Resource`] to store it in the Render `App`.
+If an entity is despawned in the Main `SubApp`, it's subsequently removed from the Render `SubApp` using the entity ID stored in these components.
+The same is done for loaded assets, although once again the [`AssetEvent`]s are read to determine whether an asset should be unloaded from the Render `SubApp`.
+However, if you do need data to persist in the Render `SubApp`, you can create and use a [`Resource`] to store it in the Render `SubApp`.
 
 [`ExtractComponent`]: https://docs.rs/bevy/latest/bevy/render/extract_component/trait.ExtractComponent.html
 [`SyncToRenderWorld`]: https://docs.rs/bevy/latest/bevy/render/sync_world/struct.SyncToRenderWorld.html

@@ -27,8 +27,8 @@ But the GPU doesn't inherently know how to output a "photo-realistic pirate ship
 It's ultimately up to you to create those scenes and find that "perfect look".
 
 To help with achieving that "perfect look", Bevy is built to allow you to interact with as much or as little of the rendering process as you want.
-You can set everything up within Bevy itself, allowing the tools Bevy provides to handle the dirty work.
-Or you can dive into the graphics APIs yourself, bypassing our abstractions and wielding all the rendering power yourself!
+You can set everything up within Bevy itself, allowing our tools to handle the dirty work.
+Or you can dive straight into the graphics APIs, bypassing our abstractions and wielding all the rendering power yourself!
 
 All of this is enabled through a series of layers that send data from your game to the computer's GPU.
 At a high level, those layers (affectionately called "the stack") looks something like this:
