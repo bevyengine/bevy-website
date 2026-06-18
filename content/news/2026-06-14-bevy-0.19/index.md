@@ -19,7 +19,7 @@ To update an existing Bevy App or Plugin to **Bevy 0.19**, check out our [0.18 t
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
 - **Next Generation Scenes**: Our brand new, massively improved scene system for Bevy has finally landed! Ergonomically define scenes in our new BSN (Bevy Scene Notation) format in code via the `bsn!` macro or (in a future release) in assets. Scenes are composable, patchable, and dependency aware. No more manually pulling in all of the ECS and asset dependencies required to spawn something! 
-- **Solari Improvements**: Bevy's realtime pathtraced renderer has gained several improvements and fixes for mirrors and non-metallic materials. Its performance has improved and it has greatly increased temporal stability.
+- **Contact Shadows**: Shadow quality makes a huge difference to how "polished" your game looks. Bevy 0.19 adds contact shadows to the mix, dramatically improving shadow detail without the cost of full raytracing.
 - **More Feathers Widgets**: Bevy's opinionated "editor tooling" widget collection got a ton of new widgets. It was also ported to BSN, making it much more pleasant to use!
 - **Text Input**: Bevy UI _finally_ has upstream support for text entry via the new `EditableText` component.
 - **Richer Text**: Bevy now has more flexible font selection, with support for higher level features like "font families" and variable font properties.
