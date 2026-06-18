@@ -1379,7 +1379,7 @@ let saved_asset = SavedAsset::from_asset(&main_asset);
 For assets that reference other assets (sub-assets), use `SavedAssetBuilder`:
 
 ```rust
-let asset_path: AssetPath<'static> = "my/file/path.whatever".into();
+let asset_path: AssetPath<'static> = "my/file/path.godot".into();
 let mut builder = SavedAssetBuilder::new(asset_server.clone(), asset_path.clone());
 
 let subasset_1 = Line("howdy".into());
