@@ -1,13 +1,11 @@
 +++
 title = "Bevy 0.19"
-date = 2026-06-17
+date = 2026-06-19
 [extra]
 show_image = true
 image = "fields_of_aaru.jpg"
 image_subtitle = "Fields of Aaru: a cozy life sim set in the mystical afterlife of Ancient Egypt. Made with Bevy!"
 image_subtitle_link = "https://store.steampowered.com/app/4410710/Fields_of_Aaru/"
-public_draft = 2474
-status = 'hidden'
 +++
 
 Thanks to **261** contributors, **1185** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.19** release on [crates.io](https://crates.io/crates/bevy)!
@@ -19,6 +17,7 @@ To update an existing Bevy App or Plugin to **Bevy 0.19**, check out our [0.18 t
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
 - **Next Generation Scenes**: Our brand new, massively improved scene system for Bevy has finally landed! Ergonomically define scenes in our new BSN (Bevy Scene Notation) format in code via the `bsn!` macro or (in a future release) in assets. Scenes are composable, patchable, and dependency aware. No more manually pulling in all of the ECS and asset dependencies required to spawn something! 
+- **Render Bigger Scenes Faster**: We've moved even more work to the GPU and optimized the renderer in a number of areas. Bevy can draw even more things even faster!
 - **Contact Shadows**: Shadow quality makes a huge difference to how "polished" your game looks. Bevy 0.19 adds contact shadows to the mix, dramatically improving shadow detail without the cost of full raytracing.
 - **More Feathers Widgets**: Bevy's opinionated "editor tooling" widget collection got a ton of new widgets. It was also ported to BSN, making it much more pleasant to use!
 - **Text Input**: Bevy UI _finally_ has upstream support for text entry via the new `EditableText` component.
@@ -516,6 +515,47 @@ fn level() -> impl SceneList {
 ```
 
 `.spawn()` will turn any function that returns a [`Scene`] or a [`SceneList`] into a system that spawns that scene.
+
+</details>
+
+## Render Big Scenes Faster! 
+
+{{ heading_metadata(authors=["@pcwalton", "@aevyrie", "@tychedelia"] prs=[23242, 23481, 23711, 23036, 23211, 23023, 22966, 22874, 22988, 23106, 23115, 23530, 22813, 22297, 23185, 23297, 23103, 22846]) }}
+
+In **Bevy 0.19** we continued our focus on making large scale scenes render quickly. Lets first look at some benchmarks!
+
+In **Bevy 0.18**, a laptop with a mobile Nvidia RTX 4090 could handle our `many_cubes` example with 1.6 million cube mesh entities (with Bevy's PBR StandardMaterial), culling enabled, and 116,000 entities in view at about 49.47ms per frame (21 FPS). In **Bevy 0.19**, it renders those cubes at 18.77ms (53 FPS)! With culling disabled (meaning all 1.6 million cubes are rendered), the same example went from to 93.1ms to 41.2ms!! 
+
+Our new [`bevy_city`](https://github.com/bevyengine/bevy/tree/main/examples/large_scenes/bevy_city) example defaults to generating a city with 55000 rendered entities:
+
+![bevy_city](bevy_city.jpg)
+
+|           | Static | Moving |
+| --------- | ------ | ------ |
+| Bevy 0.18 | 19.3 ms| 22.1 ms|
+| Bevy 0.19 | 11.8 ms| 16.2 ms|
+
+We accomplished these wins across _many_ changes. They can be summarized as "we moved more things to the GPU, more batched rendering, parallelized more things, and reduced memory accesses".
+
+<details>
+    <summary>Click here for a breakdown of each optimization!</summary>
+
+- **Unpack multi-drawable batch sets on the GPU**: In order to render using the GPU-driven multi-draw-indirect approach, Bevy needs to group mesh instances into "batch sets". Historically we did this preparatory work on the CPU, but we've managed to move most of this work over to the GPU by doing a "bin unpacking" step on the GPU. Doing this while maintaining hardware compatibility _and_ making updates cheap was challenging! When drawing a million cubes, this managed to save us almost 1.5ms!
+- **Batched depth-only prepasses**: For prepasses that don't need material data or just write normals / motion vectors, we now batch them together, this can save a considerable number of draw calls!
+- **Sparse mesh uniform buffer uploads**: Bevy now tracks which mesh uniforms have changed and only uploads those changes to the GPU (provided they cross a certain size threshold). For scenes with many meshes whose transforms haven't changed, this can be a huge win!
+- **GPU clustering for lights, light probes, and decals**: Bevy now clusters lights on the GPU. On our `many_lights` benchmark, this improved light clustering performance by about 20x!
+- **Increased system parallelism**: More rendering systems run in parallel. This is obviously faster!
+- **Visibility ranges are checked on the GPU**: We've moved these LOD checks to the GPU.
+- **Batched morph targets**: Meshes with morph targets can now be rendered in batches on platforms that support storage buffers. In our `many_morph_targets` example, this resulted in an almost 2x speedup!
+- **`NoCpuCulling` optimizations**: Meshes with `NoCpuCulling` are now ignored by the CPU visibility systems entirely, which saves a significant amount of work for meshes with that marker component.
+- **Reduced "previous transform" copies**: Bevy's renderer needs the previous frame's transforms. We now only write the previous frame's transform when the transform has been mutated, saving valuable time.
+- **Mesh collection updates GPU data directly using shared memory**: This removed a slow sequential bottleneck and saved valuable milliseconds!
+- **Use change lists instead of ticks**: We've made our specialization and queuing systems only process the entities they need each frame, significantly cutting down on the work being done!
+- **Smarter clustering heuristic usage**: We now cluster using last frame's clustering statistics, which are _better_ and also allow us to void expensive memory scans.
+- **Simpler GPU memory copies**: Bevy uses the `encase` library to prepare data for GPU buffers in the layout WGSL expects. In practice, this isn't always needed and incurs unnecessary overhead. We've swapped to cheaper direct memory copies when clustering lights to shave of a bit of time.
+- **Parallel mesh collection**: We've parallelized the "gather" step of our mesh collection, which saved ~4ms when rendering 200,000 moving meshes in `bevymark_3d`
+- **Optimized dirty transform tree marking**: We now use buffered channels to make parallel concurrent workers propagate dirty bits from leaves to roots. This makes scenes with many static objects much faster! Scenes with many dynamic objects are also a bit faster!
+- **Optimized entity removal**: We now scan from the end of the entity list when removing instead of the front, as newer entities are more likely to be dynamic than older entities.
 
 </details>
 
