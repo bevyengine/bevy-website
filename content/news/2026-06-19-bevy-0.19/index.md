@@ -702,8 +702,6 @@ Bevy's screen space reflections now use a "physically based" algorithm, which im
 
 ![physical_reflections](physical_reflections.png)
 
-Note the rough specular reflections of the hose on the wood base, and overall occlusion improvements.
-
 ## Rectangular Area Lights
 
 {{ heading_metadata(authors=["@dylansechet"] prs=[23288]) }}
