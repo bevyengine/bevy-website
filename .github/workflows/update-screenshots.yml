@@ -69,7 +69,11 @@ jobs:
 
       - name: Optimize PNGs
         run: |
-          oxipng --opt max --strip safe --recursive screenshots
+          if [ -d screenshots ]; then
+            oxipng --opt max --strip safe --recursive screenshots
+          else
+            echo "No screenshots produced for this page, skipping optimization"
+          fi
 
       - name: Upload Generated Files
         uses: actions/upload-artifact@v4
