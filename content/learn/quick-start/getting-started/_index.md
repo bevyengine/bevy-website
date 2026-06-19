@@ -38,7 +38,7 @@ Alternatively, you can manually add it to your project's Cargo.toml like this:
 
 ```toml
 [dependencies]
-bevy = "0.18.1"
+bevy = "0.19"
 ```
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
@@ -67,7 +67,7 @@ If you would like to see Bevy in action before starting a new project, you can c
     # use the latest Bevy release
     git checkout latest
     # or a specific version
-    git checkout v0.18.0
+    git checkout v0.19.0
     ```
 
 4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
