@@ -524,7 +524,7 @@ fn level() -> impl SceneList {
 
 In **Bevy 0.19** we continued our focus on making large scale scenes render quickly. Lets first look at some benchmarks!
 
-In **Bevy 0.18**, a laptop with a mobile Nvidia RTX 4090 could handle our `many_cubes` example with 1.6 million cube mesh entities (with Bevy's PBR StandardMaterial), culling enabled, and 116,000 entities in view at about 49.47ms per frame (21 FPS). In **Bevy 0.19**, it renders those cubes at 18.77ms (53 FPS)! With culling disabled (meaning all 1.6 million cubes are rendered), the same example went from to 93.1ms to 41.2ms!! 
+In **Bevy 0.18**, a laptop with a mobile Nvidia RTX 4090 could handle our `many_cubes` example with 1.6 million cube mesh entities (with Bevy's PBR StandardMaterial), culling enabled, and 116,000 entities in view at about 49.47ms per frame (21 FPS). In **Bevy 0.19**, it renders those cubes at 18.77ms (53 FPS)! With culling disabled (meaning all 1.6 million cubes are rendered), the same example went from 93.1ms to 41.2ms!! 
 
 Our new [`bevy_city`](https://github.com/bevyengine/bevy/tree/main/examples/large_scenes/bevy_city) example defaults to generating a city with 55000 rendered entities:
 
