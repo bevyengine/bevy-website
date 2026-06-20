@@ -1102,7 +1102,7 @@ A new `pccm` example demonstrates the effect, with parallax correction toggleabl
 
 Bindless rendering is how modern engines handle scenes with many different materials efficiently: shaders index into shared pools of textures and buffers rather than rebinding them each draw call.
 
-Metal (Apple's GPU API) has partial bindless support. They permit texture binding arrays but not buffer binding arrays.
+WGPU's backend for Metal (Apple's GPU API) has partial bindless support. It currently only permits texture binding arrays but not buffer binding arrays.
 
 Historically, Bevy required support for both features before it would use bindless, which excluded Metal entirely, even for materials that never use buffer arrays.
 
