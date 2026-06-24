@@ -8,6 +8,7 @@ youtube = "cartdev"
 image = "5th_birthday_reflections.svg"
 padded_list_image = true
 show_image = true
+short_excerpt = "A collection of community reflections celebrating Bevy’s fifth year, its progress, challenges, and hopes for what comes next."
 +++
 
 [@cart](https://bsky.app/profile/cart.work) here (Bevy's creator and Project Lead) with another update! A month ago was Bevy's Fifth Birthday! As is tradition, I took that as a chance to reflect on the past year and outline my hopes and dreams for the future. You can read that in my [Bevy's Fifth Birthday](/news/bevys-fifth-birthday) post.
