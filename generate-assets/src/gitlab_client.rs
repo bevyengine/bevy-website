@@ -23,9 +23,11 @@ pub struct GitlabClient {
 
 impl GitlabClient {
     pub fn new(token: String) -> Self {
-        let agent: ureq::Agent = ureq::AgentBuilder::new()
+        let config = ureq::Agent::config_builder()
             .user_agent("bevy-website-generate-assets")
             .build();
+
+        let agent: ureq::Agent = config.into();
 
         Self {
             agent,
@@ -42,10 +44,11 @@ impl GitlabClient {
         let response: Vec<GitlabProjectSearchResponse> = self
             .agent
             .get(&format!("{BASE_URL}?search={repository_name}"))
-            .set("Accept", "application/json")
-            // .set("Authorization", &format!("Bearer {}", self.token))
+            .header("Accept", "application/json")
+            // .header("Authorization", &format!("Bearer {}", self.token))
             .call()?
-            .into_json()?;
+            .body_mut()
+            .read_json()?;
         Ok(response)
     }
 
@@ -61,10 +64,11 @@ impl GitlabClient {
             .get(&format!(
                 "{BASE_URL}/{id}/repository/files/{content_path}?ref={default_branch}"
             ))
-            .set("Accept", "application/json")
+            .header("Accept", "application/json")
             // .set("Authorization", &format!("Bearer {}", self.token))
             .call()?
-            .into_json()?;
+            .body_mut()
+            .read_json()?;
 
         if response.encoding == "base64" {
             use base64::Engine;
