@@ -296,7 +296,7 @@ $color-white: #fff;
   --main-menu-mobile-box-shadow-color: #{rgba($color-black, 0.3)};
   --main-menu-text-color: var(--color-neutral-93);
 
-  --media-content-blockquote-bg-color: var(--color-neutral-18);
+  --media-content-blockquote-bg-color: #292a2d;
   --media-content-blockquote-text-color: var(--color-neutral-69);
   --media-content-button-text-color: var(--color-white);
   --media-content-code-bg-color: var(--color-neutral-18);
@@ -370,7 +370,7 @@ $color-white: #fff;
 // styled in light mode.
 .light-mode {
   @media (prefers-color-scheme: light) {
-    --color-blue-link: var(--color-blue-57);
+    --color-blue-link: #1D3B87;
 
     --callout-caution-accent-color: #ed0c41;
     --callout-caution-bg-color: #fccad5;
@@ -465,7 +465,7 @@ $color-white: #fff;
     --migration-guide-legacy-area-tags-color: var(--color-neutral-50);
     --migration-guide-title-color: var(--color-neutral-13);
 
-    --on-this-page-color: var(--color-neutral-45);
+    --on-this-page-color: var(--color-neutral-33);
     --on-this-page-hover-color: var(--color-black);
     --on-this-page-active-color: var(--color-black);
 
@@ -486,7 +486,7 @@ $color-white: #fff;
     --tree-menu-toc-bg-color: var(--color-neutral-93);
     --tree-menu-toggle-hover-color: var(--color-neutral-75);
 
-    --warning-color: rgb(179, 158, 24);
+    --warning-color: #D63D3D;
 
     .invertable {
       filter: invert(90%) hue-rotate(180deg);
