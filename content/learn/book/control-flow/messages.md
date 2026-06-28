@@ -95,7 +95,7 @@ fn main() {
 [`Messages<M>`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Messages.html
 [`MessageWriter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.MessageWriter.html
 [`MessageReader`]: https://docs.rs/bevy/latest/bevy/prelude/struct.MessageReader.html
-[`App::add_message<M>`]: https://docs.rs/bevy/*/bevy/app/struct.App.html#method.add_message
+[`App::add_message<M>`]: https://docs.rs/bevy/latest/bevy/prelude/struct.App.html#method.add_message
 [`message_update_system`]: https://docs.rs/bevy/latest/bevy/ecs/message/fn.message_update_system.html
 [`First`]: https://docs.rs/bevy/latest/bevy/prelude/struct.First.html
 [`Messages::update`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Messages.html#method.update

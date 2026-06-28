@@ -82,8 +82,6 @@ and then evaluate some complex condition inside of a system to determine if and 
 This can be very helpful for turn-based games, simulations, networked servers and more.
 Bevy itself uses this pattern for both the [`Main`] schedule and our built-in [fixed time] solution.
 
-For even more control over your game loop, read the [custom loops] chapter!
-
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.Schedule.html
 [`StateTransition`]: https://docs.rs/bevy/latest/bevy/state/state/struct.StateTransition.html
 [`PreStartup`]: https://docs.rs/bevy/latest/bevy/app/struct.PreStartup.html
@@ -100,10 +98,9 @@ For even more control over your game loop, read the [custom loops] chapter!
 [plugins]: /learn/book/modular-architecture/plugins
 [state machine abstraction]: /learn/book/control-flow/states
 [fixed update loop]: /learn/book/the-game-loop/time-and-timers#fixing-your-timestep
-[custom loops]: /learn/book/the-game-loop/custom-loops
 [`ScheduleRunnerPlugin`]: https://docs.rs/bevy/latest/bevy/app/struct.ScheduleRunnerPlugin.html
 [`MinimalPlugins`]: https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html
 [`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
 [`MainScheduleOrder`]: https://docs.rs/bevy/latest/bevy/app/struct.MainScheduleOrder.html
 [`World::run_schedule`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.run_schedule
-[fixed time]: ./fixed-time.md
+[fixed time]: /learn/book/the-game-loop/time-and-timers#frame-rate-independence-and-delta-time

@@ -295,4 +295,4 @@ fn some_system(mut commands: Commands) {
 }
 ```
 
-[`Events` and `Observers`]: ../events
+[`Events` and `Observers`]: /learn/book/control-flow/events

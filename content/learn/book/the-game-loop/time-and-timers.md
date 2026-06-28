@@ -99,8 +99,8 @@ If your systems uniformly rely on [`Time`], this will affect your entire game:
 halting, slowing or speeding up animations, movement, projectiles, physics and so on.
 Alternatively, [states] and [run conditions] can be used to skip systems while the game is paused.
 
-[states]: ../control-flow/states.md
-[run conditions]: ../control-flow/run-conditions.md
+[states]: /learn/book/control-flow/states
+[run conditions]: /learn/book/control-flow/run-conditions
 
 ## Fixing your timestep
 
@@ -327,7 +327,7 @@ within a single frame, or spawn an async task which you periodically poll for co
 
 [`Timer`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
 [`Duration`]: https://doc.rust-lang.org/std/time/struct.Duration.html
-[relationship]: ../storing-data/relations.md
+[relationship]: /learn/book/storing-data/relations
 [`on_timer`]: https://docs.rs/bevy/latest/bevy/time/common_conditions/fn.on_timer.html
 
 ## Delaying Commands

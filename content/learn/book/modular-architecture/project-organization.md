@@ -24,7 +24,7 @@ Thankfully, the Bevy community has answers to these questions:
   - placing these at the top of your files can act as a simple, consistent "table of contents"
 
 [orphan rules]: https://doc.rust-lang.org/reference/items/implementations.html#orphan-rules
-[plugin]: ./plugins.md
+[plugin]: /learn/book/modular-architecture/plugins
 
 ## Modules
 
@@ -66,9 +66,9 @@ and use the cached compilation results for everything else.
 
 [crates]: https://doc.rust-lang.org/book/ch07-01-packages-and-crates.html
 [workspaces]: https://doc.rust-lang.org/cargo/reference/workspaces.html
-[creating libraries]: ../releasing-projects/libraries-for-bevy.md
+[creating libraries]: /learn/book/releasing-projects/libraries-for-bevy
 [Rust parallelizes compilation at the crate level]: https://www.feldera.com/blog/cutting-down-rust-compile-times-from-30-to-2-minutes-with-one-thousand-crates
-[setup tips for faster compilations]: ../development-practices/fast-compiles.md
+[setup tips for faster compilations]: /learn/book/development-practices/fast-compiles
 [`cargo build --timings`]: https://doc.rust-lang.org/cargo/reference/timings.html
 
 ## Item Visibility

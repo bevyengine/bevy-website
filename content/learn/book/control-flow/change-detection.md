@@ -195,10 +195,10 @@ When a system calls `.is_changed()`, it compares the tick count of the component
 One thing to beware of is potential 1-frame delay, if the system that is causing the change runs after the system that is checking for changes.
 You may need to pay attention to how you [run schedules] or use [explicit system ordering] to prevent this.
 
-[states]: ../states
-[run conditions]: ../run-conditions#run-conditions
-[run schedules]: ../../the-game-loop/schedules
-[explicit system ordering]: ../run-conditions
+[states]: /learn/book/control-flow/states
+[run conditions]: /learn/book/control-flow/run-conditions#run-conditions
+[run schedules]: /learn/book/the-game-loop/schedules
+[explicit system ordering]: /learn/book/control-flow/run-conditions
 
 [`set_if_neq()`]: https://docs.rs/bevy/latest/bevy/ecs/change_detection/trait.DetectChangesMut.html#method.set_if_neq
 [`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html

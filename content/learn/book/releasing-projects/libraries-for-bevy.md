@@ -192,7 +192,7 @@ We have a few additional setup suggestions:
   type_complexity = "allow"
   ```
 
-Take a look at our chapter on [Testing](../development-practices/testing.md):
+Take a look at our chapter on [Testing](/learn/book/development-practices/testing):
 this advice is particularly useful for library authors.
 
 ### Configuring Github repo settings

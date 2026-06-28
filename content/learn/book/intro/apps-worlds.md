@@ -20,7 +20,7 @@ It is possible to have multiple worlds, and it's also possible to run a world co
 
 ## The App
 
-Bevy provides a modular multi-threaded runtime called an [`App`](../../the-game-loop/app). If you have used web servers before, the basic ideas of an app will probably be familiar: you configure your app with settings and logic, then `run()` it to enter an update loop. It tends to look something like this:
+Bevy provides a modular multi-threaded runtime called an [`App`](/learn/book/the-game-loop/app). If you have used web servers before, the basic ideas of an app will probably be familiar: you configure your app with settings and logic, then `run()` it to enter an update loop. It tends to look something like this:
 
 ```rust
 use bevy::prelude::*;
@@ -35,7 +35,7 @@ fn main() {
 In most cases, your world will be contained within your app.
 The app is responsible for scheduling and executing your systems, and passing the data in and out of them appropriately.
 
-Apps can be used to combine code that's been broken down into modular, reusable pieces, called [plugins](../modular-architecture/plugins).
+Apps can be used to combine code that's been broken down into modular, reusable pieces, called [plugins](/learn/book/modular-architecture/plugins).
 
 ## Next Steps
 
