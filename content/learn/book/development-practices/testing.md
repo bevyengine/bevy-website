@@ -111,13 +111,13 @@ Take advantage of existing developer tools, make your own, and make it easy to j
 
 You should create a dedicated `devtools` feature flag for your application (and enable it by default) which will turn on all of the testing and debugging utilities that your project might need.
 Reproducing tricky bugs can be incredibly time-consuming; you don't want to have to recompile your game to turn on these tools.
-Then when you are [building for release](../releasing-projects/release-builds.md), turn your `devtools` feature flag off.
+Then when you are [building for release](/learn/book/releasing-projects/release-builds), turn your `devtools` feature flag off.
 
 Rust's examples are a surprisingly powerful testing tool, letting you create secondary binaries with customized setups.
 You might configure one to open the game with the settings menu open, another to take a command line argument to jump you to the supplied level, and a third to start a new run of the game using a prebuilt character.
 
 Adding systems to these examples can be fairly straightforward.
-A useful pattern is to directly mutate the desired [state](../control-flow/states.md) to bring you to a specific point in your game.
+A useful pattern is to directly mutate the desired [state](/learn/book/control-flow/states) to bring you to a specific point in your game.
 The [`run_once`] run condition can also be particularly useful to avoid surprising behavior once setup is complete.
 You can even add asserts to verify that your setup steps have done what you wanted.
 
@@ -282,7 +282,7 @@ You get full data access and Bevy's ECS ergonomics, but you still control exactl
 ### Running Entire Schedules
 
 When the behavior you care about comes from the interaction *between* systems, you can build up a [`Schedule`] and run it against a `World`.
-This lets you verify [system ordering](../control-flow/systems#running-systems-in-schedules) and [run conditions](../control-flow/run-conditions.md), which you can't do with `run_system_once`.
+This lets you verify [system ordering](/learn/book/control-flow/systems#running-systems-in-schedules) and [run conditions](/learn/book/control-flow/run-conditions), which you can't do with `run_system_once`.
 
 ```rust
 fn regenerate(mut query: Query<&mut Life>) {
@@ -319,7 +319,7 @@ Individually test systems first where you can, and save schedule-level tests for
 Taking this one step further, you can even construct an [`App`], add your plugins, and step it forward with [`app.update()`].
 Each call to `update` runs a full frame: `Startup` (on the first call), then `PreUpdate`, `Update`, `PostUpdate`, and so on.
 
-The reason to reach for this over a raw `Schedule` is [plugins](../../modular-architecture/plugins.md).
+The reason to reach for this over a raw `Schedule` is [plugins](/learn/book/modular-architecture/plugins).
 Suppose your game has a `CombatPlugin` that registers the `PoisonStrength` resource and the `apply_poison` system.
 You can test the plugin as a whole, without manually recreating its internals:
 
@@ -449,7 +449,7 @@ Inside of your own code, be careful to never introduce a gameplay logic dependen
 This is reasonable practice in any case to avoid surprising bugs.
 Splitting your code into multiple crates can be useful to enforce this invariant as Cargo will help you catch cyclic dependencies, but doing so can seriously slow down iteration for small projects.
 
-[Compiling Less Code]: ../releasing-projects/compiling-less-code.md
+[Compiling Less Code]: /learn/book/releasing-projects/compiling-less-code
 
 ## Testing Graphical Output
 

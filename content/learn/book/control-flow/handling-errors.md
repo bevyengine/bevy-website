@@ -121,7 +121,7 @@ Each hex parse result value is wrapped in either `Result::Ok` or `Result::Err`.
 A common way to get the interior value is to [`unwrap`](https://doc.rust-lang.org/std/result/enum.Result.html#method.unwrap) the `Result`, but remember that in the case of an `Err`, `unwrap` will crash the program!
 With this in mind `unwrap` is best used when you know the value will be a success, and an `Err` value would indicate a bug in your application.
 
-This is notably true when [writing tests](/learn/book/development-practices/testing.md), which can use panicking macros like `assert_eq!` to fail a test!
+This is notably true when [writing tests](/learn/book/development-practices/testing), which can use panicking macros like `assert_eq!` to fail a test!
 
 #### Default Values
 

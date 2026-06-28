@@ -147,7 +147,7 @@ impl EnemyAssets {
 ```
 
 Now, all we need is to prevent our `enemy_spawner` system from running until `EnemyAssets` is loaded.
-A straight-forward approach is to use a [state](learn/book/control-flow/states/) to control for if our gameplay systems should run.
+A straight-forward approach is to use a [state](/learn/book/control-flow/states/) to control for if our gameplay systems should run.
 
 ```rust
 fn main() {

@@ -95,7 +95,7 @@ A version of the same functionality (without playing a separate screen) can be s
 
 {% callout(type="info") %}
 
-While loading data as an asset is more complex than simply hardcoding it, doing so unlocks [asset hot reloading](../development-practices/hot-reloading.md).
+While loading data as an asset is more complex than simply hardcoding it, doing so unlocks [asset hot reloading](/learn/book/development-practices/hot-reloading).
 This allows us to change the asset file during testing and see those changes reflected in real time.
 
 {% end %}

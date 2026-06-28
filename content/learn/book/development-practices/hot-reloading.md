@@ -11,7 +11,7 @@ Unfortunately, recompiling can be slow, and requires you to close the game, losi
 To make this easier, Bevy supports **hot reloading**, which allows you to modify your game's assets and automatically load these changes into a running instance of the game.
 
 While hot-reloading is useful during development time, it's usually not something you want to ship in a production game.
-Unless you're deliberately using this for modding support, you should turn these settings off when [releasing projects](../releasing-projects/_index.md).
+Unless you're deliberately using this for modding support, you should turn these settings off when [releasing projects](/learn/book/releasing-projects/_index).
 
 ## Hot Reloading Assets
 

@@ -112,7 +112,7 @@ processor.
 
 ### AssetLoader
 
-This is exactly the same asset loader as discussed in [`Custom Assets`](custom_assets.md). Note that
+This is exactly the same asset loader as discussed in [Custom Assets](/learn/book/assets/custom-assets). Note that
 `LoadTransformAndSave` can only use your asset loader if it is registered.
 
 ### AssetTransformer
@@ -188,7 +188,7 @@ impl AssetSaver for MySaver {
 
 Just as with [`AssetLoader`]s, your type needs to be "encoded" somehow, whether through [`serde`] or
 whatever else. It may be necessary to create a "serializable" version of your asset. This is
-described in more detail in [`Custom Assets`](custom_assets.md).
+described in more detail in [Custom Assets](/learn/book/assets/custom-assets).
 
 ## Meta Files
 

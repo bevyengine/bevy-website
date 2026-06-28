@@ -55,7 +55,7 @@ App::new().add_plugins(PlayerPlugin);
 ```
 
 Because our plugin is so simple (it doesn't take any config, and only uses the `build` method),
-we could instead choose to use [the blanket impl for functions that take a &mut App]:
+we could instead choose to use [the blanket impl for all functions that take a &mut App]:
 
 ```rust,hide_lines=1-4
 # use bevy::prelude::*;
@@ -149,12 +149,12 @@ Then, when the app is run, a few other plugin life-cycle functions are called, a
 
 In most cases, this complexity can be completely ignored, but when working with subsystems that require deferred initialization it can be helpful.
 
-[apps]: ../the-game-loop/app
+[apps]: /learn/book/the-game-loop/app
 [`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
 [`App::add_systems`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html?search=add#method.add_systems
 [`App::add_plugins`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html?search=add#method.add_plugins
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.World.html
-[the blanket for all functions that take a &mut App]: https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html#impl-Plugin-for-T
+[the blanket impl for all functions that take a &mut App]: https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html#impl-Plugin-for-T
 [`PluginGroup`]: https://docs.rs/bevy/latest/bevy/app/trait.PluginGroup.html
 [`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
 [`PluginGroup::set`]: https://docs.rs/bevy/latest/bevy/prelude/trait.PluginGroup.html#method.set
