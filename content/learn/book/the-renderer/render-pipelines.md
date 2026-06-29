@@ -16,8 +16,8 @@ This allows the simulation to execute concurrently with the render, meaning less
 
 Bevy implements a version of pipelined rendering using two separate `SubApp`s to track the compute and render logic separately.
 Both `SubApp`s abide by ECS principles and have their own `World`s, schedules, and systems to control how their respective logic is executed.
-Specifically, the Compute `SubApp` (where our Main `World` lives) calculates the simulation logic.
-Then, the freshly computed info in the Compute `SubApp` is copied and extracted into a Render `SubApp`.
+Specifically, the Main `SubApp` (where our Main `World` lives) calculates the simulation logic.
+Then, the freshly computed info in the Main `SubApp` is extracted into the Render `SubApp`.
 This extraction happens once per frame, and can delay the game if either the game logic in the Main `SubApp` or the render process in the Render `SubApp` takes longer than the other.
 
 {% callout(type="info") %}
