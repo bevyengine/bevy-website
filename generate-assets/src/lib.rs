@@ -3,6 +3,7 @@ use cratesio_dbdump_csvtab::rusqlite;
 use cratesio_dbdump_csvtab::CratesIODumpLoader;
 use github_client::GithubClient;
 use gitlab_client::GitlabClient;
+use regex::Regex;
 use serde::Deserialize;
 use std::cmp::Ordering;
 use std::{fs, path::PathBuf, str::FromStr};
@@ -29,6 +30,7 @@ pub struct Asset {
     pub licenses: Option<Vec<String>>,
     pub bevy_versions: Option<Vec<String>>,
     pub nsfw: Option<bool>,
+    pub stars: Option<u32>,
 
     // this field is not read from the toml file
     #[serde(skip)]
@@ -93,7 +95,7 @@ impl AssetNode {
 }
 
 #[derive(Default)]
-/// Where to find metadata (bevy version and license) for assets.
+/// Where to find metadata (bevy version and license) and stars for assets.
 pub struct MetadataSource<'a> {
     /// Connection to the crates.io database sqlite dump.
     pub crates_io_db: Option<&'a CratesIoDb>,
@@ -108,6 +110,11 @@ pub struct MetadataSource<'a> {
     /// Initialized with [`get_metadata_from_cratesio_statement`] at the beginning
     /// of the algorithm, used by [`get_metadata_from_cratesio`] for each asset.
     pub get_metadata_from_cratesio_statement: Option<rusqlite::Statement<'a>>,
+    /// Prepared statement to retrieve the repository link from crates.io.
+    ///
+    /// Initialized with [`get_repo_from_cratesio_statement`] at the beginning
+    /// of the algorithm, used by [`get_repo_stars_from_crates_db`] for each asset.
+    pub get_repo_from_cratesio_statement: Option<rusqlite::Statement<'a>>,
 }
 
 /// Entry point the algorithm to find [`Asset`] files inside [`Section`] folders,
@@ -139,6 +146,8 @@ pub fn parse_assets(
         };
         metadata_source.get_metadata_from_cratesio_statement =
             Some(get_metadata_from_cratesio_statement(db, bevy_crates_ids)?);
+        metadata_source.get_repo_from_cratesio_statement =
+            Some(get_repo_from_cratesio_statement(db)?);
     }
 
     visit_dirs(
@@ -212,6 +221,10 @@ fn visit_dirs(
                 eprintln!("ERROR: {err:?}");
             }
 
+            if let Err(err) = get_stars(&mut asset, metadata_source) {
+                eprintln!("Failed to get stars for {}: {err:?}", asset.name);
+            }
+
             section.content.push(AssetNode::Asset(asset));
         }
     }
@@ -236,7 +249,8 @@ fn get_extra_metadata(
         Some("crates.io") => {
             if let Some(ref mut statement) = metadata_source.get_metadata_from_cratesio_statement {
                 let crate_name = segments[1];
-                Some(get_metadata_from_crates_db(crate_name, statement)?)
+                let metadata = get_metadata_from_crates_db(crate_name, statement)?;
+                Some(metadata)
             } else {
                 None
             }
@@ -436,6 +450,7 @@ fn get_metadata_from_gitlab(
         .context("Failed to get Cargo.toml from gitlab")?;
 
     let cargo_manifest = toml::from_str::<cargo_toml::Manifest>(&content)?;
+
     Ok((
         get_license(&cargo_manifest),
         get_bevy_version_from_manifest(&cargo_manifest, bevy_crates),
@@ -573,7 +588,7 @@ fn get_bevy_manifest_dependency_version(dep: &cargo_toml::Dependency) -> Option<
 }
 
 /// Downloads the crates.io database dump and open a connection to the db.
-pub fn prepare_crates_db() -> anyhow::Result<CratesIoDb> {
+pub fn prepare_crates_db(should_update: bool) -> anyhow::Result<CratesIoDb> {
     let cache_dir = {
         let mut current_dir = std::env::current_dir()?;
         current_dir.push("data");
@@ -586,11 +601,18 @@ pub fn prepare_crates_db() -> anyhow::Result<CratesIoDb> {
         println!("Downloading crates.io data dump");
     }
 
-    let db = CratesIODumpLoader::default()
+    let mut db = CratesIODumpLoader::default();
+    let mut db = db
         .tables(&["crates", "dependencies", "versions"])
-        .preload(true)
-        .update()?
-        .open_db()?;
+        .preload(true);
+
+    if should_update {
+        db = db.update()?;
+    } else {
+        println!("Skipping `db.update()`");
+    }
+
+    let db = db.open_db()?;
 
     db.execute_batch(
         "\
@@ -645,6 +667,157 @@ fn get_metadata_from_crates_db_by_name(
     } else {
         bail!("Not found in crates.io db: {crate_name}")
     }
+}
+
+/// Gets the star count for an asset from the linked GitHub or GitLab repository, or the repository linked on the crates.io page
+fn get_stars(asset: &mut Asset, source: &mut MetadataSource) -> anyhow::Result<()> {
+    let url = Url::parse(&asset.link)?;
+    let url_stars = get_stars_from_url(url, source);
+    if let Ok(stars) = url_stars {
+        asset.stars = Some(stars);
+        return Ok(());
+    };
+
+    if let Some(crate_name) = &asset.crate_name {
+        let Some(repo_statement) = &mut source.get_repo_from_cratesio_statement else {
+            bail!("Can't get stars from crates.io repository - no get repo from crates.io statement provided");
+        };
+
+        asset.stars = Some(get_repo_stars_from_crates_db(
+            crate_name,
+            repo_statement,
+            source.github_client,
+            source.gitlab_client,
+        )?);
+        Ok(())
+    } else {
+        // Return `url_stars`s error
+        url_stars.map(|_| ())
+    }
+}
+
+/// Gets the star count from a url and [`MetadataSource`]
+fn get_stars_from_url(url: Url, metadata_source: &mut MetadataSource) -> anyhow::Result<u32> {
+    let segments = url.path_segments().map(|c| c.collect::<Vec<_>>()).unwrap();
+
+    let stars = match url.host_str() {
+        Some("crates.io") => {
+            let Some(ref mut statement) = metadata_source.get_repo_from_cratesio_statement else {
+                bail!("Can't get stars from crates.io repository - no get repo from crates.io statement provided");
+            };
+
+            let crate_name = segments[1];
+
+            get_repo_stars_from_crates_db(
+                crate_name,
+                statement,
+                metadata_source.github_client,
+                metadata_source.gitlab_client,
+            )
+            .unwrap_or_default()
+        }
+        Some("github.com") | Some("gitlab.com") => get_stars_from_repo_url(
+            metadata_source.github_client,
+            metadata_source.gitlab_client,
+            url,
+        )?,
+        Some(_) => bail!("Unknown host: {url}"),
+        None => bail!("No host"),
+    };
+
+    Ok(stars)
+}
+
+/// Gets the stars of a crate from the crates.io database dump.
+///
+/// If the crate is not found, retries with `-` instead of `_`
+fn get_repo_stars_from_crates_db(
+    crate_name: &str,
+    repo_statement: &mut rusqlite::Statement<'_>,
+    github_client: Option<&GithubClient>,
+    gitlab_client: Option<&GitlabClient>,
+) -> anyhow::Result<u32> {
+    let url = get_repo_url_from_crates_db(crate_name, repo_statement)?;
+
+    get_stars_from_repo_url(github_client, gitlab_client, url)
+}
+
+/// Gets the star count from a url to a repository
+fn get_stars_from_repo_url(
+    github_client: Option<&GithubClient>,
+    gitlab_client: Option<&GitlabClient>,
+    url: Url,
+) -> anyhow::Result<u32> {
+    let stars = match url.host_str() {
+        Some("github.com") => {
+            let Some(client) = github_client else {
+                bail!("Can't get stars from GitHub - no GitHub client");
+            };
+            let mut path = url.path().trim_matches('/').trim_end_matches(".git");
+
+            let replaced = Regex::new(r#"(.*)\/tree\/.*"#)
+                .unwrap()
+                .replace(path, r#"$1"#);
+
+            path = replaced.as_ref();
+
+            client.get_stars_from_url(path)?
+        }
+        Some("gitlab.com") => {
+            let Some(client) = gitlab_client else {
+                bail!("Can't get stars from GitLab - no GitLab client")
+            };
+
+            // `gitlab.com/api/v4/projects/me/project` 404s, but `gitlab.com/api/v4/project/me%2Fproject` doesn't.
+            let path = url.path().trim_matches('/').replace("/", "%2F");
+            client.get_stars_from_url(&path)?
+        }
+        Some(_) => bail!("Unknown repository host: {url}"),
+        _ => bail!("No repository host"),
+    };
+
+    Ok(stars)
+}
+
+/// Gets the repository link of a crate from the crates.io database dump.
+///
+/// If the crate is not found, retries with `-` instead of `_`
+fn get_repo_url_from_crates_db(
+    crate_name: &str,
+    statement: &mut rusqlite::Statement<'_>,
+) -> anyhow::Result<Url> {
+    let link: anyhow::Result<Option<Url>> =
+        if let Ok(link) = get_repo_url_from_crates_db_by_name(crate_name, statement) {
+            Ok(link)
+        } else if let Ok(link) =
+            get_repo_url_from_crates_db_by_name(&crate_name.replace('_', "-"), statement)
+        {
+            Ok(link)
+        } else {
+            bail!("Failed to get repository link from crates.io db");
+        };
+
+    if let Some(link) = link? {
+        Ok(link)
+    } else {
+        bail!("No repository link on crates.io");
+    }
+}
+
+/// Gets the repository link of a crate from the crates.io database dump by the exact name.
+fn get_repo_url_from_crates_db_by_name(
+    name: &str,
+    statement: &mut rusqlite::Statement<'_>,
+) -> anyhow::Result<Option<Url>> {
+    let row = statement.query_row([name], |row| Ok(row.get_unwrap::<_, Option<String>>(0)))?;
+    let Some(row) = row else {
+        return Ok(None);
+    };
+    if row.is_empty() {
+        return Ok(None);
+    }
+
+    Ok(Some(Url::parse(&row)?))
 }
 
 /// Gets at list of the official bevy crates from the crates.io database dump,
@@ -718,6 +891,21 @@ pub fn get_latest_bevy_version(db: &CratesIoDb) -> anyhow::Result<semver::Versio
         .into_iter()
         .max()
         .context("Failed to retrieve Bevy versions from crates.io db")
+}
+
+/// Get a prepared statement to get the repository link from the crates.io database dump.
+///
+/// Later used by [`get_repo_stars_from_crates_db`]
+fn get_repo_from_cratesio_statement(
+    db: &rusqlite::Connection,
+) -> Result<rusqlite::Statement<'_>, rusqlite::Error> {
+    db.prepare(
+        "\
+        SELECT repository \
+            FROM crates \
+                WHERE name = ? \
+        ",
+    )
 }
 
 /// Get a prepared statement to get license and version for a crate from the
