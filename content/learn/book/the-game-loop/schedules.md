@@ -103,4 +103,4 @@ Bevy itself uses this pattern for both the [`Main`] schedule and our built-in [f
 [`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
 [`MainScheduleOrder`]: https://docs.rs/bevy/latest/bevy/app/struct.MainScheduleOrder.html
 [`World::run_schedule`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.run_schedule
-[fixed time]: /learn/book/the-game-loop/time-and-timers#frame-rate-independence-and-delta-time
+[fixed time]: /learn/book/the-game-loop/game-time#frame-rate-independence-and-delta-time
