@@ -68,7 +68,7 @@ We don't need to update their statistics while waiting for them to respawn, but 
 
 If you are writing your own [`SystemParam`], this behavior can be configured via the [`SystemParam::validate_param`] method.
 
-[Handling Errors]: ../handling-errors
+[Handling Errors]: /learn/book/control-flow/handling-errors
 [`SystemParam`]: https://docs.rs/bevy/latest/bevy/ecs/system/trait.SystemParam.html
 [`Single`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Single.html
 [`Query`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Query.html

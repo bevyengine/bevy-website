@@ -179,7 +179,7 @@ See the section on [local system state] for more details.
 
 ["splits the borrow"]: https://doc.rust-lang.org/nomicon/borrow-splitting.html
 
-[local system state]: ../storing-data/local-system-param
+[local system state]: /learn/book/storing-data/local-system-param
 
 ## Running Systems In Schedules
 
@@ -204,7 +204,7 @@ You can read more about schedules in the dedicated [Schedules section], but for 
 - Each of the standard schedules are evaluated *once per frame*.
 - There are also [`Fixed`] schedules which run at a consistent interval.
 
-[Schedules section]: ../the-game-loop/schedules
+[Schedules section]: /learn/book/the-game-loop/schedules
 
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.Schedule.html
 [`App::add_system`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.add_systems
@@ -317,8 +317,8 @@ struct FooSchedule;
 commands.run_schedule(FooSchedule);
 ```
 
-[locals]: ../storing-data/local-system-param
-[change detection]: ../control-flow/change-detection
+[locals]: /learn/book/storing-data/local-system-param
+[change detection]: /learn/book/control-flow/change-detection
 
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 [`SystemId`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.SystemId.html
@@ -417,7 +417,7 @@ This can be repeated indefinitely, but branching is not supported.
 System piping is mostly useful for composing fragments of logic in a modular, reusable way.
 System output is also used when returning errors from systems, as explained in the [Handling Errors] section of this chapter.
 
-[Handling Errors]: ../control-flow/handling-errors
+[Handling Errors]: /learn/book/control-flow/handling-errors
 
 [`In`]: https://docs.rs/bevy/latest/bevy/prelude/trait.System.html#associatedtype.In
 [`Out`]: https://docs.rs/bevy/latest/bevy/prelude/trait.System.html#associatedtype.Out

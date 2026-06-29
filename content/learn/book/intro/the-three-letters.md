@@ -86,12 +86,12 @@ fn spawn_entities(mut commands: Commands) {
 }
 ```
 
-Entities are usually spawned using [Commands](../control-flow/commands), which queue up complex work to be done later.
+Entities are usually spawned using [Commands](/learn/book/control-flow/commands), which queue up complex work to be done later.
 
 ## The S: Systems
 
 Systems interact with and update the data in the ECS.
-Each system is run every frame by default, and repeats in a loop (specifically, in a [Schedule](../the-game-loop/schedules)).
+Each system is run every frame by default, and repeats in a loop (specifically, in a [Schedule](/learn/book/the-game-loop/schedules)).
 In Bevy, systems are "just Rust functions".
 These can fetch data from the ECS, make updates, call external APIs, and anything else that a function can do.
 
@@ -105,12 +105,12 @@ fn my_system(entities: Query<&mut Location>) {
 ```
 
 {% callout(type="info") %}
-Bevy systems use a technique called [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to access data about the Bevy world. By declaring your function parameters wrapped in special types like [Query](../intro/the-next-three-letters#queries) or [Res](../intro/the-next-three-letters#resources), the data for those parameters will be filled in for you automatically — without you having to actually call the system.
+Bevy systems use a technique called [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to access data about the Bevy world. By declaring your function parameters wrapped in special types like [Query](/learn/book/intro/the-next-three-letters#queries) or [Res](/learn/book/intro/the-next-three-letters#resources), the data for those parameters will be filled in for you automatically — without you having to actually call the system.
 
 Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are *disjoint* and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
 {% end %}
 
-Systems usually access entities and their components via [Queries](../intro/the-next-three-letters#queries), which will be covered in the next chapter.
+Systems usually access entities and their components via [Queries](/learn/book/intro/the-next-three-letters#queries), which will be covered in the next chapter.
 
 ## Why ECS?
 
@@ -132,9 +132,9 @@ you can:
   - Plus it helps support a thriving, heavily interoperable [ecosystem of third-party libraries](https://bevy.org/assets/).
 - Build consistent, universal abstractions on a common base of data structures.
   - Shared data structures mean that improvements and bug fixes trickle down automatically.
-  - Use the same powerful patterns for [control flow](../control-flow/) everywhere.
-  - Structure your application using a uniform, flexible [modular architecture](../modular-architecture).
-  - Debug and inspect every part of your game using the same [dev tools](../development-practices).
+  - Use the same powerful patterns for [control flow](/learn/book/control-flow/) everywhere.
+  - Structure your application using a uniform, flexible [modular architecture](/learn/book/modular-architecture).
+  - Debug and inspect every part of your game using the same [dev tools](/learn/book/development-practices).
 
 Learning to take advantage of everything a modern ECS has to offer will take time:
 if you want to be able to tackle any data modelling problem that games have to throw at you,

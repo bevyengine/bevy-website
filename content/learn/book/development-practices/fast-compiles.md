@@ -170,4 +170,4 @@ To enable `sccache`, install it and update your Cargo configuration.
 More code means more time to compile.
 If there are parts of Bevy (or your other dependencies) that you simply don't need,
 you can improve compilation times substantially by removing them.
-For advice on how to navigate Bevy's collection of feature flags, see [Compiling Less Code](../releasing-projects/compiling-less-code.md).
+For advice on how to navigate Bevy's collection of feature flags, see [Compiling Less Code](/learn/book/releasing-projects/compiling-less-code).

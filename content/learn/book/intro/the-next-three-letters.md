@@ -12,7 +12,7 @@ These concepts are core to Bevy's ECS (so much so that they're used in the previ
 ## Resources
 
 **Resources** are global state singletons.
-Unlike [components](../the-three-letters#the-c-components), which are reused across multiple entities, resources are unique. For any given resource type (like `Score` in the example below), there can only be one instance in your game world at a time.
+Unlike [components](/learn/book/intro/the-three-letters#the-c-components), which are reused across multiple entities, resources are unique. For any given resource type (like `Score` in the example below), there can only be one instance in your game world at a time.
 
 Like components, resources in Bevy are also "just Rust structs" (or enums).
 
@@ -67,7 +67,7 @@ fn tick_down_poison(mut query: Query<&mut Poison>) {
 }
 ```
 
-Then, when systems are run as part of a Bevy [app](../../the-game-loop/app), the engine automatically fetches the requested data, parallelizing work between systems wherever possible:
+Then, when systems are run as part of a Bevy [app](/learn/book/the-game-loop/app), the engine automatically fetches the requested data, parallelizing work between systems wherever possible:
 
 ```rs
 fn main() {
@@ -85,7 +85,7 @@ Going back to our database analogy, a query is a lot like a [SQL `SELECT` statem
 
 Queries have a lot more functionality than what's shown here.
 You can request optional components, fetch the `Entity` associated with each item, add query filters, and much more!
-Queries are covered in more detail in the [Queries](../../storing-data/queries) chapter.
+Queries are covered in more detail in the [Queries](/learn/book/storing-data/queries) chapter.
 
 ## Commands
 
@@ -104,4 +104,4 @@ fn spawn_entities(mut commands: Commands) {
 
 A wide range of built-in commands are provided,
 but you can also write custom commands to queue up any ECS logic you might desire.
-You can read about these in more detail in the [Commands](../../control-flow/commands) chapter.
+You can read about these in more detail in the [Commands](/learn/book/control-flow/commands) chapter.
