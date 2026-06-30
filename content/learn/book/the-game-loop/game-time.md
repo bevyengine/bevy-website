@@ -1,5 +1,5 @@
 +++
-title = "Time and Timers"
+title = "Time"
 insert_anchor_links = "right"
 [extra]
 weight = 5
@@ -18,6 +18,18 @@ during the [`TimeSystem`] system set in the [`First`] schedule.
 
 This is helpful for performance reasons, but more critically,
 it ensures consistency of behavior across all of the various bits of game logic.
+
+{% callout(type="info") %}
+## Time Versus Time Controls
+This page explains how Bevy sets up and interacts with time across the engine.
+However, it doesn't cover the tools that are provided to help you use time in your games.
+These include timers, stopwatches, system conditions, and even some command options that all rely on time.
+
+If you'd like to read about these tools, please see the [Time Controls page] located in the Control Flow chapter.
+
+[Time Controls page]: /learn/book/control-flow/time-controls
+
+{% end %}
 
 [`Time`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Time.html
 [`Instant::now()`]: https://doc.rust-lang.org/std/time/struct.Instant.html#method.now
@@ -203,153 +215,3 @@ See the [`physics_in_fixed_timestep`] example for a detailed breakdown of how to
 [`Transform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html
 [`RunFixedMainLoopSystems::AfterFixedMainLoop`]: https://docs.rs/bevy/latest/bevy/prelude/enum.RunFixedMainLoopSystems.html#variant.AfterFixedMainLoop
 [`physics_in_fixed_timestep`]: https://github.com/bevyengine/bevy/blob/latest/examples/movement/physics_in_fixed_timestep.rs
-
-## Timers and cooldowns
-
-Delta time is great for physics and animations,
-but what if we want to implement other time-driven gameplay logic?
-We might want to automatically generate cookie clicks every 5 seconds
-or add a 3 second cooldown for our fireball ability.
-
-The simplest of these tools is the [`Timer`].
-Timers in Bevy hold two [`Duration`]s:
-one to store the duration of the timer, and one which stores how much time has been elapsed.
-
-Timers have no inherent logic: they do not update themselves,
-or have any inherent way to add something like an "on completion callbacks".
-They are also not components: you cannot simply add a [`Timer`] to an entity.
-
-Instead, timers are intended to be wrapped inside of simple components,
-which are updated and polled for completion by systems.
-
-```rust,hide_lines=1-2
-# use bevy::prelude::*;
-#
-#[derive(Resource)]
-struct Cookies(u64);
-
-#[derive(Component)]
-struct AutomaticCookieClick {
-    // This should be initialized as a repeating timer
-    // ensuring it automatically resets
-    timer: Timer,
-    resources_gained: u64,
-}
-
-fn automatically_click_cookies(
-    mut cookies: ResMut<Cookies>, 
-    mut query: Query<&mut AutomaticCookieClick>,
-    time: Res<Time>,
-) {
-    let delta_time = time.delta();
-
-    for mut cookie_clicker in query.iter_mut() {
-        cookie_clicker.timer.tick(delta_time);
-        if cookie_clicker.timer.just_finished() {
-            cookies.0 += cookie_clicker.resources_gained;
-        }
-    }
-}
-```
-
-You could write your own cooldown mechanism in a similar way,
-by storing both a `duration` and a `remaining`.
-Tracking each ability as its own entity, using a custom [relationship] to link
-it to the entity with that ability would be an elegant solution,
-as it would allow you to update all cooldowns in a single system.
-
-```rust,hide_lines=1-2
-# use bevy::prelude::*;
-#
-#[derive(Relationship)]
-#[relationship(relationship_target = Abilities)]
-struct AbilityOf(Entity);
-
-#[derive(RelationshipTarget)]
-#[relationship_target(relationship = AbilityOf)]
-struct Abilities(Vec<Entity>);
-
-#[derive(Component)]
-struct Cooldown {
-    duration: Duration,
-    remaining: Duration,
-}
-
-impl Cooldown {
-    fn expend(&mut self) {
-        self.remaining = self.duration;
-    }
-  
-    fn is_ready(&self) -> bool {
-        self.remaining == Duration::ZERO;
-    }
-}
-
-fn update_cooldowns(time: Res<Time>, mut cooldowns: Query<&mut Cooldown>) {
-    let delta_time = time.delta();
-    for mut cooldown in cooldowns.iter_mut(){
-        // We never want our remaining time to become negative
-        cooldown.remaining = cooldown.remaining.saturating_sub(delta_time);
-    }
-}
-```
-
-To trigger a system periodically, the `on_timer` run condition can be very convenient.
-
-```rust,hide_lines=1-7
-# use bevy::prelude::*;
-# #[derive(Component)]
-# struct Building;
-# 
-# impl Building {
-#   fn tick(&mut self) {}
-# }
-
-fn tick_buildings(query: Query<&mut Building>){
-   for mut building in query.iter_mut(){
-      building.tick();
-   }
-}
-
-App::new()
-  .add_systems(Update, tick_buildings.run_if(on_timer(Duration::from_secs(5))));
-```
-
-Timers (and the `on_timer` run condition) can safely be ticked in any schedule.
-When they are in a fixed time schedule, the `Time<Fixed>` delta time will automatically be used instead.
-
-Note that systems run periodically via an `on_timer` run condition are still blocking!
-While it is tempting to use them for very heavy, infrequent tasks (like chunk updating or path finding),
-a naive approach to this will simply result in your game stuttering every few seconds.
-
-Instead, you should either split the work into bite-sized pieces that can safely be completed
-within a single frame, or spawn an async task which you periodically poll for completion.
-
-[`Timer`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
-[`Duration`]: https://doc.rust-lang.org/std/time/struct.Duration.html
-[relationship]: /learn/book/storing-data/relations
-[`on_timer`]: https://docs.rs/bevy/latest/bevy/time/common_conditions/fn.on_timer.html
-
-## Delaying Commands
-
-When developing your game, you might encounter some functionality that you'll want to run at a later point.
-Using [`Commands`] would work for delaying the functionality until after the end of the system, but what if you need to delay it for a particular number of seconds?
-Fortunately we have [`DelayedCommands`], a wrapper over the regular `Commands` struct which will store a queue of commands that will be applied after a specified delay.
-
-Using `DelayedCommands` will look very similar to using the regular `Commands`, although we have to insert the [`.delayed`] method and an amount of time to delay in between our `Commands` struct and the command we want to execute.
-
-```rust
-fn delayed_spawn(mut commands: Commands) {
-    commands.delayed().secs(1.0).spawn(DummyComponent);
-}
-```
-
-`DelayedCommands` can be set using either seconds (using [`.secs`]) or a duration (using [`.duration`]), much like `Timer`s and `Stopwatch`s can.
-However, instead of needing to manually tick our `DelayedCommands`, Bevy will automatically tick them in a system run in the `PreUpdate` schedule.
-All we have to do is provide the amount of time to delay our command by, and Bevy will handle the rest.
-
-[`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Commands.html
-[`DelayedCommands`]: https://docs.rs/bevy/latest/bevy/time/delayed_commands/struct.DelayedCommands.html
-[`.delayed`]: https://docs.rs/bevy/latest/bevy/time/delayed_commands/trait.DelayedCommandsExt.html#tymethod.delayed
-[`.secs`]: https://docs.rs/bevy/latest/bevy/time/struct.DelayedCommands.html#method.secs
-[`.duration`]: https://docs.rs/bevy/latest/bevy/time/struct.DelayedCommands.html#method.duration
