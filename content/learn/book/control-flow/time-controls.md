@@ -22,6 +22,24 @@ Meanwhile, a `Stopwatch` will simply track how much time has elapsed since it wa
 These are two simple tools that can be incredibly helpful, however Bevy provides many more features that can be used to structure your systems and even interact with `Commands`.
 We'll detail those further down this page, but for now let's get a little more familiar with `Timer`s and `Stopwatch`s.
 
+{% callout(type="info") %}
+## Time Versus Time Controls
+This page details the various tools that Bevy provides to interact with time.
+However, this page does not specify how time is set up in Bevy or how you should be using time.
+We also won't go into too much detail when using these tools inside of different schedules or how the outcome of these tools will vary based on what version of time they follow.
+
+To understand how Bevy sets up time and its variants, see the dedicated [Time page] in the Game Loop chapter.
+For more information on schedules, see the [Schedules page], also in the Game Loop chapter.
+It might also be handy to read the [Systems] and [Skipping Systems] pages that are further up in this chapter, as the [System Timer Conditions section] is closely aligned with those pages.
+
+[Time page]: /learn/book/the-game-loop/game-time
+[Systems]: /learn/book/control-flow/systems
+[Skipping Systems]: /learn/book/control-flow/run-conditions
+[Schedules page]: /learn/book/the-game-loop/schedules
+[System Timer Conditions section]: #system-timer-conditions
+
+{% end %}
+
 [`Timer`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
 [`Stopwatch`]: https://docs.rs/bevy/latest/bevy/time/struct.Stopwatch.html
 [`Duration`]: https://doc.rust-lang.org/std/time/struct.Duration.html

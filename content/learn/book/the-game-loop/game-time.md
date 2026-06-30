@@ -19,6 +19,18 @@ during the [`TimeSystem`] system set in the [`First`] schedule.
 This is helpful for performance reasons, but more critically,
 it ensures consistency of behavior across all of the various bits of game logic.
 
+{% callout(type="info") %}
+## Time Versus Time Controls
+This page explains how Bevy sets up and interacts with time across the engine.
+However, it doesn't cover the tools that are provided to help you use time in your games.
+These include timers, stopwatches, system conditions, and even some command options that all rely on time.
+
+If you'd like to read about these tools, please see the [Time Controls page] located in the Control Flow chapter.
+
+[Time Controls page]: /learn/book/control-flow/time-controls
+
+{% end %}
+
 [`Time`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Time.html
 [`Instant::now()`]: https://doc.rust-lang.org/std/time/struct.Instant.html#method.now
 [`TimeSystem`]: https://docs.rs/bevy/latest/bevy/time/struct.TimeSystem.html
