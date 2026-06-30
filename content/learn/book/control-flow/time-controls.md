@@ -31,7 +31,7 @@ We'll detail those further down this page, but for now let's get a little more f
 
 The simplest time-based tool Bevy provides is the [`Timer`].
 They allow you to track a duration of time and determine when it has completed.
-`Timer`s are not components though: you cannot directly add a [`Timer`] to an entity.
+`Timer`s are not components though: you cannot directly add a `Timer` to an entity.
 Instead, `Timer`s are intended to be wrapped inside of simple components.
 
 ```rust
@@ -58,14 +58,15 @@ fn update_ability_timer(mut query: Query<&mut AbilityTimer>) {
 {% callout(type="warning") %}
 ### Consistent Ticking
 Depending on when you `tick` a `Timer`, you might find that the timer is inconsistent or not behaving as intended.
-This might depend on where the [`Schedule`] that the system you call this from is located.
-Systems placed in the [`Update`] schedule will be run every frame, meaning that a `Timer` being ticked with a `Duration` value of 1 second could wind up advancing 60 seconds if your game runs at 60 frames per second.
+This might depend on what [`Schedule`] the `tick`ing system is placed in.
+Systems placed in the [`Update`] schedule will run every frame, meaning that a `Timer` being ticked with a `Duration` value of 1 second could wind up advancing 60 seconds if your game runs at 60 frames per second.
 
 This is known as "time-step", and depending on what you use a `Timer` for, it could severely alter your game.
-The quick solution is to use the time between frames (also known as [delta time]) when determining the amount of time to advance a `Timer` by each `tick`.
+The quick solution is to use the time between frames (also known as [delta time]) as the amount of time to advance a `Timer` by for each `tick`.
 This can be done by accessing the [`Time`] resource as a system parameter and using the [`Time::delta`] method to get the `tick` value.
 
-Sometimes the solution isn't as straightforward though, so we'll also advise you to check out the dedicated [Time page] in the Game Loop chapter to read about how Bevy handles time and sets up different schedules.
+Sometimes the solution isn't as straightforward though.
+To read more about "time-step" and how Bevy handles time, we recommend reading the dedicated [Time page] in the Game Loop chapter.
 
 [delta time]: https://en.wikipedia.org/wiki/Delta_timing
 [Time page]: /learn/book/content/the-game-loop/game-time
@@ -112,7 +113,7 @@ fn ability_timer(ability_query: Query<(&Ability, &AbilityTimer)>) {
 }
 ```
 
-### Adjusting Timers
+### Changing Timer Properties
 
 `Timer`s aren't locked in once they've been started.
 The values you set can be adjusted, and they can even be paused if something should interrupt them.
@@ -122,29 +123,32 @@ For example, if the player pauses the game, you might want to pause any `Timer`s
 [`Timer::pause`] can be done by mutably accessing the component the `Timer` is stored in.
 When the player unpauses, simply call [`Timer::unpause`] to resume the timer from where they left off.
 
-//TODO: Better examples, fix the Timer at least.
 ```rust
-fn pause_timer(mut timer_query: Query<&mut Timer>) {
-    for mut timer in timer_query.iter_mut() {
-        timer.pause();
+fn pause_ability_timers(mut timer_query: Query<&mut AbilityTimer>) {
+    for mut ability_timer in timer_query.iter_mut() {
+        ability_timer.timer.pause();
     }
 }
 
-fn unpause_timer(mut timer_query: Query<&mut Timer>) {
-    for mut timer in timer_query.iter_mut() {
-        timer.unpause();
+fn unpause_ability_timers(mut timer_query: Query<&mut AbilityTimer>) {
+    for mut ability_timer in timer_query.iter_mut() {
+        ability_timer.timer.unpause();
     }
 }
 ```
 
+Calling `pause` on a `Timer` will not increase the elapsed `Duration` while the `Timer` is paused.
 Additionally, we can reduce the amount of code by checking for the pause state of a `Timer`.
 [`Timer::is_paused`] will return a `bool` value based on whether a `Timer` is paused or not.
 
 ```rust
-fn check_timer_pause(mut timer_query: Query<&mut Timer>) {
-    for mut timer in timer_query.iter_mut() {
-        if timer.is_paused() {
-            timer.unpause();
+fn check_ability_timer(
+    mut timer_query: Query<&mut AbilityTimer>,
+    pause_state: Res<GamePauseState>,
+) {
+    for mut ability_timer in timer_query.iter_mut() {
+        if ability_timer.timer.is_paused() && pause_state == false {
+            ability_timer.timer.unpause();
         }
     }
 }
@@ -155,7 +159,9 @@ Let's say the player has unlocked a power up and now their ability starts automa
 Instead of having to create a separate ability timer, just change the `TimerMode` to repeating with [`Timer::set_mode`].
 
 ```rust
-fn on_ability_upgrade(mut ability_upgrade: Single<&mut AbilityTimer, With<AbilityUpgrade>) {
+fn on_ability_upgrade(
+    mut ability_upgrade: Single<&mut AbilityTimer, With<AbilityUpgrade>
+) {
     *ability_upgrade.timer.set_mode(TimerMode::Repeating);
 }
 ```
@@ -173,32 +179,22 @@ fn alter_ability(mut ability_timer: Single<&mut AbilityTimer, With<Ability>>) {
 }
 ```
 
+### Timer Completions
 
-### Finishing Timers
+Once a `Timer` reaches its duration, it's placed in a "finished" state, and will stay "finished" unless it's reset or replaced with a new `Timer`.
+We can check if a `Timer` is "finished" with the [`Timer::is_finished`] method.
+This will return a simple `bool` value indicating whether the `Timer` is finished or not.
 
-
-[`Timer::tick`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.tick
-[`TimerMode`]: https://docs.rs/bevy/latest/bevy/time/enum.TimerMode.html
-[`TimerMode::Once`]: https://docs.rs/bevy/latest/bevy/time/enum.TimerMode.html#variant.Once
-[`TimerMode::Repeating`]: https://docs.rs/bevy/latest/bevy/time/enum.TimerMode.html#variant.Repeating
-[`Timer::elapsed`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.elapsed
-[`Timer::elapsed_secs`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.elapsed_secs
-[`Timer::remaining`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.remaining
-[`Timer::remaining_secs`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.remaining_secs
-[`Timer::pause`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.pause
-[`Timer::unpause`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.unpause
-[`Timer::is_paused`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.is_paused
-[`Timer::set_elapsed`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.set_elapsed
-[`Timer::set_duration`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.set_duration
-
-## Stopwatches
-
-## System Timer Conditions
+As an example, let's look at a Cookie Clicker inspired scenario.
+We want to automatically click a cookie every at set time intervals, which will increase the total number of cookies the player has.
+We'll create an `AutomaticCookieClick` component that contains a `Timer` to track how often the auto click should happen.
 
 ```rust
+// A resource to track how many cookies the player has
 #[derive(Resource)]
 struct Cookies(u64);
 
+// A source of automatic cookie clicks
 #[derive(Component)]
 struct AutomaticCookieClick {
     // This should be initialized as a repeating timer
@@ -207,6 +203,8 @@ struct AutomaticCookieClick {
     resources_gained: u64,
 }
 
+// A system that automatically clicks cookies based
+// on the `AutomaticCookieClick` timer
 fn automatically_click_cookies(
     mut cookies: ResMut<Cookies>, 
     mut query: Query<&mut AutomaticCookieClick>,
@@ -222,6 +220,155 @@ fn automatically_click_cookies(
     }
 }
 ```
+
+There might also be situations where you want to immediately finish the `Timer`.
+Continuing our example, maybe the player wants to click the cookie themselves?
+If we wanted to tie in the player's clicks into the `Timer`, we could use the [`Timer::finish`] method to end the `Timer` and add a cookie.
+
+```rust
+// See if the player has manually clicked a cookie
+fn player_click(
+    mut query: Query<&mut AutomaticCookieClick>,
+    player_input: Res<ButtonInput<MouseButton>>,
+) {
+    if player_input.just_pressed(MouseButton::Left) {
+        for mut cookie_clicker in query.iter_mut() {
+            cookie_clicker.timer.finish();
+        }
+    }
+}
+```
+
+However, we also have two more methods to talk about that can be beneficial depending on the situation.
+[`Timer::almost_finish`] will advance a `Timer` to have 1 nanosecond remaining.
+This can be useful when you need an immediate action that occurs based on a `Timer` without having to wait for the `set_duration` of the timer in the first tick.
+
+We can use this method in our example to ensure that a player's input properly interacts with our `Timer`.
+Unless we specifically arrange the `player_click` system to run before the `automatically_click_cookies` system, there is a chance that the player's input finishes the `Timer` after the `automatically_click_cookies` system checks the `Timer`.
+One way to prevent this is to use [`Timer::almost_finish`] to advance the `Timer`, but not fully complete it.
+This ensures that the `Timer` finish is always detected by the `automatically_click_cookies` system.
+
+```rust
+fn player_click(
+    mut query: Query<&mut AutomaticCookieClick>,
+    player_input: Res<ButtonInput<MouseButton>>,
+) {
+    if player_input.just_pressed(MouseButton::Left) {
+        for mut cookie_clicker in query.iter_mut() {
+            // Change `finish` to `almost_finish`
+            cookie_clicker.timer.almost_finish();
+        }
+    }
+}
+```
+
+Additionally, the [`Timer::times_finished_this_tick`] method will return a `u32` value that represents how many times a `Timer` completed during the last `tick`.
+Remember that each [`Timer::tick`] has to be advanced by a `Duration` value, meaning that it's possible for a `tick` to advance a `Timer` beyond its total length of time.
+However, non-repeating `Timer`s will only ever return a 0 or 1 from this method.
+
+To wrap up our Cookie Clicker example, let's create a boost in the number of cookies gained in a click and use [`Timer::times_finished_this_tick`] to print this out to the player.
+
+```rust
+// A bool value that indicates whether the cookie boost is active
+#[derive(Resource)]
+struct CookieBoost(pub bool);
+
+fn automatically_click_cookies(
+    mut cookies: ResMut<Cookies>, 
+    mut query: Query<&mut AutomaticCookieClick>,
+    time: Res<Time>,
+    boost: Res<CookieBoost>,
+) {
+    let delta_time = time.delta();
+
+    for mut cookie_clicker in query.iter_mut() {
+        if boost.0 {
+            let cookie_boost = 10;
+            cookie_clicker.timer.tick(Duration::from_secs(cookie_boost));
+            if cookie_clicker.timer.just_finished() {
+                cookies.0 += cookie_clicker.resources_gained * cookie_boost;
+                println!("Cookie Explosion! {}x Multiplier!", cookie_boost);
+            }
+        } else {
+            cookie_clicker.timer.tick(delta_time);
+            if cookie_clicker.timer.just_finished() {
+                cookies.0 += cookie_clicker.resources_gained;
+            }
+        }
+    }
+}
+```
+
+[`Timer::tick`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.tick
+[`TimerMode`]: https://docs.rs/bevy/latest/bevy/time/enum.TimerMode.html
+[`TimerMode::Once`]: https://docs.rs/bevy/latest/bevy/time/enum.TimerMode.html#variant.Once
+[`TimerMode::Repeating`]: https://docs.rs/bevy/latest/bevy/time/enum.TimerMode.html#variant.Repeating
+[`Timer::elapsed`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.elapsed
+[`Timer::elapsed_secs`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.elapsed_secs
+[`Timer::remaining`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.remaining
+[`Timer::remaining_secs`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.remaining_secs
+[`Timer::pause`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.pause
+[`Timer::unpause`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.unpause
+[`Timer::is_paused`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.is_paused
+[`Timer::set_elapsed`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.set_elapsed
+[`Timer::set_duration`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.set_duration
+[`Timer::finish`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.finish
+[`Timer::almost_finish`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.almost_finish
+[`Timer::times_finished_this_tick`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.times_finished_this_tick
+[`Timer::is_finished`]: https://docs.rs/bevy/latest/bevy/time/struct.Timer.html#method.is_finished
+
+## Stopwatches
+
+It might appear like [`Timer`]s and [`Stopwatch`]s are two separate tools, however the two are actually closely tied.
+This is because a `Timer` is actually just a `Stopwatch` that is stopped or reset after a specific length of time passes.
+
+With this, using a `Stopwatch` will feel very similar to using a `Timer`.
+A `Stopwatch` still has to be `tick`ed by a `Duration` of time, we can still `pause` a `Stopwatch`, and we're still able to alter the values of a `Stopwatch` using a handful of methods.
+However, we aren't able to see the "remaining" amount of time or "finish" a `Stopwatch`, because there is no duration a `Stopwatch` is constrained by.
+This means you have to be careful when using `Stopwatch`s, since they won't automatically stop unless the containing component is removed or despawned.
+
+```rust
+#[derive(Resource)]
+struct MatchTimeCounter {
+    stopwatch: Stopwatch,
+    ...
+}
+
+// System to create the match timer
+fn create_match_timer(mut commands: Commands) {
+    commands.insert_resource(MatchTimeCounter {
+        stopwatch: Stopwatch::new(),
+        ...
+    });
+}
+
+// System to tick the match timer
+fn tick_match_timer(
+    mut match_time: ResMut<MatchTimeCounter>,
+    time: Res<Time>,
+) {
+    match_time.stopwatch.tick(time.delta());
+}
+
+// System to pause the match timer
+fn pause_match(mut match_time: ResMut<MatchTimeCounter>) {
+    match_time.stopwatch.pause();
+}
+
+// System to end the match after 5 minutes
+fn end_match(
+    mut commands: Commands,
+    mut match_time: ResMut<MatchTimeCounter>
+) {
+    let match_time_length = match_time.stopwatch.elapsed();
+    if match_time_length > Duration::from_mins(5) {
+        commands.remove_resource::<MatchTimeCounter>();
+    }
+}
+
+```
+
+## System Timer Conditions
 
 You could write your own cooldown mechanism in a similar way, by storing both a `duration` and a `remaining`.
 Tracking each ability as its own entity, using a custom [relationship] to link it to the entity with that ability would be an elegant solution, as it would allow you to update all cooldowns in a single system.
@@ -290,7 +437,8 @@ When developing your game, you might encounter some functionality that you'll wa
 Using [`Commands`] would work for delaying the functionality until after the end of the system, but what if you need to delay it for a particular number of seconds?
 Fortunately we have [`DelayedCommands`], a wrapper over the regular `Commands` struct which will store a queue of commands that will be applied after a specified delay.
 
-Using `DelayedCommands` will look very similar to using the regular `Commands`, although we have to insert the [`.delayed`] method and an amount of time to delay in between our `Commands` struct and the command we want to execute.
+Using `DelayedCommands` will look very similar to using the regular `Commands`, although we have to insert the [`Commands::delayed`] method (which converts our `Commands` struct into a `DelayedCommands` wrapper).
+Additionally, we have to specify an amount of time to delay the command we want to execute.
 
 ```rust
 fn delayed_spawn(mut commands: Commands) {
@@ -298,12 +446,12 @@ fn delayed_spawn(mut commands: Commands) {
 }
 ```
 
-`DelayedCommands` can be set using either seconds (using [`.secs`]) or a duration (using [`.duration`]), much like `Timer`s and `Stopwatch`s can.
+`DelayedCommands` can be set using either seconds (using [`DelayedCommands::secs`]) or a duration (using [`DelayedCommands::duration`]), much like `Timer`s and `Stopwatch`s can.
 However, instead of needing to manually tick our `DelayedCommands`, Bevy will automatically tick them in a system run in the `PreUpdate` schedule.
 All we have to do is provide the amount of time to delay our command by, and Bevy will handle the rest.
 
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Commands.html
 [`DelayedCommands`]: https://docs.rs/bevy/latest/bevy/time/delayed_commands/struct.DelayedCommands.html
-[`.delayed`]: https://docs.rs/bevy/latest/bevy/time/delayed_commands/trait.DelayedCommandsExt.html#tymethod.delayed
-[`.secs`]: https://docs.rs/bevy/latest/bevy/time/struct.DelayedCommands.html#method.secs
-[`.duration`]: https://docs.rs/bevy/latest/bevy/time/struct.DelayedCommands.html#method.duration
+[`Commands::delayed`]: https://docs.rs/bevy/latest/bevy/prelude/trait.DelayedCommandsExt.html#tymethod.delayed
+[`DelayedCommands::secs`]: https://docs.rs/bevy/latest/bevy/time/struct.DelayedCommands.html#method.secs
+[`DelayedCommands::duration`]: https://docs.rs/bevy/latest/bevy/time/struct.DelayedCommands.html#method.duration
