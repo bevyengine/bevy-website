@@ -35,11 +35,9 @@ If you can't figure out what a good default value might be, remember that [`Opti
 struct NoGoodDefaultValue(u8);
 
 fn increment_local_system_data(mut local: Local<Option<NoGoodDefaultValue>>){
-    if local.is_none() {
-        *local = Some(NoGoodDefaultValue(0));
-    }
+    let local = local.get_or_insert(NoGoodDefaultValue(0));
     
-    local.as_mut().unwrap().0 += 1;
+    local.0 += 1;
 }
 ```
 
