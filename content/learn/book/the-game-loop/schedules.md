@@ -27,10 +27,10 @@ Each schedule runs at a different point during the life-cycle of a Bevy app, so 
 Let's look at the other schedules provided by Bevy by default.
 When a Bevy [app] starts, it typically executes several schedules in order:
 
-+ [`StateTransition`]: Part of Bevy's [state machine abstraction].
-+ [`PreStartup`]: Library setup which must precede application setup.
-+ [`Startup`]: Setup for the application itself.
-+ [`PostStartup`]: Stuff that must follow application setup.
+1. [`StateTransition`]: Part of Bevy's [state machine abstraction].
+2. [`PreStartup`]: Library setup which must precede application setup.
+3. [`Startup`]: Setup for the application itself.
+4. [`PostStartup`]: Stuff that must follow application setup.
 
 These schedules are run only once, after [plugins] are initialized but before the game loop itself starts.
 As the names imply, they are intended for initial setup tasks.
@@ -41,13 +41,13 @@ Likewise, [`PostStartup`] should be used to react or respond to things the user 
 After the [`PostStartup`] schedule completes, the app shifts into the main game loop.
 The following schedules are then executed in order each "tick":
 
-+ [`First`]: Logic that needs to run before everything else each tick.
-+ [`PreUpdate`]: Library updates that must proceed application updates.
-+ [`StateTransition`]: Part of Bevy's [state machine abstraction].
-+ The [fixed update loop] may run multiple schedules before progressing.
-+ [`Update`]: Updates for the application itself.
-+ [`PostUpdate`]: Library updates that must follow application updates.
-+ [`Last`]: Logic that needs to run after everything else each tick.
+1. [`First`]: Logic that needs to run before everything else each tick.
+2. [`PreUpdate`]: Library updates that must proceed application updates.
+3. [`StateTransition`]: Part of Bevy's [state machine abstraction].
+4. The [fixed update loop] may run multiple schedules before progressing.
+5. [`Update`]: Updates for the application itself.
+6. [`PostUpdate`]: Library updates that must follow application updates.
+7. [`Last`]: Logic that needs to run after everything else each tick.
 
 [`PreUpdate`] and [`PostUpdate`] (like [`PreStartup`] and [`PostStartup`]) allow library code to "sandwich" user code.
 [`First`] and [`Last`] extend this further, allowing running before and after the majority of other logic.
@@ -82,8 +82,6 @@ and then evaluate some complex condition inside of a system to determine if and 
 This can be very helpful for turn-based games, simulations, networked servers and more.
 Bevy itself uses this pattern for both the [`Main`] schedule and our built-in [fixed time] solution.
 
-For even more control over your game loop, read the [custom loops] chapter!
-
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.Schedule.html
 [`StateTransition`]: https://docs.rs/bevy/latest/bevy/state/state/struct.StateTransition.html
 [`PreStartup`]: https://docs.rs/bevy/latest/bevy/app/struct.PreStartup.html
@@ -99,11 +97,10 @@ For even more control over your game loop, read the [custom loops] chapter!
 [app]: /learn/book/the-game-loop/app
 [plugins]: /learn/book/modular-architecture/plugins
 [state machine abstraction]: /learn/book/control-flow/states
-[fixed update loop]: /learn/book/the-game-loop/fixed-time
-[custom loops]: /learn/book/the-game-loop/custom-loops
+[fixed update loop]: /learn/book/the-game-loop/time-and-timers#fixing-your-timestep
 [`ScheduleRunnerPlugin`]: https://docs.rs/bevy/latest/bevy/app/struct.ScheduleRunnerPlugin.html
 [`MinimalPlugins`]: https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html
 [`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
 [`MainScheduleOrder`]: https://docs.rs/bevy/latest/bevy/app/struct.MainScheduleOrder.html
 [`World::run_schedule`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.run_schedule
-[fixed time]: ./fixed-time.md
+[fixed time]: /learn/book/the-game-loop/game-time#frame-rate-independence-and-delta-time

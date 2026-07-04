@@ -20,13 +20,13 @@ Rust allows us to designate "default" features for Bevy, causing them to be auto
 When you call `cargo add bevy`, this creates the following entry in your `Cargo.toml`, which tracks your project's dependencies:
 
 ```toml
-bevy = "0.18"
+bevy = "0.19"
 ```
 
 This is equivalent to:
 
 ```toml
-bevy = { version = "0.18", default-features = true }
+bevy = { version = "0.19", default-features = true }
 
 ```
 
@@ -40,7 +40,7 @@ Features in Rust can only be enabled by various sources, never disabled directly
 To turn Bevy's default features off, you would need to configure your `Cargo.toml` like so:
 
 ```toml
-bevy = { version = "0.18", default-features = false }
+bevy = { version = "0.19", default-features = false }
 ```
 
 In almost every published Bevy project, you should set `default-features = false`, and instead opt in to only the features you need.
@@ -174,4 +174,3 @@ For large or sophisticated teams, you may prefer to use an [alternate crate regi
 allowing you to coordinate the versions of crates you are using across multiple projects.
 
 [alternate crate registry]: https://doc.rust-lang.org/cargo/reference/registries.html
-

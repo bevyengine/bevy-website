@@ -133,7 +133,7 @@ cargo add bevy
   edition = "2024"
 
   [dependencies]
-  bevy = "0.18.1" # make sure this is the latest version
+  bevy = "0.19" # make sure this is the latest version
   ```
 
 </details>
@@ -375,6 +375,7 @@ This section explains how to speed up iterative compiles: the amount of time it 
   Notably, Wasm builds do not work yet.
 
   When shipping your game, you should still compile it with LLVM.
+
 </details>
 
 <details>

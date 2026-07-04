@@ -26,7 +26,7 @@ If you might need multiple instances, then consider using [entities and componen
 Bevy uses resources for many of the built-in features of the engine.
 For example, Bevy's [`AssetServer`] is a resource.
 
-[entities and components]: ../entities-components
+[entities and components]: /learn/book/storing-data/entities-components
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`AssetServer`]: https://docs.rs/bevy/latest/bevy/asset/struct.AssetServer.html
 

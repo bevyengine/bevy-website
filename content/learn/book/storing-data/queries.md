@@ -10,7 +10,7 @@ Queries are your primary tool for interacting with the Bevy world, allowing you 
 Queries create a filtered "view" into the metaphorical database that makes up our ECS.
 With that view you can iterate over the requested components, ask what the "row number" (`Entity`) is for each element, or fetch the matching components for a particular `Entity` value.
 
-We briefly covered queries in our [introduction](../intro/) to Bevy, so make sure to review that section if you haven't read it yet.
+We briefly covered queries in our [introduction](/learn/book/intro/) to Bevy, so make sure to review that section if you haven't read it yet.
 If you're entirely brand new to Bevy or ECS, we would recommend you to start there before continuing on this page.
 
 ## Anatomy of a Query
@@ -156,7 +156,7 @@ You can avoid this by ensuring that your access is provably disjoint: [`Without`
 If you run into this you'll be pointed to the [B0002] error page, which has advice on how to fix and avoid this problem.
 
 [mutable aliasing]: https://doc.rust-lang.org/rust-by-example/scope/borrow/alias.html
-[`Access`]: https://dev-docs.bevy.org/bevy/ecs/query/struct.Access.html
+[`Access`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Access.html
 [`Without`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Without.html
 [B0002]: https://bevy.org/learn/errors/b0002/
 {% end %}
@@ -170,8 +170,8 @@ This [smart pointer] wraps a `&mut T` and allows Bevy to automatically detect ch
 While this is talked about in more depth in the chapter on [change detection], it's helpful to know that [`Changed`] and [`Added`] are both query filters.
 
 [reference]: https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html
-[query item]: https://dev-docs.bevy.org/bevy/ecs/query/trait.QueryData.html#associatedtype.Item
-[`Mut<Life>`]: https://dev-docs.bevy.org/bevy/ecs/change_detection/struct.Mut.html
+[query item]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.QueryData.html#associatedtype.Item
+[`Mut<Life>`]: https://docs.rs/bevy/latest/bevy/ecs/change_detection/struct.Mut.html
 [smart pointer]: https://doc.rust-lang.org/book/ch15-00-smart-pointers.html
 [change detection]: /learn/book/control-flow/change-detection
 [`Changed`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html

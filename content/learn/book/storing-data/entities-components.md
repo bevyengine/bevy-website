@@ -53,7 +53,7 @@ fn spawning_system(mut commands: Commands){
 }
 ```
 
-[exclusive system]: ../../control-flow/systems/#exclusive-systems
+[exclusive system]: /learn/book/control-flow/systems/#exclusive-systems
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
@@ -71,7 +71,7 @@ To make a basic cube, you'd probably need to add:
 - A [`StandardMaterial`] to define how that mesh should be rendered (in practice, actually a [`Handle`] to a [`StandardMaterial`])
 - Etc.
 
-[introduction section on components]: ../../intro/the-three-letters#the-c-components
+[introduction section on components]: /learn/book/intro/the-three-letters#the-c-components
 [`Transform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html
 [`Mesh`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Mesh.html
 [`Handle`]: https://docs.rs/bevy/latest/bevy/asset/enum.Handle.html

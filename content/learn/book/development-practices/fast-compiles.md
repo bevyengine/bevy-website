@@ -117,6 +117,14 @@ Notably, Wasm builds do not work yet.
 
 When shipping your game, you should still compile it with LLVM.
 
+{% callout(type="caution") %}
+Enabling cranelift is known to break local variable inspection while debugging.
+You can only inspect statics.
+This is caused by the fact that `rustc_codegen_cranelift` is missing DWARF support.
+See [`cranelift #166](https://github.com/rust-lang/rustc_codegen_cranelift/issues/166) for more information.
+{% end %}
+
+
 ## Generic Sharing
 
 Allows crates to share monomorphized generic code instead of duplicating it.
@@ -162,4 +170,4 @@ To enable `sccache`, install it and update your Cargo configuration.
 More code means more time to compile.
 If there are parts of Bevy (or your other dependencies) that you simply don't need,
 you can improve compilation times substantially by removing them.
-For advice on how to navigate Bevy's collection of feature flags, see [Compiling Less Code](../releasing-projects/compiling-less-code.md).
+For advice on how to navigate Bevy's collection of feature flags, see [Compiling Less Code](/learn/book/releasing-projects/compiling-less-code).
