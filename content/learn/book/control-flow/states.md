@@ -109,7 +109,7 @@ All state transitions occur during the [`StateTransition`] schedule.
 
 The `StateTransition` schedule itself runs at two points:
 
-1. **During app startup**, after [`PreStartup`] but before [`Startup`]. This is when your initial states' [`OnEnter`] systems run.
+1. **During app startup**, before [`PreStartup`]. This is when your initial states' [`OnEnter`] systems run.
 2. **Each tick of the game loop**, after [`PreUpdate`] but before the fixed update loop and [`Update`].
 
 When you set a new state with [`NextState<T>`], the transition doesn't happen immediately.
