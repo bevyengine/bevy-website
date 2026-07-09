@@ -185,7 +185,7 @@ See the section on [local system state] for more details.
 
 Systems are usually repeatedly run throughout the life of your application.
 We are able to control when systems run and how systems are ordered by placing them into a [`Schedule`].
-The [`App::add_system`] method is the simplest way to do this, allowing us to specify a `System` that we want to insert into a specific `Schedule` running in our application.
+The [`App::add_systems`] method is the simplest way to do this, allowing us to specify a `System` that we want to insert into a specific `Schedule` running in our application.
 
 ```rust
 fn main() {
@@ -207,7 +207,7 @@ You can read more about schedules in the dedicated [Schedules section], but for 
 [Schedules section]: /learn/book/the-game-loop/schedules
 
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/struct.Schedule.html
-[`App::add_system`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.add_systems
+[`App::add_systems`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.add_systems
 [`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
 [`Fixed`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Fixed.html
 
