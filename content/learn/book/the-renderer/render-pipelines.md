@@ -115,7 +115,7 @@ To help us out, the Render `SubApp` does a bit of cleaning once a frame has fini
 
 We don't want data that isn't needed sticking around when we could use that space for new textures or meshes.
 However, we also don't want to completely wipe the Render `SubApp`.
-If we have entities and assets that persist in the Main `SubApp`, it doesn't make sense to keep copying them over every frame.
+If there are entities and assets that persist in the Main `SubApp`, it doesn't make sense to keep copying them over every frame.
 Therefore, Bevy synchronizes the Render `SubApp` to the current state of the Main `SubApp`.
 
 Remember [`RenderEntity`] and [`MainEntity`]?
