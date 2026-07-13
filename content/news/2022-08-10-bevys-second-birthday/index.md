@@ -211,4 +211,4 @@ This year is going to be a big one for Bevy. I'm looking forward to spending it 
 
 \- [@cart](https://github.com/cart/)
 
-<img src="/assets/bevy_logo_dark.svg" style="height: 4.0rem; margin-top: 1.5rem" class="invertable" />
+<img src="/assets/bevy_logo_dark.svg" alt="The Bevy logo" style="height: 4.0rem; margin-top: 1.5rem" class="invertable" />
