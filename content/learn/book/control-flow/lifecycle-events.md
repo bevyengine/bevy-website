@@ -10,7 +10,7 @@ In the previous chapter we learned about `Events` and how they allow us to run c
 We can extend this concept by using **Lifecycle Events** to run code in response to altering a `Component` within an `Entity`.
 Lifecycle events are still `Events`, but specifically they are `EntityEvents` meaning that they will have an `event_target` which determines the `Entity` being targeted.
 
-Within Bevy we currently have access to five distinct lifecycle events: `Add`, `Insert`, `Replace`, `Remove`, and `Despawn`.
+Within Bevy we currently have access to five distinct lifecycle events: `Add`, `Insert`, `Discard`, `Remove`, and `Despawn`.
 We can split these into two categories: lifecycle events that trigger when a `Component` is *added* to an `Entity`, and lifecycle events that trigger when a `Component` is *removed* from an `Entity`.
 
 On adding a `Component`:
@@ -20,17 +20,17 @@ On adding a `Component`:
 
 On removing/altering a `Component`:
 
-- [`Replace`] triggers when a component is removed from an `Entity`, *regardless of if it is replaced with a new value*.
+- [`Discard`] triggers when a component is removed from an `Entity`, *regardless of if it is replaced with a new value*.
 - [`Remove`] triggers when a component is removed from an `Entity` *and not replaced*. (This also happens before the component is actually removed.)
 - [`Despawn`] triggered on *each* component on an `Entity` when the `Entity` is *despawned*.
 
 It's also important to know that lifecycle events have an order in which they are evaluated.
 When both `Add` and `Insert` occur, `Add` hooks are evaluated before `Insert` hooks.
-`Replace` hooks are evaluated before `Remove` hooks, and `Despawn` hooks are evaluated last.
+`Discard` hooks are evaluated before `Remove` hooks, and `Despawn` hooks are evaluated last.
 
 [`Add`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Add.html
 [`Insert`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Insert.html
-[`Replace`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Replace.html
+[`Discard`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Discard.html
 [`Remove`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Remove.html
 [`Despawn`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Despawn.html
 
@@ -47,7 +47,7 @@ pub struct MyComponent;
 // This method adds the ComponentHook to `MyComponent`, and will
 // run its code whenever `MyComponent` is added to an Entity.
 world.register_component_hooks::<MyComponent>().on_add(|add| {
-    println!("MyComponent added to {}", add.entity);
+println!("MyComponent added to {}", add.entity);
 });
 ```
 
@@ -121,7 +121,7 @@ pub struct MyComponent;
 
 // This observer will trigger whenever `MyComponent` is added to any Entity. 
 world.add_observer(|add: On<Add, MyComponent>| {
-    println!("MyComponent added to {}", add.entity);
+println!("MyComponent added to {}", add.entity);
 });
 ```
 
@@ -141,14 +141,14 @@ struct PlayerName(pub String);
 
 // Then we add an Observer that will watch for `PlayerName` being added.
 commands.add_observer(|print_name: On<Add, PlayerName>, player_query: <&PlayerName>| {
-    let new_name = player_query.get(print_name.entity).unwrap().0;
-    println!("Spawned: {}", new_name);
+let new_name = player_query.get(print_name.entity).unwrap().0;
+println!("Spawned: {}", new_name);
 });
 
 commands.spawn((
-    PlayerName("Player1".to_string()),
-    Transform::from_xyz(x: 0.0, y: 0.0, z: 0.0),
-    Visibility::Visible,
+PlayerName("Player1".to_string()),
+Transform::from_xyz(x: 0.0, y: 0.0, z: 0.0),
+Visibility::Visible,
 ));
 ```
 
@@ -175,9 +175,9 @@ fn print_player_name(mut world: DeferredWorld, player_name: HookContext) {
 
 // Now we can spawn in our Entity with the `PlayerName` without needing an Observer.
 commands.spawn((
-    PlayerName("Player1".to_string()),
-    Transform::from_xyz(x: 0.0, y: 0.0, z: 0.0),
-    Visibility::Visible,
+PlayerName("Player1".to_string()),
+Transform::from_xyz(x: 0.0, y: 0.0, z: 0.0),
+Visibility::Visible,
 ));
 ```
 
@@ -190,9 +190,9 @@ struct PlayerName(pub String);
 
 // Tell the `World` to run this code whenever a `PlayerName` component is added to an Entity.
 world.register_component_hooks::<PlayerName>().on_add(|mut world, context| {
-    // Find the PlayerName component on the ComponentHook entity.
-    let new_name = world.get::<PlayerName>(context.entity).unwrap().0;
-    println!("Spawned: {}", new_name);
+// Find the PlayerName component on the ComponentHook entity.
+let new_name = world.get::<PlayerName>(context.entity).unwrap().0;
+println!("Spawned: {}", new_name);
 });
 ```
 
@@ -221,9 +221,9 @@ fn react_on_removal(mut removed: RemovedComponents<MyComponent>) {
 // `MyComponent` (if it exists). This is because the `on_remove` ComponentHook 
 // runs *before* `MyComponent` is actually removed from the `Entity`. 
 world.register_component_hooks::<MyComponent>().on_remove(|mut world, remove| {
-    // Access the value within `MyComponent` before it's removed.
-    let value = world.get::<MyComponent>(remove.entity).unwrap()
-    println!("MyComponent with value {} removed from {}", value, remove.entity);
+// Access the value within `MyComponent` before it's removed.
+let value = world.get::<MyComponent>(remove.entity).unwrap()
+println!("MyComponent with value {} removed from {}", value, remove.entity);
 });
 ```
 
