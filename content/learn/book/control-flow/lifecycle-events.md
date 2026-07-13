@@ -47,7 +47,7 @@ pub struct MyComponent;
 // This method adds the ComponentHook to `MyComponent`, and will
 // run its code whenever `MyComponent` is added to an Entity.
 world.register_component_hooks::<MyComponent>().on_add(|add| {
-println!("MyComponent added to {}", add.entity);
+    println!("MyComponent added to {}", add.entity);
 });
 ```
 
@@ -121,7 +121,7 @@ pub struct MyComponent;
 
 // This observer will trigger whenever `MyComponent` is added to any Entity. 
 world.add_observer(|add: On<Add, MyComponent>| {
-println!("MyComponent added to {}", add.entity);
+    println!("MyComponent added to {}", add.entity);
 });
 ```
 
@@ -141,14 +141,14 @@ struct PlayerName(pub String);
 
 // Then we add an Observer that will watch for `PlayerName` being added.
 commands.add_observer(|print_name: On<Add, PlayerName>, player_query: <&PlayerName>| {
-let new_name = player_query.get(print_name.entity).unwrap().0;
-println!("Spawned: {}", new_name);
+    let new_name = player_query.get(print_name.entity).unwrap().0;
+    println!("Spawned: {}", new_name);
 });
 
 commands.spawn((
-PlayerName("Player1".to_string()),
-Transform::from_xyz(x: 0.0, y: 0.0, z: 0.0),
-Visibility::Visible,
+    PlayerName("Player1".to_string()),
+    Transform::from_xyz(0.0, 0.0, 0.0),
+    Visibility::Visible,
 ));
 ```
 
@@ -175,9 +175,9 @@ fn print_player_name(mut world: DeferredWorld, player_name: HookContext) {
 
 // Now we can spawn in our Entity with the `PlayerName` without needing an Observer.
 commands.spawn((
-PlayerName("Player1".to_string()),
-Transform::from_xyz(x: 0.0, y: 0.0, z: 0.0),
-Visibility::Visible,
+    PlayerName("Player1".to_string()),
+    Transform::from_xyz(0.0, 0.0, 0.0),
+    Visibility::Visible,
 ));
 ```
 
@@ -190,9 +190,9 @@ struct PlayerName(pub String);
 
 // Tell the `World` to run this code whenever a `PlayerName` component is added to an Entity.
 world.register_component_hooks::<PlayerName>().on_add(|mut world, context| {
-// Find the PlayerName component on the ComponentHook entity.
-let new_name = world.get::<PlayerName>(context.entity).unwrap().0;
-println!("Spawned: {}", new_name);
+    // Find the PlayerName component on the ComponentHook entity.
+    let new_name = world.get::<PlayerName>(context.entity).unwrap().0;
+    println!("Spawned: {}", new_name);
 });
 ```
 
@@ -221,9 +221,9 @@ fn react_on_removal(mut removed: RemovedComponents<MyComponent>) {
 // `MyComponent` (if it exists). This is because the `on_remove` ComponentHook 
 // runs *before* `MyComponent` is actually removed from the `Entity`. 
 world.register_component_hooks::<MyComponent>().on_remove(|mut world, remove| {
-// Access the value within `MyComponent` before it's removed.
-let value = world.get::<MyComponent>(remove.entity).unwrap()
-println!("MyComponent with value {} removed from {}", value, remove.entity);
+    // Access the value within `MyComponent` before it's removed.
+    let value = world.get::<MyComponent>(remove.entity).unwrap()
+    println!("MyComponent with value {} removed from {}", value, remove.entity);
 });
 ```
 
