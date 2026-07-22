@@ -7,6 +7,8 @@ weight = 1
 status = 'hidden'
 +++
 
+## What Is Bevy?
+
 Bevy is a modern, ECS (Entity Component System)-first game engine written in Rust. We aim to be:
 
 - **Capable:** Offer a complete 2D and 3D feature set.
@@ -14,8 +16,6 @@ Bevy is a modern, ECS (Entity Component System)-first game engine written in Rus
 - **Modular:** Use only what you need. Replace what you don't like.
 - **Fast:** App logic should run quickly, and when possible, in parallel.
 - **Productive:** Short compile times and fast refreshes keep iteration tight.
-
-Bevy is dual-licensed under [MIT](https://github.com/bevyengine/bevy/blob/main/LICENSE-MIT) and [Apache v2](https://github.com/bevyengine/bevy/blob/main/LICENSE-APACHE), and governed by the [Bevy Foundation](https://bevyengine.org/foundation/), a 501(c)(3) nonprofit. It is built in the open by hundreds of [community contributors](https://bevyengine.org/learn/contribute/introduction).
 
 In practice, this means:
 
@@ -27,7 +27,16 @@ In practice, this means:
 This can feel unusual at first, especially if you are coming from object-oriented engines,
 but don't be afraid: it'll click soon enough.
 
-## Reading This Book
+## Who Builds Bevy?
+
+Bevy is built in the open by hundreds of [community contributors](https://bevyengine.org/learn/contribute/introduction).
+No one person or corporation owns it, and thus no single entity controls how Bevy can be used.
+It's dual-licensed under both the [MIT](https://github.com/bevyengine/bevy/blob/main/LICENSE-MIT) and [Apache v2](https://github.com/bevyengine/bevy/blob/main/LICENSE-APACHE) licenses, giving users the choice of determining which license best fits their use case.
+
+The [Bevy Foundation](https://bevyengine.org/foundation/) is a 501(c)(3) nonprofit that is responsible for promoting, protecting, and advancing the Bevy engine.
+It exists to both develop Bevy and help people learn how to use it.
+
+## What Is the Bevy Book? 
 
 This book is [explanatory documentation](https://diataxis.fr/) covering Bevy's core ideas.
 You can read it cover to cover, or skip ahead to the sections that interest you.
