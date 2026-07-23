@@ -42,7 +42,7 @@ After the [`PostStartup`] schedule completes, the app shifts into the main game 
 The following schedules are then executed in order each "tick":
 
 1. [`First`]: Logic that needs to run before everything else each tick.
-2. [`PreUpdate`]: Library updates that must proceed application updates.
+2. [`PreUpdate`]: Library updates that must precede application updates.
 3. [`StateTransition`]: Part of Bevy's [state machine abstraction].
 4. The [fixed update loop] may run multiple schedules before progressing.
 5. [`Update`]: Updates for the application itself.
