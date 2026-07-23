@@ -131,7 +131,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./generate_assets.sh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: generated-assets
           path: content/assets
@@ -158,7 +158,7 @@ jobs:
           cd generate-errors &&
           ./generate_errors.sh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: generated-errors
           path: content/learn/errors
@@ -179,13 +179,13 @@ jobs:
           cd generate-wasm-examples &&
           ./generate_wasm_examples.sh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: generated-wasm-examples
           path: content/examples
           retention-days: 1
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: generated-wasm-examples-webgpu
           path: content/examples-webgpu
@@ -212,7 +212,7 @@ jobs:
           cd generate-community &&
           ./generate_community.sh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: generated-community
           path: content/community/people
