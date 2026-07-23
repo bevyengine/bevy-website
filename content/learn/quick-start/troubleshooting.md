@@ -68,7 +68,8 @@ Since you cannot specify two dependencies with the same name, and since cargo do
 dependency:
 
 ```toml
-# under the [dependencies] section of `Cargo.toml`
+# in `Cargo.toml`:
+[target.'cfg(target_arch = "wasm32")'.dependencies]
 getrandom_a = { package = "getrandom", version = "0.3.4", features = ["wasm_js"] }
 getrandom_b = { package = "getrandom", version = "0.4.2", features = ["wasm_js"] }
 ```
