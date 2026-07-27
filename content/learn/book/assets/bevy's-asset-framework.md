@@ -16,9 +16,9 @@ This is handled by the [`AssetServer`], which handles the complex process of tur
 The second point means that we really don't want to be storing multiple copies of the same asset: RAM and VRAM usage is often a critical limitation for game performance.
 
 In Bevy, the single, authoritative version of every asset of a type `A` is stored in a matching resource: [`Assets<A>`].
-3D objects are stores in `Assets<Mesh>`, images are stored in `Assets<Image>`, fonts are stored in `Assets<Font>`, and so on for each type that implements the [`Asset`] trait.
+3D objects are stored in `Assets<Mesh>`, images are stored in `Assets<Image>`, fonts are stored in `Assets<Font>`, and so on for each type that implements the [`Asset`] trait.
 
-When we want to use these assets in our game, we store a [`Handle<A>`] within the relevant component that references the store asset data.
+When we want to use these assets in our game, we store a [`Handle<A>`] within the relevant component that references the stored asset data.
 This means that components like [`Mesh3d`] or [`Sprite`] aren't actually storing the asset data themselves; they're just storing a reference to it.
 
 {% callout(type="info") %}
@@ -31,7 +31,7 @@ these calls are deduplicated by [`AssetPath`].
 
 Various systems then read these component-storing handles, look up the asset they're pointing to, and then use that information to do things like "render them" or "determine collisions".
 
-This explanation serves as an excellent mental model for the core data flow of assets in Bevy. 
+This explanation serves as an excellent mental model for the core data flow of assets in Bevy.
 However, there are still a few subtleties that are worth getting into in this chapter, like how to mutate assets and the fact that handles are reference counted.
 
 But before we get into that, let's load our first assets!
