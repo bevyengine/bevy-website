@@ -75,7 +75,7 @@ Cameras are the gate-keepers of Bevy's renderer.
 If something isn't viewed by a `Camera`, then the renderer won't try to display it.
 That doesn't mean that it will be ignored though.
 As we saw in the [Pipelined Rendering page](/learn/book/the-renderer/render-pipelines), Bevy creates the draw calls (the instructions for how to render the frame) in the "Render" step, which occurs after the data is copied into the Render `World` in the "Extract" step.
-This is why the "Prepare & Queue" step occurs in-between "Extract" and "Render": we need each `Camera` to figure out what actually needs to be rendered.
+This is why the "Prepare & Queue" step occurs in-between: we use each `Camera` to figure out what actually needs to be rendered.
 
 Bevy performs [frustum culling](https://en.wikipedia.org/wiki/Hidden-surface_determination#Viewing-frustum_culling) on the supplied data to see what is actually visible to each `Camera`.
 Draw calls are then dispatched for the entities that can be seen, while those that can't are skipped.
@@ -86,17 +86,17 @@ If desired, you can fully turn a `Camera` off to prevent rendering what it sees,
 You can use this functionality to enable a large number of features, like enabling split-screen using two separate `Camera`s that each have a [`RenderTarget`] for one half of the display screen.
 Or, you could create Portal-like objects by setting the `RenderTarget` of a `Camera` to a texture that is then displayed on an object in the world.
 
-### 2D & 3D Cameras
+### 2D & 3D Rendering
 
 Like we mentioned above, you have to specify whether you want a [`Camera2d`] or a [`Camera3d`] when creating a camera entity.
 Adding this indicates that the camera entity should be included in the [rendering pipeline](/learn/book/the-renderer/render-pipelines) when a render `Schedule` runs.
-Specifically, `Camera2d` includes a `Camera` in the [`Core2d`] render schedule, while `Camera3d` includes it in the [`Core3d`] schedule.
-Forgetting to include one of these means that the renderer doesn't know to use that camera entity! 
+Specifically, `Camera2d` will be included in the [`Core2d`] render schedule, while `Camera3d` will be included in the [`Core3d`] schedule.
 
 Alternatively, you can specify a custom [`CameraRenderGraph`] if you have a custom render schedule label.
 
 [`Core2d`]: https://docs.rs/bevy/latest/bevy/core_pipeline/struct.Core2d.html
 [`Core3d`]: https://docs.rs/bevy/latest/bevy/core_pipeline/struct.Core3d.html
+[`CameraRenderGraph`]: https://docs.rs/bevy/latest/bevy/render/camera/struct.CameraRenderGraph.html
 
 ## Render Targets
 
@@ -127,7 +127,8 @@ To see an example of this, we'd recommend checking out the [Custom Projection ex
 [`OrthographicProjection`]: https://docs.rs/bevy/latest/bevy/prelude/struct.PerspectiveProjection.html
 [`PerspectiveProjection`]: https://docs.rs/bevy/latest/bevy/prelude/struct.PerspectiveProjection.html
 [`CustomProjection`]: https://docs.rs/bevy/latest/bevy/camera/struct.CustomProjection.html
-[`Projection::custom()]: https://docs.rs/bevy/latest/bevy/camera/enum.Projection.html#method.custom
+[`CameraProjection`]: https://docs.rs/bevy/latest/bevy/camera/trait.CameraProjection.html
+[`Projection::custom()`]: https://docs.rs/bevy/latest/bevy/camera/enum.Projection.html#method.custom
 [`CameraProjection::get_clip_from_view()`]: https://docs.rs/bevy/latest/bevy/camera/trait.CameraProjection.html#tymethod.get_clip_from_view
 [`CameraProjection::update()`]: https://docs.rs/bevy/latest/bevy/camera/trait.CameraProjection.html#tymethod.update
 [`CameraProjection::far()`]: https://docs.rs/bevy/latest/bevy/camera/trait.CameraProjection.html#tymethod.far
