@@ -17,7 +17,7 @@ Bevy uses a [`Camera`] component to add in the basic camera functionality.
 Each `Camera` is a struct containing several fields for altering the camera's view properties, like sub views, ordering, and even a toggle for enabling or disabling the camera.
 However, a `Camera` component doesn't contain enough information on it's own.
 We have to go one step further and specify whether we want a 2D camera ([`Camera2d`]), or a 3D camera ([`Camera3d`]).
-Doing this tells the renderer how to output the camera's view, since 2D games usually look a bit differently than 3D games do.
+Doing this tells the renderer how to output the camera's view, since both require different render pipelines to output their images.
 
 ```rust
 // Create a new entity with a 2D camera.
@@ -107,11 +107,17 @@ For example, the [`RenderTarget::Image`] variant holds an [`ImageRenderTarget`] 
 It's likely you'll use the [`RenderTarget::Window`] variant the most, as this allows us to render the camera's view onto a user's desktop via a window.
 To do this, the variant requires a [`WindowRef`] enum specifying either the system's primary window, or a specific `Entity` id that represents an alternate window.
 
+If `RenderTarget` describes the destination, then a [`Viewport`] describes where the rendered view goes in that destination.
+Every `Camera` contains a [`Viewport`] struct that defines the actual area within a `RenderTarget` that the `Camera` can render to.
+For example, if the player is playing in windowed mode (i.e. the game window doesn't take up the entire screen), then the `Viewport` represents the area of the screen that is being drawn to.
+Or, if you want to write multiple camera views to a single [`Image`] asset, you could specify the `Viewport` for each `Camera` to take up a specified section of the final `Image`.
+
 [`RenderTarget::Image`]: https://docs.rs/bevy/latest/bevy/camera/enum.RenderTarget.html#variant.Image
 [`ImageRenderTarget`]: https://docs.rs/bevy/latest/bevy/camera/struct.ImageRenderTarget.html
 [`Image`]: https://docs.rs/bevy/latest/bevy/image/struct.Image.html
 [`RenderTarget::Window`]: https://docs.rs/bevy/latest/bevy/camera/enum.RenderTarget.html#variant.Window
 [`WindowRef`]: https://docs.rs/bevy/latest/bevy/window/enum.WindowRef.html
+[`Viewport`]: https://docs.rs/bevy/latest/bevy/camera/struct.Viewport.html
 
 ## Projections
 
@@ -170,3 +176,14 @@ This ensures that the player experiences the game how they want without sacrific
 [`RenderLayers`]: https://docs.rs/bevy/latest/bevy/camera/visibility/struct.RenderLayers.html
 
 ## UI in Cameras
+
+`Camera` independence extends to UI elements as well.
+Each camera can have its own UI root, which will render according to the camera's settings.
+If there is only one `Camera` in the `World`, then no configuration is required.
+Simply spawn your `Camera2d` or `Camera3d` and your UI elements will be displayed within the camera's [`Viewport`].
+
+Once you start using multiple cameras, you can use the [`UiTargetCamera`] component to indicate a specific camera to render the UI to.
+`UiTargetCamera` is a wrapper around an `Entity` id value for a `Camera` entity.
+Add it to the entity containing the UI elements and your UI will be rendered to the `Camera`s [`RenderTarget`] while also respecting the `Camera`s `Viewport` and scale.
+
+[`UiTargetCamera`]: https://docs.rs/bevy/latest/bevy/prelude/struct.UiTargetCamera.html
