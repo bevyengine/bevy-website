@@ -9,10 +9,9 @@ Making games requires a lot of different parts: assets to display, mechanics to 
 You can put a lot of work into hand-crafting these things in order to get them looking just the way you want them to.
 Yet, you may wind up wondering: how are all of these things actually displayed to the person playing the game?
 
-The simple answer is that the player is looking through a **camera** that displays what's happening inside your game.
-The long answer is that the player looks at their screen which displays an image taken from a camera placed in your game.
+The long-winded answer is that the player looks at their screen which displays an image taken by a **camera** that is placed in your game.
+But to make it simpler: a camera shows a specific view of what's happening in your game.
 A camera could see over a character's shoulder, hover over top of the game world, or even be placed at eye level to show a first-person perspective.
-Basically, a camera shows a specific view of what's happening in your game.
 
 Bevy uses a [`Camera`] component to add in the basic camera functionality.
 Each `Camera` is a struct containing several fields for altering the camera's view properties, like sub views, ordering, and even a toggle for enabling or disabling the camera.
@@ -43,7 +42,7 @@ fn spawn_3d_camera(mut commands: Commands) {
     commands.spawn((
         Camera3d::default(),
         RenderTarget::Window(WindowRef::Primary),
-        Projection::Perspective,
+        Projection::Perspective(PerspectiveProjection::default()),
         Transform::from_xyz(0.0, 0.0, 5.0),
     ));
 }
@@ -81,10 +80,10 @@ Bevy performs [frustum culling](https://en.wikipedia.org/wiki/Hidden-surface_det
 Draw calls are then dispatched for the entities that can be seen, while those that can't are skipped.
 Every `Camera` is evaluated separately, meaning that one `Camera` isn't dependent on another. 
 You can use multiple cameras in your game and not fear one influencing or disturbing the other.
-If desired, you can fully turn a `Camera` off to prevent rendering what it sees, change individual `Camera` settings, or alter the order that each `Camera` is rendered in and only apply those changes to specific `Camera`s.
+If desired, you can turn a `Camera` off to prevent rendering what it sees, change individual `Camera` settings to alter the look of its rendered image, or alter the order that each `Camera` is rendered in.
 
 You can use this functionality to enable a large number of features, like enabling split-screen using two separate `Camera`s that each have a [`RenderTarget`] for one half of the display screen.
-Or, you could create Portal-like objects by setting the `RenderTarget` of a `Camera` to a texture that is then displayed on an object in the world.
+Or, you could create Portal-like objects by setting the `RenderTarget` of a `Camera` to an [`Image`] handle that is then used for an object in the `World`.
 
 ### 2D & 3D Rendering
 
@@ -100,25 +99,38 @@ Alternatively, you can specify a custom [`CameraRenderGraph`] if you have a cust
 
 ## Render Targets
 
+The point of a camera is to view what it sees, which means we need a "target" that the camera view is sent to.
+In Bevy, we refer to this as a [`RenderTarget`], which is an `enum` that describes what "target" the camera view is going to be rendered to.
+Each `RenderTarget` variant holds information about the target destination.
+For example, the [`RenderTarget::Image`] variant holds an [`ImageRenderTarget`] struct, which allows you to write a camera's view into an [`Image`] asset.
 
+It's likely you'll use the [`RenderTarget::Window`] variant the most, as this allows us to render the camera's view onto a user's desktop via a window.
+To do this, the variant requires a [`WindowRef`] enum specifying either the system's primary window, or a specific `Entity` id that represents an alternate window.
+
+[`RenderTarget::Image`]: https://docs.rs/bevy/latest/bevy/camera/enum.RenderTarget.html#variant.Image
+[`ImageRenderTarget`]: https://docs.rs/bevy/latest/bevy/camera/struct.ImageRenderTarget.html
+[`Image`]: https://docs.rs/bevy/latest/bevy/image/struct.Image.html
+[`RenderTarget::Window`]: https://docs.rs/bevy/latest/bevy/camera/enum.RenderTarget.html#variant.Window
+[`WindowRef`]: https://docs.rs/bevy/latest/bevy/window/enum.WindowRef.html
 
 ## Projections
 
-Since each `Camera` is independent of any others in a scene, it's important to know what type of image each `Camera` should display.
-A fundamental part of this is a camera's [`Projection`].
-A projection describes how objects in a game should be translated onto a screen.
-Specifically, each projection is a 4x4 matrix that transforms points from view space (where the `Camera` is looking) into clip space (the screen, or portion of the screen, that is being viewed).
+It's important to know how the images produced by each `Camera` should be displayed.
+A fundamental part of this the camera's [`Projection`].
+A `Projection` describes how objects should be translated from the virtual scene into a flattened image.
+Specifically, each projection is a 4x4 matrix that transforms points from view space (where the `Camera` is looking) into clip space (the [`RenderTarget`] that the `Camera` sends the image to).
 Objects that lie outside the bounds of the clip space are not rendered.
 
-By default, a [`Projection`] in Bevy is an `enum` with either a `Perspective`, `Orthographic`, or `Custom` variant.
+[`Projection`] is an `enum` with `Perspective`, `Orthographic`, or `Custom` variants.
 Each variant is a wrapper containing a struct that houses the actually values each projection uses, [`PerspectiveProjection`], [`OrthographicProjection`], or [`CustomProjection`], respectively.
-`PerspectiveProjection` is most commonly used in 3D games, making distant objects smaller than closer objects when converted into the clip space.
-`OrthographicProjection` is the default for 2D games, where objects will stay a consistent size regardless of how far back they are in a scene.
 
-Both projection types have a number of fields that can alter the final look of the projection.
-`near` and `far` are two fields common to both types, and describe the distances that objects won't be rendered at (objects beyond the `far` value won't be rendered, for example).
-`PerspectiveProjection` contains fields such as `fov` (field of view) and `aspect_ratio` (width divided by height of the `RenderTarget` area).
-Meanwhile, `OthographicProjection` contains fields like `viewport_origin` (the center of the `RenderTarget`) and `scale` (controls the size of objects in view).
+[`PerspectiveProjection`] is the default view for 3D games, making distant objects smaller than closer objects when converted into the clip space.
+You can alter the values in fields like `fov` (field of view), `near` (near clipping plane), and `far` (far clipping plane), among others, to control the projection's behavior.
+
+[`OrthographicProjection`] is the default for 2D games, where objects will stay a consistent size regardless of how far away they are from the camera.
+Like with `PerspectiveProjection`, the `near` and `far` fields adjust the distances that objects will be rendered within.
+However, because we're using `OrthographicProjection`, we don't have fields like `fov` to alter.
+Instead, fields like `viewport_origin` (the center of the `RenderTarget`) and `scale` (to control the size of objects in view) are used to control how the 2D image is shaped.
 
 You can also create a custom camera projection by implementing the [`CameraProjection`] trait on a struct and passing it into the [`Projection::custom()`] method.
 `CameraProjection` requires implementing several methods, like [`CameraProjection::get_clip_from_view()`], [`CameraProjection::update()`], and [`CameraProjection::far()`] among others.
@@ -134,3 +146,27 @@ To see an example of this, we'd recommend checking out the [Custom Projection ex
 [`CameraProjection::far()`]: https://docs.rs/bevy/latest/bevy/camera/trait.CameraProjection.html#tymethod.far
 
 ## Render Layers
+
+**Render Layers** allow you to layer multiple camera views on top of each other in a specified order.
+You can add a [`RenderLayers`] component to an entity to place them on a specific render layer.
+Entities without a `RenderLayers` component are automatically placed on layer `0`, meaning that you don't have to specify a layer unless you need to.
+These also apply for `Camera`s, which means that entities placed on a render layer without a `Camera` will not be rendered.
+
+But why would you want to use this?
+After all, the player is only going to be looking at one thing at a time.
+Why would you want to show multiple camera views at once?
+Although it might seem unintuitive to use multiple cameras, they can be quite helpful in some situations.
+Whenever you have some objects that need to look or render differently than others in a scene, you can use render layers to separate them while still containing them in the same scene.
+
+A common use case is for first person camera setups that let players select their field-of-view.
+These scenarios let players decide if they want to see all of their surroundings or whether they just want to focus on what's in front of them.
+What shouldn't be affected is the tool or weapon they have in their hands.
+This is where separate render layers come in.
+
+You can place the tool / weapon on one render layer with a fixed field-of-view value.
+Then, the environment around the player is on a different render layer that is affected by the player's chosen field-of-view value.
+This ensures that the player experiences the game how they want without sacrificing the look or readability of the item they're using.
+
+[`RenderLayers`]: https://docs.rs/bevy/latest/bevy/camera/visibility/struct.RenderLayers.html
+
+## UI in Cameras
