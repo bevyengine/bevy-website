@@ -107,7 +107,7 @@ All the queued [`Draw`] functions for every [`PhaseItem`]s are executed, incorpo
 Since the Render `SubApp` abides by the ECS principles, we can leverage systems to perform the actual task of rendering.
 Each system that accesses the [`RenderContext`] system parameter can be used to create the commands that are sent to the GPU to render the game.
 Using systems allows us to structure the execution of each system with a [`Schedule`], either those provided by Bevy by default ([`Core2d`] and [`Core3d`]), or by creating a custom render schedule.
-More information on custom render schedules can be read in the [Cameras page](/learn/book/the-renderer/camera-driven#camera-driven-rendering).
+More information on custom render schedules can be read in the [Cameras page](/learn/book/the-renderer/camera-driven).
 
 ### Cleanup
 
