@@ -11,7 +11,7 @@ Open sourcing parts of your project like this is a nice way to give back to the 
 but can also pay dividends as contributors help you refine and polish the crate that you now depend on.
 
 This chapter covers some best practices for creating open source libraries with Bevy.
-Most of these sections will *also* apply if you're splitting your work apart for reuse between projects!
+Most of these sections will _also_ apply if you're splitting your work apart for reuse between projects!
 
 ## Setting up your crate
 
@@ -66,7 +66,7 @@ When making a crate that relies on Bevy, there are two strategies:
 
 We recommend subcrates, primarily for the compile-time benefits.
 
-Regardless of your choice, you should *always* specify `default-features = false` in your `Cargo.toml`.
+Regardless of your choice, you should _always_ specify `default-features = false` in your `Cargo.toml`.
 This ensures that your crate does not pull in unneeded code.
 Remember: features can only be enabled, not disabled in Rust.
 
@@ -79,7 +79,7 @@ A few conventions go a long way:
 
 - **Expose a plugin.** The standard entry point for a Bevy library is a [`Plugin`](https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html). Even if your crate is simple, wrapping your setup logic in a plugin gives users a consistent, predictable way to integrate it: `app.add_plugins(YourPlugin)`.
 - **Use the ECS where it makes sense.** Bevy users expect their crates to use components, resources, events and messages. Structuring your crate to use them makes it easier to extend, modify and inspect.
-- **Don't panic.** Library code should almost never crash. Program defensively, and return `Result` when something goes wrong. Log an error or warning if there's nowhere to return. Reserve panics exclusively for upholding soundness invariants. Read more about [handling errors here](../control-flow/handling-errors.md).
+- **Don't panic.** Library code should almost never crash. Program defensively, and return `Result` when something goes wrong. Log an error or warning if there's nowhere to return. Reserve panics exclusively for upholding soundness invariants. Read more about [handling errors here](../control-flow/handling-errors).
 - **Follow Rust API guidelines.** The [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/) are a great reference for naming, documentation, and API design.
 - **Use feature flags to make expensive or niche functionality opt-in.** If your crate has optional integrations (e.g. serialization, debug tooling, support for specific Bevy subsystems), gate them behind [Cargo features](https://doc.rust-lang.org/cargo/reference/features.html) rather than pulling everything in by default. This keeps compile times down and avoids forcing unwanted dependencies on your users. A few guidelines:
   - Name features after what they enable (e.g. `serialize`, `bevy_ui`), not what they depend on.
@@ -104,7 +104,7 @@ or by vendoring only the small bit of the library you need.
 
 If you need to use a dependency, prefer to use the same dependencies as Bevy itself, and look for well-maintained, widely-used crates otherwise.
 
-Be *particularly* careful about adding dependencies that create a strong ecosystem lock-in effect,
+Be _particularly_ careful about adding dependencies that create a strong ecosystem lock-in effect,
 such as `tokio`.
 
 ### Documentation
@@ -117,10 +117,10 @@ At minimum, your crate should have:
 - **A README** that explains what the crate does and shows a minimal usage example. This is the first thing people see on crates.io and GitHub.
   - If your crate is visual (rendering, UI, animation), screenshots or GIFs in the README make a huge difference. A short recording of an example running can communicate what your crate does faster than any paragraph.
 - **A crate-level doc comment** (`//!` at the top of `lib.rs`) that provides an overview and links to the most important types.
-
   - You can avoid maintaining both a README and a crate-level doc comment by using `#![doc = include_str!("../README.md")]` at the top of `lib.rs`. This pulls your README in as the crate's documentation on [docs.rs](https://docs.rs), keeping everything in sync.
+
 - **Doc comments on all public items.** `cargo doc --open` should produce useful, navigable documentation.
-  - By convention, the first line of each doc comment in Rust describes *what* the type is or what the module does.
+  - By convention, the first line of each doc comment in Rust describes _what_ the type is or what the module does.
   - Then, after a blank line, detailed information is given. This might cover usage, return values, related methods or cases where the code panics.
   - Enable the `missing_docs` lint to detect problems automatically
 
@@ -236,7 +236,7 @@ Use [semantic versioning](https://semver.org/) for your releases. For pre-1.0 cr
 If you went to the effort of making and publishing a crate, you probably want people to use it.
 Getting your crate in front of users:
 
-- **Write a short blog post or announcement.** Explaining *why* you built the crate and what problems it solves gives people a reason to try it.
+- **Write a short blog post or announcement.** Explaining _why_ you built the crate and what problems it solves gives people a reason to try it.
 - **Submit to [Bevy Assets](https://bevy.org/assets/).** This is the official directory of Bevy ecosystem crates and the first place many users look. Submit your crate by opening a PR on the [bevy-assets repository](https://github.com/bevyengine/bevy-assets).
 - **Post in the [Bevy Discord](https://discord.gg/bevy).** The `#showcase` channel is an active, welcoming place to share new releases. The community is generous with feedback.
 - **Share on social media.** Posts on Reddit ([r/bevy](https://reddit.com/r/bevy), [r/rust](https://reddit.com/r/rust), [r/rust_gamedev](https://reddit.com/r/rust_gamedev)), Mastodon, and Bluesky with the `#BevyEngine` tag can reach a wide audience.
@@ -282,10 +282,10 @@ There are a few simple project management practices that go a long way:
 But open source is as much a social process as it is a technical strategy.
 Here are our most important tips on being a good open source maintainer:
 
-- **Clearly define what your crate wants to be.** A clear vision goes a long way to reducing conflict and fostering productive collaboration. Don't be afraid to say what your crate is *not*.
+- **Clearly define what your crate wants to be.** A clear vision goes a long way to reducing conflict and fostering productive collaboration. Don't be afraid to say what your crate is _not_.
 - **Be responsive and kind.** Open source contributions are a gift of someone's time. A prompt, friendly response is always welcome, even if it's "thanks, but this doesn't fit the project's direction".
 - **Set expectations about your availability.** If you maintain the crate in your spare time, say so. Contributors appreciate honesty about response times, and are surprisingly understanding if you're open about your limitations.
-- **Review PRs thoughtfully.** Explain *why* you're requesting changes, not just *what* to change. Good reviews teach contributors your crate's conventions and make future PRs better.
+- **Review PRs thoughtfully.** Explain _why_ you're requesting changes, not just _what_ to change. Good reviews teach contributors your crate's conventions and make future PRs better.
 - **Encourage reviews from the community.** Your users and contributors have useful perspectives on potential changes. You should welcome their interest and expertise. Bevy does this to great effect!
 - **Ask for help when you need it.** Maintaining an open source crate can be overwhelming, especially alone. The Bevy community is friendly and experienced — don't hesitate to ask for advice, reviews, or help in the [Bevy Discord](https://discord.gg/bevy). If you're struggling with maintainer burnout, it's okay to say so and ask for volunteers to step up.
 

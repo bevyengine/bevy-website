@@ -125,7 +125,7 @@ This has a number of advantages over using [`RemovedComponents`]:
 
 - You get access to the component values being removed.
 - [`RemovedComponents`] can miss component removals when used in [`FixedUpdate`].
-{% end %}
+  {% end %}
 
 [`RemovedComponents`]: https://docs.rs/bevy/latest/bevy/ecs/lifecycle/struct.RemovedComponents.html
 [`OnRemove`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html#adding-components-hooks
@@ -198,7 +198,6 @@ You may need to pay attention to how you [run schedules] or use [explicit system
 [states]: /learn/book/control-flow/states
 [run conditions]: /learn/book/control-flow/run-conditions#run-conditions
 [run schedules]: /learn/book/the-game-loop/schedules
-[explicit system ordering]: /learn/book/control-flow/run-conditions
-
+[explicit system ordering]: /learn/book/the-game-loop/schedules
 [`set_if_neq()`]: https://docs.rs/bevy/latest/bevy/ecs/change_detection/trait.DetectChangesMut.html#method.set_if_neq
 [`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html

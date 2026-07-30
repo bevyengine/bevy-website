@@ -97,7 +97,7 @@ Bevy itself uses this pattern for both the [`Main`] schedule and our built-in [f
 [app]: /learn/book/the-game-loop/app
 [plugins]: /learn/book/modular-architecture/plugins
 [state machine abstraction]: /learn/book/control-flow/states
-[fixed update loop]: /learn/book/the-game-loop/time-and-timers#fixing-your-timestep
+[fixed update loop]: /learn/book/the-game-loop/game-time#fixing-your-timestep
 [`ScheduleRunnerPlugin`]: https://docs.rs/bevy/latest/bevy/app/struct.ScheduleRunnerPlugin.html
 [`MinimalPlugins`]: https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html
 [`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html

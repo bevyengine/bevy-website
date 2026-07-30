@@ -11,7 +11,7 @@ Unfortunately, recompiling can be slow, and requires you to close the game, losi
 To make this easier, Bevy supports **hot reloading**, which allows you to modify your game's assets and automatically load these changes into a running instance of the game.
 
 While hot-reloading is useful during development time, it's usually not something you want to ship in a production game.
-Unless you're deliberately using this for modding support, you should turn these settings off when [releasing projects](/learn/book/releasing-projects/_index).
+Unless you're deliberately using this for modding support, you should turn these settings off when [releasing projects](/learn/book/releasing-projects).
 
 ## Hot Reloading Assets
 
@@ -124,7 +124,7 @@ it would work well for something like an ARPG, but poorly for a walking simulato
 
 {% callout(type="note") %}
 
-Within the games industry, games that use this pattern are sometimes called "data-driven". 
+Within the games industry, games that use this pattern are sometimes called "data-driven".
 This is not to be confused with data-driven in the sense of using data to make decisions, or data-oriented, where your game maps well to the underlying hardware of the machine to run faster.
 As a result, Bevy uses the less confusing term "asset-driven" when discussing this pattern.
 
