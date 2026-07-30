@@ -87,7 +87,7 @@ creating a name conflict in your dependency table:
 
 ```toml
 # in `Cargo.toml`:
-[target.'cfg(target_arch = "wasm32")'.dependencies]
+[target.'cfg(all(target_family = "wasm", any(target_os = "unknown", target_os = "none")))'.dependencies]
 getrandom_a = { package = "getrandom", version = "0.3.4", features = ["wasm_js"] }
 getrandom_b = { package = "getrandom", version = "0.4.2", features = ["wasm_js"] }
 ```
