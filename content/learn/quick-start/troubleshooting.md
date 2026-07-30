@@ -51,21 +51,39 @@ Or for `codelldb`:
 
 ## Unable to compile `getrandom` when building for web
 
+Bevy binaries tend to depend on `getrandom` through the `uuid` crate among
+others, and the standard getrandom implementation does not work for (some)
+web/wasm targets.
+
 ```txt
    Compiling getrandom v0.3.4
    Compiling getrandom v0.4.2
 error: The wasm32-unknown-unknown targets are not supported by default; you may need to enable the "wasm_js" crate feature.
 ```
 
-If you have only one tree dependency on `getrandom`, then adding
-`getrandom = { version = "*", features = ["wasm_js"] }` might solve the issue.
+If you only had one tree dependency on `getrandom`, then adding
+`getrandom = { version = "*", features = ["wasm_js"] }` would solve the issue
+like
+[`getrandom`](https://docs.rs/getrandom/latest/getrandom/#webassembly-support)
+suggests.
 
-However, if your crate depends on multiple versions of `getrandom`, then this will not be enough:
-The wildcard version pattern still ends up reflecting only a single version of the crate you want to add a feature for.
+However, if your crate depends on multiple versions of `getrandom` (which it
+likely will indirectly), this will not be enough: The wildcard version pattern
+still ends up reflecting only a single version of the crate you want to add a
+feature for.
 
-Since you cannot specify two dependencies with the same name, and since cargo does not know that you want the feature to apply to every instance of the crate
-(what if a cargo feature only exists for some versions of the dependency?), you might have to use this workaround sometimes referred to as 'renaming' the
-dependency:
+Going through `cargo tree --invert getrandom` you can find crates in your
+dependency tree that use `getrandom` (e.g. `uuid` and `ahash`), and figure out
+if they have a [solution](https://docs.rs/uuid/latest/uuid/#webassembly) that
+applies the fix for you. This can feel a little indirect and fragile though,
+since you might notice that a lot of crates share the same getrandom version,
+and you just want that crate to change its implementation.
+
+If you want to directly enforce a feature for multiple versions of a crate, you
+have to "rename" them. Cargo does not know that you want a feature to apply to
+every instance of the crate (what if a cargo feature only exists for some
+versions of the dependency?), so it has to be stated multiple times without
+creating a name conflict in your dependency table:
 
 ```toml
 # in `Cargo.toml`:
