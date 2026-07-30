@@ -14,7 +14,7 @@ Bevy has a wide range of different learning materials, targeted at different use
 
 Everyone learns differently, so we offer a variety of complementary paths:
 
-- [Quickstart](/learn/quickstart/introduction): Build a simple game through a hands-on tutorial designed for absolute beginners.
+- [Quickstart](/learn/quick-start/introduction): Build a simple game through a hands-on tutorial designed for absolute beginners.
 - [The Book](/learn/book): Learn the core concepts that make Bevy work, then explore advanced topics needed to ship a production game.
 - [docs.rs](https://docs.rs/bevy/latest/bevy/): Versioned API documentation that explains every struct, method, and function. Module and crate docs also provide an overview of specific areas of the code.
 - [Feature Examples](https://bevyengine.org/examples): Explore Bevy's features by browsing runnable snippets.
