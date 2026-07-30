@@ -10,7 +10,7 @@ The Bevy website is built using the Zola static site engine. In our experience, 
 
 To check out any local changes you've made:
 
-1. [Install Zola](https://www.getzola.org/documentation/getting-started/installation/) version `0.19.2`.
+1. [Install Zola](https://www.getzola.org/documentation/getting-started/installation/) version `0.22.1`.
 2. Clone the Bevy Website git repo and enter that directory:
    1. `git clone https://github.com/bevyengine/bevy-website.git`
    2. `cd bevy-website`

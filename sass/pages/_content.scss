@@ -112,6 +112,12 @@ $content-font-size: 1.22rem;
     padding-top: 0px;
     padding-left: 0px;
     padding-right: 0px;
+
+    // The `code` rule above styles *inline* code. Inside a highlighted block
+    // the colours belong to the highlighter theme, which sets them on the
+    // `<pre>`, so let those show through rather than painting over them.
+    background-color: transparent;
+    color: inherit;
   }
 
   img {
