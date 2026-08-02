@@ -20,8 +20,7 @@ taxonomies = [{ name = "news", feed = true }]
 
 [markdown.highlighting]
 
-dark_theme = "bevy-syntax-theme"
-light_theme = "one-light"
+theme = "bevy-syntax-theme"
 
 extra_themes = ["themes/bevy-syntax-theme.json"]
 extra_grammars = ["grammars/ron.json"]
