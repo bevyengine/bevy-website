@@ -41,14 +41,14 @@ It exists to both develop Bevy and help people learn how to use it.
 This book is [explanatory documentation](https://diataxis.fr/) covering Bevy's core ideas.
 You can read it cover to cover, or skip ahead to the sections that interest you.
 
-If you are new to Bevy, [read the first chapter](/learn/book/intro/the-three-letters) before proceeding.
+If you are new to Bevy, [read the first chapter](@/learn/book/intro/the-three-letters.md) before proceeding.
 It introduces the ECS vocabulary and core terms you'll need for the rest of this book.
 After that, use the sidebar to jump to any chapter you need.
 We've attempted to arrange them in a useful order, but they do not assume you have read previous chapters.
 
-If you want a broader map of Bevy's documentation ecosystem (quick start guide, examples, API docs, and more), see [Further Reading](/learn/book/further-reading).
+If you want a broader map of Bevy's documentation ecosystem (quick start guide, examples, API docs, and more), see [Further Reading](@/learn/book/further-reading/_index.md).
 
-If you're evaluating whether Bevy is the right fit for your project, read [Is Bevy Right for Your Project?](/learn/book/is-bevy-right-for-your-project).
+If you're evaluating whether Bevy is the right fit for your project, read [Is Bevy Right for Your Project?](@/learn/book/is-bevy-right-for-your-project/_index.md).
 
 {% callout(type="info") %}
 ### Corrections and Extensions

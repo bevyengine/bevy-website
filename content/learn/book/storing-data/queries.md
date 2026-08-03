@@ -10,7 +10,7 @@ Queries are your primary tool for interacting with the Bevy world, allowing you 
 Queries create a filtered "view" into the metaphorical database that makes up our ECS.
 With that view you can iterate over the requested components, ask what the "row number" (`Entity`) is for each element, or fetch the matching components for a particular `Entity` value.
 
-We briefly covered queries in our [introduction](/learn/book/intro/) to Bevy, so make sure to review that section if you haven't read it yet.
+We briefly covered queries in our [introduction](@/learn/book/intro/_index.md) to Bevy, so make sure to review that section if you haven't read it yet.
 If you're entirely brand new to Bevy or ECS, we would recommend you to start there before continuing on this page.
 
 ## Anatomy of a Query
@@ -173,7 +173,7 @@ While this is talked about in more depth in the chapter on [change detection], i
 [query item]: https://docs.rs/bevy/latest/bevy/ecs/query/trait.QueryData.html#associatedtype.Item
 [`Mut<Life>`]: https://docs.rs/bevy/latest/bevy/ecs/change_detection/struct.Mut.html
 [smart pointer]: https://doc.rust-lang.org/book/ch15-00-smart-pointers.html
-[change detection]: /learn/book/control-flow/change-detection
+[change detection]: @/learn/book/control-flow/change-detection.md
 [`Changed`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Changed.html
 [`Added`]: https://docs.rs/bevy/latest/bevy/ecs/query/struct.Added.html
 
@@ -230,8 +230,8 @@ fn despawn_all_enemies(enemies: Query<Entity, With<Enemy>>, mut commands: Comman
 }
 ```
 
-[hooks]: /learn/book/control-flow/lifecycle-events
-[relations]: /learn/book/storing-data/relations
+[hooks]: @/learn/book/control-flow/lifecycle-events.md
+[relations]: @/learn/book/storing-data/relations.md
 [`Query::get`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get
 [`Query::get_mut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.get_mut
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
@@ -291,8 +291,8 @@ fn kill_player_when_dead_query_single(player: Single<(Entity, &Life), With<Playe
 For more discussion on [`Single`] and how it works, please see the [error handling] chapter.
 Similarly, see the [resources] chapter of this book for a discussion on the choice between using a singleton entity or a resource.
 
-[error handling]: /learn/book/control-flow/handling-errors
-[resources]: /learn/book/storing-data/resources
+[error handling]: @/learn/book/control-flow/handling-errors.md
+[resources]: @/learn/book/storing-data/resources.md
 [`Query::single`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Query.html#method.single
 [`QuerySingleError`]: https://docs.rs/bevy/latest/bevy/ecs/query/enum.QuerySingleError.html
 [`Single`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Single.html

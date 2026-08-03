@@ -348,7 +348,7 @@ struct Click {
 
 To see [`EntityEvent`] propagation in action, the [Bevy Examples Page] has an [Observer Propagation] example which showcases an `Attack` [`EntityEvent`] propagating up from a piece of armor to the entity that is wearing the armor.
 
-[Relations]: /learn/book/storing-data/relations
+[Relations]: @/learn/book/storing-data/relations.md
 [Bevy Examples Page]: https://bevy.org/examples
 [Observer Propagation]: https://bevy.org/examples/ecs-entity-component-system/observer-propagation/
 

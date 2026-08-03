@@ -31,7 +31,7 @@ cargo add bevy -F dynamic_linking
 {% callout(type="warning") %}
 On Windows you must also enable the [performance optimizations] or you will get a ["too many exported symbols"](https://github.com/bevyengine/bevy/issues/1110#issuecomment-1312926923) error.
 
-[performance optimizations]: /learn/book/releasing-projects/release-builds
+[performance optimizations]: @/learn/book/releasing-projects/release-builds.md
 
 In order to run `cargo test --doc`, you must also add the path returned by `rustc --print target-libdir` to your `PATH` environment variable.
 {% end %}
@@ -170,4 +170,4 @@ To enable `sccache`, install it and update your Cargo configuration.
 More code means more time to compile.
 If there are parts of Bevy (or your other dependencies) that you simply don't need,
 you can improve compilation times substantially by removing them.
-For advice on how to navigate Bevy's collection of feature flags, see [Compiling Less Code](/learn/book/releasing-projects/compiling-less-code).
+For advice on how to navigate Bevy's collection of feature flags, see [Compiling Less Code](@/learn/book/releasing-projects/compiling-less-code.md).

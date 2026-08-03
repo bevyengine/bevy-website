@@ -18,7 +18,7 @@ Internally, [`Entity`] is roughly shaped like a `u64`, with arbitrary (unique) b
 While it is possible to work with the [`Entity`] type directly, it should be treated as an opaque, black box key.
 Bevy makes no guarantees that exact entity assignment or storage behavior will be stable across any version boundary.
 
-[world]: /learn/book/storing-data/world
+[world]: @/learn/book/storing-data/world.md
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
 
@@ -53,7 +53,7 @@ fn spawning_system(mut commands: Commands){
 }
 ```
 
-[exclusive system]: /learn/book/control-flow/systems/#exclusive-systems
+[exclusive system]: @/learn/book/control-flow/systems.md#exclusive-systems
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
@@ -71,7 +71,7 @@ To make a basic cube, you'd probably need to add:
 - A [`StandardMaterial`] to define how that mesh should be rendered (in practice, actually a [`Handle`] to a [`StandardMaterial`])
 - Etc.
 
-[introduction section on components]: /learn/book/intro/the-three-letters#the-c-components
+[introduction section on components]: @/learn/book/intro/the-three-letters.md#the-c-components
 [`Transform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html
 [`Mesh`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Mesh.html
 [`Handle`]: https://docs.rs/bevy/latest/bevy/asset/enum.Handle.html

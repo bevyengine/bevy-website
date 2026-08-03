@@ -27,7 +27,7 @@ These include timers, stopwatches, system conditions, and even some command opti
 
 If you'd like to read about these tools, please see the [Time Controls page] located in the Control Flow chapter.
 
-[Time Controls page]: /learn/book/control-flow/time-controls
+[Time Controls page]: @/learn/book/control-flow/time-controls.md
 
 {% end %}
 
@@ -111,8 +111,8 @@ If your systems uniformly rely on [`Time`], this will affect your entire game:
 halting, slowing or speeding up animations, movement, projectiles, physics and so on.
 Alternatively, [states] and [run conditions] can be used to skip systems while the game is paused.
 
-[states]: /learn/book/control-flow/states
-[run conditions]: /learn/book/control-flow/run-conditions
+[states]: @/learn/book/control-flow/states.md
+[run conditions]: @/learn/book/control-flow/run-conditions.md
 
 ## Fixing your timestep
 

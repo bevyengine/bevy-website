@@ -149,7 +149,7 @@ Then, when the app is run, a few other plugin life-cycle functions are called, a
 
 In most cases, this complexity can be completely ignored, but when working with subsystems that require deferred initialization it can be helpful.
 
-[apps]: /learn/book/the-game-loop/app
+[apps]: @/learn/book/the-game-loop/app.md
 [`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
 [`App::add_systems`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html?search=add#method.add_systems
 [`App::add_plugins`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html?search=add#method.add_plugins
