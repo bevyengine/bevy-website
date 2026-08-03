@@ -54,7 +54,7 @@ Some of these are firm boundaries, while others describe the standard of craft t
 11. **Translation:** LLMs may be used for translation, but you must provide the original untranslated text as wel
   (preferrably in a [collapsed section]).
   We want to understand when we're talking to a human vs an LLM, and translations which destroy your natural voice without an original to cross-reference are indistinguishable from text that was simply generated.
-1.  **Good faith:** Welcome others to the project and to the community, and presume that they are contributing in good faith.
+12.  **Good faith:** Welcome others to the project and to the community, and presume that they are contributing in good faith.
   If and when others violate these rules, start by gently correcting them; guiding them so that they can follow our community norms.
 
 Individual reviewers are empowered to request changes to contributions that fail to live up to these norms, or in cases where the work is not salvageable (commonly due to a lack of understanding by the original author), close them completely.
