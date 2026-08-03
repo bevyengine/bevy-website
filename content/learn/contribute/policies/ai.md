@@ -51,8 +51,8 @@ Some of these are firm boundaries, while others describe the standard of craft t
   See the attached Appendix for examples of acceptable and unacceptable behavior.
   There are a wide range of perspectives within our community, and community health is more important than winning arguments on the internet or accomplishing any particular bit of work.
 10. **Refusal:** Contributors are allowed to refuse to review AI-assisted code for any reason, or reject AI-assisted reviews. Please, do not pressure them to change their minds.
-11. **Translation:** LLMs may be used for translation, but you must provide the original untranslated text as wel
-  (preferrably in a [collapsed section]).
+11. **Translation:** LLMs may be used for translation, but you must provide the original untranslated text as well
+  (preferably in a [collapsed section]).
   We want to understand when we're talking to a human vs an LLM, and translations which destroy your natural voice without an original to cross-reference are indistinguishable from text that was simply generated.
 12.  **Good faith:** Welcome others to the project and to the community, and presume that they are contributing in good faith.
   If and when others violate these rules, start by gently correcting them; guiding them so that they can follow our community norms.
