@@ -19,12 +19,12 @@ Some of these are firm boundaries, while others describe the standard of craft t
 1. **Ownership:** Contributors are wholly responsible for their own submissions, regardless of how they are created. 
   You must personally understand every line of code and documentation that you submit.
   Contributions must be original (or appropriately credited and license-compliant), well-made and crafted with care: something that you are proud of.
+  Do not include "Co-authored by Claude" etc commits; these will be caught by CI and automatically rejected.
 2. **Disclosure:** Non-trivial AI use must be disclosed, typically in the PR description, with context about how AI was used.
   This gives reviewers the information they need to evaluate both the output and your personal expertise effectively.
   For example, you should disclose collaborative design work, bug finding or any authorship of code.
   Trivial use is defined here as use as an analog for an existing tool such as a search engine, grep or interactive autocomplete.
   These do not need to be disclosed.
-  "Co-authored by Claude" commit messages are not sufficient (or particularly helpful): lay this out in your own words in the PR description.
 3. **Learning:** We want to help our contributors learn and grow.
   Work within the limits of your skills, and do not allow AI to substitute for understanding or thinking.
   Verify each finding yourself, carefully and critically evaluate plans and designs, and test things rigorously, both automatically and manually.
