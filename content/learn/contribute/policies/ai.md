@@ -11,9 +11,10 @@ Bevy, as a project and a community, values:
 2. **Growth:** Developing understanding and wisdom within our contributors
 3. **Quality:** Creating a reliable, high-quality foundation for others to build on
 
-While we have a relatively permissive policy around AI use for pragmatic reasons, any use should be viewed through the lens of those values.
+Our policy around AI use is designed pragmatically,
+attempting to find ways of working together that will, in practice, honor these values.
 
-Accordingly, Bevy has the following norms around AI use.
+In concrete terms, Bevy has the following norms around AI use that we expect our contributors and community members to uphold.
 Some of these are firm boundaries, while others describe the standard of craft that we expect from our contributors:
 
 1. **Ownership:** Contributors are wholly responsible for their own submissions, regardless of how they are created. 
