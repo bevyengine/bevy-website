@@ -29,7 +29,7 @@ Some of these are firm boundaries, while others describe the standard of craft t
   Work within the limits of your skills, and do not allow AI to substitute for understanding or thinking.
   Verify each finding yourself, carefully and critically evaluate plans and designs, and test things rigorously, both automatically and manually.
   Never serve as a direct pipe for an LLM: we want to talk to *you*, not to Claude-via-proxy!
-4. **Large changes:** Please do not prepare or submit high-volume changes without prior discussion, even though AI makes doing so easier.
+4. **Large changes:** Please do not prepare or submit sweeping changes (by number of files touched, PRs opened or total lines of code) without prior discussion, even though AI makes doing so easier.
   Doing so will typically result in your PR being closed or ignored.
   These are a lot of work to review, attract merge conflicts quickly, and risk wasting resources for nothing.
   Just because you *could* generate a major feature in a single 10k LoC PR does not mean you *should* skip the design and consensus-building process!
