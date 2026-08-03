@@ -24,7 +24,7 @@ Bevy is delightful! You should use Bevy if:
   - Whether you're making CAD software, art installations, or scientific simulations, Bevy can be extremely flexible.
 - *You care about open source software:*
   - Read, understand, and hack your tools from top-to-bottom.
-- *You want an engine with a lively [community](/community):*
+- *You want an engine with a lively [community](@/community/_index.md):*
   - Users, engine devs, and ecosystem creators join forces from across the world.
 - *You never want to have to pay licensing fees or worry about vendor lock-in.*
   - Bevy is free and open source from now until the end of time.

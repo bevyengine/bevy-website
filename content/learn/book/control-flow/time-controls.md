@@ -32,10 +32,10 @@ To understand how Bevy sets up time and its variants, see the dedicated [Time pa
 For more information on schedules, see the [Schedules page], also in the Game Loop chapter.
 It might also be handy to read the [Systems] and [Skipping Systems] pages that are further up in this chapter, as the [System Timer Conditions section] is closely aligned with those pages.
 
-[Time page]: /learn/book/the-game-loop/game-time
-[Systems]: /learn/book/control-flow/systems
-[Skipping Systems]: /learn/book/control-flow/run-conditions
-[Schedules page]: /learn/book/the-game-loop/schedules
+[Time page]: @/learn/book/the-game-loop/game-time.md
+[Systems]: @/learn/book/control-flow/systems.md
+[Skipping Systems]: @/learn/book/control-flow/run-conditions.md
+[Schedules page]: @/learn/book/the-game-loop/schedules.md
 [System Timer Conditions section]: #system-timer-conditions
 
 {% end %}
@@ -86,7 +86,7 @@ Sometimes the solution isn't that straightforward though.
 To read more about "time-step" and how Bevy handles time, we recommend reading the dedicated [Time page] in the Game Loop chapter.
 
 [delta time]: https://en.wikipedia.org/wiki/Delta_timing
-[Time page]: /learn/book/the-game-loop/game-time
+[Time page]: @/learn/book/the-game-loop/game-time.md
 
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Schedule.html
 [`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
@@ -430,7 +430,7 @@ Instead, you should either split the work into bite-sized pieces that can safely
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Schedule.html
 [`Time`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Time.html
 [`Time<Fixed>`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Fixed.html
-[Time page]: /learn/book/the-game-loop/game-time
+[Time page]: @/learn/book/the-game-loop/game-time.md
 
 ## Delaying Commands
 

@@ -91,11 +91,11 @@ You can call `AssetServer::load("bevy_bird.png")` and receive a [`Handle<Image>`
 
 Most games get around this behavior by creating a loading screen that plays while their assets load.
 You can create this functionality in Bevy using [`AssetServer::load_state`], a method that allows you to check the load state of an asset, along with other [`AssetServer`] methods that provide similar functionality.
-A version of the same functionality (without playing a separate screen) can be seen in the [Loading Assets In Advance](/learn/book/assets/lifetimes#waiting-for-asset-loading) page.
+A version of the same functionality (without playing a separate screen) can be seen in the [Loading Assets In Advance](@/learn/book/assets/lifetimes.md#waiting-for-asset-loading) page.
 
 {% callout(type="info") %}
 
-While loading data as an asset is more complex than simply hardcoding it, doing so unlocks [asset hot reloading](/learn/book/development-practices/hot-reloading).
+While loading data as an asset is more complex than simply hardcoding it, doing so unlocks [asset hot reloading](@/learn/book/development-practices/hot-reloading.md).
 This allows us to change the asset file during testing and see those changes reflected in real time.
 
 {% end %}
