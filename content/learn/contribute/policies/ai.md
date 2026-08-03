@@ -5,116 +5,89 @@ insert_anchor_links = "right"
 weight = 1
 +++
 
-In recent times, there have been a growing number of contributions that are
-fully or partially produced by generative AI (e.g. large language models and
-friends) which exhibit characteristics that result in undue extra work for other
-contributors and maintainers. While we've seen PRs and issues with these
-characteristics produced entirely by humans, generative AI tools have
-significantly lowered the level of effort required to produce
-"plausibly-worthwhile" contributions that are otherwise entirely unmergeable or
-incorrectly report bugs, and so have become a major source of burdensome PRs and
-issues.
+Bevy, as a project and a community, values:
 
-Whether AI generated code is subject to copyright protection is also a
-hot-button legal topic that is still being openly debated and litigated. How
-this impacts the legal aspects of maintaining a FOSS project is currently an
-unresolved question.
+1. **Community:** Collaboration and camaraderie between contributors
+2. **Growth:** Developing understanding and wisdom within our contributors
+3. **Quality:** Creating a reliable, high-quality foundation for others to build on
 
-This policy is established as a response targeted at the problem of an
-increasing frequency of burdensome PRs/issues and to address the potential legal
-issues currently surrounding the intersection of AI generated code and the FOSS
-contribution model.
+While we have a relatively permissive policy around AI use for pragmatic reasons, any use should be viewed through the lens of those values.
 
-## AI Generated Communications
+Accordingly, Bevy has the following norms around AI use.
+Some of these are firm boundaries, while others describe the standard of craft that we expect from our contributors:
 
-The unsolicited use of automated systems to communicate issues, bugs, or
-security vulnerabilities about Bevy Organization projects under the guise of a
-human is considered unacceptable and a Code of Conduct violation. Any individual
-contributor, operator of automated systems, or company they may represent may be
-barred from future contributions and banned from regular communication channels,
-especially if these communications were found to be submitted in bad faith.
+1. **Ownership:** Contributors are wholly responsible for their own submissions, regardless of how they are created. 
+  You must personally understand every line of code and documentation that you submit.
+  Contributions must be original (or appropriately credited and license-compliant), well-made and crafted with care: something that you are proud of.
+2. **Disclosure:** Non-trivial AI use must be disclosed, typically in the PR description, with context about how AI was used.
+  This gives reviewers the information they need to evaluate both the output and your personal expertise effectively.
+  For example, you should disclose collaborative design work, bug finding or any authorship of code.
+  Trivial use is defined here as use as an analog for an existing tool such as a search engine, grep or interactive autocomplete.
+  These do not need to be disclosed.
+  "Co-authored by Claude" commit messages are not sufficient (or particularly helpful): lay this out in your own words in the PR description.
+3. **Learning:** We want to help our contributors learn and grow.
+  Work within the limits of your skills, and do not allow AI to substitute for understanding or thinking.
+  Verify each finding yourself, carefully and critically evaluate plans and designs, and test things rigorously, both automatically and manually.
+  Never serve as a direct pipe for an LLM: we want to talk to *you*, not to Claude-via-proxy!
+4. **Large changes:** Please do not prepare or submit high-volume changes without prior discussion, even though AI makes doing so easier.
+  Doing so will typically result in your PR being closed or ignored.
+  These are a lot of work to review, attract merge conflicts quickly, and risk wasting resources for nothing.
+  Just because you *could* generate a major feature in a single 10k LoC PR does not mean you *should* skip the design and consensus-building process!
+5. **Refinement:** Do not dump raw generative AI output on other contributors: this is disrespectful of their time and attention.
+  Use these tools to do things *better*, not just *faster*.
+  Aggressively review and revise generated code before submission, working carefully to refine the design and polish the implementation.
+  For written communication, seek to understand the output and synthesize it from scratch in your own words.
+  If you want to share exact output in a discussion, quote sparingly, with attribution.
+6. **Writing:** Everyone is sick of reading LLM-flavored text, no matter their feelings on its use.
+  AI should never be used to draft large blocks of public-facing prose: module docs, release notes, lengthy PR descriptions, or book chapters, to give a few examples.
+  We would rather you submit something simple that you wrote yourself; our editors can help expand and revise it later.
+  Using AI as a critic or for mechanical fixes is permitted, but substantive revisions should be made yourself to preserve both structure and voice.
+7. **Design:** Writing is thinking.
+  While AI can be helpful during the design process, it should be used to explore the space, not to simply generate a solution.
+  Publicly shared design documents (or problem definitions) must be personally authored, synthesizing your own understanding of the problem space and any proposed solution.
+  We want to foster genuine expertise, and feel that taking the time to draft plans personally is critical for both learning and refinement. Care and effort spent planning pays dividends later.
+8. **Art:** Out of respect for the craft of artists, AI must not be used for creating or manipulating art assets: find a permissively licensed asset, commission something appropriate, or make one by hand.
+9. **Harassment:** Do not harass, pressure, or demean others because of their AI use or lack thereof.
+  See the attached Appendix for examples of acceptable and unacceptable behavior.
+  There are a wide range of perspectives within our community, and community health is more important than winning arguments on the internet or accomplishing any particular bit of work.
+10. **Refusal:** Contributors are allowed to refuse to review AI-assisted code for any reason, or reject AI-assisted reviews. Please, do not pressure them to change their minds.
+11. **Translation:** LLMs may be used for translation, but you must provide the original untranslated text as wel
+  (preferrably in a [collapsed section]).
+  We want to understand when we're talking to a human vs an LLM, and translations which destroy your natural voice without an original to cross-reference are indistinguishable from text that was simply generated.
+1.  **Good faith:** Welcome others to the project and to the community, and presume that they are contributing in good faith.
+  If and when others violate these rules, start by gently correcting them; guiding them so that they can follow our community norms.
 
-This policy applies to all regular channels of communication used by members of
-the Bevy Organization, including but not limited to GitHub Issues, GitHub Pull
-Requests, Discord, other social media platforms, etc.
+Individual reviewers are empowered to request changes to contributions that fail to live up to these norms, or in cases where the work is not salvageable (commonly due to a lack of understanding by the original author), close them completely.
+Bevy is excited to mentor new contributors, and help you develop the skills you need to contribute, but we need you to engage with us directly, as people, not just serve as a proxy for an LLM.
+Repeated or severe violations may result in warnings, suspensions, or bans: please try your best to respect and uphold these norms.
 
-We recognize that English may not be the primarily language for all contributors
-and that machine translation is an indispensable tool for proper collaboration.
-Therefore machine translation is not subject to the above policy. The community
-recommends that you instruct the LLM to produce a concise output or use non-LLM
-machine translation options, as they tend to be less verbose while still getting
-the point across.
+[collapsed section]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-collapsed-sections
 
-## AI Generated Contributions and Copyright
+## Appendix on Harassment
 
-At the current time of writing (August 11th, 2025), the US Copyright Office has
-[stated publicly][us-copyright-office-response] that "human authorship is a
-pre-requisite to copyright protection". A
-[more recent report][us-copyright-office-report] from the same institution shows
-a much more contested legal space, both within the US and internationally.
-Unanswered open questions in the space include, but are not limited to:
+We understand that AI is a controversial topic, with important societal implications, many of which directly impact topics the Bevy community cares about.
+Nevertheless, Bevy's [Code of Conduct] continues to apply when AI-related topics are discussed.
+To help you understand where Bevy draws the line, the following AI-related behaviors are not acceptable:
 
-- In the case that AI generated works are protected under copyright, would AI
-  generated works be considered derivatives of any input to the model, including
-  but not limited to: the model's training dataset, the dataset used for fine
-  tuning the model, any data fetched during retrieval augmented generation
-  (RAG), or extra context provided to the model in the prompt?
-- If AI generated works are considered derivative works, do the FOSS licenses
-  currently in use by the Bevy Organization have the language and legal
-  framework to provide the same guarantees and protections to both the licensor
-  and licensee?
-- In the case that AI generated works are protected under copyright, who owns
-  the copyright to the generated work? Is it the user that requested the
-  generation? The owner of the LLM model or service? Who holds the rights to
-  license out the generated work for use in open source projects? Is the
-  copyright transferable through the same legal framework that exists for works
-  that were not AI generated?
-- If there is a minimum threshold of human contribution to a combined work
-  derived from AI-generated works for it to be considered copyrightable, where
-  does that threshold lie, and is it consistently applicable to all types of
-  contributions that Bevy Organization accepts?
-- Does the local law in various countries and jurisdictions around the world
-  provide consistent answers to all of the questions above?
+- inflammatory comments about AI or patterns of behavior that seek to get a rise out of others
+- comments that imply that AI use is or will be mandatory (inside of Bevy or outside of it), or which otherwise disparage those who do not want to use it / think it should be used
+- refusal to disengage from an argument with a specific individual after being asked to stop
+- unsubstantive negative comments or reactions in response to contributors or community members who disclose AI use
 
-Until there are well established answers to these questions, the use and/or
-distribution of AI-generated code and assets may constitute copyright
-infringement or may be subject to licensing terms incompatible with the FOSS
-licenses used by the Bevy Organization.
+If you have frustrations or concerns with other community members' behavior or project-wide rules, come to the moderation team.
+We will try our best to resolve problems, even if it is a repeated pattern of subthreshold behavior!
+Once our decision has been made, do your best to respect it unless new problems have arisen.
 
-Erring on the side of caution in light of a openly debated legal topic, all[^1]
-forms of AI-generated contributions cannot be merged into repositories
-maintained by the Bevy Organization. This includes both code and non-code game
-assets (e.g. textures, audio, etc).
+The following behaviors are permissible, when handled with social grace:
 
-Any triage team member suspecting a pull request to be made primarily through
-the use of large language models or other generative tools should mark the PR as
-`S-Nominated-to-Close` , upon which a maintainer can then review the PR for
-closure. To help identify these cases, pull requests subject to this policy have
-characteristics such as (but not limited to):
+- discussing the politics and current events of AI
+- discussing, in the general case, the role of AI in art
+- criticizing products, companies, and public figures use of or stance on AI
+- discussing best practices for using (or not using) AI
+- specific feedback about flaws in a given piece of work
+- constructive feedback about recurring problems in the way that others work or act 
+- criticizing decisions, regardless of their nature, by Bevy leadership
 
-- Needlessly or overly verbose descriptions or responses.
-- Not internally coherent or even self-contradictory.
-- Demonstrates misunderstanding of important aspects of what the code is doing
-  or the purpose of the change.
+Exercise judgement and do not fixate exclusively on these topics: the Bevy community is not a debate platform, and, per the [Code of Conduct], doing so disruptively or unkindly *will* result in moderation action.
 
-Any contributor, operator of automated systems, or company they may represent
-found to have repeatedly submitted contributions with majority AI-generated code
-or assets may be subject to:
-
-- Blanket rejection of all future contributions to Bevy Organization projects.
-- Retroactive removal of any potentially suspect AI-generated code and asset
-  contributions.
-- Further Code of Conduct actions if these contributions were found to be
-  submitted in bad faith.
-
-This policy may be revisited when the legal debate has settled.
-
-\[^1\]: Trivial LLM generated content such as variable renames or autocompleted
-function calls, often branded "predictions" or "suggestions", that is otherwise
-indistinguishable from traditional methods such as a regex search/replace or an
-LSP autocompletion is by definition not detectable and can be treated like other
-regular IDE tools such as Intellisense. This does not include cases where the
-prediction generates things like entire function blocks.
-
-[us-copyright-office-report]: https://www.copyright.gov/ai/Copyright-and-Artificial-Intelligence-Part-2-Copyrightability-Report.pdf
-[us-copyright-office-response]: https://www.copyright.gov/rulings-filings/review-board/docs/a-recent-entrance-to-paradise.pdf
+[Code of Conduct]: https://bevy.org/learn/contribute/policies/code-of-conduct/
