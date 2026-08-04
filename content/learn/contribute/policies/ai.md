@@ -109,7 +109,7 @@ Submissions were made that were *maybe* AI-generated with no way to ever prove i
 forcing reviewers and moderators to constantly decide to act on or overlook violations on the slimmest of evidence.
 Any accusation threatened complete rejection of submitted work regardless of quality or effort,
 with a looming possibility of formal and informal exclusion from the community.
-Reviwers were caught between unproven, disruptive suspicion and blithe naïveté,
+Reviewers were caught between unproven, disruptive suspicion and blithe naïveté,
 accepting "no Mom I didn't eat any cookies" at face value because the cookie jar is stored in a locked room.
 
 This was deeply unpleasant: either choice was damaging to the community in the event of a mistake,
