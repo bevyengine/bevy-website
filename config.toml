@@ -25,7 +25,7 @@ theme = "bevy-syntax-theme"
 extra_themes = ["themes/bevy-syntax-theme.json"]
 extra_grammars = ["grammars/ron.json"]
 
-error_on_missing_language = true
+# error_on_missing_language = true
 
 [extra]
 # Put all your custom variables here
