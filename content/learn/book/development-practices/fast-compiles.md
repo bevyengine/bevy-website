@@ -36,7 +36,7 @@ On Windows you must also enable the [performance optimizations] or you will get 
 In order to run `cargo test --doc`, you must also add the path returned by `rustc --print target-libdir` to your `PATH` environment variable.
 {% end %}
 
-{% callout(type="note") %}
+{% callout(type="info") %}
 Shipping your game with dynamic linking enabled is not recommended because it requires you to include `libbevy_dylib` alongside your game, it prevents certain optimizations, and can increase the size of your game.
 If you remove the `dynamic_linking` feature, your game executable can run standalone.
 {% end %}
@@ -47,28 +47,29 @@ If dynamic linking isn't preferred or possible, we can use alternative linkers d
 
 <details>
   <summary>Mold</summary>
-  
-  [Mold](https://github.com/rui314/mold) is an alternative linker for Linux systems claiming to be faster than LLVM's `lld` linker. However, it also comes with drawbacks, such as limited platform support and occasional stability issues. To install Mold, use your preferred package manager.
-  
+
+[Mold](https://github.com/rui314/mold) is an alternative linker for Linux systems claiming to be faster than LLVM's `lld` linker. However, it also comes with drawbacks, such as limited platform support and occasional stability issues. To install Mold, use your preferred package manager.
+
 Examples:
-  
-* **Ubuntu**: `sudo apt-get install mold clang`
-* **Fedora**: `sudo dnf install mold clang`
-* **Arch**: `sudo pacman -S mold clang`
-  
+
+- **Ubuntu**: `sudo apt-get install mold clang`
+- **Fedora**: `sudo dnf install mold clang`
+- **Arch**: `sudo pacman -S mold clang`
+
 You will also need to add the following to your Cargo config at `/path/to/project/.cargo/config.toml`:
 
-  ```toml
-  [target.x86_64-unknown-linux-gnu]
-  linker = "clang"
-  rustflags = ["-C", "link-arg=-fuse-ld=/path/to/mold"]
-  # Where "/path/to/mold" is the location of your mold installation.
-  ```
-  
-  {% callout(type="note") %}
-    Disabling `bevy/dynamic_linking` may improve Mold's performance.
-    <sup>[citation needed]</sup>
-  {% end %}
+```toml
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+rustflags = ["-C", "link-arg=-fuse-ld=/path/to/mold"]
+# Where "/path/to/mold" is the location of your mold installation.
+```
+
+{% callout(type="info") %}
+Disabling `bevy/dynamic_linking` may improve Mold's performance.
+<sup>[citation needed]</sup>
+{% end %}
+
 </details>
 
 ## Nightly Rust Compiler
@@ -121,9 +122,8 @@ When shipping your game, you should still compile it with LLVM.
 Enabling cranelift is known to break local variable inspection while debugging.
 You can only inspect statics.
 This is caused by the fact that `rustc_codegen_cranelift` is missing DWARF support.
-See [`cranelift #166](https://github.com/rust-lang/rustc_codegen_cranelift/issues/166) for more information.
+See [`cranelift #166`](https://github.com/rust-lang/rustc_codegen_cranelift/issues/166) for more information.
 {% end %}
-
 
 ## Generic Sharing
 
@@ -148,13 +148,14 @@ rustflags = [
 
 [sccache](https://github.com/mozilla/sccache) is a compiler cache that wraps `rustc` to cache compiled artifacts.
 
-In a standard local workflow, `sccache` provides little benefit. Its value becomes apparent when your workflow involves building your project across multiple target directories or frequently toggling feature flags. 
+In a standard local workflow, `sccache` provides little benefit. Its value becomes apparent when your workflow involves building your project across multiple target directories or frequently toggling feature flags.
 
 This is particularly true when building inside container environments like Docker or Podman. By configuring `sccache` and mounting a shared cache directory into your containers, you can reuse compiled artifacts and significantly cut down on build times.
 
 To enable `sccache`, install it and update your Cargo configuration.
 
 1. Install `sccache`:
+
    ```sh
    cargo install sccache
    ```
