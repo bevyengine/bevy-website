@@ -156,6 +156,7 @@ world.add_observer(
 ```
 
 [`.run_if`]: https://docs.rs/bevy/latest/bevy/ecs/observer/struct.Observer.html#method.run_if
+[Skipping Systems page]: @/learn/book/control-flow/run-conditions.md
 
 ## Event Triggers
 

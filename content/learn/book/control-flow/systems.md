@@ -180,6 +180,7 @@ See the section on [local system state] for more details.
 ["splits the borrow"]: https://doc.rust-lang.org/nomicon/borrow-splitting.html
 
 [local system state]: @/learn/book/storing-data/local-system-param.md
+[Queries book section]: @/learn/book/storing-data/queries.md
 
 ## Running Systems In Schedules
 
