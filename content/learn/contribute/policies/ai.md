@@ -92,3 +92,46 @@ The following behaviors are permissible, when handled with social grace:
 Exercise judgement and do not fixate exclusively on these topics: the Bevy community is not a debate platform, and, per the [Code of Conduct], doing so disruptively or unkindly *will* result in moderation action.
 
 [Code of Conduct]: https://bevy.org/learn/contribute/policies/code-of-conduct/
+
+## Appendix: History and Rationale
+
+While there is substantial diversity in opinion, Bevy's maintainers and contributors hold, on the whole, fairly skeptical and nuanced opinions about both the societal effects of AI and its technical merit within development workflows.
+If you are new to the Bevy community, you might ask: why not simply ban AI contributions and be done with it?
+
+In brief: [we tried that](https://github.com/bevyengine/bevy-website/pull/2204).
+Motivated by concerns around quality, ethics and legal risk, the Bevy maintainers voted to ban all AI-generated contributions.
+It didn't go very well.
+
+In practice, we found that we could not fairly and reliably enforce or adjudicate this policy.
+AI-generated prose is *sometimes* detectable, but rarely to the level of evidence desirable.
+AI-generated code is even less so.
+AI-generated bug detection, research, or design input could be *completely* invisible,
+and while this was not barred, many community members were unhappy with such use.
+
+Submissions were made that were *maybe* AI-generated with no way to ever prove it one way or another,
+forcing reviewers and moderators to constantly decide to act on or overlook violations on the slimmest of evidence.
+Any accusation threatened complete rejection of submitted work regardless of quality or effort,
+with a looming possibility of formal and informal exclusion from the community.
+Reviwers were caught between unproven, disruptive suspicion and blithe naïveté,
+accepting "no Mom I didn't eat any cookies" at face value because the cookie jar is stored in a locked room.
+
+This was deeply unpleasant: either choice was damaging to the community in the event of a mistake,
+and evaluating these meta-questions around provenance was emotionally exhausting.
+It did not, contrary to our initial goals, save maintainers time!
+
+This was, unsurprisingly, stressful and contentious!
+The day-to-day details of "how does this policy actually function in practice" matter.
+The simple cases of "new contributor, AI disclosed, code bad" were easily dealt with,
+but we were left without a settled answer to the socially complex problems buried in the edge cases.
+
+Over time, we found that what we were punishing was *disclosure*, not *use*.
+Without reliable detection, there was a strong incentive to defect: silently use AI, don't tell anyone about it.
+Even if no one *took* it, the temptation weighed on our contributors (who wants to do tedious refactors by hand?),
+and those who felt strongly that Bevy should not allow AI-assisted contributions worried about what might be slipping by.
+
+Ultimately, Bevy's AI policy was not driven by a desire to "10x productivity" or "embrace the future".
+It is a pragmatic reflection of our values and collective experience:
+establishing shared norms that allow us to work together healthily to build a better Bevy.
+
+For *extensive* discussion about this policy from contributors, maintainers and community members, and more information about how and why this decision was made,
+please see [the PR that introduced this policy](https://github.com/bevyengine/bevy-website/pull/2551).
