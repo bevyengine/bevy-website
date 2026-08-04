@@ -168,8 +168,11 @@ Note that Bevy's "fixed timesteps" are not the right mechanism to use for gamepl
 In most cases, [`Timer`] components and the [`on_timer`] run condition are more appropriate.
 
 Bevy only supports a single fixed timestep across your entire project, and its use is completely optional.
-Please see our [timers and cooldowns] section below for the tools available to model this type of behavior.
+Please see the [Time Controls page] for the tools available to model this type of behavior.
 
+[`Timer`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
+[`on_timer`]: https://docs.rs/bevy/latest/bevy/time/common_conditions/fn.on_timer.html
+[Time Controls page]: @/learn/book/control-flow/time-controls.md
 [`Time<Fixed>::timestep`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Time.html#method.timestep
 [`Main`]: https://docs.rs/bevy/latest/bevy/app/struct.Main.html
 [`FixedMain`]: https://docs.rs/bevy/latest/bevy/app/struct.FixedMain.html
