@@ -129,8 +129,9 @@ Without reliable detection, there was a strong incentive to defect: silently use
 Even if no one *took* it, the temptation weighed on our contributors (who wants to do tedious refactors by hand?),
 and those who felt strongly that Bevy should not allow AI-assisted contributions worried about what might be slipping by.
 
-Ultimately, Bevy's AI policy was not driven by a desire to "10x productivity" or "embrace the future".
-It is a pragmatic reflection of our values and collective experience:
+Ultimately, the changes to Bevy's AI policy were not driven by a desire to "10x productivity" or "embrace the future",
+but out of a need to make review and moderation a better, more humane experience, fostering transparency and psychological safety.
+Our policy is a pragmatic reflection of our values and collective experience:
 establishing shared norms that allow us to work together healthily to build a better Bevy.
 
 For *extensive* discussion about this policy from contributors, maintainers and community members, and more information about how and why this decision was made,
