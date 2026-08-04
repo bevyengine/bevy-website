@@ -20,7 +20,9 @@ This is helpful for performance reasons, but more critically,
 it ensures consistency of behavior across all of the various bits of game logic.
 
 {% callout(type="info") %}
+
 ## Time Versus Time Controls
+
 This page explains how Bevy sets up and interacts with time across the engine.
 However, it doesn't cover the tools that are provided to help you use time in your games.
 These include timers, stopwatches, system conditions, and even some command options that all rely on time.
@@ -47,11 +49,11 @@ use bevy::prelude::*;
 struct Player;
 
 fn move_player(mut player_transform: Single<&mut Transform, With<Player>>){
-    // With Bevy's default camera setup and a 60 fps framerate, 
+    // With Bevy's default camera setup and a 60 fps framerate,
     // this will move the player 60 pixels per second in 2D (reasonable),
     // or 60 meters per second in 3D (wheee!)
     const PLAYER_MOVEMENT: f32 = 1.;
-    
+
     player_transform.translation.x += PLAYER_MOVEMENT;
 }
 ```
@@ -61,19 +63,19 @@ But what happens when our game stutters, and the frame rate drops?
 Suddenly, rather than moving 60 units per second at our target 60 frames per second,
 our player is moving at an unsteady 20-30 units per second. Oh no!
 
-Instead, we can compensate for this effect by fixing our *speed* (or other rates of change per second),
+Instead, we can compensate for this effect by fixing our _speed_ (or other rates of change per second),
 and then multiplying by the elapsed time.
 
-```rust, hide_lines=1-4,hide_lines=1-5
+```rust,hide_lines=1-5
 # use bevy::prelude::*;
-# 
+#
 # #[derive(Component)]
 # struct Player;
 #
 fn move_player(mut player_transform: Single<&mut Transform, With<Player>>, time: Res<Time>){
     // At 60 FPS, this will be the same as before
     const PLAYER_SPEED: f32 = 60.;
-    
+
     player_transform.translation.x += PLAYER_SPEED * time.delta_secs();
 }
 ```
@@ -122,7 +124,7 @@ it's better to simply always advance time by a fixed amount.
 This is particularly important for physics and networking.
 
 To understand how to work with fixed time in Bevy, we need to first learn a little bit about how [`Time`] actually works under the hood.
-As the docs on [`Time`] explain, there's actually *three* distinct types of time being measured:
+As the docs on [`Time`] explain, there's actually _three_ distinct types of time being measured:
 
 - real time: the actual wall clock time
   - use this for things like UI animations that you don't want to be affected by pausing
@@ -150,6 +152,7 @@ to [`Real`], [`Virtual`] or [`Fixed`].
 [`Real`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Real.html
 [`Virtual`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Virtual.html
 [`Fixed`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Fixed.html
+
 {% end %}
 
 Now that we have the required vocabulary, let's go over exactly how the fixed timestep logic works in Bevy:

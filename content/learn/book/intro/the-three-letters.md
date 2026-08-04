@@ -8,7 +8,7 @@ status = 'hidden'
 
 Bevy's architecture centers around its [ECS](https://en.wikipedia.org/wiki/Entity_component_system): E for **Entity**, C for **Component** and S for **System**. ECS is a high-performance way of organizing the data of a program, and controlling how that data is accessed and updated.
 ECS has been utilized in a number of commercial game engines, and has been increasing in popularity over the last couple of decades.
-Bevy however is relatively unique in how widely it uses these patterns: ECS in Bevy is used *everywhere*, not just for performance-critical code.
+Bevy however is relatively unique in how widely it uses these patterns: ECS in Bevy is used _everywhere_, not just for performance-critical code.
 
 There are two main mental models for how to think about ECS:
 
@@ -40,7 +40,7 @@ In the "in-memory database" model, entities are the row keys in our database, wi
 While entities are conceptually similar to Objects in object-oriented engines, they are distinctly different because they **do not store any behavior**.
 Instead, behavior is controlled by [systems](#the-s-systems).
 
-{% callout(type="note") %}
+{% callout(type="info") %}
 **Note on terminology**: Sometimes, using the word "entity" on its own can be ambiguous. Does it mean the row/id/primary key or does it mean the game object/thing it represents with all its data? In Bevy, entity ids are modeled in the `Entity` type. As a result, `Entity` typically refers to the id, and a lowercase "entity" typically refers to the game object.
 {% end %}
 
@@ -107,7 +107,7 @@ fn my_system(entities: Query<&mut Location>) {
 {% callout(type="info") %}
 Bevy systems use a technique called [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to access data about the Bevy world. By declaring your function parameters wrapped in special types like [Query](@/learn/book/intro/the-next-three-letters.md#queries) or [Res](@/learn/book/intro/the-next-three-letters.md#resources), the data for those parameters will be filled in for you automatically — without you having to actually call the system.
 
-Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are *disjoint* and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
+Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are _disjoint_ and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
 {% end %}
 
 Systems usually access entities and their components via [Queries](@/learn/book/intro/the-next-three-letters.md#queries), which will be covered in the next chapter.

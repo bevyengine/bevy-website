@@ -27,7 +27,7 @@ When enabled, assets loaded in your game will automatically reload when their as
 
 To detect changes that occur due to hot-reloading, listen for [`AssetEvent::Modified`], or use the [`AssetChanged`] query filter.
 
-{% callout(type="note") %}
+{% callout(type="info") %}
 If you are also using embedded assets (through the [`load_embedded_asset!`] macro), it can be useful to also enable the `embedded_watcher` feature.
 {% end %}
 
@@ -122,9 +122,9 @@ There's non-trivial setup work, significant indirection, and you cannot capture 
 This pattern is best suited to games that have a large amount of structured gameplay data that needs tuning:
 it would work well for something like an ARPG, but poorly for a walking simulator.
 
-{% callout(type="note") %}
+{% callout(type="info") %}
 
-Within the games industry, games that use this pattern are sometimes called "data-driven". 
+Within the games industry, games that use this pattern are sometimes called "data-driven".
 This is not to be confused with data-driven in the sense of using data to make decisions, or data-oriented, where your game maps well to the underlying hardware of the machine to run faster.
 As a result, Bevy uses the less confusing term "asset-driven" when discussing this pattern.
 
