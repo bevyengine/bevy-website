@@ -68,7 +68,7 @@ Repeated or severe violations may result in warnings, suspensions, or bans: plea
 
 We understand that AI is a controversial topic, with important societal implications, many of which directly impact topics the Bevy community cares about.
 Nevertheless, Bevy's [Code of Conduct] continues to apply when AI-related topics are discussed.
-To help you understand where Bevy draws the line, the following AI-related behaviors are not acceptable, anywhere within the Bevy community:
+To help you understand where Bevy draws the line, the following AI-related behaviors are not acceptable anywhere within the Bevy community:
 
 - inflammatory comments about AI or patterns of behavior that seek to get a rise out of others
 - comments that imply that AI use is or will be mandatory (inside of Bevy or outside of it), or which otherwise disparage those who do not want to use it / think it should be used
