@@ -50,7 +50,7 @@ Some of these are firm boundaries, while others describe the standard of craft t
   While AI can be helpful during the design process, it should be used to explore the space, not to simply generate a solution.
   Publicly shared design documents (or problem definitions) must be personally authored, synthesizing your own understanding of the problem space and any proposed solution.
   We want to foster genuine expertise, and feel that taking the time to draft plans personally is critical for both learning and refinement. Care and effort spent planning pays dividends later.
-10. **Art:** Out of respect for the craft of artists, AI must not be used for creating or manipulating art assets: find a permissively licensed asset, commission something appropriate, or make one by hand.
+10. **Art:** Out of respect for the craft of artists, AI must not be used for creating or manipulating art assets submitted to Bevy: find a permissively licensed asset, commission something appropriate, or make one by hand.
 11. **Harassment:** Do not harass, pressure, or demean others because of their AI use or lack thereof.
   See the attached Appendix for examples of acceptable and unacceptable behavior.
   There are a wide range of perspectives within our community, and community health is more important than winning arguments on the internet or accomplishing any particular bit of work.
