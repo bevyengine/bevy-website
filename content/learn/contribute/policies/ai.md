@@ -31,28 +31,31 @@ Some of these are firm boundaries, while others describe the standard of craft t
   Doing so will typically result in your PR being closed or ignored.
   These are a lot of work to review, attract merge conflicts quickly, and risk wasting resources for nothing.
   Just because you *could* generate a major feature in a single 10k LoC PR does not mean you *should* skip the design and consensus-building process!
-5. **Refinement:** Do not dump raw generative AI output on other contributors: this is disrespectful of their time and attention.
+5. **Collaboration:** Do not use AI tools to supercede or accelerate others' active work without their explicit consent.
+  Check for open efforts before embarking on new major features, and prefer collaborating to improve that work, 
+  with the understanding that experimenting with alternative approaches is often an important part of collaboration.
+6. **Refinement:** Do not dump raw generative AI output on other contributors: this is disrespectful of their time and attention.
   Use these tools to do things *better*, not just *faster*.
   Aggressively review and revise generated code before submission, working carefully to refine the design and polish the implementation.
   For written communication, seek to understand the output and synthesize it from scratch in your own words.
   If you want to share exact output in a discussion, quote sparingly, with attribution.
-6. **Writing:** Everyone is sick of reading LLM-flavored text, no matter their feelings on its use.
+7. **Writing:** Everyone is sick of reading LLM-flavored text, no matter their feelings on its use.
   AI should never be used to draft large blocks of public-facing prose: module docs, release notes, lengthy PR descriptions, or book chapters, to give a few examples.
   We would rather you submit something simple that you wrote yourself; our editors can help expand and revise it later.
   Using AI as a critic or for mechanical fixes is permitted, but substantive revisions should be made yourself to preserve both structure and voice.
-7. **Design:** Writing is thinking.
+8. **Design:** Writing is thinking.
   While AI can be helpful during the design process, it should be used to explore the space, not to simply generate a solution.
   Publicly shared design documents (or problem definitions) must be personally authored, synthesizing your own understanding of the problem space and any proposed solution.
   We want to foster genuine expertise, and feel that taking the time to draft plans personally is critical for both learning and refinement. Care and effort spent planning pays dividends later.
-8. **Art:** Out of respect for the craft of artists, AI must not be used for creating or manipulating art assets: find a permissively licensed asset, commission something appropriate, or make one by hand.
-9. **Harassment:** Do not harass, pressure, or demean others because of their AI use or lack thereof.
+9. **Art:** Out of respect for the craft of artists, AI must not be used for creating or manipulating art assets: find a permissively licensed asset, commission something appropriate, or make one by hand.
+10. **Harassment:** Do not harass, pressure, or demean others because of their AI use or lack thereof.
   See the attached Appendix for examples of acceptable and unacceptable behavior.
   There are a wide range of perspectives within our community, and community health is more important than winning arguments on the internet or accomplishing any particular bit of work.
-10. **Refusal:** Contributors are allowed to refuse to review AI-assisted code for any reason, or reject AI-assisted reviews. Please, do not pressure them to change their minds.
-11. **Translation:** LLMs may be used for translation, but you must provide the original untranslated text as well
+11. **Refusal:** Contributors are allowed to refuse to review AI-assisted code for any reason, or reject AI-assisted reviews. Please, do not pressure them to change their minds.
+12. **Translation:** LLMs may be used for translation, but you must provide the original untranslated text as well
   (preferably in a [collapsed section]).
   We want to understand when we're talking to a human vs an LLM, and translations which destroy your natural voice without an original to cross-reference are indistinguishable from text that was simply generated.
-12.  **Good faith:** Welcome others to the project and to the community, and presume that they are contributing in good faith.
+13. **Good faith:** Welcome others to the project and to the community, and presume that they are contributing in good faith.
   If and when others violate these rules, start by gently correcting them; guiding them so that they can follow our community norms.
 
 Individual reviewers are empowered to request changes to contributions that fail to live up to these norms, or in cases where the work is not salvageable (commonly due to a lack of understanding by the original author), close them completely.
