@@ -137,6 +137,12 @@ Without reliable detection, there was a strong incentive to defect: silently use
 Even if no one *took* it, the temptation weighed on our contributors (who wants to do tedious refactors by hand?),
 and those who felt strongly that Bevy should not allow AI-assisted contributions worried about what might be slipping by.
 
+While looking for an alternative, we studied and discussed dozens of other AI policies in open source.
+The policies of [Blender], [Godot], [Rust], [Mastodon] and [GCC] were particularly useful as inspiration,
+and encourage others seeking to write their own policy to start their research there.
+While we do not follow any of those policies exactly, we've integrated meaningful elements from each,
+and are grateful for the hard work done to draft and pass those policies.
+
 Ultimately, the changes to Bevy's AI policy were not driven by a desire to "10x productivity" or "embrace the future",
 but out of a need to make review and moderation a better, more humane experience, fostering transparency and psychological safety.
 Our policy is a pragmatic reflection of our values and collective experience:
@@ -144,3 +150,9 @@ establishing shared norms that allow us to work together healthily to build a be
 
 For *extensive* discussion about this policy from contributors, maintainers and community members, and more information about how and why this decision was made,
 please see [the PR that introduced this policy](https://github.com/bevyengine/bevy-website/pull/2551).
+
+[Blender]: https://web.archive.org/web/20260728002534/https://developer.blender.org/docs/handbook/contributing/ai_contributions/
+[Godot]: https://godotengine.org/article/contribution-policy-2026/
+[Rust]: https://github.com/rust-lang/rust-forge/commit/392e02626777c7388fb8532bee956f1361559d0b
+[Mastodon]: https://github.com/mastodon/.github/commit/4eb2a1c3cb7caca9789d2aa9446a105bf1fae801
+[GCC]: https://forge.sourceware.org/redi/gcc-wwwdocs/commit/4d0793a6a14bf9bfe9e92ac1599840780355199d
