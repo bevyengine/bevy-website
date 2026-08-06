@@ -151,7 +151,7 @@ establishing shared norms that allow us to work together healthily to build a be
 For *extensive* discussion about this policy from contributors, maintainers and community members, and more information about how and why this decision was made,
 please see [the PR that introduced this policy](https://github.com/bevyengine/bevy-website/pull/2551).
 
-[Blender]: https://web.archive.org/web/20260728002534/https://developer.blender.org/docs/handbook/contributing/ai_contributions/
+[Blender]: https://projects.blender.org/blender/blender-developer-docs/commit/c7c4280a41bba631c42c6247429bf9c80216c090
 [Godot]: https://godotengine.org/article/contribution-policy-2026/
 [Rust]: https://github.com/rust-lang/rust-forge/commit/392e02626777c7388fb8532bee956f1361559d0b
 [Mastodon]: https://github.com/mastodon/.github/commit/4eb2a1c3cb7caca9789d2aa9446a105bf1fae801
