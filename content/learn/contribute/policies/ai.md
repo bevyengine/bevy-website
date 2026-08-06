@@ -11,55 +11,23 @@ Bevy, as a project and a community, values:
 2. **Growth:** Developing understanding and wisdom within our contributors
 3. **Quality:** Creating a reliable, high-quality foundation for others to build on
 
-Our policy around AI use is designed pragmatically,
-attempting to find ways of working together that will, in practice, honor these values.
+We are broadly wary of AI's use in the development of Bevy,
+but tolerate careful human-driven AI use consistent with the above values.
+Originally, Bevy had a nearly complete ban on the use of AI,
+but, as discussed in [History](#appendix-history-and-rationale),
+this policy was modified due to the difficulty and stress of detecting AI use and concerns about long-term community health.
 
-In concrete terms, Bevy has the following norms around AI use that we expect our contributors and community members to uphold.
-Some of these are firm boundaries, while others describe the standard of craft that we expect from our contributors:
+In concrete terms, Bevy expects its community members to uphold the following norms around AI:
 
-1. **Ownership:** Contributors are wholly responsible for their own submissions, regardless of how they are created. 
-  You must personally understand every line of code and documentation that you submit.
-  Contributions must be original (or appropriately credited and license-compliant), well-made and crafted with care: something that you are proud of.
-  Do not include "Co-authored by Claude" etc commits; these will be caught by CI and automatically rejected.
-2. **Disclosure:** AI use, regardless of extent, must be disclosed, typically in the PR description, with context about how AI was used.
-  This gives reviewers the information they need to evaluate both the output and your personal expertise effectively, and guide contributors to use these tools in a constructive way.
-3. **Learning:** We want to help our contributors learn and grow.
-  Work within the limits of your skills, and do not allow AI to substitute for understanding or thinking.
-  Verify each finding yourself, carefully and critically evaluate plans and designs, and test things rigorously, both automatically and manually.
-  Never serve as a direct pipe for an LLM: we want to talk to *you*, not to Claude-via-proxy!
-4. **Large changes:** Please do not prepare or submit sweeping changes (by number of files touched, PRs opened or total lines of code) without prior discussion, even though AI makes doing so easier.
-  Doing so will typically result in your PR being closed or ignored.
-  These are a lot of work to review, attract merge conflicts quickly, and risk wasting resources for nothing.
-  Just because you *could* generate a major feature in a single 10k LoC PR does not mean you *should* skip the design and consensus-building process!
-5. **Collaboration:** Do not use AI tools to supercede or accelerate others' active work without their explicit consent.
-  Check for open efforts before embarking on new major features, and prefer collaborating to improve that work, 
-  with the understanding that experimenting with alternative approaches is often an important part of collaboration.
-6. **Refinement:** Do not dump raw generative AI output on other contributors: this is disrespectful of their time and attention.
-  Aggressively review and revise generated code before submission, working carefully to refine the design and polish the implementation.
-  For written communication, seek to understand the output and synthesize it from scratch in your own words.
-  If you want to share exact output in a discussion, quote sparingly, with attribution.
-7. **Quality:** The Bevy project is willing to take the time to do things well.
-  Do not simply pressure reviewers, authors or maintainers to increase velocity.
-  Sit down, understand where the bottlenecks currently are, and offer tangible and humane suggestions to improve how we work.
-  Don't use AI tools as a shortcut, or suggest that others do so.
-8. **Writing:** Everyone is sick of reading LLM-flavored text, no matter their feelings on its use.
-  AI should never be used to draft large blocks of public-facing prose: module docs, release notes, lengthy PR descriptions, or book chapters, to give a few examples.
-  We would rather you submit something simple that you wrote yourself; our editors can help expand and revise it later.
-  Using AI as a critic or for mechanical fixes is permitted, but substantive revisions should be made yourself to preserve both structure and voice.
-9. **Design:** Writing is thinking.
-  While AI can be helpful during the design process, it should be used to explore the space, not to simply generate a solution.
-  Publicly shared design documents (or problem definitions) must be personally authored, synthesizing your own understanding of the problem space and any proposed solution.
-  We want to foster genuine expertise, and feel that taking the time to draft plans personally is critical for both learning and refinement. Care and effort spent planning pays dividends later.
-10. **Art:** Out of respect for the craft of artists, AI must not be used for creating or manipulating art assets submitted to Bevy: find a permissively licensed asset, commission something appropriate, or make one by hand.
-11. **Harassment:** Do not harass, pressure, or demean others because of their AI use or lack thereof.
-  See the attached Appendix for examples of acceptable and unacceptable behavior.
-  There are a wide range of perspectives within our community, and community health is more important than winning arguments on the internet or accomplishing any particular bit of work.
-12. **Refusal:** Contributors are allowed to refuse to review AI-assisted code for any reason, or reject AI-assisted reviews. Please, do not pressure them to change their minds.
-13. **Translation:** LLMs may be used for translation, but you must provide the original untranslated text as well
-  (preferably in a [collapsed section]).
-  We want to understand when we're talking to a human vs an LLM, and translations which destroy your natural voice without an original to cross-reference are indistinguishable from text that was simply generated.
-14. **Good faith:** Welcome others to the project and to the community, and presume that they are contributing in good faith.
-  If and when others violate these rules, start by gently correcting them; guiding them so that they can follow our community norms.
+1. **No AI-generated media.** Images, models, audio assets (and so on) submitted to Bevy may not be authored or modified with the use generative AI tools. Use a permissively licensed asset, make one by hand, or commission an artist.
+2. **No LLM-generated prose.** LLMs cannot be used to write public-facing prose, including documentation,issues, PR descriptions, or release notes. 
+3. **No LLM-generated communication.** We want to talk to *you*, not a machine. Do not paste LLM output directly into conversations with humans, no matter where they take place. LLMs may be used to assist for translation and accessiblity purposes, but please include the original untranslated text as well.
+4. **No LLM-authored commits.** This includes "Co-authored by" and is enforced via automated checks in CI.
+5. **Ownership.** As a contributor, you are personally responsible for everything you submit. You must personally understand every line of code or documentation that you put forward for review, and be able to articulate the design rationale and implementation tradeoffs when asked. Work within your skill level and knowledge of the project.
+6. **Disclosure.** Any use of AI to contribute to Bevy must be disclosed, with context about how it was used.
+7. **Quality.** Bevy holds a high bar for quality, and are willing to take the time to do things well. AI-assisted PRs will be held to a rigorous standard of review: correctness, tests, rationale, incremental reviewable units, appropriate design and consensus building and so on. 
+8. **Harassment.** Do not harass, demean, pressure, or bully others. This continues to apply, even when the basis of your disagreement centers around use of, absistenence from or views on AI. See the [appendix on harassment](#appendix-harassment-policy-details) for examples of acceptable and unacceptable behavior.
+9. **Refusal.** Bevy contributors and community members are not required to review AI-assisted work, use AI tools, or engage in discussions about AI. We want to make sure that those who reject AI remain a valued part of both the work and community of Bevy.
 
 Individual reviewers are empowered to request changes to contributions that fail to live up to these norms, or in cases where the work is not salvageable (commonly due to a lack of understanding by the original author), close them completely.
 Bevy is excited to mentor new contributors, and help you develop the skills you need to contribute, but we need you to engage with us directly, as people, not just serve as a proxy for an LLM.
