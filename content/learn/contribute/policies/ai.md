@@ -80,6 +80,7 @@ To help you understand where Bevy draws the line, the following AI-related behav
   - engine-related conversation on adoption or abandonment of AI workflows should be similarly threaded.
 - refusal to disengage from an argument with a specific individual after being asked to stop
 - broad negative generalizations about groups of people based on their views on or usage of or abstinence from AI
+- participating in or condoning harassment campaigns
 - unsubstantive negative comments or reactions in response to contributors or community members who disclose AI use
 
 If you have frustrations or concerns with other community members' behavior or project-wide rules, come to the moderation team.
