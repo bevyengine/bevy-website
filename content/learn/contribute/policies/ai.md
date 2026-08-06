@@ -11,8 +11,9 @@ Bevy, as a project and a community, values:
 2. **Growth:** Developing understanding and wisdom within our contributors
 3. **Quality:** Creating a reliable, high-quality foundation for others to build on
 
-We are broadly wary of AI's use in the development of Bevy,
-but tolerate careful human-driven AI use for code consistent with the above values.
+We are wary of the use of AI in the development of Bevy,
+and particularly troubled by its impact on the livelihood of artists,
+but tolerate careful human-driven AI use in some areas consistent with the above values.
 
 In concrete terms, Bevy expects its community members to uphold the following norms around AI:
 
