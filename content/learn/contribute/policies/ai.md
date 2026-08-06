@@ -20,9 +20,9 @@ this policy was modified due to the difficulty and stress of detecting AI use an
 In concrete terms, Bevy expects its community members to uphold the following norms around AI:
 
 1. **No AI-generated media.** Images, models, audio assets (and so on) submitted to Bevy may not be authored or modified with the use generative AI tools. Use a permissively licensed asset, make one by hand, or commission an artist.
-2. **No LLM-generated prose.** LLMs cannot be used to write public-facing prose, including documentation,issues, PR descriptions, or release notes. 
-3. **No LLM-generated communication.** We want to talk to *you*, not a machine. Do not paste LLM output directly into conversations with humans, no matter where they take place. LLMs may be used to assist for translation and accessiblity purposes, but please include the original untranslated text as well.
-4. **No LLM-authored commits.** This includes "Co-authored by" and is enforced via automated checks in CI.
+2. **No AI-generated prose.** AI cannot be used to write public-facing prose, including documentation,issues, PR descriptions, or release notes.
+3. **No AI-generated communication.** We want to talk to *you*, not a machine. Do not paste AI-generated output directly into conversations with humans, no matter where they take place. AI may be used to assist for translation and accessiblity purposes, but please include the original untranslated text as well.
+4. **No AI-authored commits.** This includes "Co-authored by" and is enforced via automated checks in CI.
 5. **Ownership.** As a contributor, you are personally responsible for everything you submit. You must personally understand every line of code or documentation that you put forward for review, and be able to articulate the design rationale and implementation tradeoffs when asked. Work within your skill level and knowledge of the project.
 6. **Disclosure.** Any use of AI to contribute to Bevy must be disclosed, with context about how it was used.
 7. **Quality.** Bevy holds a high bar for quality, and are willing to take the time to do things well. AI-assisted PRs will be held to a rigorous standard of review: correctness, tests, rationale, incremental reviewable units, appropriate design and consensus building and so on. 
@@ -30,7 +30,7 @@ In concrete terms, Bevy expects its community members to uphold the following no
 9. **Refusal.** Bevy contributors and community members are not required to review AI-assisted work, use AI tools, or engage in discussions about AI. We want to make sure that those who reject AI remain a valued part of both the work and community of Bevy.
 
 Individual reviewers are empowered to request changes to contributions that fail to live up to these norms, or in cases where the work is not salvageable (commonly due to a lack of understanding by the original author), close them completely.
-Bevy is excited to mentor new contributors, and help you develop the skills you need to contribute, but we need you to engage with us directly, as people, not just serve as a proxy for an LLM.
+Bevy is excited to mentor new contributors, and help you develop the skills you need to contribute, but we need you to engage with us directly, as people, not just serve as a proxy for a machine.
 Repeated or severe violations may result in warnings, suspensions, or bans: please try your best to respect and uphold these norms.
 
 [collapsed section]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-collapsed-sections
