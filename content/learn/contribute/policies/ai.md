@@ -12,11 +12,14 @@ Bevy, as a project and a community, values:
 3. **Quality:** Creating a reliable, high-quality foundation for others to build on
 
 We are broadly wary of AI's use in the development of Bevy,
-but tolerate careful human-driven AI use consistent with the above values.
+but tolerate careful human-driven AI use for code consistent with the above values.
+Originally, Bevy had a nearly complete ban on the use of AI,
+but, as discussed in [History](#appendix-history-and-rationale),
+this policy was modified due to the difficulty and stress of detecting AI use and concerns about long-term community health.
 
 In concrete terms, Bevy expects its community members to uphold the following norms around AI:
 
-1. **No AI-generated media.** Images, models, audio assets (and so on) submitted to Bevy may not be authored or modified with the use of generative AI tools. Use a permissively licensed asset, make one by hand, or commission an artist.
+1. **No AI-generated media.** Images, 3d models, audio assets (and so on) submitted to Bevy may not be authored or modified with the use of generative AI tools. Use a permissively licensed asset, make one by hand, or commission an artist.
 2. **No AI-generated prose.** AI cannot be used to write public-facing prose, including documentation, issues, PR descriptions, or release notes.
 3. **No AI-generated communication.** We want to talk to *you*, not a machine. Do not paste AI-generated output directly into conversations with humans, no matter where they take place. AI may be used to assist for translation and accessibility purposes, but please include the original untranslated text as well.
 4. **No AI-authored commits.** This includes "Co-authored by" and is enforced via automated checks in CI.
@@ -42,17 +45,17 @@ To help you understand where Bevy draws the line, the following AI-related behav
 - comments that imply that AI use is or will be mandatory (inside of Bevy or outside of it), or which otherwise disparage those who do not want to use it / think it should be used
 - insistently advocating for the use of AI, in general or with respect to specific practices / tools, in either Bevy's development or others' personal workflows
   - note that discussion of personal AI-related tools and practices should be contained to the `#machine-learning` channel on Discord to ensure others can easily avoid these discussions.
-  - engine-related conversation on adoption or abandonment of AI workflows should be similarly threaded.
+  - engine-related conversation on adoption or abandonment of AI workflows should similarly be threaded.
 - refusal to disengage from an argument with a specific individual after being asked to stop
 - broad negative generalizations about groups of people based on their views on or usage of or abstinence from AI
 - participating in or condoning harassment campaigns
-- unsubstantive negative comments or reactions in response to contributors or community members who disclose AI use
+- unsubstantial negative comments or reactions in response to contributors or community members who disclose AI use
 
 If you have frustrations or concerns with other community members' behavior or project-wide rules, come to the moderation team.
 We will try our best to resolve problems, even if it is a repeated pattern of subthreshold behavior!
 Once our decision has been made, do your best to respect it unless new problems have arisen.
 
-The following behaviors are permissible, when handled with social grace:
+The following behaviors are permissible, when handled with social grace and at the appropriate channels:
 
 - discussing the politics and current events of AI
 - discussing, in the general case, the role of AI in art
