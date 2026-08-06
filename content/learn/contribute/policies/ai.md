@@ -46,7 +46,7 @@ To help you understand where Bevy draws the line, the following AI-related behav
 - refusal to disengage from an argument with a specific individual after being asked to stop
 - broad negative generalizations about groups of people based on their views on or usage of or abstinence from AI
 - participating in or condoning harassment campaigns
-- unsubstantial negative comments or reactions in response to contributors or community members who disclose AI use
+- unconstructive negative comments or reactions in response to contributors or community members who disclose AI use
 
 If you have frustrations or concerns with other community members' behavior or project-wide rules, come to the moderation team.
 We will try our best to resolve problems, even if it is a repeated pattern of subthreshold behavior!
