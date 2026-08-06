@@ -5,9 +5,8 @@ use std::{
 
 use anyhow::bail;
 use chrono::{DateTime, NaiveDate, TimeZone, Utc};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
-use ureq::Response;
 
 /// A GitHub repository in the `bevyengine` organization.
 #[derive(Debug, Clone, Copy)]
@@ -76,6 +75,23 @@ pub struct GithubIssuesResponsePullRequest {
     pub merged_at: Option<String>,
 }
 
+#[derive(Serialize)]
+struct Query {
+    query: String,
+}
+
+#[derive(Serialize)]
+struct RequestBody {
+    body: String,
+}
+
+#[derive(Serialize)]
+struct GithubIssueRequest {
+    title: String,
+    body: String,
+    labels: Vec<String>,
+}
+
 #[derive(Deserialize, Clone, Debug)]
 pub struct GithubIssuesResponse {
     pub title: String,
@@ -104,28 +120,34 @@ pub struct GithubClient {
 
 impl GithubClient {
     pub fn new(token: String, repo: BevyRepo) -> Self {
-        let agent: ureq::Agent = ureq::AgentBuilder::new()
+        let config = ureq::Agent::config_builder()
             .user_agent("bevy-website-generate-release")
             .build();
+
+        let agent: ureq::Agent = config.into();
 
         Self { agent, token, repo }
     }
 
     /// Submits a GET request to `bevyengine/{repo}`
-    fn get(&self, path: &str, repo: BevyRepo) -> ureq::Request {
+    fn get(
+        &self,
+        path: &str,
+        repo: BevyRepo,
+    ) -> ureq::RequestBuilder<ureq::typestate::WithoutBody> {
         self.agent
             .get(&format!(
                 "https://api.github.com/repos/bevyengine/{repo}/{path}",
             ))
-            .set("Accept", "application/json")
-            .set("Authorization", &format!("Bearer {}", self.token))
+            .header("Accept", "application/json")
+            .header("Authorization", &format!("Bearer {}", self.token))
     }
 
-    fn post_graphql(&self) -> ureq::Request {
+    fn post_graphql(&self) -> ureq::RequestBuilder<ureq::typestate::WithBody> {
         self.agent
             // WARN if this path ends with a / it will break
             .post("https://api.github.com/graphql")
-            .set("Authorization", &format!("bearer {}", self.token))
+            .header("Authorization", &format!("bearer {}", self.token))
     }
 
     /// Gets the list of all commits between two git ref
@@ -161,8 +183,8 @@ impl GithubClient {
         let request = self
             .get(&format!("compare/{from}...{to}"), BevyRepo::Bevy)
             .query("per_page", "250")
-            .query("page", &page.to_string());
-        Ok(request.call()?.into_json()?)
+            .query("page", page.to_string());
+        Ok(request.call()?.into_body().read_json()?)
     }
 
     /// Gets a filtered list of issues and PRs from `bevyengine/{repo}`.
@@ -232,16 +254,16 @@ impl GithubClient {
             .query("state", state.as_github_str())
             .query("base", "main")
             .query("per_page", "100")
-            .query("page", &page.to_string());
+            .query("page", page.to_string());
 
         if let Some(date) = date {
-            request = request.query("since", &format!("{date}T00:00:00Z"));
+            request = request.query("since", format!("{date}T00:00:00Z"));
         }
 
         if let Some(label) = label {
             request = request.query("labels", label);
         }
-        let mut responses: Vec<GithubIssuesResponse> = request.call()?.into_json()?;
+        let mut responses: Vec<GithubIssuesResponse> = request.call()?.into_body().read_json()?;
 
         // Filter the PRs based on the requested state
         match state {
@@ -279,10 +301,9 @@ query {{
         );
         // for whatever reasons, github doesn't accept newlines in graphql queries
         let query = query.replace('\n', "");
-        let resp = self
-            .post_graphql()
-            .send_json(ureq::json!({ "query": query }))?;
-        let json: serde_json::Value = resp.into_json()?;
+        let json = Query { query };
+        let resp = self.post_graphql().send_json(json)?;
+        let json: serde_json::Value = resp.into_body().read_json()?;
 
         let mut name_login_map = HashMap::new();
 
@@ -328,7 +349,7 @@ query {{
         repo: BevyRepo,
     ) -> anyhow::Result<GithubCommitResponse> {
         let request = self.get(&format!("commits/{git_ref}"), repo);
-        Ok(request.call()?.into_json()?)
+        Ok(request.call()?.into_body().read_json()?)
     }
 
     /// Opens a new issue on the specified repo.
@@ -342,27 +363,28 @@ query {{
         issue_body: &str,
         labels: Vec<&str>,
     ) -> Result<GithubIssueOpenedResponse, IssueError> {
+        let json = GithubIssueRequest {
+            title: issue_title.to_string(),
+            body: issue_body.to_string(),
+            // TODO: add the milestone. Tracked in https://github.com/bevyengine/bevy-website/issues/1269
+            // Note that this must be provided as an integer, so we'll have to look up the milestone ID.
+            labels: labels.iter().map(|s| s.to_string()).collect(),
+        };
         let response = self
             .agent
             .post(&format!(
                 "https://api.github.com/repos/bevyengine/{repo}/issues"
             ))
-            .set("Authorization", &format!("Bearer {}", self.token))
-            .set("Accept", "application/vnd.github+json")
-            .set("X-GitHub-Api-Version", "2022-11-28")
-            .send_json(ureq::json!({
-                "title": issue_title,
-                "body": issue_body,
-                // TODO: add the milestone. Tracked in https://github.com/bevyengine/bevy-website/issues/1269
-                // Note that this must be provided as an integer, so we'll have to look up the milestone ID.
-                "labels": labels,
-            }))?;
+            .header("Authorization", &format!("Bearer {}", self.token))
+            .header("Accept", "application/vnd.github+json")
+            .header("X-GitHub-Api-Version", "2022-11-28")
+            .send_json(json)?;
 
         // Make sure the issue was created successfully
         if response.status() != 201 {
             Err(IssueError::FailedToCreateIssue(response))
         } else {
-            let parsed_response: GithubIssueOpenedResponse = response.into_json()?;
+            let parsed_response: GithubIssueOpenedResponse = response.into_body().read_json()?;
 
             Ok(parsed_response)
         }
@@ -377,18 +399,19 @@ query {{
         repo: BevyRepo,
         issue_number: u64,
         comment: &str,
-    ) -> Result<Response, ureq::Error> {
+    ) -> Result<ureq::http::Response<ureq::Body>, ureq::Error> {
+        let json = RequestBody {
+            body: comment.to_string(),
+        };
         let response = self
             .agent
             .post(&format!(
                 "https://api.github.com/repos/bevyengine/{repo}/issues/{issue_number}/comments",
             ))
-            .set("Authorization", &format!("Bearer {}", self.token))
-            .set("Accept", "application/vnd.github+json")
-            .set("X-GitHub-Api-Version", "2022-11-28")
-            .send_json(ureq::json!({
-                "body": comment,
-            }))?;
+            .header("Authorization", &format!("Bearer {}", self.token))
+            .header("Accept", "application/vnd.github+json")
+            .header("X-GitHub-Api-Version", "2022-11-28")
+            .send_json(json)?;
 
         Ok(response)
     }
@@ -400,7 +423,7 @@ pub enum IssueError {
     #[error("error making request")]
     Ureq(#[from] ureq::Error),
     #[error("failed to create issue")]
-    FailedToCreateIssue(Response),
+    FailedToCreateIssue(ureq::http::Response<ureq::Body>),
     #[error("failed to parse response")]
     FailedToParseResponse(#[from] std::io::Error),
 }
