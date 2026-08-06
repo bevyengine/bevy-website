@@ -106,6 +106,8 @@ commands.spawn((
 ))
 ```
 
+#### Perspective Projection
+
 [`PerspectiveProjection`] is the default view for 3D games, making distant objects smaller than closer objects when converted into the clip space.
 You can alter the values in fields like `fov` (field of view), `near` (near clipping plane), and `far` (far clipping plane), among others, to control the projection's behavior.
 
@@ -115,7 +117,7 @@ commands.spawn((
     Camera3d::default(),
     Transform::from_xyz(0.0, 0.0, 5.0),
     Projection::Perspective(
-        PerspectiveProjection{
+        PerspectiveProjection {
             fov: 70.0,
             near: 0.1,
             far: 1000.0,
@@ -125,10 +127,12 @@ commands.spawn((
 ))
 ```
 
+#### Orthographic Projection
+
 [`OrthographicProjection`] is the default for 2D games, where objects will stay a consistent size regardless of how far away from the camera they are.
 Like with `PerspectiveProjection`, the `near` and `far` fields adjust the distances that objects will be rendered within.
 However, because we're using `OrthographicProjection`, we don't have fields like `fov` to alter.
-Instead, fields like `viewport_origin` (the center of the `RenderTarget`), `scale` (to control the size of objects in view), and `scaling_mode` (how the projection will scale) are used to control how the 2D image is shaped.
+Instead, fields like `viewport_origin` (the center of the `RenderTarget`) and `scale` (to control the size of objects in view) are used to control how the 2D image is shaped.
 
 ```rust
 // Create a new 2D camera with a custom Orthographic projection.
@@ -136,7 +140,7 @@ commands.spawn((
     Camera2d::default(),
     Transform::from_xyz(0.0, 0.0, 5.0),
     Projection::Orthographic(
-        OrthographicProjection{
+        OrthographicProjection {
             viewport_origin: Vec2(0.5, 0.5),
             scaling_mode: ScalingMode::Fixed {
                 width: 200.0,
@@ -150,6 +154,34 @@ commands.spawn((
     ),
 ))
 ```
+
+{% callout(type="info") %}
+##### Orthographic Scaling Mode
+
+Scaling objects in an Orthographic view is not a uniform process.
+While the `scale` field controls an overall multiplier on how large or small the projection will be scaled, we still have to determine how we're viewing the game world itself.
+The [`ScalingMode`] enum can be set to one of several variants that determines how objects in view of your camera will scale.
+
+The simplest variant is the [`WindowSize`] variant, where the number of pixels a window has will map 1:1 with the length of world units displayed by the projection.
+This means that a 64x64 image sprite will be displayed as 64 pixels wide and 64 pixels tall.
+However, this doesn't adapt to different screen sizes, as players with different monitor resolutions will have vastly different views of your game.
+
+Alternatively, the [`Fixed`] variant allows you to manually specify the size of the projection.
+By providing a `f32` value for both the `width` and `height` fields, the projection will always display the same region of the game world, regardless of any window resizing.
+
+The [`AutoMin`] and [`AutoMax`] variants can be used to maintain the aspect ratio of the window, while additionally specifying that the axes can't be smaller than a given minimum or maximum.
+
+Finally, the [`FixedVertical`] and [`FixedHorizontal`] will maintain a constant vertical or horizontal value while the other value will match the aspect ratio.
+
+[`ScalingMode`]: https://docs.rs/bevy/latest/bevy/camera/enum.ScalingMode.html
+[`WindowSize`]: https://docs.rs/bevy/latest/bevy/camera/enum.ScalingMode.html#variant.WindowSize
+[`Fixed`]: https://docs.rs/bevy/latest/bevy/camera/enum.ScalingMode.html#variant.Fixed
+[`AutoMin`]: https://docs.rs/bevy/latest/bevy/camera/enum.ScalingMode.html#variant.AutoMin
+[`AutoMax`]: https://docs.rs/bevy/latest/bevy/camera/enum.ScalingMode.html#variant.AutoMax
+[`FixedVertical`]: https://docs.rs/bevy/latest/bevy/camera/enum.ScalingMode.html#variant.FixedVertical
+[`FixedHorizontal`]: https://docs.rs/bevy/latest/bevy/camera/enum.ScalingMode.html#variant.FixedHorizontal
+
+{% end %}
 
 [`Projection`]: https://docs.rs/bevy/latest/bevy/prelude/enum.Projection.html
 [`OrthographicProjection`]: https://docs.rs/bevy/latest/bevy/prelude/struct.OrthographicProjection.html
