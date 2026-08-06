@@ -124,7 +124,7 @@ fn spawn_entity_with_children(mut commands: Commands) {
 }
 ```
 
-{% callout(type="warn") %}
+{% callout(type="warning") %}
 **Caution**
 
 In this shorter syntax, the parentheses around each child entity can trip you up if you are not careful.

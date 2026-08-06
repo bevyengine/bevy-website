@@ -21,7 +21,9 @@ opt-level = 'z'
 lto = "fat"
 codegen-units = 1
 strip = true
+```
 
+```toml
 # Optimized for speed
 # Good for desktop
 [profile.release]

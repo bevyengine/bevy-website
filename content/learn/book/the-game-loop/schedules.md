@@ -93,14 +93,15 @@ Bevy itself uses this pattern for both the [`Main`] schedule and our built-in [f
 [`PostUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.PostUpdate.html
 [`Last`]: https://docs.rs/bevy/latest/bevy/app/struct.Last.html
 [`Main`]: https://docs.rs/bevy/latest/bevy/app/struct.Main.html
-[systems]: /learn/book/control-flow/systems
-[app]: /learn/book/the-game-loop/app
-[plugins]: /learn/book/modular-architecture/plugins
-[state machine abstraction]: /learn/book/control-flow/states
-[fixed update loop]: /learn/book/the-game-loop/time-and-timers#fixing-your-timestep
+[systems]: @/learn/book/control-flow/systems.md
+[app]: @/learn/book/the-game-loop/app.md
+[plugins]: @/learn/book/modular-architecture/plugins.md
+[state machine abstraction]: @/learn/book/control-flow/states.md
+[fixed update loop]: @/learn/book/the-game-loop/game-time.md#fixing-your-timestep
 [`ScheduleRunnerPlugin`]: https://docs.rs/bevy/latest/bevy/app/struct.ScheduleRunnerPlugin.html
 [`MinimalPlugins`]: https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html
 [`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
 [`MainScheduleOrder`]: https://docs.rs/bevy/latest/bevy/app/struct.MainScheduleOrder.html
+[`ScheduleLabel`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/trait.ScheduleLabel.html
 [`World::run_schedule`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.run_schedule
-[fixed time]: /learn/book/the-game-loop/game-time#frame-rate-independence-and-delta-time
+[fixed time]: @/learn/book/the-game-loop/game-time.md#frame-rate-independence-and-delta-time

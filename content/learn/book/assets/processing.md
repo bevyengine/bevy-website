@@ -21,7 +21,7 @@ folder are automatically processed by the registered processors to produce the g
 of assets. Your game will automatically use the processed assets (without needing to change anything
 else).
 
-{% callout(type="important") %}
+{% callout(type="info") %}
 
 While it is possible to enable asset processing just before publishing to do steps like compression,
 we **strongly** recommend users choose at the beginning of their project whether to use processing
@@ -112,7 +112,7 @@ processor.
 
 ### AssetLoader
 
-This is exactly the same asset loader as discussed in [Custom Assets](/learn/book/assets/custom-assets). Note that
+This is exactly the same asset loader as discussed in [Custom Assets](@/learn/book/assets/custom_assets.md). Note that
 `LoadTransformAndSave` can only use your asset loader if it is registered.
 
 ### AssetTransformer
@@ -188,7 +188,7 @@ impl AssetSaver for MySaver {
 
 Just as with [`AssetLoader`]s, your type needs to be "encoded" somehow, whether through [`serde`] or
 whatever else. It may be necessary to create a "serializable" version of your asset. This is
-described in more detail in [Custom Assets](/learn/book/assets/custom-assets).
+described in more detail in [Custom Assets](@/learn/book/assets/custom_assets.md).
 
 ## Meta Files
 

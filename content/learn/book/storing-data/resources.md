@@ -26,7 +26,7 @@ If you might need multiple instances, then consider using [entities and componen
 Bevy uses resources for many of the built-in features of the engine.
 For example, Bevy's [`AssetServer`] is a resource.
 
-[entities and components]: /learn/book/storing-data/entities-components
+[entities and components]: @/learn/book/storing-data/entities-components.md
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`AssetServer`]: https://docs.rs/bevy/latest/bevy/asset/struct.AssetServer.html
 
@@ -46,6 +46,7 @@ fn update_music_volume(mut settings: ResMut<AudioSettings>) {
     settings.music_volume = 0.8;
 }
 ```
+
 [`Res`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
 [`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html
 
@@ -116,7 +117,7 @@ fn setup_audio_settings(world: &mut World) {
 }
 ```
 
-{% callout(type="warn") %}
+{% callout(type="warning") %}
 **Caution**
 
 Use care when accessing resources which may not exist.
@@ -133,6 +134,7 @@ fn audio_settings_system(settings_res: Option<Res<AudioSettings>>) {
 
 [`Res`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
 [`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html
+
 {% end %}
 
 ## Resources vs Singleton Entities

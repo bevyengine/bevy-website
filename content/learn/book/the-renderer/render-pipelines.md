@@ -80,7 +80,7 @@ Once copied over, a connection between the Render `SubApp` entity and their Main
 Alternatively, if you only need a specific type of asset (like a texture or a mesh), you can load an [`Asset`].
 `Asset`s that are loaded in your Main `SubApp` are automatically copied over in the `ExtractSchedule`.
 Bevy is able to do this by reading the associated [`AssetEvent`] messages that the `Asset` type emits when registered and loaded.
-You can read more about how `Asset`s are loaded and handled by Bevy in the [dedicated Assets chapter](/learn/book/assets).
+You can read more about how `Asset`s are loaded and handled by Bevy in the [dedicated Assets chapter](@/learn/book/assets/_index.md).
 
 ### Prepare & Queue
 

@@ -185,7 +185,6 @@ $color-white: #fff;
   --card-title-color: var(--color-neutral-93);
   --card-sponsor-icon-color: #b13376;
 
-  --code-bg-color: var(--color-neutral-18);
   --code-incorrect-bg-color: #481e21;
   --code-incorrect-border-color: darkred;
   --code-incorrect-border-hover-color: red;
@@ -194,32 +193,6 @@ $color-white: #fff;
   --code-incorrect-img-filter: invert(11%) sepia(57%) saturate(5143%)
     hue-rotate(350deg) brightness(118%) contrast(87%); // firebrick red
   --code-text-dim-color: var(--color-neutral-60c);
-
-  --code-aaa: #c0c5ce;
-  --code-ccc: #c594c5;
-  --code-ddd: #6699cc;
-  --code-eee: #dfc479;
-  --code-fff: #eff1f5;
-  --code-ggg: #e79e6d;
-  --code-hhh: #8fa1b3;
-  --code-iii: #b48ead;
-  --code-jjj: #9fc37f;
-  --code-kkk: #e0858d;
-  --code-lll: #d08770;
-  --code-mmm: #a3be8c;
-  --code-nnn: #bf616a;
-  --code-ooo: #4f5b66;
-  --code-ppp: #96b5b4;
-  --code-qqq: #ab7967;
-  --code-rrr: #2b303b;
-  --code-sss: #f92672;
-  --code-ttt: #a6e22e;
-  --code-uuu: #967efb;
-  --code-vvv: #565656;
-  --code-www: #9fc37f;
-  --code-xxx: #56b6c2;
-  --code-yyy: #d19a66;
-  --code-zzz: #d1af8f;
 
   --details-bg-color: #{rgba($color-neutral-93, 0.01)};
   --details-border-color: #444;
@@ -382,35 +355,8 @@ $color-white: #fff;
     --callout-warning-bg-color: #fdedc9;
     --callout-warning-color: #362a02;
 
-    --code-bg-color: var(--color-neutral-93);
     --code-incorrect-border-color: red;
     --code-text-dim-color: var(--color-neutral-61);
-
-    --code-aaa: #5078a4;
-    --code-ccc: #b041a3;
-    --code-ddd: #498bcc;
-    --code-eee: #c58908;
-    --code-fff: #eff1f5;
-    --code-ggg: #d67b3e;
-    --code-hhh: #6e91b5;
-    --code-iii: #ae3698;
-    --code-jjj: #64ae23;
-    --code-kkk: #d1767d;
-    --code-lll: #d08770;
-    --code-mmm: #81ba50;
-    --code-nnn: #bf616a;
-    --code-ooo: #4f5b66;
-    --code-ppp: #68b1af;
-    --code-qqq: #ab7967;
-    --code-rrr: #2b303b;
-    --code-sss: #f92672;
-    --code-ttt: #a6e22e;
-    --code-uuu: #967efb;
-    --code-vvv: #565656;
-    --code-www: #5ea91c;
-    --code-xxx: #2aa5a9;
-    --code-yyy: #cd5d12;
-    --code-zzz: #ce8c4e;
 
     --details-bg-color: #{rgba($color-neutral-17, 0.1)};
     --details-text-shadow-color: var(--color-neutral-17);

@@ -27,7 +27,6 @@ This is equivalent to:
 
 ```toml
 bevy = { version = "0.19", default-features = true }
-
 ```
 
 Bevy's default features are designed to provide a beginner-friendly experience that works out of the box.
@@ -49,7 +48,7 @@ For most users, feature collections are the right level of granularity.
 ## Feature Collections
 
 Bevy is a large project, with lots of different functionality and users who each have their own unique needs.
-As a result, it has *many* feature flags, and these feature flags often change quickly across versions.
+As a result, it has _many_ feature flags, and these feature flags often change quickly across versions.
 
 To make this easier to manage, Bevy offers "feature collections", which are feature flags that simply enable other features.
 You can see the full list of features by reading `bevy`'s [Cargo.toml](https://github.com/bevyengine/bevy/blob/latest/Cargo.toml).
@@ -80,7 +79,7 @@ As a result, disabling plugins or removing systems from schedules will not resul
 
 Users who are particularly interested in optimizing binary size, compile times, or even runtime performance may find it useful to try to shrink the set of feature flags they're using even further.
 This process can be quite time-consuming and frustrating (especially when updating Bevy versions), and we recommend only doing so if it's absolutely needed.
-You *will* have to dig into the internals regularly, and track the flow of features across multiple crates.
+You _will_ have to dig into the internals regularly, and track the flow of features across multiple crates.
 
 Bevy's feature flags follow a fairly complex flow:
 
@@ -95,11 +94,11 @@ There are two viable approaches to constructing a minimal feature set:
 2. Start with a fairly permissive set of features, construct a working project, and then pare them down. Replace feature collections with their corresponding set of features and then attempt to delete features one-at-a-time to see what breaks.
 
 Both of these can work well; approach 1 prioritizes faster compilation times throughout development, while approach 2 will let you get off the ground more easily.
-Again, this process is *fully* optional: you should not feel like you *have* to do this unless you have real data that it's important for your particular project.
+Again, this process is _fully_ optional: you should not feel like you _have_ to do this unless you have real data that it's important for your particular project.
 
 {% callout(type="info") %}
 
-Features in Rust are *additive*.
+Features in Rust are _additive_.
 This means that if any crate in your tree enables a feature,
 it will be enabled for all users of the crate.
 

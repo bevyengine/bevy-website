@@ -8,7 +8,7 @@ status = 'hidden'
 
 Bevy's architecture centers around its [ECS](https://en.wikipedia.org/wiki/Entity_component_system): E for **Entity**, C for **Component** and S for **System**. ECS is a high-performance way of organizing the data of a program, and controlling how that data is accessed and updated.
 ECS has been utilized in a number of commercial game engines, and has been increasing in popularity over the last couple of decades.
-Bevy however is relatively unique in how widely it uses these patterns: ECS in Bevy is used *everywhere*, not just for performance-critical code.
+Bevy however is relatively unique in how widely it uses these patterns: ECS in Bevy is used _everywhere_, not just for performance-critical code.
 
 There are two main mental models for how to think about ECS:
 
@@ -40,7 +40,7 @@ In the "in-memory database" model, entities are the row keys in our database, wi
 While entities are conceptually similar to Objects in object-oriented engines, they are distinctly different because they **do not store any behavior**.
 Instead, behavior is controlled by [systems](#the-s-systems).
 
-{% callout(type="note") %}
+{% callout(type="info") %}
 **Note on terminology**: Sometimes, using the word "entity" on its own can be ambiguous. Does it mean the row/id/primary key or does it mean the game object/thing it represents with all its data? In Bevy, entity ids are modeled in the `Entity` type. As a result, `Entity` typically refers to the id, and a lowercase "entity" typically refers to the game object.
 {% end %}
 
@@ -86,12 +86,12 @@ fn spawn_entities(mut commands: Commands) {
 }
 ```
 
-Entities are usually spawned using [Commands](/learn/book/control-flow/commands), which queue up complex work to be done later.
+Entities are usually spawned using [Commands](@/learn/book/control-flow/commands.md), which queue up complex work to be done later.
 
 ## The S: Systems
 
 Systems interact with and update the data in the ECS.
-Each system is run every frame by default, and repeats in a loop (specifically, in a [Schedule](/learn/book/the-game-loop/schedules)).
+Each system is run every frame by default, and repeats in a loop (specifically, in a [Schedule](@/learn/book/the-game-loop/schedules.md)).
 In Bevy, systems are "just Rust functions".
 These can fetch data from the ECS, make updates, call external APIs, and anything else that a function can do.
 
@@ -105,12 +105,12 @@ fn my_system(entities: Query<&mut Location>) {
 ```
 
 {% callout(type="info") %}
-Bevy systems use a technique called [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to access data about the Bevy world. By declaring your function parameters wrapped in special types like [Query](/learn/book/intro/the-next-three-letters#queries) or [Res](/learn/book/intro/the-next-three-letters#resources), the data for those parameters will be filled in for you automatically — without you having to actually call the system.
+Bevy systems use a technique called [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to access data about the Bevy world. By declaring your function parameters wrapped in special types like [Query](@/learn/book/intro/the-next-three-letters.md#queries) or [Res](@/learn/book/intro/the-next-three-letters.md#resources), the data for those parameters will be filled in for you automatically — without you having to actually call the system.
 
-Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are *disjoint* and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
+Another cool feature of Bevy systems is automatic parallelism: by inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are _disjoint_ and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
 {% end %}
 
-Systems usually access entities and their components via [Queries](/learn/book/intro/the-next-three-letters#queries), which will be covered in the next chapter.
+Systems usually access entities and their components via [Queries](@/learn/book/intro/the-next-three-letters.md#queries), which will be covered in the next chapter.
 
 ## Why ECS?
 
@@ -128,13 +128,13 @@ you can:
   - No more speculative rewrites of whole subsystems: gradually optimize the hot loops.
 - Have engine code that looks like library code that looks like game code.
   - Weird behavior? Check the source!
-  - This makes [contributing](/learn/contribute) fixes and features to Bevy much easier.
+  - This makes [contributing](@/learn/contribute/_index.md) fixes and features to Bevy much easier.
   - Plus it helps support a thriving, heavily interoperable [ecosystem of third-party libraries](https://bevy.org/assets/).
 - Build consistent, universal abstractions on a common base of data structures.
   - Shared data structures mean that improvements and bug fixes trickle down automatically.
-  - Use the same powerful patterns for [control flow](/learn/book/control-flow/) everywhere.
-  - Structure your application using a uniform, flexible [modular architecture](/learn/book/modular-architecture).
-  - Debug and inspect every part of your game using the same [dev tools](/learn/book/development-practices).
+  - Use the same powerful patterns for [control flow](@/learn/book/control-flow/_index.md) everywhere.
+  - Structure your application using a uniform, flexible [modular architecture](@/learn/book/modular-architecture/_index.md).
+  - Debug and inspect every part of your game using the same [dev tools](@/learn/book/development-practices/_index.md).
 
 Learning to take advantage of everything a modern ECS has to offer will take time:
 if you want to be able to tackle any data modelling problem that games have to throw at you,

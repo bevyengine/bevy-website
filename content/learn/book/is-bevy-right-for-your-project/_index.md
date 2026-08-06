@@ -14,39 +14,39 @@ Use this page to make an informed decision.
 
 Bevy is delightful! You should use Bevy if:
 
-- *You like Rust:*
+- _You like Rust:_
   - It's a modern, safe, high-performance language with incredible tooling and a welcoming community.
-- *You like ECS:*
+- _You like ECS:_
   - Fast, elegant, and extremely parallelizable, ECS handles extreme levels of complexity well.
-- *You prefer a code-first approach to game logic:*
+- _You prefer a code-first approach to game logic:_
   - Bevy is all just plain Rust.
-- *You're making something unusual:*
+- _You're making something unusual:_
   - Whether you're making CAD software, art installations, or scientific simulations, Bevy can be extremely flexible.
-- *You care about open source software:*
+- _You care about open source software:_
   - Read, understand, and hack your tools from top-to-bottom.
-- *You want an engine with a lively [community](/community):*
+- _You want an engine with a lively [community](@/community/_index.md):_
   - Users, engine devs, and ecosystem creators join forces from across the world.
-- *You never want to have to pay licensing fees or worry about vendor lock-in.*
+- _You never want to have to pay licensing fees or worry about vendor lock-in._
   - Bevy is free and open source from now until the end of time.
 
 ## Why Not Use Bevy?
 
 We love Bevy, but it's not the right tool for every project. You should not use Bevy if:
 
-- *You need a stable, mature tool:*
+- _You need a stable, mature tool:_
   - Bevy iterates quickly, and ships breaking changes approximately once every four months.
-  - Many serious users upgrade Bevy mid-project with the help of our [migration guides](https://bevyengine.org/learn/migration-guides/introduction/), but this can be a serious time sink on large projects.
-- *You want to ship (relatively traditional) games very quickly:*
+  - Many serious users upgrade Bevy mid-project with the help of our [migration guides](https://bevy.org/learn/migration-guides/introduction/), but this can be a serious time sink on large projects.
+- _You want to ship (relatively traditional) games very quickly:_
   - Bevy is still not finished, stable software: many important features are missing.
   - While you can build these features yourself, or work with others in the community, doing so will take valuable development time and add risk.
   - [Godot](https://godotengine.org/) is a fantastic choice for many common game genres, and it's even [scriptable with Rust](https://github.com/godot-rust/gdext).
-- *You need to make a lot of game content:*
+- _You need to make a lot of game content:_
   - Bevy does not currently have a graphical editor.
-- *You want scripting language support out-of-the-box:*
+- _You want scripting language support out-of-the-box:_
   - Unlike other game engines, gameplay logic is written in the same language (and style) as engine logic.
   - That said, it is possible. Bevy and Rust provide the tools needed to integrate Lua, Python and more.
-  - Take a look at [Bevy Assets](https://bevyengine.org/assets) to see the options that the community has provided.
-- *You want to ship to consoles:*
+  - Take a look at [Bevy Assets](https://bevy.org/assets) to see the options that the community has provided.
+- _You want to ship to consoles:_
   - Rust (and therefore Bevy) is currently not supported on Sony or Nintendo consoles.
 
 ## Bevy Beyond Games

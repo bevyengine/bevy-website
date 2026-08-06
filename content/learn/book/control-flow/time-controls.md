@@ -23,7 +23,9 @@ These are two simple tools that can be incredibly helpful, however Bevy provides
 We'll detail those further down this page, but for now let's get a little more familiar with `Timer`s and `Stopwatch`s.
 
 {% callout(type="info") %}
+
 ## Time Versus Time Controls
+
 This page details the various tools that Bevy provides to interact with time.
 However, this page does not specify how time is set up in Bevy or how you should be using time.
 We also won't go into too much detail when using these tools inside of different schedules or how the outcome of these tools will vary based on what version of time they follow.
@@ -32,10 +34,10 @@ To understand how Bevy sets up time and its variants, see the dedicated [Time pa
 For more information on schedules, see the [Schedules page], also in the Game Loop chapter.
 It might also be handy to read the [Systems] and [Skipping Systems] pages that are further up in this chapter, as the [System Timer Conditions section] is closely aligned with those pages.
 
-[Time page]: /learn/book/the-game-loop/game-time
-[Systems]: /learn/book/control-flow/systems
-[Skipping Systems]: /learn/book/control-flow/run-conditions
-[Schedules page]: /learn/book/the-game-loop/schedules
+[Time page]: @/learn/book/the-game-loop/game-time.md
+[Systems]: @/learn/book/control-flow/systems.md
+[Skipping Systems]: @/learn/book/control-flow/run-conditions.md
+[Schedules page]: @/learn/book/the-game-loop/schedules.md
 [System Timer Conditions section]: #system-timer-conditions
 
 {% end %}
@@ -52,7 +54,7 @@ They allow you to track a duration of time and determine when it has finished.
 Instead, `Timer`s are intended to be wrapped inside of simple components.
 
 ```rust
-// A simple component that holds a `Timer` for the 
+// A simple component that holds a `Timer` for the
 // cool-down of an ability.
 #[derive(Component)]
 struct AbilityTimer {
@@ -73,7 +75,9 @@ fn update_ability_timer(mut query: Query<&mut AbilityTimer>) {
 ```
 
 {% callout(type="warning") %}
+
 ### Consistent Ticking
+
 Depending on where you `tick` a `Timer`, you might find that the timer is inconsistent or not behaving as intended.
 This might depend on what [`Schedule`] the `tick`ing system is placed in.
 Systems placed in the [`Update`] schedule will run every frame, meaning that a `Timer` being ticked with a `Duration` value of 1 second could wind up advancing 60 seconds if your game runs at 60 frames per second.
@@ -86,8 +90,7 @@ Sometimes the solution isn't that straightforward though.
 To read more about "time-step" and how Bevy handles time, we recommend reading the dedicated [Time page] in the Game Loop chapter.
 
 [delta time]: https://en.wikipedia.org/wiki/Delta_timing
-[Time page]: /learn/book/the-game-loop/game-time
-
+[Time page]: @/learn/book/the-game-loop/game-time.md
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Schedule.html
 [`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
 [`Time`]: https://docs.rs/bevy/latest/bevy/time/struct.Time.html
@@ -113,7 +116,7 @@ Timer::from_seconds(3.0, TimerMode::Once);
 
 Two `Duration`s are stored when a `Timer` is first created.
 The first stores the length of the timer (i.e. the value we passed when creating the `Timer`), while the second stores how much time has elapsed since the timer started.
-We can access both of these `Duration` values using the [`Timer::remaining`] and [`Timer::elapsed`] methods. 
+We can access both of these `Duration` values using the [`Timer::remaining`] and [`Timer::elapsed`] methods.
 If we only need the actual time values from these, we can use [`Timer::remaining_secs`] and [`Timer::elapsed_secs`] to get `f32` values instead of a `Duration` value.
 
 ```rust
@@ -224,7 +227,7 @@ struct AutomaticCookieClick {
 // A system that automatically clicks cookies based
 // on the `AutomaticCookieClick` timer
 fn automatically_click_cookies(
-    mut cookies: ResMut<Cookies>, 
+    mut cookies: ResMut<Cookies>,
     mut query: Query<&mut AutomaticCookieClick>,
     time: Res<Time>,
 ) {
@@ -292,7 +295,7 @@ To wrap up our Cookie Clicker example, let's create a boost in the number of coo
 struct CookieBoost(pub bool);
 
 fn automatically_click_cookies(
-    mut cookies: ResMut<Cookies>, 
+    mut cookies: ResMut<Cookies>,
     mut query: Query<&mut AutomaticCookieClick>,
     time: Res<Time>,
     boost: Res<CookieBoost>,
@@ -388,7 +391,6 @@ fn end_match(
         commands.remove_resource::<MatchTimeCounter>();
     }
 }
-
 ```
 
 ## System Timer Conditions
@@ -430,7 +432,7 @@ Instead, you should either split the work into bite-sized pieces that can safely
 [`Schedule`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Schedule.html
 [`Time`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Time.html
 [`Time<Fixed>`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Fixed.html
-[Time page]: /learn/book/the-game-loop/game-time
+[Time page]: @/learn/book/the-game-loop/game-time.md
 
 ## Delaying Commands
 

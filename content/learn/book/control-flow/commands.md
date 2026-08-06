@@ -87,7 +87,7 @@ fn add_twenty_five_to_counter_system(mut commands: Commands) {
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Commands.html
 [`Command`]: https://docs.rs/bevy/latest/bevy/prelude/trait.Command.html
 [`queue`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Commands.html#method.queue
-[Custom Commands]: /learn/book/control-flow/commands#custom-commands
+[Custom Commands]: @/learn/book/control-flow/commands.md#custom-commands
 
 ## When Do Commands Take Effect?
 
@@ -295,4 +295,4 @@ fn some_system(mut commands: Commands) {
 }
 ```
 
-[`Events` and `Observers`]: /learn/book/control-flow/events
+[`Events` and `Observers`]: @/learn/book/control-flow/events.md

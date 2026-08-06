@@ -134,7 +134,7 @@ For more details on where `StateTransition` fits into the broader game loop, see
 [`Startup`]: https://docs.rs/bevy/latest/bevy/app/struct.Startup.html
 [`PreUpdate`]: https://docs.rs/bevy/latest/bevy/app/struct.PreUpdate.html
 [`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
-[schedules]: /learn/book/the-game-loop/schedules
+[schedules]: @/learn/book/the-game-loop/schedules.md
 
 ## Cleaning Up Between States
 
