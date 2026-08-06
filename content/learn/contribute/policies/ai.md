@@ -18,7 +18,7 @@ but tolerate careful human-driven AI use in some areas consistent with the above
 In concrete terms, Bevy expects its community members to uphold the following norms around AI:
 
 1. **No AI-generated media.** Images, 3d models, audio assets (and so on) submitted to Bevy may not be authored or modified with the use of generative AI tools. Use a permissively licensed asset, make one by hand, or commission an artist.
-2. **No AI-generated prose.** AI cannot be used to write public-facing prose, including documentation, issues, PR descriptions, or release notes.
+2. **No AI-generated prose.** AI must not be used to write public-facing prose, including documentation, issues, PR descriptions, or release notes.
 3. **No AI-generated communication.** We want to talk to *you*, not a machine. Do not paste AI-generated output directly into conversations with humans, no matter where they take place. AI may be used to assist for translation and accessibility purposes, but please include the original untranslated text as well.
 4. **No AI-authored commits.** This includes "Co-authored by" and is enforced via automated checks in CI.
 5. **Ownership.** As a contributor, you are personally responsible for everything you submit. You must personally understand every line of code or documentation that you put forward for review, and be able to articulate the design rationale and implementation tradeoffs when asked. Work within your skill level and knowledge of the project.
