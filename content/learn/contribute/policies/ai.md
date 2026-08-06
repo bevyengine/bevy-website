@@ -13,9 +13,6 @@ Bevy, as a project and a community, values:
 
 We are broadly wary of AI's use in the development of Bevy,
 but tolerate careful human-driven AI use consistent with the above values.
-Originally, Bevy had a nearly complete ban on the use of AI,
-but, as discussed in [History](#appendix-history-and-rationale),
-this policy was modified due to the difficulty and stress of detecting AI use and concerns about long-term community health.
 
 In concrete terms, Bevy expects its community members to uphold the following norms around AI:
 
