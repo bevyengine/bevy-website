@@ -67,7 +67,7 @@ If you would like to see Bevy in action before starting a new project, you can c
     # use the latest Bevy release
     git checkout latest
     # or a specific version
-    git checkout v0.19.0
+    git checkout release-0.19.0
     ```
 
 4. Try the examples in the [examples folder](https://github.com/bevyengine/bevy/tree/latest/examples#examples)
