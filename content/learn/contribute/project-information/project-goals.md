@@ -44,9 +44,9 @@ Goals are tracked on the [Project Goals Board](https://github.com/orgs/bevyengin
 
 - Goals allow the Bevy Organization to define, discuss, and share its priorities with the community
 - Goals let us give quick yes/no/later feedback for feature proposals as early as possible
-- Goals allow big efforts move forward _when_ they are staffed by SMEs
-- Goals help ensure that big efforts do _not_ move forward when they are _not_ staffed by SMEs. This helps protect contributors from building things we aren't ready for (Bevy's technical leadership has limited capacity) or don't want.
-- Goals make it easier for interested developers to find "project aligned" work
+- Goals allow big efforts to move forward when they are staffed by SMEs
+- Goals make it easier for interested developers to find and collaborate on "project aligned" work
+- Goals help signal to developers what work is currently "staffed" by SMEs. This helps protect contributors from building things we aren't ready for (Bevy's technical leadership has limited capacity) or don't want.
 
 ## Goal States
 
@@ -58,9 +58,9 @@ Goals can have a variety of "states", which are expressed as "statuses" on the [
 - **Postponed**: We might want to do this later, but we don't have the bandwidth or inclination to invest in it now.
 - **Blocked (Approved)**: We want to do this, one or more SME has agreed to "staff" it once unblocked, and the **Project Lead** and **SME**s have approved it, but other work is required first
   - Goals that are blocked on other Goals or issues should include a "blocked by" relationship on GitHub.
-- **Inactive (Approved)**: We want to do this, the **Project Lead** and **SME**s have approved it, but there is no **SME** staffing it and no active **Working Group**
-  - This is essentially the list of Goals Bevy Leadership really wants to work on now / is willing to support, but without anyone actively working on them. Interested contributors are highly encouraged to help form a Working Group for these Goals and advocate for an **SME** to staff it.
-- **Active (Approved)**:  A **Working Group** is actively working toward this, with one or more **SME** staffing it.
+- **Unstaffed (Approved)**: We want to do this, the **Project Lead** and **SME**s have approved it, but there is no **SME** staffing it. There may be an active **Working Group**, but it is not currently receiving focused direction from an **SME**, and there will likely be delays in upstreaming any work produced by the **Working Group**. Making progress in these areas also has an element of risk, as SMEs are not actively guiding the work, and may have requirements that have not yet been determined or stated.
+  - This is essentially the list of Goals Bevy Leadership really wants the community to work on now / is willing to "staff" in the near future. Interested contributors are encouraged to help form a Working Group for these Goals and advocate for an **SME** to staff it.
+- **Staffed (Approved)**:  A **Working Group** is actively working toward this, with one or more **SME** staffing it. This is a development area where upstream progress is actively occurring with support from both the community and project leadership.
 - **Done**: The goal's issue has been closed. This actually has two "sub states" (which are _not_ expressed as Project Board Statuses, as GitHub issues already encode the relevant information):
   - **Declined**: Closed as "not planned"
   - **Completed**: Closed as "completed"
@@ -75,11 +75,11 @@ Goals can be "staffed" by one or more [SME](/learn/contribute/project-informatio
 
 A "staffing" SME's job is to shepherd the Working Group in the right direction. They generally have the final say on design and implementation proposals, prior to the final reviews by the other SMEs / Project Lead. Staffing SMEs are welcome (and encouraged) to help draft designs and implementations, but this is not _required_. In _all_ cases they are responsible for ensuring that the Working Group moves in the correct direction.
 
-If a "staffing SME" can no longer dedicate the time necessary to vet the outputs of a Working Group, they should inform the relevant members of Bevy Leadership, who will then decide the best way to move forward (ex: Keeping moving forward if there are still enough staffing SMEs, find a new SME to staff the Goal, or Postpone the Goal).
+If a "staffing SME" can no longer dedicate the time necessary to vet the outputs of a Working Group, they should inform the relevant members of Bevy Leadership, who will then decide the best way to move forward (ex: Keeping moving forward if there are still enough staffing SMEs, find a new SME to staff the Goal, transitioned to the Unstaffed state, or Postpone the Goal).
 
 If an appropriate **SME** is unavailable, **Maintainers** can also choose to staff a Goal, provided relevant **SMEs** and the **Project Lead** are on board.
 
-The SMEs staffing a Goal should be listed in the Goal's description.
+The SMEs staffing a Goal should be listed in the Goal's description and assigned to the Goal's issue.
 
 ## The Life-cycle of a Goal
 
@@ -90,10 +90,11 @@ The SMEs staffing a Goal should be listed in the Goal's description.
 4. **SMEs** identify that the issue needs a goal and apply the `S-Needs-Goal` label
 5. **SMEs** discuss the framing of the Goal and create a new issue with the `C-Goal` label.
 6. A Github Project Workflow picks up the `C-Goal` issue and adds it to the **Project Goals** board in the Proposed state.
-7. The **Project Lead** and **SMEs** discuss how to handle the Goal: Deny, Inactive (Approved), or Postpone.
-8. If the Goal is Inactive (Approved), an SME has agreed to "staff" it, and there is enough commitment and support from the community to form a **Working Group**, it moves into the Active (Approved) state.
-9. The **Project Lead** adjusts the priorities of the Goals (expressed via the [Project Goals Board](https://github.com/orgs/bevyengine/projects/23/views/1) order), based on the needs of the project.
-10. When a Goal is completed, the issue is closed out. A GitHub Project Workflow moves it into the Done status.
+7. The **Project Lead** and **SMEs** discuss how to handle the Goal: Deny, Unstaffed (Approved), or Postpone.
+8. At any point, if there is community interest in working on an Unstaffed (Approved) Goal, a **Working Group** can be formed.
+9. If the Goal is Unstaffed (Approved), an SME has agreed to "staff" it, and there is enough commitment and support from the community to form a **Working Group**, it moves into the Staffed (Approved) state.
+10. The **Project Lead** adjusts the priorities of the Goals (expressed via the [Project Goals Board](https://github.com/orgs/bevyengine/projects/23/views/1) order), based on the needs of the project.
+11. When a Goal is completed, the issue is closed out. A GitHub Project Workflow moves it into the Done status.
 
 ## Goal Issue Template
 
@@ -114,7 +115,7 @@ In roughly one paragraph, describe from a high level _what_ this Goal is. Provid
 
 ## Goal Status
 
-This is a potential [Bevy Project Goal](https://bevy.org/learn/contribute/project-information/project-goals/). Its state on the [Project Goals Board](https://github.com/orgs/bevyengine/projects/23/views/1) determines if it is Proposed, Postponed, Blocked (Approved), Inactive (Approved), Active (Approved), Completed, or Declined.
+This is a potential [Bevy Project Goal](https://bevy.org/learn/contribute/project-information/project-goals/). Its state on the [Project Goals Board](https://github.com/orgs/bevyengine/projects/23/views/1) determines if it is Proposed, Postponed, Blocked (Approved), Unstaffed (Approved), Staffed (Approved), Completed, or Declined.
 
 - **Staffing SMEs**: Not yet staffed
 - **Working Group Link**: Working Group not yet formed
@@ -122,5 +123,5 @@ This is a potential [Bevy Project Goal](https://bevy.org/learn/contribute/projec
 ```
 
 - If / when a Goal is approved and SMEs agree to "staff" the Goal, add them to the **Staffing SMEs** list.
-- If / when a Goal becomes "active" and a Working Group is formed, fill in the **Working Group Link** with the Working Group thread on the Bevy Discord.
+- If / when a Goal becomes "approved" and a Working Group is formed, fill in the **Working Group Link** with the Working Group thread on the Bevy Discord.
 - If / when design documents are authored by the Working Group, link to them in the **Design Documents**.
