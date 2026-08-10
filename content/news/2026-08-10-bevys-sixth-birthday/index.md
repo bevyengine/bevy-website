@@ -5,7 +5,7 @@ authors = ["Carter Anderson"]
 [extra]
 github = "cart"
 youtube = "cartdev"
-image = "bevy_birthday_birds.svg"
+image = "bevy_birthday_birds.png"
 padded_list_image = true
 show_image = true
 +++
