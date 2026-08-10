@@ -34,11 +34,11 @@ When participating in a Working Group, here are a few things to keep in mind:
 Working groups move through the following phases:
 
 1. A [**Goal**](/learn/contribute/project-information/project-goals/) is proposed.
-2. Project Leadership (SMEs and the Project Lead) approves the [**Goal**](/learn/contribute/project-information/project-goals/), and one or more SME agrees to "staff" it.
-3. A Working Group is formed and the [**Goal**](/learn/contribute/project-information/project-goals/) becomes "active".
-4. The Working Group comes up with design proposal(s) / prototypes, in collaboration with the ["staffing SME(s)"](/learn/contribute/project-information/project-goals/)
-5. The design is approved by Project Leadership.
-6. The design is implemented by the Working Group, in collaboration with the "staffing SME(s)".
+2. Project Leadership (SMEs and the Project Lead) approves the [**Goal**](/learn/contribute/project-information/project-goals/), either in the Staffed (Approved) or Unstaffed (Approved) state.
+3. If there is community interest in starting development, a Working Group is formed for the [**Goal**](/learn/contribute/project-information/project-goals/).
+4. The Working Group comes up with design proposal(s) / prototypes, in collaboration with the ["staffing SME(s)"](/learn/contribute/project-information/project-goals/). If there is no staffing SME, the Working Group is free to explore the space in an undirected fashion, but making progress on the Goal has an element of risk, as SMEs are not actively guiding the work, and may have requirements that have not yet been determined or stated.
+5. The design is approved by the staffing SME(s) / Project Leadership.
+6. The design is implemented by the Working Group, in collaboration with the staffing SME(s).
 7. The implementation is reviewed and approved.
 
 ## Make A Proposal
