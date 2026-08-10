@@ -46,7 +46,7 @@ Goals are tracked on the [Project Goals Board](https://github.com/orgs/bevyengin
 - Goals let us give quick yes/no/later feedback for feature proposals as early as possible
 - Goals allow big efforts to move forward when they are staffed by SMEs
 - Goals make it easier for interested developers to find and collaborate on "project aligned" work
-- Goals help signal to developers what work is currently "staffed" by SMEs. This helps protect contributors from building things we aren't ready for (Bevy's technical leadership has limited capacity) or don't want.
+- Goals help signal to developers what work is currently "staffed" by SMEs. This helps protect contributors from building things we aren't ready for (Bevy's technical leadership has limited capacity).
 
 ## Goal States
 
