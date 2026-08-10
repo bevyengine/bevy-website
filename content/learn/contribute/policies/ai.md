@@ -13,7 +13,7 @@ Bevy, as a project and a community, values:
 
 We are wary of the use of AI in the development of Bevy,
 and are particularly troubled by its impact on artists,
-but tolerate careful human-driven AI use in some areas consistent with the above values.
+but tolerate careful human-driven AI use in some code-related areas consistent with the above values.
 
 In concrete terms, Bevy expects its community members to uphold the following norms around AI:
 
