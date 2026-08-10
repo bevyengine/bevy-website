@@ -19,7 +19,7 @@ In concrete terms, Bevy expects its community members to uphold the following no
 
 1. **No AI-generated media.** Images, 3d models, audio assets (and so on) submitted to Bevy may not be authored or modified with the use of generative AI tools. Use a permissively licensed asset, make one by hand, or commission an artist.
 2. **No AI-generated prose.** AI must not be used to write public-facing prose, including documentation, issues, PR descriptions, or release notes.
-3. **No AI-generated communication.** We want to talk to *you*, not a machine. Do not paste AI-generated output directly into conversations with humans, no matter where they take place. AI may be used to assist for translation and accessibility purposes, but please include the original untranslated text as well.
+3. **No AI-generated communication.** We want to talk to *you*, not a machine. Do not paste AI-generated output directly into conversations with humans, no matter where they take place. AI may be used to assist for translation and accessibility purposes, but please include the [original untranslated text] as well.
 4. **No AI-authored commits.** This includes "Co-authored by" and is enforced via automated checks in CI.
 5. **Ownership.** As a contributor, you are personally responsible for everything you submit. You must personally understand every line of code or documentation that you put forward for review, and be able to articulate the design rationale and implementation tradeoffs when asked. Work within your skill level and knowledge of the project.
 6. **Disclosure.** Any use of AI to contribute to Bevy must be disclosed, with context about how it was used.
@@ -31,7 +31,7 @@ Individual reviewers are empowered to request changes to contributions that fail
 Bevy is excited to mentor new contributors, and help you develop the skills you need to contribute, but we need you to engage with us directly, as people, not just serve as a proxy for a machine.
 Repeated or severe violations may result in warnings, suspensions, or bans: please try your best to respect and uphold these norms.
 
-[collapsed section]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-collapsed-sections
+[original untranslated text]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-collapsed-sections
 
 ## Appendix: Harassment Policy Details
 
