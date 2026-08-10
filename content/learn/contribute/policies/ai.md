@@ -59,6 +59,7 @@ The following behaviors are permissible, when handled with social grace and at t
 - discussing, in the general case, the role of AI in art
 - criticizing products, companies, and public figures use of or stance on AI
 - discussing best practices for using (or avoiding) AI
+- politely suggesting that a goal (such as learning) might be better accomplished by avoiding AI
 - discussing, in tangible ways, how Bevy's development practices should change to incorporate, avoid or respond to AI
 - specific feedback about flaws in a given piece of work
 - constructive feedback about recurring problems in the way that others work or act 
