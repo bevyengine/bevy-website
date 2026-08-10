@@ -132,7 +132,7 @@ We're using these widgets to build the Bevy Editor, in addition to things like a
 
 ### Bevy Rendering Devs Go Hard
 
-This year was _packed_ with renderer work. We [landed](/news/bevy-0-17/#bevy-solari-raytraced-lighting-experimental) and [evolved](/news/bevy-0-19/#solari-improvements) Solari, our experimental real-time raytraced renderer (led by [@Jasmine](https://github.com/JMS55/)):
+This year was _packed_ with renderer work. We [landed](/news/bevy-0-17/#bevy-solari-raytraced-lighting-experimental) and [evolved](/news/bevy-0-19/#solari-improvements) Solari, our experimental real-time raytraced renderer (led by [Jasmine](https://github.com/JMS55/)):
 
 ![solari](/news/bevy-0-19/solari.jpg)
 
@@ -267,7 +267,7 @@ We landed BSN. Score!
 
 > **Reactivity Ecosystem**
 
-Bevy does have a reactivity ecosystem! There are BSN reactive impls like [`bevy_reactor`](https://github.com/viridia/bevy_reactor) and [@JMS55's reactive BSN experiment](https://github.com/JMS55/bevy/tree/react-experiment). There is also [haalka](https://github.com/databasedav/haalka), which uses "functional reactive programming" to produce its own (non-BSN, but Bevy-native) data API.
+Bevy does have a reactivity ecosystem! There are BSN reactive impls like [`bevy_reactor`](https://github.com/viridia/bevy_reactor) and [Jasmine's (rough / quick) reactive BSN experiment](https://github.com/JMS55/bevy/tree/react-experiment). There is also [haalka](https://github.com/databasedav/haalka), which uses "functional reactive programming" to produce its own (non-BSN, but Bevy-native) data API.
 
 We haven't yet converged on the correct upstream implementation, but I suspect this will happen within the year now that Bevy UI, Feathers, and BSN are all in a pretty solid place.
 
