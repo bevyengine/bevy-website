@@ -7,9 +7,9 @@ weight = 1
 
 Bevy, as a project and a community, values:
 
-1. **Community:** Collaboration and camaraderie between contributors
+1. **Quality:** Creating a reliable, high-quality foundation for others to build on
 2. **Growth:** Developing understanding and wisdom within our contributors
-3. **Quality:** Creating a reliable, high-quality foundation for others to build on
+3. **Community:** Collaboration and camaraderie between contributors
 
 Our policy around AI use is designed pragmatically,
 attempting to find ways of working together that will, in practice, honor these values.
