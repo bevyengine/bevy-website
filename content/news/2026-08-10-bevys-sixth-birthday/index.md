@@ -74,7 +74,7 @@ This year we finally landed [BSN: Bevy's next generation scene system](/news/bev
 
 ![bsn macro](bsn.png)
 
-This was a massive step forward for Bevy's usability. It enables developers to quickly and easily spawn composable, inheritable, interrelated hierarchies of ECS entities and components in a templated, dependency and asset-aware way. Developers can compose BSN within their Rust code using the `bsn!` macro, or they can define it in asset files (the `.bsn` asset format should land on Bevy `main` soon).
+This was a massive step forward for Bevy's usability. It enables developers to quickly and easily spawn composable, inheritable, interrelated hierarchies of ECS entities and components in a templated, dependency and asset-aware way (some engines call these "prefabs" instead of "scenes"). Developers can compose BSN within their Rust code using the `bsn!` macro, or they can define it in asset files (the `.bsn` asset format should land on Bevy `main` soon).
 
 BSN is also a key piece of Bevy's UI story going forward. UI developers (especially outside of the engine space) expect a certain level of ergonomics that raw Rust cannot provide. With BSN, composing UI in Bevy has never been easier!
 
