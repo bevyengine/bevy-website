@@ -1,11 +1,11 @@
 [package]
 name = "learning-code-examples"
-edition = "2021"
+edition = "2024"
 publish = false
 autoexamples = false
 
 [dependencies]
-bevy = "0.17"
+bevy = "0.19"
 
 [lints]
 workspace = true
@@ -61,3 +61,7 @@ path = "examples/quick-start/mock_entity.rs"
 [[example]]
 name = "generic-plugin"
 path = "examples/quick-start/generic_plugin.rs"
+
+[[example]]
+name = "the_three_letters"
+path = "examples/book/intro/the_three_letters.rs"
