@@ -89,7 +89,7 @@ forcing reviewers and moderators to constantly decide to act on or overlook viol
 Any accusation threatened complete rejection of submitted work regardless of quality or effort,
 with a looming possibility of formal and informal exclusion from the community.
 Reviewers were caught between unproven, disruptive suspicion and blithe naïveté,
-accepting "no Mom I didn't eat any cookies" at face value because the cookie jar is stored in a locked room.
+accepting unprovable assertions of innocence.
 
 This was deeply unpleasant: either choice was damaging to the community in the event of a mistake,
 and evaluating these meta-questions around provenance was emotionally exhausting.
