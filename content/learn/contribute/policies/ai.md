@@ -23,7 +23,7 @@ In concrete terms, Bevy expects its community members to uphold the following no
 4. **No AI-authored commits.** Only humans can be commit authors or listed as `Co-authored-by`.
 5. **Ownership.** As a contributor, you are responsible for everything you submit. You must personally understand every line of code or documentation that you put forward for review, and be able to articulate the design rationale and implementation tradeoffs when asked. Work within your skill level and knowledge of the project.
 6. **Disclosure.** Any use of AI to contribute to Bevy must be disclosed, with context about how it was used.
-7. **Quality.** Bevy holds a high bar for quality, and is willing to take the time to do things well. AI-assisted PRs will be held to a rigorous standard of review: correctness, tests, rationale, incremental reviewable units, appropriate design and consensus building and so on. 
+7. **Quality.** Bevy holds a high bar for quality, and is willing to take the time to do things well. AI-assisted PRs will be held to the same rigorous standard of review: correctness, tests, rationale, incremental reviewable units, appropriate design and consensus building and so on. 
 8. **Harassment.** Do not harass, demean, pressure, or bully others. This continues to apply, even when the basis of your disagreement centers around use of, abstinence from or views on AI. See the [appendix on harassment](#appendix-harassment-policy-details) for examples of acceptable and unacceptable behavior.
 9. **Refusal.** Bevy contributors and community members are not required to review AI-assisted work, use AI tools, or engage in discussions about AI. We want to make sure that those who reject AI remain a valued part of both the work and community of Bevy.
 
