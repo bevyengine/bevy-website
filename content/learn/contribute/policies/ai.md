@@ -102,7 +102,7 @@ but we were left without a settled answer to the socially complex problems burie
 
 Over time, we found that what we were punishing was *disclosure*, not *use*.
 Without reliable detection, there was a strong incentive to defect: silently use AI, don't tell anyone about it.
-Even if no one *took* it, the temptation weighed on our contributors (who wants to do tedious refactors by hand?),
+Even if no one *took* it, the temptation weighed on contributors,
 and those who felt strongly that Bevy should not allow AI-assisted contributions worried about what might be slipping by.
 
 While looking for an alternative, we studied and discussed dozens of other AI policies in open source.
