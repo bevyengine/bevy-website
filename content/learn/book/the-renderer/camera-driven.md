@@ -307,24 +307,29 @@ An example of a first person camera setup using [`RenderLayers`] is available in
 
 ### ClearColor
 
-Whenever a `Camera` renders out sequential images or frames, there is a very brief moment when the previous frame is cleared away, but the next frame hasn't finished being written to the `Viewport`.
-What is shown during this brief moment?
+Imagine you render a scene with only a single cube (apart from the camera and lighting to actually view it, of course).
+Once you compile and run the program to test it, you would see your cube and a void surrounding it.
+But, if you then started to move the camera around to check out different angles of the cube, what fills in the `Viewport` space that the cube occupied before, but now doesn't?
 
-If we left the previous frame up, it would cause visual distortions and choppiness since parts of the next frame would be overlaid on top of the previous frame.
-We could just remove the previous frame and let the `Viewport` stay blank?
-It would work, but if the frame rate ever dropped, players might be stuck looking at a partially rendered screen.
+With no setup or adjustments, you'd still see the cube.
+Or rather, you would see the part of the cube that used to be on that section of the `Viewport` space on the previous frame.
+This is called the "hall of mirrors" effect, and appears when a section of the `Viewport` doesn't have anything to render.
+If there's nothing to render, then the `Viewport` doesn't need to be updated!
+Fortunately, Bevy is equipped to deal with this nauseating visual aberration.
 
-Instead, Bevy clears the `Viewport` of the previous frame and displays a single, uniform color.
+Bevy will automatically clear the `Viewport` of the previous frame and then display a single, uniform color.
 You can think of it like a "background" color that sits behind the rendered frames.
-We call this the [`ClearColor`], a [`Resource`] that stores a [`Color`] value that all cameras will default to.
+We call this the [`ClearColor`], and it's stored in a globally accessible [`Resource`] so that each `Camera` in a scene can make use of it.
+Inside of `ClearColor`is a [`Color`] value that all cameras will use by default.
 
 However, each `Camera` is able to have a unique `ClearColor` if desired.
 The `clear_color` field holds a [`ClearColorConfig`] enum, which allows you to pick either the default [`ClearColor`] resource, a custom [`Color`] value, or `None` if you want the camera to just draw on top of whatever is already in the `Viewport`.
 
-You might be wondering why you would ever choose `None` if we just said that not clearing the `Viewport` would cause visual distortions?
-It's because clearing the `Viewport` of a `Camera` that is rendered on top of another `Camera` would (briefly) create a box of `ClearColor` that obstructs the background `Camera`.
-It might not be an issue if the `Viewport` is updated fast enough, but if the frame rate were ever to drop, players would potentially see a section of their screen covered by `ClearColor`.
-Whereas, if `ClearColorConfig` is set to `None`, then no color is used and the `Viewport` remains blank after clearing the previous screen.
+When would you want to pick `None` though?
+Well, sometimes the "hall of mirrors" effect might be what you want to display.
+Alternatively, maybe you're overlaying a partially transparent `Camera` on top of another `Camera`.
+Since the layered camera isn't fully opaque, you'd see the `ClearColor` value instead of the base `Camera` view.
+The important thing to consider is whether you want a `Camera` to be opaque and block whatever might be underneath it, or transparent and simply draw on top of whatever might be below it. 
 
 [`ClearColor`]: https://docs.rs/bevy/latest/bevy/camera/struct.ClearColor.html
 [`Resource`]: https://docs.rs/bevy/latest/bevy/prelude/trait.Resource.html
