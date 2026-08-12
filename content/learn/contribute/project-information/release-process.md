@@ -106,7 +106,7 @@ done 3< <(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.merge
 Once all merge conflicts are resolved, double check that everything works. Go back and fix the commit responsible for a merge to correct any issues. Then:
 
 1. Bump version number for all crates, using [the Update Command] locally, with `patch` for the new version.
-    - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.Y`
+    - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.Y"`
 2. Create tag on GitHub.
 3. Edit [GitHub Release]. Add link to the comparison between this patch and the previous version.
 4. Bump `latest` tag to most recent release.
