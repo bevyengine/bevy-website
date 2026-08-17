@@ -20,9 +20,9 @@ taxonomies = [{ name = "news", feed = true }]
 
 [markdown.highlighting]
 
-theme = "bevy-syntax-theme"
+theme = "bevy-syntax-theme-dark"
 
-extra_themes = ["themes/bevy-syntax-theme.json"]
+extra_themes = ["themes/bevy-syntax-theme-dark.json"]
 extra_grammars = ["grammars/ron.json"]
 
 # error_on_missing_language = true
