@@ -120,6 +120,7 @@ every_org_link = "https://www.every.org/bevy-foundation?amount=8000&theme_color=
 reward_logo = true
 reward_link = true
 logo_height = 120
+reward_readme_link = true
 
 [[tier]]
 name = "Patron"
@@ -131,3 +132,5 @@ stripe_missing = "Not supported right now"
 reward_logo = true
 reward_link = true
 logo_height = 190
+reward_readme_link = true
+reward_readme_logo = true
