@@ -49,42 +49,14 @@ Instead, behavior is controlled by [systems](#the-s-systems).
 A **component** is a modular piece of data that can be reused across entities in the world.
 In Bevy, components are "just Rust structs" (or enums).
 
-```rs
-/// The grid-based location of a player, creature, or object in our game.
-#[derive(Component)]
-struct Location {
-    x: u32,
-    y: u32,
-}
-
-/// The color of an object in our game.
-#[derive(Component)]
-enum Color {
-    Red,
-    Green,
-    Blue,
-    Heliotrope,
-}
-
-/// A "marker" component for entities which represents a player.
-/// Since this contains no data, this is more like a tag.
-#[derive(Component)]
-struct Player;
-```
+{{ file_code_block(file="book/intro/the_three_letters.rs", anchor="components") }}
 
 Any number and combination of components can be added to an entity, and each entity gets its own value for that component.
 In the database model, components are like the columns of our database (although not every entity will have every component).
 
 Spawning entities with components is done like so:
 
-```rs
-fn spawn_entities(mut commands: Commands) {
-    // Spawn an entity with all our components
-    commands.spawn((Location::zero(), Color::Red, Player));
-    // Spawn an entity with only one component
-    commands.spawn(Color::Heliotrope);
-}
-```
+{{ file_code_block(file="book/intro/the_three_letters.rs", anchor="spawn_entities") }}
 
 Entities are usually spawned using [Commands](@/learn/book/control-flow/commands.md), which queue up complex work to be done later.
 
@@ -95,14 +67,7 @@ Each system is run every frame by default, and repeats in a loop (specifically, 
 In Bevy, systems are "just Rust functions".
 These can fetch data from the ECS, make updates, call external APIs, and anything else that a function can do.
 
-```rs
-// No derive macro needed!
-fn my_system(entities: Query<&mut Location>) {
-    for location in entities.iter_mut() {
-        location.x += 1;
-    }
-}
-```
+{{ file_code_block(file="book/intro/the_three_letters.rs", anchor="systems") }}
 
 {% callout(type="info") %}
 Bevy systems use a technique called [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to access data about the Bevy world. By declaring your function parameters wrapped in special types like [Query](@/learn/book/intro/the-next-three-letters.md#queries) or [Res](@/learn/book/intro/the-next-three-letters.md#resources), the data for those parameters will be filled in for you automatically — without you having to actually call the system.
