@@ -37,7 +37,7 @@ When both `Add` and `Insert` occur, `Add` hooks are evaluated before `Insert` ho
 ## Component Hooks
 
 The most common way of interacting with lifecycle events is by using [`ComponentHooks`].
-We have a couple ways to use `ComponentHooks`, the first of which is through the [`World::register_component_hook`] method.
+We have a couple of ways to use `ComponentHooks`, the first of which is through the [`World::register_component_hooks`] method.
 
 ```rust
 // Create a ComponentHook with the `World` method:
@@ -105,7 +105,7 @@ impl MyComponent {
 ```
 
 [`ComponentHooks`]: https://docs.rs/bevy/latest/bevy/ecs/lifecycle/struct.ComponentHooks.html
-[`World::register_component_hook`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.register_component_hooks
+[`World::register_component_hooks`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.register_component_hooks
 
 ## Lifecycle Observers
 
@@ -140,7 +140,7 @@ Using `Observers`, we'd have to structure our code like such:
 struct PlayerName(pub String);
 
 // Then we add an Observer that will watch for `PlayerName` being added.
-commands.add_observer(|print_name: On<Add, PlayerName>, player_query: <&PlayerName>| {
+commands.add_observer(|print_name: On<Add, PlayerName>, player_query: Query<&PlayerName>| {
     let new_name = player_query.get(print_name.entity).unwrap().0;
     println!("Spawned: {}", new_name);
 });
@@ -200,7 +200,7 @@ world.register_component_hooks::<PlayerName>().on_add(|mut world, context| {
 
 In earlier chapters, we went over several lifecycle event interactions without specifically naming them as lifecycle events.
 This is because they aren't used in the same manner as we've been using them so far.
-However they are still lifecycle event interactions, so we will briefly return to them to show the differences between them and the tools introduced in this chapter.
+However, they are still lifecycle event interactions, so we will briefly return to them to show the differences between them and the tools introduced in this chapter.
 
 ### Removed Components Parameter
 
@@ -222,7 +222,7 @@ fn react_on_removal(mut removed: RemovedComponents<MyComponent>) {
 // runs *before* `MyComponent` is actually removed from the `Entity`. 
 world.register_component_hooks::<MyComponent>().on_remove(|mut world, remove| {
     // Access the value within `MyComponent` before it's removed.
-    let value = world.get::<MyComponent>(remove.entity).unwrap()
+    let value = world.get::<MyComponent>(remove.entity).unwrap();
     println!("MyComponent with value {} removed from {}", value, remove.entity);
 });
 ```
@@ -238,14 +238,14 @@ We can also manually clear `RemovedComponents` by using the [`World::clear_track
 
 The [`Added`] query filter can be used to see `Entities` that have had a new instance of a specific `Component` added to them for the first time.
 Much like `RemovedComponents` though, `Added` can only be accessed after the lifecycle event occurs.
-Additionally `Added` is less precise, returning `Entities` that had a target `Component` added for the first time and `Entities` that had a target `Component` reinserted, even if the component already existed.
+Additionally, `Added` is less precise, returning `Entities` that had a target `Component` added for the first time and `Entities` that had a target `Component` reinserted, even if the component already existed.
 In effect, this combines both the `Add` and `Insert` lifecycle events, which can be an important distinction depending on the functionality you want to run.
 
-To show the differences, lets imagine we are building a networked multiplayer game where we want to track the following:
+To show the differences, let's imagine we are building a networked multiplayer game where we want to track the following:
 
 - Create a new `Entity` for each player when a new match starts.
-- Have a way for players to reconnect to a match with an existing `Entity` if they happen to leave for some reason.
-- Keep a general log of everytime a Player connects or reconnects to the match.
+- Have a way for players to reconnect to a match with some existing `Entity` if they happen to leave for some reason.
+- Keep a general log of every time a Player connects or reconnects to the match.
 
 We can use both the `Added` query filter and `ComponentHooks` to achieve each use case.
 

@@ -52,7 +52,7 @@ commands.trigger(event);
 ```
 
 To use `Commands` in your systems, it is easiest to pass it in as a system parameter.
-This ensures that every system that needs access to `Commands` gets it and that all of the `Commands` that are called are placed into the `Command` queue.
+This ensures that every system that needs access to `Commands` gets it and that all `Commands` that are called are placed into the `Command` queue.
 
 ```rust
 fn my_system(mut commands: Commands) {
@@ -64,7 +64,7 @@ fn my_system(mut commands: Commands) {
 }
 ```
 
-While Bevy offers a number of different pre-defined `Commands` to use, it also offers the [`queue`] method to make changes that aren't provided by default.
+While Bevy offers a number of different predefined `Commands` to use, it also offers the [`queue`] method to make changes that aren't provided by default.
 `queue` gives us mutable access to the `World`, which we can use however we want.
 The most straightforward approach is to construct our modifications within the method itself, as can be seen in the example below.
 You can also go one step further and create *custom* commands by implementing the `Command` trait on a struct you create, or even extend the `Commands` struct with traits and methods that you define and implement yourself.
@@ -103,7 +103,7 @@ struct UpdateEvent;
 
 // Add our Systems to their Schedules.
 app.add_systems(Startup, insert_observer_system);
-app.add_system(Update, update_system);
+app.add_systems(Update, update_system);
 
 // This System will run in the `Startup` schedule.
 fn insert_observer_system(mut commands: Commands) {
@@ -120,12 +120,12 @@ fn update_system(mut commands: Commands) {
 
 In the above example, we have two systems: `insert_observer_system` running in the `Startup` schedule, and `update_system` running in the `Update` schedule.
 Since the `Startup` schedule only runs once, the `add_observer()` command is only run when our application is launched.
-However a `trigger()` command is queued everytime the `Update` schedule runs, meaning that a `trigger()` command is run every time the `Update` schedule completes.
+However, a `trigger()` command is queued every time the `Update` schedule runs, meaning that a `trigger()` command is run every time the `Update` schedule completes.
 
 We mentioned above that by default `Commands` are applied at the *end* of a `Schedule`.
-While correct, what really happens is that all of the `Commands` we queue are placed into a special `System` known as [`ApplyDeferred`].
+While correct, what really happens is that all the `Commands` we queue are placed into a special `System` known as [`ApplyDeferred`].
 This system will run at the end of every `Schedule` that has a system which uses `Commands` as a `SystemParameter`.
-Since `ApplyDeferred` is run after all of systems in a given schedule, all of the changes made by the `ApplyDeferred` system are able to be seen by the systems in other schedules.
+Since `ApplyDeferred` is run after all of systems in a given schedule, all the changes made by the `ApplyDeferred` system are able to be seen by the systems in other schedules.
 
 In addition, if a system accessing `Commands` is ordered before another system also accessing `Commands` in the same `Schedule`, the second system will always see the effects of `Commands` run in the first system.
 Bevy ensures this occurs by dynamically inserting synchronization points, during which all `Commands` are applied.
@@ -145,7 +145,7 @@ app.add_systems(
 );
 
 // This System will add the TargetComponent to the `player` Entity.
-fn add_the_component(mut commands: Commands, mut player: Single<Entity, Without<TargetComponent>) {
+fn add_the_component(mut commands: Commands, mut player: Single<Entity, Without<TargetComponent>>) {
     commands.entity(player).insert_if_new((TargetComponent));
     println!("TargetComponent added!");
 }
@@ -266,7 +266,7 @@ In the above example we took that same premise and extended it into a full custo
 Creating custom commands can help reduce the amount of boilerplate code you write, especially if you know that you need to repeat that code at multiple points.
 
 You can make this pattern even more ergonomic by writing an extension trait for the `Commands` type, allowing you to call new methods as long as the extension trait is imported.
-Calling `commands.custom_command(my_data)` is shorter and plays nicer with auto-complete, however this approach has no functional benefit or cost; it's simply a matter of style.
+Calling `commands.custom_command(my_data)` is shorter and plays nicer with autocomplete, however this approach has no functional benefit or cost; it's simply a matter of style.
 These same strategies can also be applied for the `EntityCommand` trait and the `EntityCommands` struct.
 
 ```rust
@@ -276,7 +276,7 @@ struct Counter(u64);
 
 // A custom Trait to add a value to the Counter Resource.
 pub trait CounterAdd {
-    fn add_to_counter(&mut self, value: u64)
+    fn add_to_counter(&mut self, value: u64);
 }
 
 // Implement our custom Trait on Commands.

@@ -6,7 +6,7 @@ weight = 4
 status = 'hidden'
 +++
 
-If Entities, Components and Systems are the first three concepts, then **Resources**, **Queries**, and **Commands** are the next three.
+If Entities, Components, and Systems are the first three concepts, then **Resources**, **Queries**, and **Commands** are the next three.
 These concepts are core to Bevy's ECS (so much so that they're used in the previous section!), but they aren't inherent to the architecture.
 
 ## Resources
@@ -72,7 +72,7 @@ Then, when systems are run as part of a Bevy [app](@/learn/book/the-game-loop/ap
 ```rs
 fn main() {
     App::new()
-        .add_systems(Update, (my_system, my_other_system))
+        .add_systems(Update, (apply_poison, tick_down_poison))
         .run();
 }
 ```

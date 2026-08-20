@@ -44,7 +44,7 @@ We love Bevy, but it's not the right tool for every project. You should not use 
   - Bevy does not currently have a graphical editor.
 - _You want scripting language support out-of-the-box:_
   - Unlike other game engines, gameplay logic is written in the same language (and style) as engine logic.
-  - That said, it is possible. Bevy and Rust provide the tools needed to integrate Lua, Python and more.
+  - That said, it is possible. Bevy and Rust provide the tools needed to integrate Lua, Python, and more.
   - Take a look at [Bevy Assets](https://bevy.org/assets) to see the options that the community has provided.
 - _You want to ship to consoles:_
   - Rust (and therefore Bevy) is currently not supported on Sony or Nintendo consoles.

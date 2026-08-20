@@ -26,7 +26,7 @@ For example, you might have a HUD (heads-up display) entity which only exists du
 
 [`States`]: https://docs.rs/bevy/latest/bevy/state/state/trait.States.html
 
-## Setting Up States
+## Setting up States
 
 Let's say that we're building a retro arcade game like [Galaga](https://en.wikipedia.org/wiki/Galaga).
 We'll want at least three states:
@@ -113,7 +113,7 @@ The `StateTransition` schedule itself runs at two points:
 2. **Each tick of the game loop**, after [`PreUpdate`] but before the fixed update loop and [`Update`].
 
 When you set a new state with [`NextState<T>`], the transition doesn't happen immediately.
-Instead the change is queued and applied the next time `StateTransition` runs.
+Instead, the change is queued and applied the next time `StateTransition` runs.
 This means that systems which will run later in the _same_ tick will still see the _old_ state.
 
 When a transition does occur, the schedules run in this order:
@@ -136,7 +136,7 @@ For more details on where `StateTransition` fits into the broader game loop, see
 [`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
 [schedules]: @/learn/book/the-game-loop/schedules.md
 
-## Cleaning Up Between States
+## Cleaning up Between States
 
 One of the most common patterns when working with states is to run some setup logic upon entering a state, and some tear-down or clean-up logic when exiting a state.
 The most common form of clean-up is despawning entities when the state they're associated with ends. 
@@ -157,7 +157,7 @@ fn spawn_enemy(mut commands: Commands) {
 
 The same pattern can be very helpful for UI as well.
 We can automatically close menus by despawning them when their associated state ends.
-This allows us to automatically couple the "remember to clean this up" logic with the creation of our objects, rather than needing to remember all of the things we might have spawned in a single monolithic cleanup system.
+This allows us to automatically couple the "remember to clean this up" logic with the creation of our objects, rather than needing to remember all the things we might have spawned in a single monolithic cleanup system.
 
 Similar helper components exist: [`DespawnOnEnter`], for when you want to clean up when entering a specific state, and [`DespawnWhen`], for when you want to perform more complex state-matching logic.
 
@@ -165,7 +165,7 @@ Similar helper components exist: [`DespawnOnEnter`], for when you want to clean 
 [`DespawnOnEnter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnEnter.html
 [`DespawnWhen`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnWhen.html
 
-## SubStates: States Within States
+## Substates: States Within States
 
 For our arcade game, the `GameState::Playing` state is actually more complex than it appears.
 When a level starts, the action doesn't begin immediately - instead there is a brief interval where we display an animation of the ship arriving, or "warping in".
@@ -193,12 +193,12 @@ pub enum ActionState {
 }
 ```
 
-Sub-states are initialized just like top-level states:
+Sub-states are initialized alongside top-level states, but with their own method call:
 
 ```rust
 app
     .init_state::<GameState>()
-    .init_state::<ActionState>();
+    .add_sub_state::<ActionState>();
 ```
 
 When state transitions occur, sub-states and computed states are recomputed accordingly, causing these transitions to cascade.

@@ -88,7 +88,7 @@ If you're interested, you can check the [`SystemParam`] page for more details.
 [`Local`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Local.html
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.Commands.html
 
-## Accessing Data In Systems
+## Accessing Data in Systems
 
 One of the major benefits of Bevy's system abstraction is that it easily and efficiently ["splits the borrow"] of a `World`.
 When a system is run, the requested data is automatically fetched from the `World`.
@@ -116,7 +116,7 @@ fn access_resource(custom_resource: Res<CustomResource>) {
 }
 ```
 
-Systems can run in parallel, as long as one system isn't *mutably* accessing the same data as the other system.
+Systems can run in parallel, as long as one system isn't *mutably* accessing the same component data as the other system.
 Both systems in the example below access the same data, but neither changes the data.
 These systems can run in parallel.
 
@@ -130,9 +130,8 @@ fn print_player_and_enemy_locations(
     println!("Enemy Location: {:?}", enemy_query.translation);
 }
 
-// While this System also immutably accesses the same Transform components,
-// meaning it can run alongside `print_player_and_enemy_locations`
-// even though they both access the same data.
+// Even though `Stats` is mutably accessed in this system, `Transform` isn't.
+// This means `damage_player` can run alongside `print_player_and_enemy_locations`.
 fn damage_player(
     mut player_query: Single<(&Transform, &mut Stats), With<Player>>,
     enemy_query: Single<&Transform, With<Enemy>>,
@@ -182,7 +181,7 @@ See the section on [local system state] for more details.
 [local system state]: @/learn/book/storing-data/local-system-param.md
 [Queries book section]: @/learn/book/storing-data/queries.md
 
-## Running Systems In Schedules
+## Running Systems in Schedules
 
 Systems are usually repeatedly run throughout the life of your application.
 We are able to control when systems run and how systems are ordered by placing them into a [`Schedule`].
@@ -198,7 +197,7 @@ fn main() {
 In the above example, we're running the `my_system` system in the [`Update`] schedule.
 `Update` is one of the *standard* schedules that Bevy provides, but there are many more to choose from.
 Each standard schedule provides access to a different point of time for a single frame, allowing you to place your systems in relation to the state of the frame.
-You can read more about schedules in the dedicated [Schedules section], but for now you just need to know a couple things:
+You can read more about schedules in the dedicated [Schedules section], but for now you just need to know a couple of things:
 
 - By default, systems within a single schedule run in parallel.
 - Systems within a single schedule can also be explicitly ordered to run relative to each other.
@@ -212,18 +211,18 @@ You can read more about schedules in the dedicated [Schedules section], but for 
 [`Update`]: https://docs.rs/bevy/latest/bevy/app/struct.Update.html
 [`Fixed`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Fixed.html
 
-## One-shot Systems
+## One-Shot Systems
 
 Systems can also be run on demand, via a "one-shot" pattern.
 This is an extremely flexible tool, allowing you to execute arbitrary logic on the world in an ergonomic way whenever you please.
 One-shot systems are particularly useful for testing, handling callbacks in UI, or creating scripted events.
 
-We have two means of running one-shot systems:
+We have two ways of running one-shot systems:
 
 - Register and invoke a system's [`SystemId`].
 - Access a System by name, caching it in a [`CachedSystemId`].
 
-Both means involve accessing the *state* of a particular system.
+Both ways involve accessing the *state* of a particular system.
 When working with one-shot systems, entities are spawned to store this information.
 The [`Entity`] identifier for each system are stored in a `SystemId` (or `CachedSystemId`).
 
@@ -232,7 +231,7 @@ After the system is registered, we can use [`World::run_system`] and pass in the
 
 ```rust
 // This System will register and then run two One-shot Systems.
-fn register_one_shot_systems(mut world: &mut World) {
+fn register_one_shot_systems(world: &mut World) {
     // Register two One-shot Systems.
     let some_system_id = world.register_system(one_shot_system);
     let another_system_id = world.register_system(one_shot_system_with_input);
@@ -256,11 +255,11 @@ fn one_shot_system_with_input(In(input): In<usize>) {
 
 Alternatively, if we don't want to handle the `SystemId` ourselves, we can use [`World::run_system_cached`].
 This will automatically cache the system and will retrieve its `SystemId` based on its [`TypeId`].
-However this approach can be harder to abstract, and limits you to one copy of each system.
+However, this approach can be harder to abstract, and limits you to one copy of each system.
 Any internal state (such as [locals] or [change detection] information) will be shared.
 
 ```rust
-fn run_one_shot_systems(mut world: &mut World) {
+fn run_one_shot_systems(world: &mut World) {
     // This will print a `local_value: 1` since this is the first time
     // the system is run.
     world.run_system_cached(one_shot_system);
@@ -271,7 +270,7 @@ fn run_one_shot_systems(mut world: &mut World) {
 }
 
 fn one_shot_system(mut local_value: Local<usize>) {
-    local_value += 1;
+    *local_value += 1;
     println!("local_value: {}", local_value);
 }
 ```
@@ -344,14 +343,21 @@ Exclusive Systems:
 
 ```rust
 // This system exclusively accesses `World` in a mutable way.
-fn exclusive_system(mut world: &mut World) {
+fn exclusive_system(world: &mut World) {
     // This registers a System.
-    world.register_system(SystemdId);
+    world.register_system(my_system);
     // This removes all entities from the World.
     world.clear_entities();
     // This adds a custom schedule to be run in the World.
     world.add_schedule(MySchedule);
 }
+
+// A system we want to register.
+fn my_system(mut commands: Commands) {...}
+
+// A custom schedule to use.
+#[derive(ScheduleLabel)]
+struct MySchedule;
 ```
 
 Exclusive systems are useful for operations that require making large or unique changes to your `World`.
@@ -367,7 +373,7 @@ such as [`System`].
 The application of this is simplest to understand in the context of one-shot systems.
 
 ```rust
-fn call_system(mut world: &mut World) {
+fn call_system(world: &mut World) {
     // Call the one-shot system with an input value of 42.
     let system_value: Result<usize, _> = world.run_system_once_with(one_shot_system_with_input, 42);
     // After going through the one-shot system, system_value will equal `Ok<44>`.

@@ -12,7 +12,7 @@ and reuse functionality between projects.
 Plugins are best used to organize your code into functional units:
 `WorldGenPlugin`, `InventoryPlugin` or `AudioPlugin` are all plausible.
 Inside of each plugin, you can initialize resources,
-add systems, setup observers, register types and generally handle the setup needed
+add systems, set up observers, register types and generally handle the setup needed
 to make your subsystem function.
 Once all of this setup is complete, a plugin's job is done:
 vanishing into thin air as the systems and resources it added live on to carry out its job.
@@ -28,12 +28,12 @@ trait Plugin {
 
 Let's break that down:
 
-- this is a trait, so we need to implement it for a user-defined type
+- This is a trait, so we need to implement it for a user-defined type.
 - `build` takes `&self`, allowing you to change the behavior based on the value.
-- it takes a `&mut App` reference, allowing you to mutate the [`App`] state freely
-  - adding systems via [`App::add_systems`] is the most common and important method
-  - as discussed in our section on [apps], [`App`] holds a [`World`], allowing you to add resources, make queries, spawn entities and more
-- because of how simple this is, we can just cut-and-paste code from our `main.rs` into plugins when we're ready to clean up
+- It takes a `&mut App` reference, allowing you to mutate the [`App`] state freely.
+  - Adding systems via [`App::add_systems`] is the most common and important method.
+  - As discussed in our section on [apps], [`App`] holds a [`World`], allowing you to add resources, make queries, spawn entities and more.
+- Because of how simple this is, we can just cut-and-paste code from our `main.rs` into plugins when we're ready to clean up
 
 Let's see how this works in practice:
 
@@ -75,7 +75,7 @@ extra features in the future.
 
 [`Plugin`]: https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html
 
-## Configuring plugins
+## Configuring Plugins
 
 As alluded to above, you can use the `&self` argument in [`Plugin::build`] to change
 the behavior of the plugin based on the passed in configuration.
@@ -99,7 +99,7 @@ is the best and only option.
 
 [`Plugin::build`]: https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html#tymethod.build
 
-## Plugin groups
+## Plugin Groups
 
 You may have noticed that [`App::add_plugins`] is a method that takes `&mut App`.
 Does that mean you can add plugins via other plugins?
@@ -121,7 +121,7 @@ You've likely already encountered these: [`DefaultPlugins`] is a [`PluginGroup`]
 2. You can overwrite the values of contained plugins via [`PluginGroup::set`], changing the default config.
 3. With the help of [`PluginGroupBuilder`] you can enable and disable contained plugins cleanly.
 
-## Plugin ordering and dependencies
+## Plugin Ordering and Dependencies
 
 When working with multiple plugins, be mindful that they're effectively just functions that immediately mutate the [`App`].
 As a result, plugins are [evaluated in the order that they are added to the `App`].
@@ -137,12 +137,12 @@ This behavior can be overridden by overwriting the default [`Plugin::is_unique`]
 The same duck-typing solution can be used to check if the plugin already exists,
 and avoid re-adding it if another dependency has already pulled it in.
 
-## The `Plugin` lifecycle
+## The `Plugin` Life Cycle
 
 When a plugin is added though [`App::add_plugins`], the app calls `Plugin::build`, and the plugin typically accesses and configures the world.  
 Then, when the app is run, a few other plugin life-cycle functions are called, and finally we enter the run loop:
 
-- The app polls `Plugin::finished` until all the added plugins return `true`.
+- The app polls `Plugin::ready` until all the added plugins return `true`.
 - The app calls `Plugin::finish` on all plugins.
 - The app calls `Plugin::cleanup` an all plugins.
 - The app calls the run loop function on itself.

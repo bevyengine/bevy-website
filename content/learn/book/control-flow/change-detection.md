@@ -47,7 +47,7 @@ fn detect_changed_position(query: Query<(Entity, &Position), Changed<Position>>)
 
 Removing components works differently, see the section below.
 
-## Checking For Changes
+## Checking for Changes
 
 In some cases, you may want to know whether or not an entity's components have changed, but at the same time want to access all the entities, even the ones that have _not_ changed.
 
@@ -109,11 +109,11 @@ fn detect_changed_score(score: Res<Score>) {
 
 Change detection works differently for removed components, since the component (and possibly the entity) no longer exists!
 
-To detect when components are removed, you can use the [`RemovedComponents`] param:
+To detect when components are removed, you can use the [`RemovedComponents`] parameter:
 
 ```rust
 fn detect_removed_position(mut removed: RemovedComponents<Position>) {
-    for entity in removed.iter() {
+    for entity in removed.read() {
         println!("Entity {:?} just lost its Position component", entity);
     }
 }
@@ -121,7 +121,7 @@ fn detect_removed_position(mut removed: RemovedComponents<Position>) {
 
 {% callout(type="warning") %}
 It's generally better to use an [`OnRemove`] observer or a component hook to detect removals.
-This has a number of advantages over using [`RemovedComponents`]:
+Using this has a number of advantages over [`RemovedComponents`]:
 
 - You get access to the component values being removed.
 - [`RemovedComponents`] can miss component removals when used in [`FixedUpdate`].
@@ -198,7 +198,7 @@ You may need to pay attention to how you [run schedules] or use [explicit system
 [states]: @/learn/book/control-flow/states.md
 [run conditions]: @/learn/book/control-flow/run-conditions.md#run-conditions
 [run schedules]: @/learn/book/the-game-loop/schedules.md
-[explicit system ordering]: @/learn/book/control-flow/run-conditions.md
+[explicit system ordering]: @/learn/book/the-game-loop/schedules.md
 
 [`set_if_neq()`]: https://docs.rs/bevy/latest/bevy/ecs/change_detection/trait.DetectChangesMut.html#method.set_if_neq
 [`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html

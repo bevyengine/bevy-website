@@ -6,7 +6,7 @@ weight = 3
 +++
 
 The [`World`] is a catch-all container for *stuff*.
-Entities, components, resources, assets -- all of these exist within a world.
+Entities, components, resources, assets – all of these exist within a world.
 It's where your data lives.
 
 ## The World as a Database

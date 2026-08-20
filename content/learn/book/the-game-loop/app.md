@@ -16,7 +16,7 @@ You can think of an `App` as containing three things:
 + A run-loop function, to execute [schedules].
 + A set of [plugins], which are important enough to deserve their own section.
 
-Most app configuration -- registering systems, etc. -- boils down to modifying the world.
+Most app configuration (registering systems, etc.) boils down to modifying the world.
 To simplify this, [`App`] proxies most of the [`World`] API.
 The world can also be accessed directly via [`App::world_mut`].
 

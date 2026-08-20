@@ -14,7 +14,7 @@ These are the situations where **Messages** are the preferred tool.
 They can be created and read from using system parameters and are stored in a [`Messages<M>`] resource.
 
 You can use `Messages` for a variety of different functionalities.
-Some messages might re-occur over a longer period of time, like continuously applying damage effects or regularly updating a leaderboard.
+Some messages might reoccur over a longer period of time, like continuously applying damage effects or regularly updating a leaderboard.
 Others can be short-lived, such as checking for whether a player can interact with an object or if a UI element should appear.
 The key concept to remember is that a `Message` is best used for logic that can be _deferred_ rather than requiring immediate action.
 
@@ -60,7 +60,7 @@ fn main() {
 }
 ```
 
-If you would prefer to implement `Message` handling yourself, you are free to omit `App::add_message` and handle all of the functionality manually.
+If you would prefer to implement `Message` handling yourself, you are free to omit `App::add_message` and handle all the functionality manually.
 Setting up `Message` handling manually follows the same process used by `App::add_message<M>`, however we are able to choose when `Messages::update` gets called.
 
 ```rust
@@ -105,7 +105,7 @@ fn main() {
 Messages function based on _writing_ them in response to something happening and _reading_ them at a later point to perform some functionality.
 Let's work through an example to showcase how and why messages should be used in your application.
 To do this we'll be creating a very basic scoreboard update mechanic for a king-of-the-hill style gamemode.
-Before we jump into the code, lets assess our objectives for the scoreboard update:
+Before we jump into the code, let's assess our objectives for the scoreboard update:
 
 - Update each player's score based on if they control the hill.
 - End the game when a player's score reaches 500.
@@ -129,7 +129,7 @@ fn main() {
 }
 ```
 
-Now lets _write_ our message which will update the scoreboard.
+Now let's _write_ our message which will update the scoreboard.
 We'll do this by creating a `Single` query for the hill objective that our players are fighting for control of.
 Specifically we'll be looking for the player `Entity` value stored in a `CurrentHillKing` component, which is a part of an `Entity` with a `HillObjective` marker component.
 Once we have our player `Entity`, we'll write a new `ScoreboardUpdate` message containing the player and the value to update their score by (5 in our case).
@@ -164,7 +164,7 @@ fn read_scoreboard_update(
 ) {
     // Read all of the ScoreboardUpdate messages in `update_reader`.
     for score_update in update_reader.read() {
-        scoreboard_res.update_score(score_update.player, score_update.value);
+        scoreboard_res.update_score(score_update.0, score_update.1);
     }
 
     if scoreboard_res.highest_player_score() >= 500 {
@@ -221,7 +221,7 @@ fn my_system(mut mutator: MessageMutator<MyMessage>) {
 ```
 
 One thing to note is that `MessageMutator` does not run in parallel.
-This is because `MessageMutator` mutably accesses the `Messages<M>` resource that contains all of the messages of a given type.
+This is because `MessageMutator` mutably accesses the `Messages<M>` resource that contains all messages of a given type.
 The same applies for `MessageWriter` as well.
 Systems accessing either will only run sequentially with each other.
 On the other hand, `MessageReader` _can_ be accessed by multiple systems concurrently if they only access `MessageReader`.
@@ -238,7 +238,7 @@ pub struct MyMessage(pub u32);
 fn message_resource(mut messages: ResMut<Messages<MyMessage>>) {
     // Drain all of the messages out of the resource,
     // and remove any message with a value of 2.
-    let filtered_messages = messages.drain().filter(|message| message.0 != 2);
+    let filtered_messages = messages.drain().filter(|message| message.0 != 2).collect();
 
     // Add the filtered messages back into the resource.
     messages.write_batch(filtered_messages);
@@ -267,23 +267,23 @@ pub struct TickDamage {
 }
 
 fn deal_tick_damage(mut tick_damage_reader: MessageReader<TickDamage>, mut health_query: Query<&mut Health>) {
-    for tick_damage in tick_damage_reader.par_read() {
-        if let Some(mut health) = health_query.get_mut(tick_damage.entity) {
-            health.value -= tick_damage.damage;
+    tick_damage_reader.par_read().for_each(|damage_message| {
+        if let Ok(mut health) = health_query.get_mut(damage_message.entity) {
+            health.value -= damage_message.damage;
         }
-    }
+    });
     tick_damage_reader.clear();
 }
 ```
 
 In the above example, we have a `TickDamage` message that tracks an `Entity` and a damage amount (`i32`).
 Throughout our schedules we can use a `MessageWriter` to accumulate `TickDamage` messages.
-When `Messages<TickDamage>` gets updated, we can then apply all of the `TickDamage` messages at once, benefitting from the parallel access that `MessageReader` gives us.
+When `Messages<TickDamage>` gets updated, we can then apply all `TickDamage` messages at once, benefiting from the parallel access that `MessageReader` gives us.
 
 Reproducing the same behavior using `Events` would involve several more steps.
 First we would have to first track all of our entities separately, since we only want to apply `TickDamage` to our entities at a single point.
 Then we would have to queue each `Event` to be evaluated sequentially.
-As the number of entities we're applying `TickDamage` to grows larger and larger, the more time it will take to execute those `Events`.
+As the number of entities we're applying `TickDamage` to grow larger and larger, the more time it will take to execute those `Events`.
 
 By using messages, we avoid the headache of making sure entities are tracked separately and gain stability by avoiding sequential `Event` execution.
 
@@ -310,7 +310,7 @@ If `Messages::update` is never called, these buffers will continue to grow in si
 
 Using `App:add_message<M>()` to register your `Message` will run `Messages::update` _every frame_.
 Like we mentioned at the top, this is because the `message_update_system` is placed in the `First` schedule, meaning it will be the first thing updated every frame.
-However we aren't locked into this behaviour.
+However, we aren't locked into this behavior.
 If we instead want our `Messages` to be updated within the [`FixedUpdate`] schedule rather than being frame-dependent, we can do so by several means.
 
 The first would be to manually place `message_update_system` in the `FixedUpdate` schedule (or some other schedule within the [`FixedMain`] set).
@@ -324,7 +324,7 @@ fn main() {
 }
 ```
 
-However, this is indiscriminant and will update _every_ `Message` type in your application.
+However, this is indiscriminate and will update _every_ `Message` type in your application.
 Instead, it's likely that you'll want more fine-grained control over which `Messages` update in `FixedUpdate` versus those that update every frame.
 We'll have to access each individual `Messages<M>` resource to accomplish this.
 
@@ -350,9 +350,9 @@ fn deal_tick_damage_update(mut tick_damage_messages: ResMut<Messages<TickDamage>
 // This system will read from the Message<TickDamage> resource
 // and apply damage to entities.
 fn deal_tick_damage(mut tick_damage_reader: MessageReader<TickDamage>, mut health_query: Query<&mut Health>) {
-    for tick_damage in tick_damage_reader.par_read() {
-        if let Some(mut health) = health_query.get_mut(tick_damage.entity) {
-            health.value -= tick_damage.damage;
+    tick_damage_reader.par_read().for_each(|damage_message| {
+        if let Ok(mut health) = health_query.get_mut(damage_message.entity) {
+            health.value -= damage_message.damage;
         }
     }
     tick_damage_reader.clear();
@@ -360,15 +360,15 @@ fn deal_tick_damage(mut tick_damage_reader: MessageReader<TickDamage>, mut healt
 
 // This system will update the Message<WarnTickDamage> resource.
 fn warn_tick_damage_update(mut warn_messages: ResMut<Messages<WarnTickDamage>>) {
-    warn_message.update();
+    warn_messages.update();
 }
 
 // This system will read from the Message<WarnTickDamage> resource
 // and print a warning message.
 fn warn_tick_damage(warn_tick_damage_reader: MessageReader<WarnTickDamage>) {
-    for message in warn_tick_damage_reader.par_read() {
+    warn_tick_damage_reader.par_read().for_each(|message| {
         println!("{} will take Tick Damage!", message.entity);
-    }
+    });
 }
 
 // This system will add the Message<TickDamage> and Message<WarnTickDamage>

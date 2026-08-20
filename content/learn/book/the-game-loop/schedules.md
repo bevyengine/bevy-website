@@ -22,7 +22,7 @@ Now, whenever Bevy runs the `Update` schedule, `move_players` will execute.
 The `Update` schedule is one of many built-in schedules provided by Bevy, each of which runs at a different point.
 Each schedule runs at a different point during the life-cycle of a Bevy app, so by controlling where your system is registered you can also control how it's run.
 
-## The standard Bevy schedules
+## The Standard Bevy Schedules
 
 Let's look at the other schedules provided by Bevy by default.
 When a Bevy [app] starts, it typically executes several schedules in order:
@@ -42,7 +42,7 @@ After the [`PostStartup`] schedule completes, the app shifts into the main game 
 The following schedules are then executed in order each "tick":
 
 1. [`First`]: Logic that needs to run before everything else each tick.
-2. [`PreUpdate`]: Library updates that must proceed application updates.
+2. [`PreUpdate`]: Library updates that must precede application updates.
 3. [`StateTransition`]: Part of Bevy's [state machine abstraction].
 4. The [fixed update loop] may run multiple schedules before progressing.
 5. [`Update`]: Updates for the application itself.
@@ -53,7 +53,7 @@ The following schedules are then executed in order each "tick":
 [`First`] and [`Last`] extend this further, allowing running before and after the majority of other logic.
 Libraries should generally prefer the update schedules unless they have a very good reason to use `First` or `Last`.
 
-## Adding your own schedules
+## Adding Your Own Schedules
 
 This repeating game loop is set up by the [`ScheduleRunnerPlugin`],
 which is included as part of both [`MinimalPlugins`] and [`DefaultPlugins`].

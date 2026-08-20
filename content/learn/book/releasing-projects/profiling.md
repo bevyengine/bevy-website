@@ -27,7 +27,7 @@ Bevy has built-in [tracing](https://github.com/tokio-rs/tracing) spans to make i
 Enable the `trace` cargo feature to enable Bevy's built-in spans.
 
 If you want to include `wgpu` tracing spans when profiling, they are emitted at the `tracing` `info` level.
-You will need to make sure they are not filtered out by the `LogSettings` resource's `filter` member which defaults to `wgpu=error`.
+You will need to make sure they are not filtered out by the [`LogPlugin`]'s `filter` member which defaults to `wgpu=error`.
 This can be done by setting the `RUST_LOG=info` environment variable when running your application.
 
 You also need to select a `tracing` backend using one of the cargo features described in the below sections.
@@ -41,6 +41,8 @@ You can find more details in the docs for [`prepare_windows`](https://docs.rs/be
 {% end %}
 
 ![prepare_windows span bug](https://github.com/bevyengine/bevy/assets/2771466/15c0819b-0e07-4665-aa1e-579caa24fece)
+
+[`LogPlugin`]: https://docs.rs/bevy/latest/bevy/log/struct.LogPlugin.html
 
 ### Adding Your Own Spans
 
@@ -98,7 +100,7 @@ If you also want to track memory allocations, at the cost of increased runtime o
 After running your app, you can open the captured profile file (`my_capture.tracy` in the example above) in the Tracy GUI application to see a timeline of the executed spans.
 
 Alternatively, directly run the tracy GUI and then run your application, for live capture.
-However, beware that running the live capture on the same machine will be a competing graphical application, which may impact results. Pre-recording the profile data through the CLI tool is recommended for more accurate traces.
+However, beware that running the live capture on the same machine will be a competing graphical application, which may impact results. Prerecording the profile data through the CLI tool is recommended for more accurate traces.
 
 In any case, you'll see your trace in the GUI window:
 
@@ -139,7 +141,7 @@ It will look something like this:
 
 This approach requires no extra instrumentation and shows finer-grained flame graphs of actual code call trees.
 This is useful when you want to identify the specific function of a "hot spot".
-The downside is that it has higher overhead, so your app will run slower than it normally does.
+The downside is that it will have a higher overhead, so your app will run slower than it normally does.
 
 Install [cargo-flamegraph](https://github.com/flamegraph-rs/flamegraph), [enable debug symbols in your release build](https://github.com/flamegraph-rs/flamegraph#improving-output-when-running-with---release), then run your app using one of the following commands.
 Note that `cargo-flamegraph` forwards arguments to cargo.
@@ -182,7 +184,7 @@ Note that while RenderDoc is a great debugging tool, it is _not_ a profiler, and
 #### Xcode's Metal Debugger
 
 Follow the steps below to start GPU debugging on macOS.
-There is no need to create an Xcode project.
+There is no need to create a Xcode project.
 
 1. In the menu bar click on Debug > Debug Executable…
 
