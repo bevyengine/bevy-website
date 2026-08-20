@@ -354,7 +354,7 @@ fn deal_tick_damage(mut tick_damage_reader: MessageReader<TickDamage>, mut healt
         if let Ok(mut health) = health_query.get_mut(damage_message.entity) {
             health.value -= damage_message.damage;
         }
-    }
+    });
     tick_damage_reader.clear();
 }
 
