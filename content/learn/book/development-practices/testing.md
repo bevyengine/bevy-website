@@ -135,7 +135,7 @@ To test that our game logic is working, we need to set up some world state and t
 The tools below are presented in order of increasing realism and complexity.
 You can mix-and-match, but you should prefer simpler methods wherever possible.
 
-### The Best ECS Is no ECS
+### The Best ECS Is No ECS
 
 Just because your data lives inside of the ECS doesn't mean that you need to use the ECS in your tests.
 This is an obvious insight, but surprisingly easy to overlook.
