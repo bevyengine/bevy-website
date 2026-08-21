@@ -72,7 +72,7 @@ Simply compiling the code is often good enough.
 Doc tests serve three purposes:
 
 1. Teaching the reader about the intended usage of the API.
-2. Serving as a canary for when code changes cause your documentation to go out of date.
+2. Serving as a canary for when code changes cause your documentation to go out-of-date.
 3. Acting as quick unit tests to assert invariants.
 
 Unsurprisingly, these are extremely useful for teaching users about libraries!
@@ -89,7 +89,7 @@ Save doc tests for teaching about usage and important invariants, and use unit t
 
 ## Integration Tests
 
-Integration tests are used to ensure that all of the parts of your project fit together and produce a desired end result.
+Integration tests are used to ensure that all parts of your project fit together and produce a desired end result.
 
 In Rust, integration tests are conventionally written by creating a `.rs` file with `#[test]` functions inside of your project's `tests` folder.
 Unlike unit tests, these tests can only access your crate's public API.
@@ -98,18 +98,18 @@ For games specifically, integration tests present some serious problems:
 
 1. Most games require graphics to run, and will simply panic uninformatively if this fails. Most CI providers do not offer GPUs or monitors.
 2. Most games require user input to advance.
-3. Failure conditions can be subtle, often involving human judgement or visual processing, and rigidly encoding desired states can lead to fragile tests that need to be constantly rewritten.
+3. Failure conditions can be subtle, often involving human judgment or visual processing, and rigidly encoding desired states can lead to fragile tests that need to be constantly rewritten.
 
 On small teams, these hurdles often aren't worth overcoming — unit tests and manual testing may be all you need.
 
-## Speeding Up Manual Testing
+## Speeding up Manual Testing
 
 Regardless of the complexity of your automated testing, you should be regularly testing your project by hand to catch unexpected bugs and judge it as a whole.
 
 You will be doing this a *lot*, so you should take the time to make this process both fast and painless.
 Take advantage of existing developer tools, make your own, and make it easy to jump to problematic game states.
 
-You should create a dedicated `devtools` feature flag for your application (and enable it by default) which will turn on all of the testing and debugging utilities that your project might need.
+You should create a dedicated `devtools` feature flag for your application (and enable it by default) which will turn on all testing and debugging utilities that your project might need.
 Reproducing tricky bugs can be incredibly time-consuming; you don't want to have to recompile your game to turn on these tools.
 Then when you are [building for release](@/learn/book/releasing-projects/release-builds.md), turn your `devtools` feature flag off.
 
@@ -127,7 +127,7 @@ Save games don't have nice compiler errors, and automatically upgrading them is 
 
 [`run_once`]: https://docs.rs/bevy/latest/bevy/ecs/schedule/common_conditions/fn.run_once.html
 
-## Testing With The ECS
+## Testing with the ECS
 
 When testing Bevy applications in a more integrated way, most of what we care about lives in the ECS.
 To test that our game logic is working, we need to set up some world state and then assert something about it.
@@ -178,7 +178,7 @@ If the function you are testing doesn't need a `World`, neither does your test.
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`App`]: https://docs.rs/bevy/latest/bevy/app/struct.App.html
 
-### Testing Using A Raw `World`
+### Testing Using a Raw `World`
 
 When you need to test helper functions that set up entities or resources, you can create a [`World`] directly and make assertions against it.
 
@@ -347,7 +347,7 @@ Failures can be caused by completely unrelated code, and refactors commonly move
 Treat this approach like lightweight integration testing; it can ensure that everything fits together as expected, but it will also be a hassle to maintain.
 Save them for critical game logic, and think carefully about your assertions to avoid breakage due to irrelevant changes.
 
-#### Running To Completion
+#### Running to Completion
 
 Sometimes you don't care *when* something happens, only *that* it happens.
 A level loads, an animation finishes, a character dies, etc.
@@ -396,7 +396,7 @@ These problems are tightly coupled: operating at the level of pixels, coordinate
 You should prefer:
 
 1. Sending the highest level user input possible. Prefer actions over inputs, manipulate state rather than going through intermediates.
-2. Locating objects to interact with by querying for them, rather than using hot keys or simulated positional mouse clicks.
+2. Locating objects to interact with by querying for them, rather than using hot-keys or simulated positional mouse clicks.
 3. Determining application state by polling the underlying data directly.
 4. Deciding on whether or not to proceed by polling to see if the state has changed (with a timeout).
 
@@ -571,10 +571,10 @@ sudo apt-get install xvfb
 xvfb-run cargo run --example my_example --features bevy_ci_testing
 ```
 
-#### Self-hosted Runners
+#### Self-Hosted Runners
 
 Software renderers work, but they're slow and don't behave identically to real GPUs.
-Hosting your own CI runners on machines with actual graphics hardware is more common in gamedev than in other parts of software development.
+Hosting your own CI runners on machines with actual graphics hardware is more common in game dev than in other parts of software development.
 A desktop with a mid-range GPU under a desk is enough to run graphical tests on real hardware, and the results will be far more representative of what your players actually see.
 
 Both [GitHub Actions] and [GitLab CI] support self-hosted runners.
@@ -653,12 +653,12 @@ Simply calling public APIs has three problems:
 2. They are not trained on these tasks, and may struggle to identify the objects you care about or cope with your artistic style.
 3. They may change out from underneath you, as a new version of the model rolls out.
 
-Training your own model to do this (probably via finetuning) may seem appealing, but is not for the faint of heart.
+Training your own model to do this (probably via fine-tuning) may seem appealing, but is not for the faint of heart.
 There are a huge number of potential failure modes: your style and features are a moving target, false positives are frustrating time-sinks, the investment in both expertise and hardware needed to do this well is quite large, etc.
 
 Like always, keep your testing as simple as possible.
 
-#### Know When To Test Logic Instead
+#### Know When to Test Logic Instead
 
 Before investing in graphical testing infrastructure, ask yourself: **can this be tested without looking at pixels?**
 

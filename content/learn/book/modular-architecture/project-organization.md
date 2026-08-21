@@ -10,18 +10,18 @@ But how should you split it apart, and what are your tools for doing so?
 
 Thankfully, the Bevy community has answers to these questions:
 
-- split your code based on the "domain" it covers
-  - think about where you might want to reuse, or selectively disable bits of functionality
-  - code that changes together should live together
-  - don't try to group together objects by "kind", like "components" and "systems"
-- don't try to get it right from the very start
-  - split things up gradually, as areas become complex and unwieldy
-  - you'll have a much better idea of the shape of your program then
-  - and it stops you from wasting time at the start of your project
-- take advantage of Rust's modules, crates and visibility to organize your code
-  - be mindful of [orphan rules] when architecting multi-crate projects
-- one [plugin] per module, and one plugin per crate (which may nest multiple plugins) is a good default
-  - placing these at the top of your files can act as a simple, consistent "table of contents"
+- Split your code based on the "domain" it covers.
+  - Think about where you might want to reuse, or selectively disable bits of functionality.
+  - Code that changes together should live together.
+  - Don't try to group together objects by "kind", like "components" and "systems".
+- Don't try to get it right from the very start.
+  - Split things up gradually, as areas become complex and unwieldy.
+  - You'll have a much better idea of the shape of your program then.
+  - And it stops you from wasting time at the start of your project.
+- Take advantage of Rust's modules, crates, and visibility to organize your code.
+  - Be mindful of [orphan rules] when architecting multi-crate projects.
+- One [plugin] per module, and one plugin per crate (which may nest multiple plugins) is a good default.
+  - Placing these at the top of your files can act as a simple, consistent "table of contents".
 
 [orphan rules]: https://doc.rust-lang.org/reference/items/implementations.html#orphan-rules
 [plugin]: @/learn/book/modular-architecture/plugins.md
@@ -83,16 +83,16 @@ You might even be the only person on your team!
 And that's largely right: game programming often warrants a more fluid, permissive approach.
 But there's still a few good reasons to take advantage of Rust's visibility system:
 
-- carefully maintaining invariants
-  - simple validated getter/setter patterns are very effective
-  - more complex patterns can often benefit from custom commands or system params to ensure a single blessed workflow
-  - clean encapsulation ensures that you can update how something works in a single place
-- dead code detection
-  - if your types/methods/functions are `pub`, Rust won't know if they're dead code
-  - dead code slows down compile times, confuses the reader and slowly rots
-- keeping your code *reasonably* untangled
-  - iterating quickly is important, and Rust will help you refactor, so you should be careful not to get too tangled up
-  - forcing consumers to do things the right way makes it easier to change the internals later
+- Carefully maintaining invariants.
+  - Simple validated getter/setter patterns are very effective.
+  - More complex patterns can often benefit from custom commands or system parameters to ensure a single blessed workflow.
+  - Clean encapsulation ensures that you can update how something works in a single place.
+- Dead code detection.
+  - If your types/methods/functions are `pub`, Rust won't know if they're dead code.
+  - Dead code slows down compile times, confuses the reader and slowly rots.
+- Keeping your code *reasonably* untangled.
+  - Iterating quickly is important, and Rust will help you refactor, so you should be careful not to get too tangled up.
+  - Forcing consumers to do things the right way makes it easier to change the internals later.
 
 At the end of the day, `pub(crate)` is a good default visibility level for items in larger projects.
 Internal methods, invariants, and implementation details should be private, which is the Rust language default behavior.
@@ -105,7 +105,7 @@ skip the getter/setter methods unless you're performing validation.
 
 [visibility]: https://doc.rust-lang.org/reference/visibility-and-privacy.html
 
-## Project organization by example
+## Project Organization by Example
 
 Now that we have a handle on the tools available, let's talk over how a hypothetical project might change and grow.
 Our small studio is building a Wild West single player first-person shooter!
@@ -138,7 +138,7 @@ Our project now looks like this:
 
 With a bit of basic gameplay working, it's time to tackle some infrastructure that we know we'll need: menus and loading screens.
 We look at what we've done in previous projects and copy-paste liberally into a new `ui` folder, with multiple sub-files.
-We setup a basic `GameState` here, to allow us to pause and restart the game and handle opening and closing menus,
+We set up a basic `GameState` here, to allow us to pause and restart the game and handle opening and closing menus,
 sticking it in our `main.rs` because it's used throughout the project.
 Now, our project looks like this:
 
@@ -250,7 +250,7 @@ Now:
 
 Ugh, the compile times are really starting to slow down, and things are getting complicated.
 Let's refactor this to be a workspace.
-One step at a time though: get the simple setup right first, then we'll spin out subcrates.
+One step at a time though: get the simple setup right first, then we'll spin out sub-crates.
 We're just going to create a binary application and a single library,
 and dump everything but our main.rs contents into the library, which we'll depend on in our binary.
 

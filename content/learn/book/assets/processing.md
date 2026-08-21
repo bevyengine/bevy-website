@@ -174,7 +174,7 @@ impl AssetSaver for MySaver {
         &self,
         writer: &mut Writer,
         asset: SavedAsset<'_, '_, Self::Asset>,
-        _settings; &Self::Settings,
+        _settings: &Self::Settings,
         _asset_path: AssetPath<'_>,
     ) -> Result<NewAssetLoader::Settings, BevyError> {
         // Note: this is a simplified example where we assume we have no "subassets". If we did,

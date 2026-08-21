@@ -13,9 +13,9 @@ but can also pay dividends as contributors help you refine and polish the crate 
 This chapter covers some best practices for creating open source libraries with Bevy.
 Most of these sections will *also* apply if you're splitting your work apart for reuse between projects!
 
-## Setting up your crate
+## Setting up Your Crate
 
-### Naming your crate
+### Naming Your Crate
 
 Names are famously one of the hardest problems in computer science,
 and crates are no exception to this.
@@ -23,7 +23,7 @@ and crates are no exception to this.
 When considering a name for your crate, we recommend that you:
 
 - **Always use `_` rather than `-`.** This keeps the crate name consistent with how users import it.
-- **Pick a name which communicates what your crate does** in a somewhat unique way.
+- **Pick a name which communicates what your crate does** in a somewhat special way.
 - **Avoid confusion with potential official Bevy crates.** `crates.io` does not have namespaces currently, and `bevy_color` and `bevy_colour` are easy to confuse.
 - **Consider choosing a "branding" name** for your family of crates (e.g. `leafwing`). This can unify your projects without cluttering the main crate namespace.
 
@@ -62,15 +62,15 @@ as this will seriously hinder the adoption of your work and the contributions ma
 When making a crate that relies on Bevy, there are two strategies:
 
 - **Rely on `bevy` directly.** Simple to set up and update, and easy to patch if the user wants to point to their own fork or `bevy/main`.
-- **Rely on Bevy subcrates**, like `bevy_ecs` and `bevy_input`. Works for projects that don't rely on `bevy` itself, and enables faster compilation: your crate can compile before `bevy` itself finishes.
+- **Rely on Bevy sub-crates**, like `bevy_ecs` and `bevy_input`. Works for projects that don't rely on `bevy` itself, and enables faster compilation: your crate can compile before `bevy` itself finishes.
 
-We recommend subcrates, primarily for the compile-time benefits.
+We recommend sub-crates, primarily for the compile-time benefits.
 
 Regardless of your choice, you should *always* specify `default-features = false` in your `Cargo.toml`.
 This ensures that your crate does not pull in unneeded code.
 Remember: features can only be enabled, not disabled in Rust.
 
-## Polishing your crate
+## Polishing Your Crate
 
 ### Idiomatic Bevy and Rust
 
@@ -78,7 +78,7 @@ Users of your crate will expect it to feel like a natural extension of Bevy.
 A few conventions go a long way:
 
 - **Expose a plugin.** The standard entry point for a Bevy library is a [`Plugin`](https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html). Even if your crate is simple, wrapping your setup logic in a plugin gives users a consistent, predictable way to integrate it: `app.add_plugins(YourPlugin)`.
-- **Use the ECS where it makes sense.** Bevy users expect their crates to use components, resources, events and messages. Structuring your crate to use them makes it easier to extend, modify and inspect.
+- **Use the ECS where it makes sense.** Bevy users expect their crates to use components, resources, events, and messages. Structuring your crate to use them makes it easier to extend, modify and inspect.
 - **Don't panic.** Library code should almost never crash. Program defensively, and return `Result` when something goes wrong. Log an error or warning if there's nowhere to return. Reserve panics exclusively for upholding soundness invariants. Read more about [handling errors here](@/learn/book/control-flow/handling-errors.md).
 - **Follow Rust API guidelines.** The [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/) are a great reference for naming, documentation, and API design.
 - **Use feature flags to make expensive or niche functionality opt-in.** If your crate has optional integrations (e.g. serialization, debug tooling, support for specific Bevy subsystems), gate them behind [Cargo features](https://doc.rust-lang.org/cargo/reference/features.html) rather than pulling everything in by default. This keeps compile times down and avoids forcing unwanted dependencies on your users. A few guidelines:
@@ -86,7 +86,7 @@ A few conventions go a long way:
   - Keep your default features minimal.
   - Document your features in your `Cargo.toml` using comments above each feature.
 - **Consider `no_std` support.** If your crate is primarily logic — math, data structures, ECS patterns — it may not need the standard library at all. This makes your crate usable in more environments, including embedded platforms and WebAssembly without a full runtime.
-  - This is easiest to set up at the start of a project; retrofitting it later is harder but not impossible.
+  - This is easiest to set up at the start of a project; retrofitting it later is harder but isn't impossible.
   - Add `#![no_std]` to your `lib.rs`, with a `std` feature flag to enable anything that requires it
   - In the majority of cases, you can just use `core` or `alloc` directly instead
   - Confirm that your dependencies work without `std` by compiling to a target that does not have `std` (such as `wasm32v1-none`).
@@ -94,7 +94,7 @@ A few conventions go a long way:
 
 [`no_std` example]: https://github.com/bevyengine/bevy/tree/latest/examples/no_std/library
 
-### Minimizing dependencies
+### Minimizing Dependencies
 
 You should try to keep your dependency tree lean.
 Every dependency you add is a dependency your users inherit, and one that you need to regularly update.
@@ -144,12 +144,12 @@ name = "basic_usage"
 path = "examples/basic_usage.rs"
 ```
 
-While you should always rely on Bevy or its subcrates using `default-features=false`,
+While you should always rely on Bevy or its sub-crates using `default-features=false`,
 it's common to need access to more features to create an interactive example.
 You can depend on `bevy` as a `dev-dependency` using whatever features you need,
 and get the best of both worlds.
 
-### Automated quality control
+### Automated Quality Control
 
 Set up CI early. A basic GitHub Actions workflow can catch issues before they reach your users and makes accepting contributions much easier.
 
@@ -195,14 +195,14 @@ We have a few additional setup suggestions:
 Take a look at our chapter on [Testing](@/learn/book/development-practices/testing.md):
 this advice is particularly useful for library authors.
 
-### Configuring Github repo settings
+### Configuring GitHub Repo Settings
 
 There are a few things we recommend configuring for every new public open source project:
 
 - **Protect your main branch.** Require PRs to pass CI before merging. This keeps contributors from accidentally breaking things, and lets you review changes before they land. On GitHub, configure this under Settings → Branches → Branch protection rules.
 - **Use squash-and-merge.** Squashing PR commits into a single commit keeps your main branch history clean and readable. Each merge becomes one self-contained entry in `git log`, which makes changelogs, bisecting, and reverts much simpler. You can set this as the default (or only) merge strategy in your GitHub repository settings.
 
-## Sharing your crate
+## Sharing Your Crate
 
 ### Publishing
 
@@ -231,7 +231,7 @@ cargo publish
 
 Use [semantic versioning](https://semver.org/) for your releases. For pre-1.0 crates (which most Bevy ecosystem crates are), a bump to the minor version (`0.1.0` → `0.2.0`) signals breaking changes, while a patch bump (`0.1.0` → `0.1.1`) signals backwards-compatible fixes.
 
-### Promoting your crate
+### Promoting Your Crate
 
 If you went to the effort of making and publishing a crate, you probably want people to use it.
 Getting your crate in front of users:
@@ -244,9 +244,9 @@ Getting your crate in front of users:
 Make sure that your README, crate docs and your posts on social media clearly explain what your work is and why someone might want to use it.
 Don't underestimate the value of a pretty screenshot or GIF — polish is a strong indicator of a maintainer who's put the time in to make something worth using.
 
-## Maintaining your crate
+## Maintaining Your Crate
 
-### Keeping up with Bevy versions
+### Keeping up with Bevy Versions
 
 The major version of Bevy that your crate uses must match the Bevy version that your users are on.
 As a result, users expect ecosystem crates to track Bevy releases actively.
@@ -268,7 +268,7 @@ This can be a fair bit of work, but there are a few practices that help:
 - **Work with your community to update.** Active crates often get PRs from users eager to update versions. Work with them to polish the migration and spread the load.
 - **Use the [Bevy migration guides](https://bevy.org/learn/migration-guides/).** These are the primary resource for updating your code.
 
-### Managing contributions
+### Managing Contributions
 
 If your crate gains traction, people will want to contribute.
 You want to empower users to scratch their own itch, not stand in their way.
@@ -289,7 +289,7 @@ Here are our most important tips on being a good open source maintainer:
 - **Encourage reviews from the community.** Your users and contributors have useful perspectives on potential changes. You should welcome their interest and expertise. Bevy does this to great effect!
 - **Ask for help when you need it.** Maintaining an open source crate can be overwhelming, especially alone. The Bevy community is friendly and experienced — don't hesitate to ask for advice, reviews, or help in the [Bevy Discord](https://discord.gg/bevy). If you're struggling with maintainer burnout, it's okay to say so and ask for volunteers to step up.
 
-### Keeping a changelog
+### Keeping a Changelog
 
 As your crate evolves, help your users keep up.
 
@@ -308,7 +308,7 @@ As your crate evolves, help your users keep up.
 
 - **Tag releases in git** and use GitHub Releases (or your host's equivalent) to publish release notes alongside the tag. This gives users a natural place to find what changed.
 
-### Offering support
+### Offering Support
 
 As your user base grows, people will ask for help using your crate.
 You should not feel compelled to do so (you're almost certainly not getting paid for this),

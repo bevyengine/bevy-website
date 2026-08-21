@@ -8,7 +8,7 @@ status = 'hidden'
 
 **Assets** have two defining qualities that shape how Bevy works with them:
 
-1. They can be loaded and unloaded at runtime (as opposed to being part of your game's code). Typically, assets are stored in the file system on the user's hard drive.
+1. They can be loaded and unloaded at runtime (as opposed to being part of your game's code). Typically, assets are stored in the filesystem on the user's hard drive.
 2. They are often very large: asset files can be multiple megabytes, when typical data-storing components are measured in bytes.
 
 The first point means that we need tools to dynamically load (and unload) assets at runtime.

@@ -7,7 +7,9 @@ weight = 6
 
 Failures happen all the time in production software, from recoverable failures like not finding a user's save file on first run to unrecoverable errors which are symptoms of critical bugs.
 Dealing with that failure in a productive way means games and applications become more reliable.
-In Bevy, with data such as Entities, Components, and Resources being inserted and manipulated at runtime, handling cases when a Resource doesn't exist yet, an index needs to be updated, or a Component doesn't have the data you're looking for is routine work.
+In Bevy, data such as Entities, Components, and Resources are being inserted and manipulated at runtime.
+This means it's common to encounter cases where a Resource might not exist when you access it, or an index needs to be updated, or a Component doesn't have the data you're looking for.
+We need to handle these cases, and hopefully recover from them gracefully.
 
 ## To Recover or Not
 
@@ -21,7 +23,7 @@ They happen immediately, and provide us no opportunity for clean up or a gracefu
 
 So panics are bad? Well, kind of. Using panicking macros like [`todo!`](https://doc.rust-lang.org/std/macro.todo.html) can be extremely useful during prototyping. Just try to remove them before you let anyone run your code.
 
-## Avoiding crashes
+## Avoiding Crashes
 
 In Rust, unrecoverable failures are explicitly written in the source code.
 Some functions that will signal a potential crash include:
@@ -61,7 +63,7 @@ todo = "warn"
 
 {% end %}
 
-## Recoverable failures
+## Recoverable Failures
 
 The [`Result`](https://doc.rust-lang.org/std/result/enum.Result.html) and [`Option`](https://doc.rust-lang.org/std/option/enum.Option.html) types are regular enums commonly used to represent different kinds of failure.
 An `Option`'s variants, `None` and `Some`, indicate whether a value exists or not while a `Result`'s variants, `Ok` and `Err` store a successful value or an error value respectively.
@@ -178,7 +180,7 @@ Once you have a `Result`, `Option`, or other enum, there are a number of options
 ### `match`
 
 Here we have a Bevy application with a single system that runs every frame.
-The system queries for all of the `Camera` components that have been spawned and uses [`Query::single`](https://docs.rs/bevy/latest/bevy/prelude/struct.Query.html#method.single) to test if there is only a single `Entity` matching the `Query`.
+The system queries for all `Camera` components that have been spawned and uses [`Query::single`](https://docs.rs/bevy/latest/bevy/prelude/struct.Query.html#method.single) to test if there is only a single `Entity` matching the `Query`.
 In the case of 0 or 2+ matching entities, the returned value is the `Err` variant of the `Result`, which itself contains [an enum](https://docs.rs/bevy/latest/bevy/ecs/query/enum.QuerySingleError.html) indicating the reason for the error.
 Using `match` allows running different branches of logic based on matching patterns.
 
@@ -239,10 +241,10 @@ fn update(query: Query<&Camera>, mut commands: Commands) {
 }
 ```
 
-### if let
+### If Let
 
-if-let is a similar concept to let-else that doesn't require the else block to diverge, and can have multiple additional conditions.
-In turn, this means that _if_ an arm doesn't diverge, then each arm of the if-let must return the same type.
+`if let` is a similar concept to `let else` that doesn't require the else block to diverge, and can have multiple additional conditions.
+In turn, this means that _if_ an arm doesn't diverge, then each arm of the `if let` must return the same type.
 
 In this example, the first else block checks to make sure there are no other cameras spawned before spawning in a new camera instead of returning a value from the `if let`.
 Values that _are_ returned from the `if let` are stored in the `computed_target_info` variable and can be used in the rest of the program.
@@ -273,16 +275,16 @@ fn update(query: Query<&Camera>, mut commands: Commands) {
 }
 ```
 
-if-let enables using a concept called "let chaining".
-In the example program, a series of lets are chained together using `&&`, using and matching on values that were previously matched.
-If all of the let patterns match successfully, the relevant branch is executed.
+`if-let` enables using a concept called "let chaining".
+In the example program, a series of `let`s are chained together using `&&`, using and matching on values that were previously matched.
+If all `let` patterns match successfully, the relevant branch is executed.
 
 ## System Requirements
 
 We've been using `Query::single` to validate query data and dispatch logic accordingly.
 Since systems require certain data to be available to function, there are two ways to validate that data before a system runs:
 
-- SystemParam validation
+- `SystemParam` validation
 - Run conditions
 
 Run conditions and fallible system parameters are covered in [run conditions](@/learn/book/control-flow/run-conditions.md)
@@ -297,7 +299,7 @@ While Rust loosely buckets errors into "recoverable" and "unrecoverable", Bevy t
 
 This works because Bevy contains a global, configurable error handler.
 
-### Returning errors from Systems
+### Returning Errors from Systems
 
 Bevy's prelude contains a custom [`Result`](https://docs.rs/bevy/latest/bevy/ecs/error/type.Result.html) type alias that amounts to `Result<(), BevyError>` in the default case.
 This can be used as the return type from systems.
@@ -367,13 +369,13 @@ fn update_map_severity(query: Query<&Camera>) -> Result {
 }
 ```
 
-This is a common and useful pattern: quickly allowing you to downgrade errors based on the local context about how big of a problem they actually pose.
+This is a common and useful pattern: quickly allowing you to downgrade errors based on the local context about how big a problem they actually pose.
 
 [`Severity`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Severity.html
 [`with_severity`]: https://docs.rs/bevy/latest/bevy/prelude/trait.ResultSeverityExt.html#tymethod.with_severity
 [`map_severity`]: https://docs.rs/bevy/latest/bevy/prelude/trait.ResultSeverityExt.html#tymethod.map_severity
 
-#### Configuring the global error handler
+#### Configuring the Global Error Handler
 
 This policy of aggressive panicking can help raise issues quickly in development, but you may prefer a different approach to handling errors globally, especially in production.
 The job of the global error handler is to decide how to log a global error, so Bevy provides [a series of preset handlers](https://docs.rs/bevy/latest/bevy/ecs/error/index.html) ranging from panicking to completely ignoring errors and all log levels in between.
@@ -418,7 +420,7 @@ This is particularly true if you are writing a library: you should *never* overr
 Instead, we recommend you change the global error handler when preparing a game for production, turning unhandled crashes into errors.
 Use a feature flag for this, so you can decide on error policies for development and production separately.
 
-### Per-system error handling
+### Per-System Error Handling
 
 If you want to handle errors returned from a system in more complex ways, system piping can pass the return value of one system to another.
 More details on system piping can be found in [systems](@/learn/book/control-flow/systems.md).
@@ -450,7 +452,7 @@ fn handle_error(In(input): In<Result>) {
 }
 ```
 
-The input type can be any type, which means we don't need to use the generic `BevyError`, and can instead use a custom error type or a pre-existing type like `QuerySingleError` that is returned by the operations the program uses.
+The input type can be any type, which means we don't need to use the generic `BevyError`, and can instead use a custom error type or a preexisting type like `QuerySingleError` that is returned by the operations the program uses.
 
 This allows specific matching of those errors in the piped system.
 

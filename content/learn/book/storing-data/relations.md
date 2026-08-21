@@ -17,7 +17,7 @@ This has numerous potential uses:
 
 There is one particular type of relation that gets used a lot in Bevy: the [`ChildOf`] relation.
 This is a [`Component`] which is inserted into a child entity, holding a reference to the child's parent entity.
-The parent has a corresponding [`Children`] component which contains a reference to all of the parent's children.
+The parent has a linked [`Children`] component which contains a reference to all the parent's children.
 
 Like all relations, the `ChildOf` / `Children` relation is dual-ended and directed, with separate components maintaining each end of the relationship.
 It represents a "one-to-many" relationship, with the parent being the one, and the children being the many.
@@ -34,13 +34,15 @@ It represents a "one-to-many" relationship, with the parent being the one, and t
 fn spawn_entity_with_children(mut commands: Commands) {
     // Spawn a car
     let vehicle = commands.spawn((Camaro, Color::Red)).id();
+    
     // Spawn 4 wheels and attach to the car
-    commands.entity(vehicle).add_children(&[
+    let wheels: Vec<Entity> = [
         commands.spawn((Wheel, Color::Black)).id(),
         commands.spawn((Wheel, Color::Black)).id(),
         commands.spawn((Wheel, Color::Black)).id(),
         commands.spawn((Wheel, Color::Black)).id(),
-    ]);
+    ];
+    commands.entity(vehicle).add_children(&wheels);
 
     // You can also use `with_children`:
     commands.entity(vehicle).with_children(|parent| {
@@ -52,7 +54,7 @@ fn spawn_entity_with_children(mut commands: Commands) {
 Note that `add_children` and `with_children` only set up the `ChildOf` and `Children` components, and nothing else.
 If you want any other components, you'll need to add them yourself.
 
-The `ChildOf` relation uses the [`linked_spawn`] option, which means that when a parent is despawned, it's children (and their children, and so on) are also despawned automatically.
+The `ChildOf` relation uses the [`linked_spawn`] option, which means that when a parent is despawned, its children (and their children, and so on) are also despawned automatically.
 
 ```rs
 fn despawn_vehicle(mut commands: Commands, vehicle: Entity) {
@@ -211,7 +213,7 @@ Similarly, `ContainedBy` makes it clear that this is an item in a container, not
 {% end %}
 
 Now that we've defined our new relation, we can start using it!
-Remember in the previous sections all of the various methods for adding children?
+Remember the various methods for adding children in the previous sections?
 Well, those methods are just special cases of more general ones.
 Instead of `add_children()`, you could use `add_related::<ContainedBy>()`, and instead of `Children::spawn()` you can call `Contents::spawn()`.
 
@@ -219,7 +221,7 @@ Instead of `add_children()`, you could use `add_related::<ContainedBy>()`, and i
 
 As your game develops further, you might find that there are cases where you want a relationship between an `Entity` and _itself_.
 Maybe your game is inspired by JRPGs and you want to include the player's character in a custom `Party` relationship collection, or perhaps the enemy boss should include themselves in a `EnemyCombatants` relationship collection.
-However you wish to implement it, including an `Entity` in a relationship collection that the same `Entity` owns can potentially help simplify the logic required to build your game.
+However, you wish to implement it, including an `Entity` in a relationship collection that the same `Entity` owns can potentially help simplify the logic required to build your game.
 
 However, Bevy does not allow this by default: attempting to create a relationship between an `Entity` and itself will simply remove the relationship component from the `Entity` and a warning will be logged.
 To get around the default behavior, we have to include the `allow_self_referential` attribute when defining our relationship struct:

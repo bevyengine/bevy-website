@@ -97,7 +97,7 @@ These can fetch data from the ECS, make updates, call external APIs, and anythin
 
 ```rs
 // No derive macro needed!
-fn my_system(entities: Query<&mut Location>) {
+fn my_system(mut entities: Query<&mut Location>) {
     for location in entities.iter_mut() {
         location.x += 1;
     }

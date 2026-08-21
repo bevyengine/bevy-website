@@ -83,7 +83,7 @@ Create a `rust-toolchain.toml` file in the root of your project, next to `Cargo.
 channel = "nightly"
 ```
 
-For more information, see [The rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
+For more information, see [The Rustup book: Overrides](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file).
 
 ## Cranelift
 
@@ -109,20 +109,20 @@ codegen-backend = "cranelift"
 codegen-backend = "llvm"
 ```
 
-This enables faster compiles for your binary, but builds Bevy and other dependencies with the more-optimized LLVM backend. See the [cranelift setup guide](https://github.com/rust-lang/rustc_codegen_cranelift#download-using-rustup) for
+This enables faster compiles for your binary, but builds Bevy and other dependencies with the more-optimized LLVM backend. See the [Cranelift setup guide](https://github.com/rust-lang/rustc_codegen_cranelift#download-using-rustup) for
 details on other ways in which Cranelift can be enabled. The installation process for Windows is a bit more involved. Consult the linked documentation for help.
-MacOS builds can currently crash on Bevy applications, so you should still wait a bit before using cranelift on that system.
+MacOS builds can currently crash on Bevy applications, so you should still wait a bit before using Cranelift on that system.
 
 While Cranelift is very fast to compile, the generated binaries are not optimized for speed. Additionally, it is generally still immature, so you may run into issues with it.
-Notably, Wasm builds do not work yet.
+Notably, WASM builds do not work yet.
 
 When shipping your game, you should still compile it with LLVM.
 
 {% callout(type="caution") %}
-Enabling cranelift is known to break local variable inspection while debugging.
+Enabling Cranelift is known to break local variable inspection while debugging.
 You can only inspect statics.
 This is caused by the fact that `rustc_codegen_cranelift` is missing DWARF support.
-See [`cranelift #166`](https://github.com/rust-lang/rustc_codegen_cranelift/issues/166) for more information.
+See [`Cranelift #166`](https://github.com/rust-lang/rustc_codegen_cranelift/issues/166) for more information.
 {% end %}
 
 ## Generic Sharing
@@ -131,7 +131,7 @@ Allows crates to share monomorphized generic code instead of duplicating it.
 In some cases this allows us to "precompile" generic code so it doesn't affect iterative compiles.
 This is currently only available on nightly Rust ([see above](#nightly-rust-compiler)).
 
-### Generic sharing setup
+### Generic Sharing Setup
 
 See [this file](https://github.com/bevyengine/bevy/blob/latest/.cargo/config_fast_builds.toml) for a more comprehensive, cross-platform example.
 

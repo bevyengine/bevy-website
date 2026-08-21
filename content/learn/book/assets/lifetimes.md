@@ -70,7 +70,7 @@ struct EnemyAssets {
 
 fn load_enemy_assets_in_startup(
     asset_server: Res<AssetServer>,
-    mut commands: AssetCommands
+    mut commands: Commands
 ) {
     commands.insert_resource(EnemyAssets {
         sprite: asset_server.load("enemy.png"),
@@ -168,6 +168,7 @@ fn main() {
 
 #[derive(States, Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 enum AssetsState {
+    #[default]
     Loading,
     Loaded,
 }
