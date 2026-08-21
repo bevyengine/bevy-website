@@ -213,7 +213,7 @@ This year we had a ton of new Bevy usage, with some exciting Steam releases, dem
 - [Willcaster](https://store.steampowered.com/app/4953880/Willcaster/): a game where you guide an ordinary frog on your magical game board, helping him with your spells, was announced on Steam.
 - [Unhaunter](https://www.unhaunter.com/): the paranormal investigation simulator, made a lot of progress this year.
 - [One Planet](https://store.steampowered.com/app/2348960/One_Planet/): a political strategy game where you take on climate change, was announced on Steam.
-- [Manufact](https://manufact.au/): a "design for manufacture" and simulation platform, was released. It uses Bevy as the renderer!
+- [Design Once](https://www.designonce.ai/): a "design for manufacture" and simulation platform, was released. It uses Bevy as the renderer!
 
 [bevy_awesome_prod](https://github.com/Vrixyz/bevy_awesome_prod/) has even more cool projects!
 
