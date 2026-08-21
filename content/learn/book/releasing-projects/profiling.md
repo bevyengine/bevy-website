@@ -184,7 +184,7 @@ Note that while RenderDoc is a great debugging tool, it is _not_ a profiler, and
 #### Xcode's Metal Debugger
 
 Follow the steps below to start GPU debugging on macOS.
-There is no need to create a Xcode project.
+There is no need to create an Xcode project.
 
 1. In the menu bar click on Debug > Debug Executable…
 
