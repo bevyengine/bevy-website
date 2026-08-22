@@ -1,0 +1,277 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="First person view model" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/camera/first-person-view-model/ property=og:url><meta content=https://bevy.org/examples/camera/first-person-view-model/../static/screenshots/Camera/first_person_view_model.png property=og:image><meta content="A first-person camera that uses a world model and a view model with different field of views (FOV)" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>First person view model</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Camera / First person view model</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/camera/first_person_view_model.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/camera/first-person-view-model/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example showcases a 3D first-person camera.<p>The setup presented here is a very common way of organizing a first-person game where the player can see their own arms. We use two industry terms to differentiate the kinds of models we have:<ul><li>The <em>view model</em> is the model that represents the player's body.<li>The <em>world model</em> is everything else.</ul><h2 id=motivation>Motivation</h2><p>The reason for this distinction is that these two models should be rendered with different field of views (FOV). The view model is typically designed and animated with a very specific FOV in mind, so it is generally <em>fixed</em> and cannot be changed by a player. The world model, on the other hand, should be able to change its FOV to accommodate the player's preferences for the following reasons:<ul><li><em>Accessibility</em>: How prone is the player to motion sickness? A wider FOV can help.<li><em>Tactical preference</em>: Does the player want to see more of the battlefield? Or have a more zoomed-in view for precision aiming?<li><em>Physical considerations</em>: How well does the in-game FOV match the player's real-world FOV? Are they sitting in front of a monitor or playing on a TV in the living room? How big is the screen?</ul><h2 id=implementation>Implementation</h2><p>The <code>Player</code> is an entity holding two cameras, one for each model. The view model camera has a fixed FOV of 70 degrees, while the world model camera has a variable FOV that can be changed by the player.<p>We use different <code>RenderLayers</code> to select what to render.<ul><li>The world model camera has no explicit <code>RenderLayers</code> component, so it uses the layer 0. All static objects in the scene are also on layer 0 for the same reason.<li>The view model camera has a <code>RenderLayers</code> component with layer 1, so it only renders objects explicitly assigned to layer 1. The arm of the player is one such object. The order of the view model camera is additionally bumped to 1 to ensure it renders on top of the world model.<li>The light source in the scene must illuminate both the view model and the world model, so it is assigned to both layers 0 and 1.</ul><h2 id=controls>Controls</h2><table><thead><tr><th style=text-align:left>Key Binding<th style=text-align:left>Action<tbody><tr><td style=text-align:left>mouse<td style=text-align:left>Look around<tr><td style=text-align:left>arrow up<td style=text-align:left>Decrease FOV<tr><td style=text-align:left>arrow down<td style=text-align:left>Increase FOV</table></div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>first_person_view_model.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>FRAC_PI_2</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#c0c5ce>visibility</span><span>::</span><span style=color:#dfc479>RenderLayers</span><span style=color:#c0c5ce>, color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::tailwind</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input</span><span>::</span><span style=color:#c0c5ce>mouse</span><span>::</span><span style=color:#dfc479>AccumulatedMouseMotion</span><span style=color:#c0c5ce>, light</span><span>::</span><span style=color:#dfc479>NotShadowCaster</span><span style=color:#c0c5ce>, prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Startup</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                spawn_view_model,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                spawn_world_model,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                spawn_lights,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                spawn_text,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>move_player, change_fov</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Player</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CameraSensitivity</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Vec2</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> CameraSensitivity</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span style=color:#d19a66>()</span><span> -></span><span style=color:#c0c5ce> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Self</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // These factors are just arbitrary mouse sensitivity values.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // It's often nicer to have a faster horizontal sensitivity than vertical.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // We use a component for them so that we can make them user-configurable at runtime</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // for accessibility reasons.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // It also allows you to inspect them in an editor if you `Reflect` the component.</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Vec2</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.003</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.002</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> WorldModelCamera</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Used implicitly by all entities without a `RenderLayers` component.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Our world model camera and all objects other than the player are on this layer.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The light source belongs to both layers.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> DEFAULT_RENDER_LAYER</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> usize</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Used by the view model camera and the player's arm.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The light source belongs to both layers.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> VIEW_MODEL_RENDER_LAYER</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> usize</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_view_model</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> arm</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> arm_material</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>from</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>TEAL_200))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Player</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        CameraSensitivity</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Visibility</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        children!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                WorldModelCamera</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Camera3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Projection</span><span>::</span><span style=color:#69c>from</span><span style=color:#d19a66>(</span><span style=color:#dfc479>PerspectiveProjection</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    fov:</span><span style=color:#e79e6d> 90.0_</span><span style=color:#b48ead>f32</span><span style=color:#c594c5>.</span><span style=color:#69c>to_radians</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Spawn view model camera.</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Camera3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Camera</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Bump the order to render on top of the world model.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    order:</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Projection</span><span>::</span><span style=color:#69c>from</span><span style=color:#d19a66>(</span><span style=color:#dfc479>PerspectiveProjection</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    fov:</span><span style=color:#e79e6d> 70.0_</span><span style=color:#b48ead>f32</span><span style=color:#c594c5>.</span><span style=color:#69c>to_radians</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Only render objects belonging to the view model.</span></span>
+<span class=giallo-l><span style=color:#dfc479>                RenderLayers</span><span>::</span><span style=color:#69c>layer</span><span style=color:#d19a66>(VIEW_MODEL_RENDER_LAYER)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Spawn the player's right arm.</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span></span>
+<span class=giallo-l><span style=color:#69c>                Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>arm</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>arm_material</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.2</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.1</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.25</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Ensure the arm is only rendered by the view model camera.</span></span>
+<span class=giallo-l><span style=color:#dfc479>                RenderLayers</span><span>::</span><span style=color:#69c>layer</span><span style=color:#d19a66>(VIEW_MODEL_RENDER_LAYER)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // The arm is free-floating, so shadows would look weird.</span></span>
+<span class=giallo-l><span style=color:#dfc479>                NotShadowCaster</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_world_model</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> floor</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Plane3d</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#c0c5ce>, Vec2</span><span>::</span><span style=color:#69c>splat</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>10.0</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> cube</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> material</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The world model camera will render the floor and the cubes spawned in this system.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Assigning no `RenderLayers` component defaults to layer 0.</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span><span style=color:#69c>Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>floor</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#69c> MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>material</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>cube</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>material</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.25</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>3.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>cube</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>material</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.75</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.75</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_lights</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        PointLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color: Color</span><span>::</span><span style=color:#69c>from</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>ROSE_300)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            shadow_maps_enabled:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span>-</span><span style=color:#e79e6d>2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 4.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.75</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The light source illuminates both the world model and the view model.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        RenderLayers</span><span>::</span><span style=color:#69c>from_layers</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span>[</span><span style=color:#d19a66>DEFAULT_RENDER_LAYER</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> VIEW_MODEL_RENDER_LAYER</span><span>]</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_text</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            bottom:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_child</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#61afef>concat!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Move the camera with your mouse.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Press arrow up to decrease the FOV of the world model.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Press arrow down to increase the FOV of the world model."</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> move_player</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    accumulated_mouse_motion:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AccumulatedMouseMotion</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    player:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>CameraSensitivity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Player</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#d19a66> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> transform, camera_sensitivity</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> player</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> accumulated_mouse_motion</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5> !=</span><span style=color:#dfc479> Vec2</span><span>::</span><span style=color:#d19a66>ZERO</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Note that we are not multiplying by delta_time here.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The reason is that for mouse movement, we already get the full movement that happened since the last frame.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This means that if we multiply by delta_time, we will get a smaller rotation than intended by the user.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This situation is reversed when reading e.g. analog input from a gamepad however, where the same rules</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // as for keyboard input apply. Such an input should be multiplied by delta_time to get the intended rotation</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // independent of the framerate.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> delta_yaw</span><span style=color:#c594c5> =</span><span> -</span><span style=color:#c0c5ce>delta</span><span style=color:#c594c5>.</span><span>x *</span><span style=color:#c0c5ce> camera_sensitivity</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> delta_pitch</span><span style=color:#c594c5> =</span><span> -</span><span style=color:#c0c5ce>delta</span><span style=color:#c594c5>.</span><span>y *</span><span style=color:#c0c5ce> camera_sensitivity</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>yaw, pitch, roll</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5>.</span><span>rotation</span><span style=color:#c594c5>.</span><span style=color:#69c>to_euler</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>YXZ)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> yaw</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> yaw</span><span> +</span><span style=color:#c0c5ce> delta_yaw;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // If the pitch was ±¹⁄₂ π, the camera would look straight up or down.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // When the user wants to move the camera back to the horizon, which way should the camera face?</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The camera has no way of knowing what direction was "forward" before landing in that extreme position,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // so the direction picked will for all intents and purposes be arbitrary.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Another issue is that for mathematical reasons, the yaw will effectively be flipped when the pitch is at the extremes.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // To not run into these issues, we clamp the pitch to a safe range.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        const</span><span style=color:#d19a66> PITCH_LIMIT</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#d19a66> FRAC_PI_2</span><span> -</span><span style=color:#e79e6d> 0.01</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> pitch</span><span style=color:#c594c5> =</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>pitch</span><span> +</span><span style=color:#c0c5ce> delta_pitch</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span style=color:#d19a66>(</span><span>-</span><span style=color:#d19a66>PITCH_LIMIT</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> PITCH_LIMIT)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span>rotation </span><span style=color:#c594c5>=</span><span style=color:#dfc479> Quat</span><span>::</span><span style=color:#69c>from_euler</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>YXZ</span><span style=color:#c0c5ce>, yaw, pitch, roll</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> change_fov</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> world_model_projection:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Projection</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>WorldModelCamera</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> Projection</span><span>::</span><span style=color:#69c>Perspective</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>perspective</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> world_model_projection</span><span style=color:#c594c5>.</span><span style=color:#69c>as_mut</span><span style=color:#d19a66>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>        unreachable!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "The `Projection` component was explicitly built with `Projection::Perspective`"</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowUp</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        perspective</span><span style=color:#c594c5>.</span><span>fov </span><span style=color:#c594c5>-=</span><span style=color:#e79e6d> 1.0_</span><span style=color:#b48ead>f32</span><span style=color:#c594c5>.</span><span style=color:#69c>to_radians</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        perspective</span><span style=color:#c594c5>.</span><span>fov </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> perspective</span><span style=color:#c594c5>.</span><span>fov</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20.0_</span><span style=color:#b48ead>f32</span><span style=color:#c594c5>.</span><span style=color:#69c>to_radians</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowDown</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        perspective</span><span style=color:#c594c5>.</span><span>fov </span><span style=color:#c594c5>+=</span><span style=color:#e79e6d> 1.0_</span><span style=color:#b48ead>f32</span><span style=color:#c594c5>.</span><span style=color:#69c>to_radians</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        perspective</span><span style=color:#c594c5>.</span><span>fov </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> perspective</span><span style=color:#c594c5>.</span><span>fov</span><span style=color:#c594c5>.</span><span style=color:#69c>min</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>160.0_</span><span style=color:#b48ead>f32</span><span style=color:#c594c5>.</span><span style=color:#69c>to_radians</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/Camera/first-person-view-model/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

@@ -1,0 +1,309 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Render UI to Texture" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/ui-user-interface/render-ui-to-texture/ property=og:url><meta content="https://bevy.org/examples-webgpu/ui-user-interface/render-ui-to-texture/../static/screenshots/UI (User Interface)/render_ui_to_texture.png" property=og:image><meta content="An example of rendering UI as a part of a 3D world" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Render UI to Texture</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>UI (User Interface) / Render UI to Texture</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/ui/render_ui_to_texture.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/ui-user-interface/render-ui-to-texture/>here</a>.</aside></div><div class="example__explanation media-content"><p>Shows how to render UI to a texture. Useful for displaying UI in 3D space.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>render_ui_to_texture.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>PI</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>picking</span><span>::</span><span style=color:#dfc479>PickingSystems</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset</span><span>::{</span><span style=color:#c0c5ce>uuid</span><span>::</span><span style=color:#dfc479>Uuid</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderAssetUsages</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#dfc479>RenderTarget</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>css</span><span>::{</span><span style=color:#dfc479>BLUE</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> GRAY</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RED</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input</span><span>::</span><span style=color:#dfc479>ButtonState</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    picking</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        backend</span><span>::</span><span style=color:#c0c5ce>ray</span><span>::</span><span style=color:#dfc479>RayMap</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pointer</span><span>::{</span><span style=color:#dfc479>Location</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PointerAction</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PointerId</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PointerInput</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::</span><span style=color:#c0c5ce>render_resource</span><span>::{</span><span style=color:#dfc479>Extent3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureDimension</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureFormat</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureUsages</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    window</span><span>::{</span><span style=color:#dfc479>PrimaryWindow</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> WindowEvent</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> CUBE_POINTER_ID</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> PointerId</span><span style=color:#c594c5> =</span><span style=color:#dfc479> PointerId</span><span>::</span><span style=color:#69c>Custom</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Uuid</span><span>::</span><span style=color:#69c>from_u128</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>90870987</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, rotator_system</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>First</span><span style=color:#c0c5ce>, drive_diegetic_pointer</span><span style=color:#c594c5>.</span><span style=color:#69c>in_set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>PickingSystems</span><span>::</span><span style=color:#dfc479>Input</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Marks the cube, to which the UI texture is applied.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Cube</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> images:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> size</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Extent3d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        width:</span><span style=color:#e79e6d> 512</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        height:</span><span style=color:#e79e6d> 512</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This is the texture that will be rendered to.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> image</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Image</span><span>::</span><span style=color:#69c>new_fill</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        size,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        TextureDimension</span><span>::</span><span style=color:#dfc479>D2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span>[</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        TextureFormat</span><span>::</span><span style=color:#dfc479>Bgra8UnormSrgb</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        RenderAssetUsages</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // You need to set these texture usage flags in order to use the image as a render target</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    image</span><span style=color:#c594c5>.</span><span>texture_descriptor</span><span style=color:#c594c5>.</span><span>usage </span><span style=color:#c594c5>=</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TextureUsages</span><span>::</span><span style=color:#d19a66>TEXTURE_BINDING</span><span style=color:#c594c5> |</span><span style=color:#dfc479> TextureUsages</span><span>::</span><span style=color:#d19a66>COPY_DST</span><span style=color:#c594c5> |</span><span style=color:#dfc479> TextureUsages</span><span>::</span><span style=color:#d19a66>RENDER_ATTACHMENT</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> image_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> images</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>image</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Light</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>DirectionalLight</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> texture_camera</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Camera2d</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Camera</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // render before the "main pass" camera</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                order:</span><span> -</span><span style=color:#e79e6d>1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            RenderTarget</span><span>::</span><span style=color:#69c>Image</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>image_handle</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Cover the whole image</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span style=color:#d19a66>(GRAY</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            UiTargetCamera</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>texture_camera</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_children</span><span style=color:#d19a66>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>parent</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            parent</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        width:</span><span style=color:#69c> auto</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        height:</span><span style=color:#69c> auto</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        padding: UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20</span><span style=color:#c594c5>.</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>10</span><span style=color:#c594c5>.</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    BackgroundColor</span><span style=color:#d19a66>(BLUE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>observe</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    |</span><span style=color:#c0c5ce>drag:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Drag</span><span style=color:#c0c5ce>>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> nodes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Node</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ComputedNode</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>></span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        let</span><span style=color:#d19a66> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> node, computed</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> nodes</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>drag</span><span style=color:#c594c5>.</span><span>entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        node</span><span style=color:#c594c5>.</span><span>left </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>drag</span><span style=color:#c594c5>.</span><span>pointer_location</span><span style=color:#c594c5>.</span><span>position</span><span style=color:#c594c5>.</span><span>x -</span><span style=color:#c0c5ce> computed</span><span style=color:#c594c5>.</span><span>size</span><span style=color:#c594c5>.</span><span>x /</span><span style=color:#e79e6d> 2.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        node</span><span style=color:#c594c5>.</span><span>top </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>drag</span><span style=color:#c594c5>.</span><span>pointer_location</span><span style=color:#c594c5>.</span><span>position</span><span style=color:#c594c5>.</span><span>y -</span><span style=color:#e79e6d> 50.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>observe</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    |</span><span style=color:#c0c5ce>over:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Over</span><span style=color:#c0c5ce>>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> colors:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>></span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        colors</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>over</span><span style=color:#c594c5>.</span><span>entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> RED</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>observe</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    |</span><span style=color:#c0c5ce>out:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Out</span><span style=color:#c0c5ce>>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> colors:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>></span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        colors</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>out</span><span style=color:#c594c5>.</span><span>entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> BLUE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>with_children</span><span style=color:#d19a66>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>parent</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    parent</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Drag Me!"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>40.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        TextColor</span><span>::</span><span style=color:#d19a66>WHITE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mesh_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This material has the texture that has been rendered.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> material_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        base_color_texture:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>image_handle</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reflectance:</span><span style=color:#e79e6d> 0.02</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        unlit:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Cube with material containing the rendered UI texture.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh_handle</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>material_handle</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.5</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_rotation</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_rotation_x</span><span style=color:#d19a66>(PI))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Cube</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The main pass camera.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5.0</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>(CUBE_POINTER_ID)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> ROTATION_SPEED</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> rotator_system</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Cube</span><span style=color:#c0c5ce>>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_x</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>1.0</span><span> *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>()</span><span> *</span><span style=color:#d19a66> ROTATION_SPEED)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_y</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.7</span><span> *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>()</span><span> *</span><span style=color:#d19a66> ROTATION_SPEED)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Because bevy has no way to know how to map a mouse input to the UI texture, we need to write a</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> system that tells it there is a pointer on the UI texture. We cast a ray into the scene and find</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> the UV (2D texture) coordinates of the raycast hit. This UV coordinate is effectively the same</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> as a pointer coordinate on a 2D UI rect.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> drive_diegetic_pointer</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> cursor_last:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Vec2</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> raycast:</span><span style=color:#dfc479> MeshRayCast</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    rays:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RayMap</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    cubes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Mesh3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Cube</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ui_camera:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>RenderTarget</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera2d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    primary_window:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PrimaryWindow</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    windows:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Window</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    images:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    manual_texture_views:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ManualTextureViews</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> window_events:</span><span style=color:#dfc479> MessageReader</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>WindowEvent</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> pointer_inputs:</span><span style=color:#dfc479> MessageWriter</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerInput</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> Result</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Get the size of the texture, so we can convert from dimensionless UV coordinates that span</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // from 0 to 1, to pixel coordinates.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> target</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ui_camera</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>single</span><span style=color:#d19a66>()</span><span style=color:#c594c5>?</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>normalize</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>primary_window</span><span style=color:#c594c5>.</span><span style=color:#69c>single</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>ok</span><span style=color:#d19a66>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> target_info</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> target</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>get_render_target_info</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>windows,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>images,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>manual_texture_views</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> size</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> target_info</span><span style=color:#c594c5>.</span><span>physical_size</span><span style=color:#c594c5>.</span><span style=color:#69c>as_vec2</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Find raycast hits and update the virtual pointer.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> raycast_settings</span><span style=color:#c594c5> =</span><span style=color:#dfc479> MeshRayCastSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        visibility:</span><span style=color:#dfc479> RayCastVisibility</span><span>::</span><span style=color:#dfc479>VisibleInView</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        filter:</span><span style=color:#c594c5> &|</span><span style=color:#c0c5ce>entity</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> cubes</span><span style=color:#c594c5>.</span><span style=color:#69c>contains</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        early_exit_test:</span><span style=color:#c594c5> &|</span><span style=color:#c0c5ce>_</span><span style=color:#c594c5>|</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>_id, ray</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> rays</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>_cube, hit</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> raycast</span><span style=color:#c594c5>.</span><span style=color:#69c>cast_ray</span><span style=color:#d19a66>(</span><span>*</span><span style=color:#c0c5ce>ray,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>raycast_settings</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> position</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> size</span><span> *</span><span style=color:#c0c5ce> hit</span><span style=color:#c594c5>.</span><span>uv</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> position</span><span style=color:#c594c5> !=</span><span> *</span><span style=color:#c0c5ce>cursor_last</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                pointer_inputs</span><span style=color:#c594c5>.</span><span style=color:#69c>write</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>PointerInput</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    CUBE_POINTER_ID</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    Location</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        target: target</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        position,</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    PointerAction</span><span>::</span><span style=color:#dfc479>Move</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        delta: position</span><span> - *</span><span style=color:#c0c5ce>cursor_last,</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                *</span><span style=color:#c0c5ce>cursor_last</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> position;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Pipe pointer button presses to the virtual pointer on the UI texture.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> window_event</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> window_events</span><span style=color:#c594c5>.</span><span style=color:#69c>read</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if let</span><span style=color:#dfc479> WindowEvent</span><span>::</span><span style=color:#69c>MouseButtonInput</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>input</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> window_event</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> button</span><span style=color:#c594c5> = match</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span>button {</span></span>
+<span class=giallo-l><span style=color:#dfc479>                MouseButton</span><span>::</span><span style=color:#dfc479>Left</span><span> =></span><span style=color:#dfc479> PointerButton</span><span>::</span><span style=color:#dfc479>Primary</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                MouseButton</span><span>::</span><span style=color:#dfc479>Right</span><span> =></span><span style=color:#dfc479> PointerButton</span><span>::</span><span style=color:#dfc479>Secondary</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                MouseButton</span><span>::</span><span style=color:#dfc479>Middle</span><span> =></span><span style=color:#dfc479> PointerButton</span><span>::</span><span style=color:#dfc479>Middle</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                _</span><span> =></span><span style=color:#c594c5> continue</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> action</span><span style=color:#c594c5> = match</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span>state {</span></span>
+<span class=giallo-l><span style=color:#dfc479>                ButtonState</span><span>::</span><span style=color:#dfc479>Pressed</span><span> =></span><span style=color:#dfc479> PointerAction</span><span>::</span><span style=color:#69c>Press</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>button</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                ButtonState</span><span>::</span><span style=color:#dfc479>Released</span><span> =></span><span style=color:#dfc479> PointerAction</span><span>::</span><span style=color:#69c>Release</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>button</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            pointer_inputs</span><span style=color:#c594c5>.</span><span style=color:#69c>write</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>PointerInput</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>                CUBE_POINTER_ID</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Location</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    target: target</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    position:</span><span> *</span><span style=color:#c0c5ce>cursor_last,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                action,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#dfc479>    Ok</span><span style=color:#d19a66>(())</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/UI (User Interface)/render-ui-to-texture/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

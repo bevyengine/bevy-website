@@ -1,0 +1,781 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Custom Render Phase" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/shaders/custom-render-phase/ property=og:url><meta content=https://bevy.org/examples-webgpu/shaders/custom-render-phase/../static/screenshots/Shaders/custom_render_phase.png property=og:image><meta content="Shows how to make a complete render phase" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Custom Render Phase</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Shaders / Custom Render Phase</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/shader_advanced/custom_render_phase.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/shaders/custom-render-phase/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example demonstrates how to write a custom phase<p>Render phases in bevy are used whenever you need to draw a group of meshes in a specific way. For example, bevy's main pass has an opaque phase, a transparent phase for both 2d and 3d. Sometimes, you may want to only draw a subset of meshes before or after the builtin phase. In those situations you need to write your own phase.<p>This example showcases how writing a custom phase to draw a stencil of a bevy mesh could look like. Some shortcuts have been used for simplicity.<p>This example was made for 3d, but a 2d equivalent would be almost identical.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>custom_render_phase.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>ops</span><span>::</span><span style=color:#dfc479>Range</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>camera</span><span>::</span><span style=color:#dfc479>Viewport</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>core_pipeline</span><span>::</span><span style=color:#c0c5ce>core_3d</span><span>::</span><span style=color:#dfc479>TransparentSortingInfo3d</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>math</span><span>::</span><span style=color:#dfc479>Affine3Ext</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>pbr</span><span>::{</span><span style=color:#c0c5ce>self,</span><span style=color:#dfc479> MeshPipelineSystems</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SetMeshViewEmptyBindGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ViewKeyCache</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#dfc479>MainPassResolutionOverride</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    core_pipeline</span><span>::{</span><span style=color:#c0c5ce>core_3d</span><span>::main_opaque_pass_3d</span><span style=color:#c0c5ce>, schedule</span><span>::</span><span style=color:#dfc479>Core3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Core3dSystems</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ecs</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        entity</span><span>::</span><span style=color:#dfc479>EntityHash</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        system</span><span>::{</span><span style=color:#c0c5ce>lifetimeless</span><span>::</span><span style=color:#dfc479>SRes</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SystemParamItem</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    math</span><span>::</span><span style=color:#dfc479>FloatOrd</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mesh</span><span>::</span><span style=color:#dfc479>MeshVertexBufferLayoutRef</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pbr</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DrawMesh</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MeshInputUniform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MeshPipeline</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MeshPipelineKey</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MeshPipelineViewLayoutKey</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        MeshUniform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderMeshInstances</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SetMeshBindGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SetMeshViewBindGroup</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    platform</span><span>::</span><span style=color:#c0c5ce>collections</span><span>::</span><span style=color:#dfc479>HashSet</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        batching</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            gpu_preprocessing</span><span>::{</span></span>
+<span class=giallo-l><span>                batch_and_prepare_sorted_render_phase</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> BatchedInstanceBuffers</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                IndirectParametersCpuMetadata</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> UntypedPhaseIndirectParametersBuffers</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GetBatchData</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> GetFullBatchData</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        camera</span><span>::{</span><span style=color:#dfc479>DirtySpecializations</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ExtractedCamera</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PendingQueues</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        extract_component</span><span>::{</span><span style=color:#dfc479>ExtractComponent</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ExtractComponentPlugin</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mesh</span><span>::{</span><span style=color:#c0c5ce>allocator</span><span>::</span><span style=color:#dfc479>MeshAllocator</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderMesh</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_asset</span><span>::</span><span style=color:#dfc479>RenderAssets</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_phase</span><span>::{</span></span>
+<span class=giallo-l><span>            sort_phase_system</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AddRenderCommand</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> CachedRenderPipelinePhaseItem</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DrawFunctionId</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DrawFunctions</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PhaseItem</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PhaseItemExtraIndex</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SetItemPipeline</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SortedPhaseItem</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SortedRenderPhasePlugin</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ViewSortedRenderPhases</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_resource</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>            CachedRenderPipelineId</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ColorTargetState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ColorWrites</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Face</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> FragmentState</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            PipelineCache</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PrimitiveState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderPassDescriptor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderPipelineDescriptor</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SpecializedMeshPipeline</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SpecializedMeshPipelineError</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SpecializedMeshPipelines</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            VertexState</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        renderer</span><span>::{</span><span style=color:#dfc479>RenderContext</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ViewQuery</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        sync_world</span><span>::</span><span style=color:#dfc479>MainEntity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        view</span><span>::{</span><span style=color:#dfc479>ExtractedView</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderVisibleEntities</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RetainedViewEntity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ViewTarget</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Extract</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Render</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderApp</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderDebugFlags</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderStartup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderSystems</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> indexmap</span><span>::</span><span style=color:#dfc479>IndexMap</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> nonmax</span><span>::</span><span style=color:#dfc479>NonMaxU32</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SHADER_ASSET_PATH</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "shaders/custom_stencil.wgsl"</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>((</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MeshStencilPhasePlugin</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // circular base</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Circle</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>4.0</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_rotation</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_rotation_x</span><span style=color:#d19a66>(</span><span>-</span><span style=color:#c0c5ce>std</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#d19a66>FRAC_PI_2))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // cube</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This cube will be rendered by the main pass, but it will also be rendered by our custom</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // pass. This should result in an unlit red cube</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgb_u8</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>124</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 144</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 255</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This marker component is used to identify which mesh will be used in our custom pass</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The circle doesn't have it so it won't be rendered in our pass</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DrawStencil</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // light</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        PointLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            shadow_maps_enabled:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>4.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 8.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 4.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // camera</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span>-</span><span style=color:#e79e6d>2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 4.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 9.0</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // disable msaa for simplicity</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Msaa</span><span>::</span><span style=color:#dfc479>Off</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ExtractComponent</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> DrawStencil</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> MeshStencilPhasePlugin</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Plugin</span><span style=color:#c594c5> for</span><span style=color:#dfc479> MeshStencilPhasePlugin</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> build</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self, app:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> App</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ExtractComponentPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DrawStencil</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            SortedRenderPhasePlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Stencil3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MeshPipeline</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>RenderDebugFlags</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // We need to get the render app from the main app</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>render_app</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> app</span><span style=color:#c594c5>.</span><span style=color:#69c>get_sub_app_mut</span><span style=color:#d19a66>(</span><span style=color:#dfc479>RenderApp</span><span style=color:#d19a66>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_app</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SpecializedMeshPipelines</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StencilPipeline</span><span style=color:#c0c5ce>>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DrawFunctions</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Stencil3d</span><span style=color:#c0c5ce>>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_render_command</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Stencil3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DrawMesh3dStencil</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ViewSortedRenderPhases</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Stencil3d</span><span style=color:#c0c5ce>>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PendingCustomMeshQueues</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                RenderStartup</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                init_stencil_pipeline</span><span style=color:#c594c5>.</span><span style=color:#69c>after</span><span style=color:#d19a66>(</span><span style=color:#dfc479>MeshPipelineSystems</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>ExtractSchedule</span><span style=color:#c0c5ce>, extract_camera_phases</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Render</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    queue_custom_meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>in_set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>RenderSystems</span><span>::</span><span style=color:#dfc479>QueueMeshes</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    sort_phase_system</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Stencil3d</span><span style=color:#c0c5ce>></span><span style=color:#c594c5>.</span><span style=color:#69c>in_set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>RenderSystems</span><span>::</span><span style=color:#dfc479>PhaseSort</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    batch_and_prepare_sorted_render_phase</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Stencil3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> StencilPipeline</span><span style=color:#c0c5ce>></span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>in_set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>RenderSystems</span><span>::</span><span style=color:#dfc479>PrepareResources</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Core3d</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                custom_draw_system</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>after</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>main_opaque_pass_3d</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>in_set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Core3dSystems</span><span>::</span><span style=color:#dfc479>MainPass</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> StencilPipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The base mesh pipeline defined by bevy</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Since we want to draw a stencil of an existing bevy mesh we want to reuse the default</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> pipeline as much as possible</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mesh_pipeline:</span><span style=color:#dfc479> MeshPipeline</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Stores the shader used for this pipeline directly on the pipeline.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> This isn't required, it's only done like this for simplicity.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    shader_handle:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Shader</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> init_stencil_pipeline</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mesh_pipeline:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MeshPipeline</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#dfc479>StencilPipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mesh_pipeline: mesh_pipeline</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        shader_handle: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(SHADER_ASSET_PATH)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// For more information on how SpecializedMeshPipeline work, please look at the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// specialized_mesh_pipeline example</span></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> SpecializedMeshPipeline</span><span style=color:#c594c5> for</span><span style=color:#dfc479> StencilPipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Key</span><span style=color:#c594c5> =</span><span style=color:#dfc479> MeshPipelineKey</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> specialize</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#c0c5ce>self,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        key: Self</span><span>::</span><span style=color:#dfc479>Key</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        layout:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>MeshVertexBufferLayoutRef</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> -></span><span style=color:#dfc479> Result</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderPipelineDescriptor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SpecializedMeshPipelineError</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // We will only use the position of the mesh in our shader so we only need to specify that</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> vertex_attributes</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> layout</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>contains</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Mesh</span><span>::</span><span style=color:#d19a66>ATTRIBUTE_POSITION)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Make sure this matches the shader location</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vertex_attributes</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Mesh</span><span>::</span><span style=color:#d19a66>ATTRIBUTE_POSITION</span><span style=color:#c594c5>.</span><span style=color:#69c>at_shader_location</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This will automatically generate the correct `VertexBufferLayout` based on the vertex attributes</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> vertex_buffer_layout</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> layout</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>get_layout</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>vertex_attributes</span><span style=color:#d19a66>)</span><span style=color:#c594c5>?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> view_layout</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> self</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span>mesh_pipeline</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>get_view_layout</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MeshPipelineViewLayoutKey</span><span>::</span><span style=color:#69c>from</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>key</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Ok</span><span style=color:#d19a66>(</span><span style=color:#dfc479>RenderPipelineDescriptor</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            label:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Specialized Mesh Pipeline"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // We want to reuse the data from bevy so we use the same bind groups as the default</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // mesh pipeline</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            layout:</span><span style=color:#61afef> vec!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Bind group 0 is the view uniform</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                view_layout</span><span style=color:#c594c5>.</span><span>main_layout</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Bind group 1 is empty</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                view_layout</span><span style=color:#c594c5>.</span><span>empty_layout</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Bind group 2 is the mesh uniform</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                self</span><span style=color:#c594c5>.</span><span>mesh_pipeline</span><span style=color:#c594c5>.</span><span>mesh_layouts</span><span style=color:#c594c5>.</span><span>model_only</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vertex:</span><span style=color:#dfc479> VertexState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                shader: self</span><span style=color:#c594c5>.</span><span>shader_handle</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                buffers:</span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#c0c5ce>vertex_buffer_layout</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            fragment:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>FragmentState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                shader: self</span><span style=color:#c594c5>.</span><span>shader_handle</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                targets:</span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#e5c07b>Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>ColorTargetState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    format: key</span><span style=color:#c594c5>.</span><span style=color:#69c>target_format</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    blend:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    write_mask:</span><span style=color:#dfc479> ColorWrites</span><span>::</span><span style=color:#d19a66>ALL</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#d19a66>)</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            primitive:</span><span style=color:#dfc479> PrimitiveState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                topology: key</span><span style=color:#c594c5>.</span><span style=color:#69c>primitive_topology</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                strip_index_format: key</span><span style=color:#c594c5>.</span><span style=color:#69c>strip_index_format</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                cull_mode:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Face</span><span>::</span><span style=color:#dfc479>Back</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // It's generally recommended to specialize your pipeline for MSAA,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // but it's not always possible</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// We will reuse render commands already defined by bevy to draw a 3d mesh</span></span>
+<span class=giallo-l><span style=color:#c594c5>type</span><span style=color:#dfc479> DrawMesh3dStencil</span><span style=color:#c594c5> =</span><span style=color:#d19a66> (</span></span>
+<span class=giallo-l><span style=color:#dfc479>    SetItemPipeline</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This will set the view bindings in group 0</span></span>
+<span class=giallo-l><span style=color:#dfc479>    SetMeshViewBindGroup</span><span style=color:#c0c5ce>&lt;0>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This will set an empty bind group in group 1</span></span>
+<span class=giallo-l><span style=color:#dfc479>    SetMeshViewEmptyBindGroup</span><span style=color:#c0c5ce>&lt;1>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This will set the mesh bindings in group 2</span></span>
+<span class=giallo-l><span style=color:#dfc479>    SetMeshBindGroup</span><span style=color:#c0c5ce>&lt;2>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This will draw the mesh</span></span>
+<span class=giallo-l><span style=color:#dfc479>    DrawMesh</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// This is the data required per entity drawn in a custom phase in bevy. More specifically this is the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// data required when using a ViewSortedRenderPhase. This would look differently if we wanted a</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// batched render phase. Sorted phases are a bit easier to implement, but a batched phase would</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// look similar.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>//</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// If you want to see how a batched phase implementation looks, you should look at the Opaque2d</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// phase.</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Stencil3d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Information needed to sort the objects in the phase by distance to the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> view.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> sorting_info:</span><span style=color:#dfc479> TransparentSortingInfo3d</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> distance:</span><span style=color:#dfc479> FloatOrd</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> entity:</span><span style=color:#d19a66> (</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MainEntity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> pipeline:</span><span style=color:#dfc479> CachedRenderPipelineId</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> draw_function:</span><span style=color:#dfc479> DrawFunctionId</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> batch_range:</span><span style=color:#dfc479> Range</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>u32</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> extra_index:</span><span style=color:#dfc479> PhaseItemExtraIndex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Whether the mesh in question is indexed (uses an index buffer in</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> addition to its vertex buffer).</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> indexed:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// For more information about writing a phase item, please look at the custom_phase_item example</span></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> PhaseItem</span><span style=color:#c594c5> for</span><span style=color:#dfc479> Stencil3d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> entity</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> Entity</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        self</span><span style=color:#c594c5>.</span><span>entity</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> main_entity</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> MainEntity</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        self</span><span style=color:#c594c5>.</span><span>entity</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>1</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> draw_function</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> DrawFunctionId</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        self</span><span style=color:#c594c5>.</span><span>draw_function</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> batch_range</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#c594c5> &</span><span style=color:#dfc479>Range</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>u32</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#c0c5ce>self</span><span style=color:#c594c5>.</span><span>batch_range</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> batch_range_mut</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Range</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>u32</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#c0c5ce> self</span><span style=color:#c594c5>.</span><span>batch_range</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> extra_index</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> PhaseItemExtraIndex</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        self</span><span style=color:#c594c5>.</span><span>extra_index</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> batch_range_and_extra_index_mut</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#d19a66> (</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Range</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>u32</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> PhaseItemExtraIndex</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>        (</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> self</span><span style=color:#c594c5>.</span><span>batch_range</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#c0c5ce> self</span><span style=color:#c594c5>.</span><span>extra_index</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> SortedPhaseItem</span><span style=color:#c594c5> for</span><span style=color:#dfc479> Stencil3d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> SortKey</span><span style=color:#c594c5> =</span><span style=color:#dfc479> FloatOrd</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> sort_key</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#c0c5ce> Self</span><span>::</span><span style=color:#dfc479>SortKey</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        self</span><span style=color:#c594c5>.</span><span>distance</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> sort</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>items:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> IndexMap</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MainEntity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Stencil3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> EntityHash</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        items</span><span style=color:#c594c5>.</span><span style=color:#69c>sort_by_key</span><span style=color:#d19a66>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>_, phase_item:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Stencil3d</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> phase_item</span><span style=color:#c594c5>.</span><span>distance</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> recalculate_sort_keys</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        items:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> IndexMap</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MainEntity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, Self,</span><span style=color:#dfc479> EntityHash</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        view:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ExtractedView</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Determine the distance to the view for each phase item.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> rangefinder</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> view</span><span style=color:#c594c5>.</span><span style=color:#69c>rangefinder3d</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> item</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> items</span><span style=color:#c594c5>.</span><span style=color:#69c>values_mut</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            item</span><span style=color:#c594c5>.</span><span>distance </span><span style=color:#c594c5>=</span><span style=color:#69c> FloatOrd</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>item</span><span style=color:#c594c5>.</span><span>sorting_info</span><span style=color:#c594c5>.</span><span style=color:#69c>sort_distance</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>rangefinder</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> indexed</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#e5c07b> bool</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        self</span><span style=color:#c594c5>.</span><span>indexed</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> CachedRenderPipelinePhaseItem</span><span style=color:#c594c5> for</span><span style=color:#dfc479> Stencil3d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> cached_pipeline</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> CachedRenderPipelineId</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        self</span><span style=color:#c594c5>.</span><span>pipeline</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> GetBatchData</span><span style=color:#c594c5> for</span><span style=color:#dfc479> StencilPipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Param</span><span style=color:#c594c5> =</span><span style=color:#d19a66> (</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SRes</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderMeshInstances</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SRes</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderAssets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderMesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SRes</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MeshAllocator</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Placing `AssetId&lt;Mesh>` in the batch set compare data prevents Bevy from</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // trying to multi-draw items with different meshes together. This is fine</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // for this simple example.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> BatchSetCompareData</span><span style=color:#c594c5> =</span><span style=color:#dfc479> AssetId</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> BatchCompareData</span><span style=color:#c594c5> =</span><span style=color:#d19a66> ()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> BufferData</span><span style=color:#c594c5> =</span><span style=color:#dfc479> MeshUniform</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> get_batch_data</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>        (</span><span style=color:#c0c5ce>mesh_instances, _render_assets, mesh_allocator</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>SystemParamItem</span><span style=color:#c0c5ce>&lt;Self</span><span>::</span><span style=color:#dfc479>Param</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        (</span><span style=color:#c0c5ce>_entity, main_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>:</span><span style=color:#d19a66> (</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MainEntity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> -></span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Self</span><span>::</span><span style=color:#dfc479>BufferData</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Self</span><span>::</span><span style=color:#dfc479>BatchSetCompareData</span><span style=color:#c0c5ce>, Self</span><span>::</span><span style=color:#dfc479>BatchCompareData</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#dfc479> RenderMeshInstances</span><span>::</span><span style=color:#69c>CpuBuilding</span><span style=color:#d19a66>(</span><span style=color:#c594c5>ref</span><span style=color:#c0c5ce> mesh_instances</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span> **</span><span style=color:#c0c5ce>mesh_instances</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>            error!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "`get_batch_data` should never be called in GPU mesh uniform \</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                building mode"</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> mesh_instance</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> mesh_instances</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>main_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5>?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> first_vertex_index</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c594c5>            match</span><span style=color:#c0c5ce> mesh_allocator</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh_vertex_slice</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>mesh_instance</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh_asset_id</span><span style=color:#d19a66>())</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh_vertex_slice</span><span style=color:#d19a66>)</span><span> =></span><span style=color:#c0c5ce> mesh_vertex_slice</span><span style=color:#c594c5>.</span><span>range</span><span style=color:#c594c5>.</span><span>start</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                None</span><span> =></span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> mesh_uniform</span><span style=color:#c594c5> =</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> mesh_transforms</span><span style=color:#c594c5> = &</span><span style=color:#c0c5ce>mesh_instance</span><span style=color:#c594c5>.</span><span>transforms</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>local_from_world_transpose_a, local_from_world_transpose_b</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                mesh_transforms</span><span style=color:#c594c5>.</span><span>world_from_local</span><span style=color:#c594c5>.</span><span style=color:#69c>inverse_transpose_3x3</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#dfc479>            MeshUniform</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                world_from_local: mesh_transforms</span><span style=color:#c594c5>.</span><span>world_from_local</span><span style=color:#c594c5>.</span><span style=color:#69c>to_transpose</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                previous_world_from_local: mesh_transforms</span><span style=color:#c594c5>.</span><span>previous_world_from_local</span><span style=color:#c594c5>.</span><span style=color:#69c>to_transpose</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                lightmap_uv_rect:</span><span style=color:#dfc479> UVec2</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                local_from_world_transpose_a,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                local_from_world_transpose_b,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                flags: mesh_transforms</span><span style=color:#c594c5>.</span><span>flags</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                first_vertex_index,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                current_skin_index:</span><span style=color:#b48ead> u32</span><span>::</span><span style=color:#d19a66>MAX</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                material_and_lightmap_bind_group_slot:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                tag:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                morph_descriptor_index:</span><span style=color:#b48ead> u32</span><span>::</span><span style=color:#d19a66>MAX</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#e5c07b>        Some</span><span style=color:#d19a66>((</span><span style=color:#c0c5ce>mesh_uniform,</span><span style=color:#e5c07b> None</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> GetFullBatchData</span><span style=color:#c594c5> for</span><span style=color:#dfc479> StencilPipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> BufferInputData</span><span style=color:#c594c5> =</span><span style=color:#dfc479> MeshInputUniform</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> get_index_and_compare_data</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>        (</span><span style=color:#c0c5ce>mesh_instances, _, _</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>SystemParamItem</span><span style=color:#c0c5ce>&lt;Self</span><span>::</span><span style=color:#dfc479>Param</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        main_entity:</span><span style=color:#dfc479> MainEntity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> -></span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>        NonMaxU32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Self</span><span>::</span><span style=color:#dfc479>BatchSetCompareData</span><span style=color:#c0c5ce>, Self</span><span>::</span><span style=color:#dfc479>BatchCompareData</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This should only be called during GPU building.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#dfc479> RenderMeshInstances</span><span>::</span><span style=color:#69c>GpuBuilding</span><span style=color:#d19a66>(</span><span style=color:#c594c5>ref</span><span style=color:#c0c5ce> mesh_instances</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span> **</span><span style=color:#c0c5ce>mesh_instances</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>            error!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "`get_index_and_compare_data` should never be called in CPU mesh uniform building \</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                mode"</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> mesh_instance</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> mesh_instances</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>main_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5>?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#e5c07b>        Some</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            NonMaxU32</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh_instance</span><span style=color:#c594c5>.</span><span>gpu_specific</span><span style=color:#c594c5>.</span><span style=color:#69c>current_uniform_index</span><span style=color:#d19a66>())</span><span style=color:#c594c5>?</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            mesh_instance</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>should_batch</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>then_some</span><span style=color:#d19a66>((</span><span style=color:#c0c5ce>mesh_instance</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh_asset_id</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> ()))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> get_binned_batch_data</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>        (</span><span style=color:#c0c5ce>mesh_instances, _render_assets, mesh_allocator</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>SystemParamItem</span><span style=color:#c0c5ce>&lt;Self</span><span>::</span><span style=color:#dfc479>Param</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        main_entity:</span><span style=color:#dfc479> MainEntity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> -></span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;Self</span><span>::</span><span style=color:#dfc479>BufferData</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#dfc479> RenderMeshInstances</span><span>::</span><span style=color:#69c>CpuBuilding</span><span style=color:#d19a66>(</span><span style=color:#c594c5>ref</span><span style=color:#c0c5ce> mesh_instances</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span> **</span><span style=color:#c0c5ce>mesh_instances</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>            error!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "`get_binned_batch_data` should never be called in GPU mesh uniform building mode"</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> mesh_instance</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> mesh_instances</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>main_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5>?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> first_vertex_index</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c594c5>            match</span><span style=color:#c0c5ce> mesh_allocator</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh_vertex_slice</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>mesh_instance</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh_asset_id</span><span style=color:#d19a66>())</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh_vertex_slice</span><span style=color:#d19a66>)</span><span> =></span><span style=color:#c0c5ce> mesh_vertex_slice</span><span style=color:#c594c5>.</span><span>range</span><span style=color:#c594c5>.</span><span>start</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                None</span><span> =></span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e5c07b>        Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>MeshUniform</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &</span><span style=color:#c0c5ce>mesh_instance</span><span style=color:#c594c5>.</span><span>transforms</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            first_vertex_index,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            mesh_instance</span><span style=color:#c594c5>.</span><span style=color:#69c>material_bindings_index</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span>slot</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>            None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>            None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>            None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>            None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> write_batch_indirect_parameters_metadata</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        indexed:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        base_output_index:</span><span style=color:#b48ead> u32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        batch_set_index:</span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>NonMaxU32</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        indirect_parameters_buffers:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> UntypedPhaseIndirectParametersBuffers</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        indirect_parameters_offset:</span><span style=color:#b48ead> u32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Note that `IndirectParameters` covers both of these structures, even</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // though they actually have distinct layouts. See the comment above that</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // type for more information.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> indirect_parameters</span><span style=color:#c594c5> =</span><span style=color:#dfc479> IndirectParametersCpuMetadata</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            base_output_index,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            batch_set_index:</span><span style=color:#c594c5> match</span><span style=color:#c0c5ce> batch_set_index</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                None</span><span> =></span><span style=color:#c594c5> !</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>batch_set_index</span><span style=color:#d19a66>)</span><span> =></span><span style=color:#b48ead> u32</span><span>::</span><span style=color:#69c>from</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>batch_set_index</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> indexed</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            indirect_parameters_buffers</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span>indexed</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>indirect_parameters_offset, indirect_parameters</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            indirect_parameters_buffers</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span>non_indexed</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>indirect_parameters_offset, indirect_parameters</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> get_binned_index</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _param:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>SystemParamItem</span><span style=color:#c0c5ce>&lt;Self</span><span>::</span><span style=color:#dfc479>Param</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _query_item:</span><span style=color:#dfc479> MainEntity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> -></span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>NonMaxU32</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#e5c07b>        None</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// When defining a phase, we need to extract it from the main world and add it to a resource</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// that will be used by the render world. We need to give that resource all views that will use</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// that phase</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> extract_camera_phases</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> stencil_phases:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ViewSortedRenderPhases</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Stencil3d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    cameras:</span><span style=color:#dfc479> Extract</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Camera</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera3d</span><span style=color:#c0c5ce>>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> live_entities:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>HashSet</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RetainedViewEntity</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    live_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>clear</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>main_entity, camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>cameras</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if !</span><span style=color:#c0c5ce>camera</span><span style=color:#c594c5>.</span><span>is_active {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This is the main camera, so we use the first subview index (0)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> retained_view_entity</span><span style=color:#c594c5> =</span><span style=color:#dfc479> RetainedViewEntity</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>main_entity</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        stencil_phases</span><span style=color:#c594c5>.</span><span style=color:#69c>prepare_for_new_frame</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>retained_view_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        live_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>retained_view_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Clear out all dead views.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    stencil_phases</span><span style=color:#c594c5>.</span><span style=color:#69c>retain</span><span style=color:#d19a66>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>camera_entity, _</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> live_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>contains</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera_entity</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A resource that stores meshes that couldn't be specialized yet because their</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> materials hadn't loaded.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> See the documentation for [`PendingQueues`] for more information.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> PendingCustomMeshQueues</span><span style=color:#d19a66>(</span><span style=color:#c594c5>pub</span><span style=color:#dfc479> PendingQueues</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// This is a very important step when writing a custom phase.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>//</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// This system determines which meshes will be added to the phase.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> queue_custom_meshes</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    custom_draw_functions:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DrawFunctions</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Stencil3d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> pipelines:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SpecializedMeshPipelines</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StencilPipeline</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pipeline_cache:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PipelineCache</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    custom_draw_pipeline:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StencilPipeline</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render_meshes:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderAssets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderMesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render_mesh_instances:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderMeshInstances</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    maybe_batched_instance_buffers:</span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>BatchedInstanceBuffers</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MeshUniform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MeshInputUniform</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> custom_render_phases:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ViewSortedRenderPhases</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Stencil3d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> views:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>ExtractedView</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>RenderVisibleEntities</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    view_key_cache:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ViewKeyCache</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    dirty_specializations:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DirtySpecializations</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> pending_custom_mesh_queues:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PendingCustomMeshQueues</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    has_marker:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DrawStencil</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>view, visible_entities</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> views</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>custom_phase</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> custom_render_phases</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>view</span><span style=color:#c594c5>.</span><span>retained_view_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> draw_custom</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> custom_draw_functions</span><span style=color:#c594c5>.</span><span style=color:#69c>read</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>id</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DrawMesh3dStencil</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>view_key</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> view_key_cache</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>view</span><span style=color:#c594c5>.</span><span>retained_view_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Since our phase can work on any 3d mesh we can reuse the default mesh 3d filter</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>render_visible_mesh_entities</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> visible_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh3d</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> view_pending_custom_mesh_queues</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            pending_custom_mesh_queues</span><span style=color:#c594c5>.</span><span style=color:#69c>prepare_for_new_frame</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>view</span><span style=color:#c594c5>.</span><span>retained_view_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // First, remove meshes that need to be respecialized, and those that were removed, from the bins.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for &</span><span style=color:#c0c5ce>main_entity</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> dirty_specializations</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>iter_to_dequeue</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>view</span><span style=color:#c594c5>.</span><span>retained_view_entity</span><span style=color:#c0c5ce>, render_visible_mesh_entities</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span>        {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            custom_phase</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Entity</span><span>::</span><span style=color:#d19a66>PLACEHOLDER</span><span style=color:#c0c5ce>, main_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>render_entity, visible_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> dirty_specializations</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_to_queue</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            view</span><span style=color:#c594c5>.</span><span>retained_view_entity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            render_visible_mesh_entities,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &</span><span style=color:#c0c5ce>view_pending_custom_mesh_queues</span><span style=color:#c594c5>.</span><span>prev_frame</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // We only want meshes with the marker component to be queued to our phase.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> has_marker</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span>*</span><span style=color:#c0c5ce>render_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>is_err</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh_instance</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> render_mesh_instances</span><span style=color:#c594c5>.</span><span style=color:#69c>render_mesh_queue_data</span><span style=color:#d19a66>(</span><span>*</span><span style=color:#c0c5ce>visible_entity</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // We couldn't fetch the mesh, probably because it hasn't been</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // loaded yet. Add the entity to the list of pending custom mesh</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // queues and bail.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                view_pending_custom_mesh_queues</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span>current_frame</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>insert</span><span style=color:#d19a66>((</span><span>*</span><span style=color:#c0c5ce>render_entity,</span><span> *</span><span style=color:#c0c5ce>visible_entity</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> render_meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh_instance</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh_asset_id</span><span style=color:#d19a66>())</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Specialize the key for the current mesh entity</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // For this example we only specialize based on the mesh topology</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // but you could have more complex keys and that's where you'd need to create those keys</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let mut</span><span style=color:#c0c5ce> mesh_key</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> view_key;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            mesh_key</span><span style=color:#c594c5> |=</span><span style=color:#dfc479> MeshPipelineKey</span><span>::</span><span style=color:#69c>from_primitive_topology_and_strip_index</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>primitive_topology</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>index_format</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> pipeline_id</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> pipelines</span><span style=color:#c594c5>.</span><span style=color:#69c>specialize</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &</span><span style=color:#c0c5ce>pipeline_cache,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &</span><span style=color:#c0c5ce>custom_draw_pipeline,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                mesh_key,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &</span><span style=color:#c0c5ce>mesh</span><span style=color:#c594c5>.</span><span>layout</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> pipeline_id</span><span style=color:#c594c5> = match</span><span style=color:#c0c5ce> pipeline_id</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Ok</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>id</span><span style=color:#d19a66>)</span><span> =></span><span style=color:#c0c5ce> id,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Err</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>err</span><span style=color:#d19a66>)</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#61afef>                    error!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, err</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // At this point we have all the data we need to create a phase item and add it to our</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // phase</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            custom_phase</span><span style=color:#c594c5>.</span><span style=color:#69c>add_retained</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Stencil3d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                sorting_info: TransparentSortingInfo3d</span><span>::</span><span style=color:#dfc479>Sorted</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    mesh_center: pbr</span><span>::</span><span style=color:#69c>get_mesh_instance_world_from_local</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span>                        *</span><span style=color:#c0c5ce>visible_entity,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        mesh_instance</span><span style=color:#c594c5>.</span><span>current_uniform_index</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        &</span><span style=color:#c0c5ce>render_mesh_instances,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        maybe_batched_instance_buffers</span><span style=color:#c594c5>.</span><span style=color:#69c>as_deref</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>transform_point3</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        render_meshes</span></span>
+<span class=giallo-l><span style=color:#c594c5>                            .</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh_instance</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh_asset_id</span><span style=color:#d19a66>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>                            .</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                            .</span><span>aabb_center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    depth_bias:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                distance:</span><span style=color:#69c> FloatOrd</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                entity:</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>Entity</span><span>::</span><span style=color:#d19a66>PLACEHOLDER</span><span style=color:#c0c5ce>,</span><span> *</span><span style=color:#c0c5ce>visible_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                pipeline: pipeline_id,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                draw_function: draw_custom,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Sorted phase items aren't batched</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                batch_range:</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#e79e6d>1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                extra_index:</span><span style=color:#dfc479> PhaseItemExtraIndex</span><span>::</span><span style=color:#e5c07b>None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                indexed: mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>indexed</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> custom_draw_system</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    world:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>World</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    view:</span><span style=color:#dfc479> ViewQuery</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#dfc479>ExtractedCamera</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#dfc479>ExtractedView</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#dfc479>ViewTarget</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>MainPassResolutionOverride</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    stencil_phases:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ViewSortedRenderPhases</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Stencil3d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> ctx:</span><span style=color:#dfc479> RenderContext</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> view_entity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> view</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>camera, extracted_view, target, resolution_override</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> view</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>stencil_phase</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> stencil_phases</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>extracted_view</span><span style=color:#c594c5>.</span><span>retained_view_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> render_pass</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ctx</span><span style=color:#c594c5>.</span><span style=color:#69c>begin_tracked_render_pass</span><span style=color:#d19a66>(</span><span style=color:#dfc479>RenderPassDescriptor</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        label:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"stencil pass"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // For the purpose of the example, we will write directly to the view target. A real</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // stencil pass would write to a custom texture and that texture would be used in later</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // passes to render custom effects using it.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        color_attachments:</span><span style=color:#c594c5> &</span><span>[</span><span style=color:#e5c07b>Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>target</span><span style=color:#c594c5>.</span><span style=color:#69c>get_color_attachment</span><span style=color:#d19a66>())</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // We don't bind any depth buffer for this pass</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        depth_stencil_attachment:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        timestamp_writes:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        occlusion_query_set:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        multiview_mask:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>viewport</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Viewport</span><span>::</span><span style=color:#69c>from_viewport_and_override</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#c594c5>.</span><span>viewport</span><span style=color:#c594c5>.</span><span style=color:#69c>as_ref</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>, resolution_override</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span>    {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_pass</span><span style=color:#c594c5>.</span><span style=color:#69c>set_camera_viewport</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>viewport</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Err</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>err</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> stencil_phase</span><span style=color:#c594c5>.</span><span style=color:#69c>render</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> render_pass, world, view_entity</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>        error!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Error encountered while rendering the stencil phase </span><span style=color:#d19a66>{err:?}</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div><input class=tabs__radio id=tab1 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab1><code>shaders/custom_stencil.wgsl</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=wgsl><span class=giallo-l><span style=color:#7f848e>//! A shader showing how to use the vertex position data to output the </span></span>
+<span class=giallo-l><span style=color:#7f848e>//! stencil in the right position</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>// First we import everything we need from bevy_pbr</span></span>
+<span class=giallo-l><span style=color:#7f848e>// A 2d shader would be vevry similar but import from bevy_sprite instead</span></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>import bevy_pbr</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#e06c75>    mesh_functions</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>    view_transformations</span><span>::</span><span style=color:#e06c75>position_world_to_clip</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>struct</span><span style=color:#e5c07b> Vertex</span><span> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // This is needed if you are using batching and/or gpu preprocessing</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // It's a built in so you don't need to define it in the vertex layout</span></span>
+<span class=giallo-l><span>    @builtin(</span><span style=color:#e06c75>instance_index</span><span>)</span><span style=color:#e06c75> instance_index</span><span>: </span><span style=color:#c678dd>u32</span><span>,</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // Like we defined for the vertex layout</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // position is at location 0</span></span>
+<span class=giallo-l><span>    @location(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#e06c75> position</span><span>: </span><span style=color:#c678dd>vec3</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span></span>
+<span class=giallo-l><span>};</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>// This is the output of the vertex shader and we also use it as the input for the fragment shader</span></span>
+<span class=giallo-l><span style=color:#c678dd>struct</span><span style=color:#e5c07b> VertexOutput</span><span> {</span></span>
+<span class=giallo-l><span>    @builtin(</span><span style=color:#e06c75>position</span><span>)</span><span style=color:#e06c75> clip_position</span><span>: </span><span style=color:#c678dd>vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span></span>
+<span class=giallo-l><span>    @location(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#e06c75> world_position</span><span>: </span><span style=color:#c678dd>vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span></span>
+<span class=giallo-l><span>};</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@vertex</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> vertex</span><span>(</span><span style=color:#e06c75>vertex</span><span>: </span><span style=color:#e5c07b>Vertex</span><span>) -></span><span style=color:#e5c07b> VertexOutput</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c678dd>    var</span><span style=color:#e06c75> out</span><span>: </span><span style=color:#e5c07b>VertexOutput</span><span>;</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // This is how bevy computes the world position</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // The vertex.instance_index is very important. Especially if you are using batching and gpu preprocessing</span></span>
+<span class=giallo-l><span style=color:#c678dd>    var</span><span style=color:#e06c75> world_from_local</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> mesh_functions</span><span>::</span><span style=color:#61afef>get_world_from_local</span><span>(</span><span style=color:#e06c75>vertex</span><span>.instance_index);</span></span>
+<span class=giallo-l><span style=color:#e06c75>    out</span><span>.world_position </span><span style=color:#56b6c2>=</span><span style=color:#e06c75> mesh_functions</span><span>::</span><span style=color:#61afef>mesh_position_local_to_world</span><span>(</span><span style=color:#e06c75>world_from_local</span><span>,</span><span style=color:#61afef> vec4</span><span>(</span><span style=color:#e06c75>vertex</span><span>.position,</span><span style=color:#d19a66> 1.0</span><span>));</span></span>
+<span class=giallo-l><span style=color:#e06c75>    out</span><span>.clip_position </span><span style=color:#56b6c2>=</span><span style=color:#61afef> position_world_to_clip</span><span>(</span><span style=color:#e06c75>out</span><span>.world_position.xyz);</span></span>
+<span class=giallo-l><span style=color:#c678dd>    return</span><span style=color:#e06c75> out</span><span>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@fragment</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> fragment</span><span>(</span><span style=color:#e06c75>in</span><span>: </span><span style=color:#e5c07b>VertexOutput</span><span>) -> @location(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // Output a red color to represent the stencil of the mesh</span></span>
+<span class=giallo-l><span style=color:#c678dd>    return</span><span style=color:#61afef> vec4</span><span>(</span><span style=color:#d19a66>1.0</span><span>,</span><span style=color:#d19a66> 0.0</span><span>,</span><span style=color:#d19a66> 0.0</span><span>,</span><span style=color:#d19a66> 1.0</span><span>);</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/Shaders/custom-render-phase/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

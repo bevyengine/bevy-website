@@ -1,0 +1,911 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Directional Navigation Overrides" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/ui-user-interface/directional-navigation-overrides/ property=og:url><meta content="https://bevy.org/examples-webgpu/ui-user-interface/directional-navigation-overrides/../static/screenshots/UI (User Interface)/directional_navigation_overrides.png" property=og:image><meta content="Demonstration of automatic directional navigation between UI elements with manual overrides" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Directional Navigation Overrides</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>UI (User Interface) / Directional Navigation Overrides</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/ui/navigation/directional_navigation_overrides.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/ui-user-interface/directional-navigation-overrides/>here</a>.</aside></div><div class="example__explanation media-content"><p>Demonstrates automatic directional navigation with manual navigation overrides.<p>This example shows how to leverage both automatic navigation and manual overrides to create a desired user navigation experience without much boilerplate code. In this example, there are multiple pages of UI Buttons that depict different scenarios in which both automatic and manual navigation are leveraged to produce a desired navigation experience.<p>Manual overrides can be used to define navigation in any situation where automatic navigation fails to create an edge due to lack of proximity. For example, when creating navigation that loops around to an opposite side, manual overrides should be used to define this behavior. If one input is too far away from the others and <code>AutoNavigationConfig</code> cannot be tweaked, manual overrides can connect that input to the others. Manual navigation can also be used to override any undesired automatic navigation.<p>The [<code>AutoDirectionalNavigation</code>] component is used to create basic, intuitive navigation to UI elements within a page. Manual navigation edges are added to the [<code>DirectionalNavigationMap</code>] to create special navigation rules. The [<code>AutoDirectionalNavigator</code>] system parameter navigates using manual navigation rules/overrides first and automatic navigation second.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>directional_navigation_overrides.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> core</span><span>::</span><span style=color:#c0c5ce>time</span><span>::</span><span style=color:#dfc479>Duration</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#dfc479>NormalizedRenderTarget</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        directional_navigation</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AutoNavigationConfig</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DirectionalNavigationMap</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DirectionalNavigationPlugin</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        FocusCause</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InputFocus</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InputFocusVisible</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    math</span><span>::{</span><span style=color:#dfc479>CompassOctant</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Dir2</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    picking</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        backend</span><span>::</span><span style=color:#dfc479>HitData</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pointer</span><span>::{</span><span style=color:#dfc479>Location</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PointerId</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    platform</span><span>::</span><span style=color:#c0c5ce>collections</span><span>::</span><span style=color:#dfc479>HashSet</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ui</span><span>::</span><span style=color:#c0c5ce>auto_directional_navigation</span><span>::{</span><span style=color:#dfc479>AutoDirectionalNavigation</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AutoDirectionalNavigator</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Input focus is not enabled by default, so we need to add the corresponding plugins</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The navigation system's resources are initialized by the DirectionalNavigationPlugin.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>((</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DirectionalNavigationPlugin</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This resource is canonically used to track whether or not to render a focus indicator</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // It starts as false, but we set it to true here as we would like to see the focus indicator</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#69c>InputFocusVisible</span><span style=color:#d19a66>(true))</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Configure auto-navigation behavior</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#dfc479>AutoNavigationConfig</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Require at least 10% overlap in perpendicular axis for cardinal directions</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            min_alignment_factor:</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Don't connect nodes more than 200 pixels apart between their closest edges</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            max_search_distance:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>200.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Prefer nodes that are well-aligned</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            prefer_aligned:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ActionState</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // For automatic navigation, UI entities will have the component `AutoDirectionalNavigation`</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // and will be automatically connected by the navigation system.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // We will also add some new edges that the automatic navigation system</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // cannot create by itself by inserting them into `DirectionalNavigationMap`</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup_paged_ui</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Input is generally handled during PreUpdate</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>PreUpdate</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>process_inputs, navigate</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>chain</span><span style=color:#d19a66>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Update</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                highlight_focused_element,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                interact_with_focused_button,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                reset_button_after_interaction,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                update_focus_display</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>run_if</span><span style=color:#d19a66>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>input_focus:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocus</span><span style=color:#c0c5ce>></span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> input_focus</span><span style=color:#c594c5>.</span><span style=color:#69c>is_changed</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                update_key_display,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>universal_button_click_behavior</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PAGE_1_NORMAL_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>BLUE_400</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PAGE_1_PRESSED_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>BLUE_500</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PAGE_1_FOCUSED_BORDER</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>BLUE_50</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PAGE_2_NORMAL_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>RED_400</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PAGE_2_PRESSED_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>RED_500</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PAGE_2_FOCUSED_BORDER</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>RED_50</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PAGE_3_NORMAL_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>GREEN_400</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PAGE_3_PRESSED_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>GREEN_500</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PAGE_3_FOCUSED_BORDER</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>GREEN_50</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> NORMAL_BUTTON_COLORS</span><span style=color:#c0c5ce>:</span><span> [</span><span style=color:#dfc479>Srgba</span><span style=color:#c0c5ce>;</span><span style=color:#e79e6d> 3</span><span>]</span><span style=color:#c594c5> =</span><span> [</span></span>
+<span class=giallo-l><span style=color:#d19a66>    PAGE_1_NORMAL_BUTTON</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    PAGE_2_NORMAL_BUTTON</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    PAGE_3_NORMAL_BUTTON</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PRESSED_BUTTON_COLORS</span><span style=color:#c0c5ce>:</span><span> [</span><span style=color:#dfc479>Srgba</span><span style=color:#c0c5ce>;</span><span style=color:#e79e6d> 3</span><span>]</span><span style=color:#c594c5> =</span><span> [</span></span>
+<span class=giallo-l><span style=color:#d19a66>    PAGE_1_PRESSED_BUTTON</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    PAGE_2_PRESSED_BUTTON</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    PAGE_3_PRESSED_BUTTON</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> FOCUSED_BORDER_COLORS</span><span style=color:#c0c5ce>:</span><span> [</span><span style=color:#dfc479>Srgba</span><span style=color:#c0c5ce>;</span><span style=color:#e79e6d> 3</span><span>]</span><span style=color:#c594c5> =</span><span> [</span></span>
+<span class=giallo-l><span style=color:#d19a66>    PAGE_1_FOCUSED_BORDER</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    PAGE_2_FOCUSED_BORDER</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    PAGE_3_FOCUSED_BORDER</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Marker component for the text that displays the currently focused button</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> FocusDisplay</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Marker component for the text that displays the last key pressed</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> KeyDisplay</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Component that stores which page a button is on</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Page</span><span style=color:#d19a66>(</span><span style=color:#b48ead>usize</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Observer for button clicks</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> universal_button_click_behavior</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> click:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Click</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> button_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Page</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> ResetTimer</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> button_entity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> click</span><span style=color:#c594c5>.</span><span>entity</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span style=color:#d19a66>((</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> color, page,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> reset_timer</span><span style=color:#d19a66>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> button_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>button_entity</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        color</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> PRESSED_BUTTON_COLORS</span><span>[</span><span style=color:#c0c5ce>page</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>]</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reset_timer</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Timer</span><span>::</span><span style=color:#69c>from_seconds</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.3</span><span style=color:#c0c5ce>, TimerMode</span><span>::</span><span style=color:#dfc479>Once</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        click</span><span style=color:#c594c5>.</span><span style=color:#69c>propagate</span><span style=color:#d19a66>(false)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ResetTimer</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Timer</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> reset_button_after_interaction</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> ResetTimer</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Page</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> reset_timer,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> color, page</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reset_timer</span><span style=color:#c594c5>.</span><span style=color:#69c>tick</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> reset_timer</span><span style=color:#c594c5>.</span><span style=color:#69c>just_finished</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> NORMAL_BUTTON_COLORS</span><span>[</span><span style=color:#c0c5ce>page</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>]</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawn pages of buttons to demonstrate automatic and manual navigation.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This function creates three pages of buttons. All buttons have automatic navigation</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> enabled by having the [`AutoDirectionalNavigation`] component.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Manual navigation is specified with the [`DirectionalNavigationMap`].</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Page 1 has a simple grid of buttons where transitions between rows is defined using</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> the [`DirectionalNavigationMap`].</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Page 2 has a cluster of buttons to the top left and a lonely button on the bottom right.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Navigation between the cluster and the lonely button is defined using the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> [`DirectionalNavigationMap`].</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Page 3 has the same simple grid of buttons as page 1, but automatic navigation has been</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> overridden in the vertical direction with the [`DirectionalNavigationMap`].</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup_paged_ui</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> manual_directional_nav_map:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DirectionalNavigationMap</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> input_focus:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Camera2d</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Create a full-screen background node</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> root_node</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Instructions</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> instructions</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "Directional Navigation Overrides Demo</span><span style=color:#56b6c2>\n\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                 Use arrow keys or D-pad to navigate.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                 Press Enter or A button to interact.</span><span style=color:#56b6c2>\n\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                 Navigation on each page is a combination of \</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                 both automatic and manual navigation."</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                left:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                top:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>280</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                padding: UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>8</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgba</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.8</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>root_node</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>add_children</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span>[</span><span style=color:#c0c5ce>instructions</span><span>]</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Focus display - shows which button is currently focused</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Focused: None"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        FocusDisplay</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            bottom:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>80</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>280</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            padding: UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>8</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        BackgroundColor</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgba</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.8</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Key display - shows the last key pressed</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Last Key: None"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        KeyDisplay</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            bottom:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>280</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            padding: UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>8</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        BackgroundColor</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgba</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.8</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Setup the pages with buttons and helper text</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> pages_entities</span><span style=color:#c594c5> =</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Vec</span><span>::</span><span style=color:#69c>with_capacity</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Vec</span><span>::</span><span style=color:#69c>with_capacity</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Vec</span><span>::</span><span style=color:#69c>with_capacity</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> text_entities</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec</span><span>::</span><span style=color:#69c>with_capacity</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>10</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>page_num, page_button_entities</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> pages_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>enumerate</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> page_num</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 1</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // the second page</span></span>
+<span class=giallo-l><span style=color:#69c>            setup_buttons_for_triangle_page</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &mut</span><span style=color:#c0c5ce> commands,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                page_num,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#c0c5ce>page_button_entities,</span><span style=color:#c594c5> &mut</span><span style=color:#c0c5ce> text_entities</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // the first and third pages are regular grids</span></span>
+<span class=giallo-l><span style=color:#69c>            setup_buttons_for_grid_page</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &mut</span><span style=color:#c0c5ce> commands,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                page_num,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#c0c5ce>page_button_entities,</span><span style=color:#c594c5> &mut</span><span style=color:#c0c5ce> text_entities</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Only the first page is visible at setup.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> visibility</span><span style=color:#c594c5> = if</span><span style=color:#c0c5ce> page_num</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Visibility</span><span>::</span><span style=color:#dfc479>Visible</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Visibility</span><span>::</span><span style=color:#dfc479>Hidden</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> page</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    width:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    height:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                visibility,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>id</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>page</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_children</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>page_button_entities</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_children</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>text_entities</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>clear</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // For Pages 1 and 3, add manual edges within the grid page for navigation between rows.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> entity_pairs</span><span style=color:#c594c5> =</span><span> [</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // the end of the first row should connect to the beginning of the second</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ((</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // the end of the second row should connect to the beginning of the third</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ((</span><span style=color:#e79e6d>1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // the end of the third row should connect to the beginning of the fourth</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ((</span><span style=color:#e79e6d>2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>page_num, page_entities</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> pages_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>enumerate</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Skip Page 2; we are only adding these manual edges for the grid pages.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> page_num</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 1</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#d19a66> ((</span><span style=color:#c0c5ce>entity_a_row, entity_a_col</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>entity_b_row, entity_b_col</span><span style=color:#d19a66>))</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> entity_pairs</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            manual_directional_nav_map</span><span style=color:#c594c5>.</span><span style=color:#69c>add_symmetrical_edge</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                page_entities</span><span>[</span><span style=color:#c0c5ce>entity_a_row</span><span> *</span><span style=color:#e79e6d> 3</span><span> +</span><span style=color:#c0c5ce> entity_a_col</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                page_entities</span><span>[</span><span style=color:#c0c5ce>entity_b_row</span><span> *</span><span style=color:#e79e6d> 3</span><span> +</span><span style=color:#c0c5ce> entity_b_col</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                CompassOctant</span><span>::</span><span style=color:#dfc479>East</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Add manual edges within the triangle page (Page 2) between buttons 3 and 4.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The `AutoNavigationConfig` is set to our desired values, but automatic</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // navigation does not connect Button 3 to Button 4, so we have to add</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // this navigation manually.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    manual_directional_nav_map</span><span style=color:#c594c5>.</span><span style=color:#69c>add_symmetrical_edge</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>1</span><span>][</span><span style=color:#e79e6d>2</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>1</span><span>][</span><span style=color:#e79e6d>3</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        CompassOctant</span><span>::</span><span style=color:#dfc479>East</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    manual_directional_nav_map</span><span style=color:#c594c5>.</span><span style=color:#69c>add_symmetrical_edge</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>1</span><span>][</span><span style=color:#e79e6d>2</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>1</span><span>][</span><span style=color:#e79e6d>3</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        CompassOctant</span><span>::</span><span style=color:#dfc479>South</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    manual_directional_nav_map</span><span style=color:#c594c5>.</span><span style=color:#69c>add_symmetrical_edge</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>1</span><span>][</span><span style=color:#e79e6d>2</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>1</span><span>][</span><span style=color:#e79e6d>3</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        CompassOctant</span><span>::</span><span style=color:#dfc479>SouthEast</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Add one-way blocking within the first grid page (Page 1) for down nav.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> btn</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>pages_entities</span><span>[</span><span style=color:#e79e6d>0</span><span>] {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        manual_directional_nav_map</span><span style=color:#c594c5>.</span><span style=color:#69c>block_edge</span><span style=color:#d19a66>(</span><span>*</span><span style=color:#c0c5ce>btn, CompassOctant</span><span>::</span><span style=color:#dfc479>South</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        manual_directional_nav_map</span><span style=color:#c594c5>.</span><span style=color:#69c>block_edge</span><span style=color:#d19a66>(</span><span>*</span><span style=color:#c0c5ce>btn, CompassOctant</span><span>::</span><span style=color:#dfc479>North</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // For Page 3, we override the navigation North and South to be inverted.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> col_entities</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec</span><span>::</span><span style=color:#69c>with_capacity</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>4</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> col</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..=</span><span style=color:#e79e6d>2</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> row</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..=</span><span style=color:#e79e6d>3</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            col_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>pages_entities</span><span>[</span><span style=color:#e79e6d>2</span><span>][</span><span style=color:#c0c5ce>row</span><span> *</span><span style=color:#e79e6d> 3</span><span> +</span><span style=color:#c0c5ce> col</span><span>]</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        manual_directional_nav_map</span><span style=color:#c594c5>.</span><span style=color:#69c>add_looping_edges</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>col_entities, CompassOctant</span><span>::</span><span style=color:#dfc479>North</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        col_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>clear</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Add manual edges between pages.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // When navigating east (right) from the last button of page 1,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // go to the first button of page 2. This edge is symmetrical.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    manual_directional_nav_map</span><span style=color:#c594c5>.</span><span style=color:#69c>add_symmetrical_edge</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>0</span><span>][</span><span style=color:#e79e6d>11</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>1</span><span>][</span><span style=color:#e79e6d>0</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        CompassOctant</span><span>::</span><span style=color:#dfc479>East</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // When navigating south (down) from the last button of page 2,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // go to the first button of page 3. This edge is NOT symmetrical.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This means going north (up) from the first button of page 3 does</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // NOT go to the last button of page 2.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    manual_directional_nav_map</span><span style=color:#c594c5>.</span><span style=color:#69c>add_edge</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>1</span><span>][</span><span style=color:#e79e6d>3</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>2</span><span>][</span><span style=color:#e79e6d>0</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        CompassOctant</span><span>::</span><span style=color:#dfc479>South</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // When navigating west (left) from the first button of page 3,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // go back to the last button of page 2. This edge is NOT symmetrical.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    manual_directional_nav_map</span><span style=color:#c594c5>.</span><span style=color:#69c>add_edge</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>2</span><span>][</span><span style=color:#e79e6d>0</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>1</span><span>][</span><span style=color:#e79e6d>3</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        CompassOctant</span><span>::</span><span style=color:#dfc479>West</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // When navigating east (right) from the last button of page 1,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // go to the first button of page 2. This edge is symmetrical.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    manual_directional_nav_map</span><span style=color:#c594c5>.</span><span style=color:#69c>add_symmetrical_edge</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>2</span><span>][</span><span style=color:#e79e6d>11</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pages_entities</span><span>[</span><span style=color:#e79e6d>0</span><span>][</span><span style=color:#e79e6d>0</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        CompassOctant</span><span>::</span><span style=color:#dfc479>East</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Set initial focus</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>pages_entities</span><span>[</span><span style=color:#e79e6d>0</span><span>][</span><span style=color:#e79e6d>0</span><span>]</span><span style=color:#c0c5ce>, FocusCause</span><span>::</span><span style=color:#dfc479>Navigated</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the buttons and text for a grid page and places the ids into their</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> respective Vecs in `entities`.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup_buttons_for_grid_page</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    page_num:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    entities:</span><span style=color:#d19a66> (</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>page_button_entities, text_entities</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> entities;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn buttons in a grid</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Auto-navigation will automatically configure navigation within rows.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> button_positions</span><span style=color:#c594c5> =</span><span> [</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Row 0</span></span>
+<span class=giallo-l><span>        [</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>450.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 80.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>650.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 80.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>850.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 80.0</span><span style=color:#d19a66>)</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Row 1</span></span>
+<span class=giallo-l><span>        [</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>450.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 215.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>650.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 215.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>850.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 215.0</span><span style=color:#d19a66>)</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Row 2</span></span>
+<span class=giallo-l><span>        [</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>450.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 350.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>650.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 350.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>850.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 350.0</span><span style=color:#d19a66>)</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Row 3</span></span>
+<span class=giallo-l><span>        [</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>450.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 485.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>650.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 485.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>850.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 485.0</span><span style=color:#d19a66>)</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>i, row</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> button_positions</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>enumerate</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>j,</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>left, top</span><span style=color:#d19a66>))</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> row</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>enumerate</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> button_entity</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_auto_nav_button</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                commands,</span></span>
+<span class=giallo-l><span style=color:#61afef>                format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Btn </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>-</span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, i</span><span> +</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>, j</span><span> +</span><span style=color:#e79e6d> 1</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                left,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                top,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                page_num,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            page_button_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>button_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Text describing current page</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> current_page_entity</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Currently on Page </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, page_num</span><span> +</span><span style=color:#e79e6d> 1</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        650</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        20</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Justify</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>current_page_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Text describing direction to go to the previous page, placed left of the top-left button.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> previous_page</span><span style=color:#c594c5> = if</span><span style=color:#c0c5ce> page_num</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 0</span><span> {</span><span style=color:#e79e6d> 3</span><span> }</span><span style=color:#c594c5> else</span><span> {</span><span style=color:#c0c5ce> page_num</span><span> }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> previous_page_entity</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Page </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f> &lt;&lt; "</span><span style=color:#c0c5ce>, previous_page</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        310</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        120</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Justify</span><span>::</span><span style=color:#dfc479>Right</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>previous_page_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Text describing direction to go to the next page, placed right of the bottom-right button.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> next_page_entity</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>">> Page </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>page_num</span><span> +</span><span style=color:#e79e6d> 1</span><span style=color:#d19a66>)</span><span> %</span><span style=color:#e79e6d> 3</span><span> +</span><span style=color:#e79e6d> 1</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        1000</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        525</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Justify</span><span>::</span><span style=color:#dfc479>Left</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>next_page_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Texts describing that moving right wraps to the next row.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> right_1</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands,</span><span style=color:#9fc37f> "> Btn 2-1"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1000</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 120</span><span style=color:#c0c5ce>, Justify</span><span>::</span><span style=color:#dfc479>Left</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> right_2</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands,</span><span style=color:#9fc37f> "> Btn 3-1"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1000</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 255</span><span style=color:#c0c5ce>, Justify</span><span>::</span><span style=color:#dfc479>Left</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> right_3</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands,</span><span style=color:#9fc37f> "> Btn 4-1"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1000</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 390</span><span style=color:#c0c5ce>, Justify</span><span>::</span><span style=color:#dfc479>Left</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> left_1</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands,</span><span style=color:#9fc37f> "Btn 1-3 &lt; "</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 310</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 255</span><span style=color:#c0c5ce>, Justify</span><span>::</span><span style=color:#dfc479>Right</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> left_2</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands,</span><span style=color:#9fc37f> "Btn 2-3 &lt; "</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 310</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 390</span><span style=color:#c0c5ce>, Justify</span><span>::</span><span style=color:#dfc479>Right</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> left_3</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands,</span><span style=color:#9fc37f> "Btn 3-3 &lt; "</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 310</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 525</span><span style=color:#c0c5ce>, Justify</span><span>::</span><span style=color:#dfc479>Right</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>right_1</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>right_2</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>right_3</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>left_1</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>left_2</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>left_3</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> text</span><span style=color:#c594c5> = match</span><span style=color:#c0c5ce> page_num</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // For the first page, add a notice about vertical navigation being blocked off</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        0</span><span> =></span><span style=color:#dfc479> Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Vertical movements disabled on each button, but you can still navigate between rows by going off the left or right sides."</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // For the third page, add a notice about vertical navigation being inverted in the grid.</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        2</span><span> =></span><span style=color:#dfc479> Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Vertical Navigation has been manually overridden to be inverted! \</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            ^ moves down, and v (down) moves up."</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _</span><span> =></span><span style=color:#dfc479> Text</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> footer_info</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            text,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                left:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>450</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                top:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>600</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>540</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                padding: UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>footer_info</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the buttons and text for the triangle page (page 2) and places the ids into their</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> respective Vecs in `entities`.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup_buttons_for_triangle_page</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    page_num:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    entities:</span><span style=color:#d19a66> (</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> button_positions</span><span style=color:#c594c5> =</span><span> [</span></span>
+<span class=giallo-l><span style=color:#d19a66>        (</span><span style=color:#e79e6d>450.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 80.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#8e9aa4>   // top left</span></span>
+<span class=giallo-l><span style=color:#d19a66>        (</span><span style=color:#e79e6d>700.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 80.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#8e9aa4>   // top right</span></span>
+<span class=giallo-l><span style=color:#d19a66>        (</span><span style=color:#e79e6d>575.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 215.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#8e9aa4>  // middle</span></span>
+<span class=giallo-l><span style=color:#d19a66>        (</span><span style=color:#e79e6d>1050.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 350.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#8e9aa4> // bottom right</span></span>
+<span class=giallo-l><span>    ]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>page_button_entities, text_entities</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> entities;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>i,</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>left, top</span><span style=color:#d19a66>))</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> button_positions</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>enumerate</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> button_entity</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#69c>            spawn_auto_nav_button</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands,</span><span style=color:#61afef> format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Btn </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, i</span><span> +</span><span style=color:#e79e6d> 1</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, left, top, page_num</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        page_button_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>button_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Text describing current page</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> current_page_entity</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Currently on Page </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, page_num</span><span> +</span><span style=color:#e79e6d> 1</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        650</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        20</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Justify</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>current_page_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Text describing direction to go to the previous page, placed left of the top-left button.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> previous_page</span><span style=color:#c594c5> = if</span><span style=color:#c0c5ce> page_num</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 0</span><span> {</span><span style=color:#e79e6d> 3</span><span> }</span><span style=color:#c594c5> else</span><span> {</span><span style=color:#c0c5ce> page_num</span><span> }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> previous_page_entity</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Page </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f> &lt;&lt; "</span><span style=color:#c0c5ce>, previous_page</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        310</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        120</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Justify</span><span>::</span><span style=color:#dfc479>Right</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>previous_page_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Direction to navigate from button 3 to button 4, placed below center button</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> below_button_three_entity</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#69c>        spawn_small_text_node</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands,</span><span style=color:#9fc37f> "v</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>Btn 4"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 575</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 325</span><span style=color:#c0c5ce>, Justify</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>below_button_three_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Direction to navigate from button 3 to button 4, placed right of center button</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> right_of_button_three_entity</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#69c>        spawn_small_text_node</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands,</span><span style=color:#9fc37f> "> Btn 4"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 735</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 255</span><span style=color:#c0c5ce>, Justify</span><span>::</span><span style=color:#dfc479>Left</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>right_of_button_three_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Direction to navigate from button 4 to button 3, placed above bottom right button</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> below_button_three_entity</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#69c>        spawn_small_text_node</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands,</span><span style=color:#9fc37f> "Btn 3</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>^"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1050</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 300</span><span style=color:#c0c5ce>, Justify</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>below_button_three_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Direction to navigate from button 4 to button 3, placed left of bottom right button</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> right_of_button_three_entity</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#69c>        spawn_small_text_node</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands,</span><span style=color:#9fc37f> "Btn 3 &lt; "</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 910</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 390</span><span style=color:#c0c5ce>, Justify</span><span>::</span><span style=color:#dfc479>Right</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>right_of_button_three_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Direction to go to the next page, placed bottom of the bottom-right button.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> next_page_entity</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"V</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>V</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>Page </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>page_num</span><span> +</span><span style=color:#e79e6d> 1</span><span style=color:#d19a66>)</span><span> %</span><span style=color:#e79e6d> 3</span><span> +</span><span style=color:#e79e6d> 1</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        1050</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        460</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Justify</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>next_page_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_auto_nav_button</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text:</span><span style=color:#dfc479> String</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    left:</span><span style=color:#c594c5> &</span><span style=color:#b48ead>f64</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    top:</span><span style=color:#c594c5> &</span><span style=color:#b48ead>f64</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    page_num:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> Entity</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Button</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                left:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span>*</span><span style=color:#c0c5ce>left</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                top:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span>*</span><span style=color:#c0c5ce>top</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>140</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border: UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>4</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            Page</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>page_num</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span style=color:#d19a66>(NORMAL_BUTTON_COLORS</span><span>[</span><span style=color:#c0c5ce>page_num</span><span>]</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Just add this component for automatic navigation</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            AutoDirectionalNavigation</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ResetTimer</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Name</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_child</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>text</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextLayout</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify: Justify</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_small_text_node</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text:</span><span style=color:#dfc479> String</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    left:</span><span style=color:#b48ead> i32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    top:</span><span style=color:#b48ead> i32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    justify:</span><span style=color:#dfc479> Justify</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> Entity</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>text</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                left:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>left</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                top:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>top</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>140</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                padding: UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextLayout</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Action state and input handling</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Eq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Hash</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> DirectionalNavigationAction</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Up</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Down</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Left</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Right</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Select</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> DirectionalNavigationAction</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> variants</span><span style=color:#d19a66>()</span><span> -></span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;Self></span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>        vec!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> keycode</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> KeyCode</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span style=color:#c0c5ce> self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span> =></span><span style=color:#dfc479> KeyCode</span><span>::</span><span style=color:#dfc479>ArrowUp</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span> =></span><span style=color:#dfc479> KeyCode</span><span>::</span><span style=color:#dfc479>ArrowDown</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span> =></span><span style=color:#dfc479> KeyCode</span><span>::</span><span style=color:#dfc479>ArrowLeft</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span> =></span><span style=color:#dfc479> KeyCode</span><span>::</span><span style=color:#dfc479>ArrowRight</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span> =></span><span style=color:#dfc479> KeyCode</span><span>::</span><span style=color:#dfc479>Enter</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> gamepad_button</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> GamepadButton</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span style=color:#c0c5ce> self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span> =></span><span style=color:#dfc479> GamepadButton</span><span>::</span><span style=color:#dfc479>DPadUp</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span> =></span><span style=color:#dfc479> GamepadButton</span><span>::</span><span style=color:#dfc479>DPadDown</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span> =></span><span style=color:#dfc479> GamepadButton</span><span>::</span><span style=color:#dfc479>DPadLeft</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span> =></span><span style=color:#dfc479> GamepadButton</span><span>::</span><span style=color:#dfc479>DPadRight</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span> =></span><span style=color:#dfc479> GamepadButton</span><span>::</span><span style=color:#dfc479>South</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ActionState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pressed_actions:</span><span style=color:#dfc479> HashSet</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DirectionalNavigationAction</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> process_inputs</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> action_state:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ActionState</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    keyboard_input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    gamepad_input:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Gamepad</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    action_state</span><span style=color:#c594c5>.</span><span>pressed_actions</span><span style=color:#c594c5>.</span><span style=color:#69c>clear</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> action</span><span style=color:#c594c5> in</span><span style=color:#dfc479> DirectionalNavigationAction</span><span>::</span><span style=color:#69c>variants</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>action</span><span style=color:#c594c5>.</span><span style=color:#69c>keycode</span><span style=color:#d19a66>())</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            action_state</span><span style=color:#c594c5>.</span><span>pressed_actions</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>action</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> gamepad</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> gamepad_input</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> action</span><span style=color:#c594c5> in</span><span style=color:#dfc479> DirectionalNavigationAction</span><span>::</span><span style=color:#69c>variants</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> gamepad</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>action</span><span style=color:#c594c5>.</span><span style=color:#69c>gamepad_button</span><span style=color:#d19a66>())</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                action_state</span><span style=color:#c594c5>.</span><span>pressed_actions</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>action</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> navigate</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    action_state:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ActionState</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    parent_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>ChildOf</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> visibility_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Visibility</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> auto_directional_navigator:</span><span style=color:#dfc479> AutoDirectionalNavigator</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> net_east_west</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> action_state</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span>pressed_actions</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>contains</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span style=color:#d19a66>)</span><span style=color:#c594c5> as</span><span style=color:#b48ead> i8</span></span>
+<span class=giallo-l><span>        -</span><span style=color:#c0c5ce> action_state</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span>pressed_actions</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>contains</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span style=color:#d19a66>)</span><span style=color:#c594c5> as</span><span style=color:#b48ead> i8</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> net_north_south</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> action_state</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span>pressed_actions</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>contains</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span style=color:#d19a66>)</span><span style=color:#c594c5> as</span><span style=color:#b48ead> i8</span></span>
+<span class=giallo-l><span>        -</span><span style=color:#c0c5ce> action_state</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span>pressed_actions</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>contains</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span style=color:#d19a66>)</span><span style=color:#c594c5> as</span><span style=color:#b48ead> i8</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Use Dir2::from_xy to convert input to direction, then convert to CompassOctant</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> maybe_direction</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Dir2</span><span>::</span><span style=color:#69c>from_xy</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>net_east_west</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>, net_north_south</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>ok</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>map</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>CompassOctant</span><span>::</span><span style=color:#c0c5ce>from</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Store the previous focus in case navigation switches pages.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> previous_focus</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> auto_directional_navigator</span><span style=color:#c594c5>.</span><span style=color:#69c>input_focus</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>direction</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> maybe_direction</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span style=color:#c0c5ce> auto_directional_navigator</span><span style=color:#c594c5>.</span><span style=color:#69c>navigate</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>direction</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Ok</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>new_focus</span><span style=color:#d19a66>)</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Successfully navigated!</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // If navigation switches between pages, change the visibilities of pages</span></span>
+<span class=giallo-l><span style=color:#c594c5>                if let</span><span style=color:#dfc479> Ok</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>current_child_of</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> parent_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>new_focus</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    && let</span><span style=color:#dfc479> Ok</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> current_page_visibility</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        visibility_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>current_child_of</span><span style=color:#c594c5>.</span><span style=color:#69c>parent</span><span style=color:#d19a66>())</span></span>
+<span class=giallo-l><span>                {</span></span>
+<span class=giallo-l><span>                    *</span><span style=color:#c0c5ce>current_page_visibility</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Visibility</span><span>::</span><span style=color:#dfc479>Visible</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>                    if let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>previous_focus_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> previous_focus</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        && let</span><span style=color:#dfc479> Ok</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>previous_child_of</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> parent_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>previous_focus_entity</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        &&</span><span style=color:#c0c5ce> previous_child_of</span><span style=color:#c594c5>.</span><span style=color:#69c>parent</span><span style=color:#d19a66>()</span><span style=color:#c594c5> !=</span><span style=color:#c0c5ce> current_child_of</span><span style=color:#c594c5>.</span><span style=color:#69c>parent</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        && let</span><span style=color:#dfc479> Ok</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> previous_page_visibility</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            visibility_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>previous_child_of</span><span style=color:#c594c5>.</span><span style=color:#69c>parent</span><span style=color:#d19a66>())</span></span>
+<span class=giallo-l><span>                    {</span></span>
+<span class=giallo-l><span>                        *</span><span style=color:#c0c5ce>previous_page_visibility</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Visibility</span><span>::</span><span style=color:#dfc479>Hidden</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Err</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>_e</span><span style=color:#d19a66>)</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Navigation failed (no neighbor in that direction)</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_focus_display</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    button_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Name</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Button</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> display_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>FocusDisplay</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> text</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> display_query</span><span style=color:#c594c5>.</span><span style=color:#69c>single_mut</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>focused_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> input_focus</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if let</span><span style=color:#dfc479> Ok</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>name</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> button_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>focused_entity</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span>                **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Focused: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, name</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span>                **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "Focused: Unknown"</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span>            **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "Focused: None"</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_key_display</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    keyboard_input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    gamepad_input:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Gamepad</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> display_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyDisplay</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> text</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> display_query</span><span style=color:#c594c5>.</span><span style=color:#69c>single_mut</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Check for keyboard inputs</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> action</span><span style=color:#c594c5> in</span><span style=color:#dfc479> DirectionalNavigationAction</span><span>::</span><span style=color:#69c>variants</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>action</span><span style=color:#c594c5>.</span><span style=color:#69c>keycode</span><span style=color:#d19a66>())</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> key_name</span><span style=color:#c594c5> = match</span><span style=color:#c0c5ce> action</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span> =></span><span style=color:#9fc37f> "Up Arrow"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span> =></span><span style=color:#9fc37f> "Down Arrow"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span> =></span><span style=color:#9fc37f> "Left Arrow"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span> =></span><span style=color:#9fc37f> "Right Arrow"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span> =></span><span style=color:#9fc37f> "Enter"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Last Key: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, key_name</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Check for gamepad inputs</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> gamepad</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> gamepad_input</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            for</span><span style=color:#c0c5ce> action</span><span style=color:#c594c5> in</span><span style=color:#dfc479> DirectionalNavigationAction</span><span>::</span><span style=color:#69c>variants</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                if</span><span style=color:#c0c5ce> gamepad</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>action</span><span style=color:#c594c5>.</span><span style=color:#69c>gamepad_button</span><span style=color:#d19a66>())</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    let</span><span style=color:#c0c5ce> button_name</span><span style=color:#c594c5> = match</span><span style=color:#c0c5ce> action</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span> =></span><span style=color:#9fc37f> "D-Pad Up"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span> =></span><span style=color:#9fc37f> "D-Pad Down"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span> =></span><span style=color:#9fc37f> "D-Pad Left"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span> =></span><span style=color:#9fc37f> "D-Pad Right"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span> =></span><span style=color:#9fc37f> "A Button"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Last Key: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, button_name</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> highlight_focused_element</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus_visible:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocusVisible</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> BorderColor</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Page</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>entity,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> border_color, page</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> input_focus</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>()</span><span style=color:#c594c5> ==</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5> &&</span><span style=color:#c0c5ce> input_focus_visible</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> {</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>border_color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> BorderColor</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(FOCUSED_BORDER_COLORS</span><span>[</span><span style=color:#c0c5ce>page</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>]</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>border_color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> BorderColor</span><span>::</span><span style=color:#d19a66>DEFAULT</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> interact_with_focused_button</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    action_state:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ActionState</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> action_state</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span>pressed_actions</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>contains</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        && let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>focused_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> input_focus</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>    {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>trigger</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Pointer</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            PointerId</span><span>::</span><span style=color:#dfc479>Mouse</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Location</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                target: NormalizedRenderTarget</span><span>::</span><span style=color:#e5c07b>None</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    width:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    height:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                position: Vec2</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Click</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                button: PointerButton</span><span>::</span><span style=color:#dfc479>Primary</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                hit:</span><span style=color:#dfc479> HitData</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    camera: Entity</span><span>::</span><span style=color:#d19a66>PLACEHOLDER</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    depth:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    position:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    normal:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    extra:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                count:</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                duration: Duration</span><span>::</span><span style=color:#69c>from_secs_f32</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.1</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            focused_entity,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/UI (User Interface)/directional-navigation-overrides/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

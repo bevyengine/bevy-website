@@ -1,0 +1,221 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Custom Asset" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/assets/custom-asset/ property=og:url><meta content=https://bevy.org/examples-webgpu/assets/custom-asset/../static/screenshots/Assets/custom_asset.png property=og:image><meta content="Implements a custom asset loader" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Custom Asset</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Assets / Custom Asset</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/asset/custom_asset.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/assets/custom-asset/>here</a>.</aside></div><div class="example__explanation media-content"><p>Implements loader for a custom asset type.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>custom_asset.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset</span><span>::{</span><span style=color:#c0c5ce>io</span><span>::</span><span style=color:#dfc479>Reader</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AssetLoader</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> LoadContext</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    reflect</span><span>::</span><span style=color:#dfc479>TypePath</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> serde</span><span>::</span><span style=color:#dfc479>Deserialize</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> thiserror</span><span>::</span><span style=color:#dfc479>Error</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Asset</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TypePath</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deserialize</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CustomAsset</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[expect(</span></span>
+<span class=giallo-l><span style=color:#d19a66>        dead_code</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        reason </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "Used to show how the data inside an asset file will be loaded into the struct"</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    value:</span><span style=color:#b48ead> i32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TypePath</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CustomAssetLoader</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Possible errors that can be produced by [`CustomAssetLoader`]</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[non_exhaustive]</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Error</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> CustomAssetLoaderError</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> An [IO](std::io) Error</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[error(</span><span style=color:#9fc37f>"Could not load asset: </span><span style=color:#d19a66>{0}</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#69c>    Io</span><span style=color:#d19a66>(#[from]</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>io</span><span>::</span><span style=color:#dfc479>Error</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> A [RON](ron) Error</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[error(</span><span style=color:#9fc37f>"Could not parse RON: </span><span style=color:#d19a66>{0}</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#69c>    RonSpannedError</span><span style=color:#d19a66>(#[from]</span><span style=color:#c0c5ce> ron</span><span>::</span><span style=color:#c0c5ce>error</span><span>::</span><span style=color:#dfc479>SpannedError</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> AssetLoader</span><span style=color:#c594c5> for</span><span style=color:#dfc479> CustomAssetLoader</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Asset</span><span style=color:#c594c5> =</span><span style=color:#dfc479> CustomAsset</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Settings</span><span style=color:#c594c5> =</span><span style=color:#d19a66> ()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Error</span><span style=color:#c594c5> =</span><span style=color:#dfc479> CustomAssetLoaderError</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    async fn</span><span style=color:#69c> load</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#c0c5ce>self,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reader:</span><span style=color:#c594c5> &mut dyn</span><span style=color:#dfc479> Reader</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _settings:</span><span style=color:#c594c5> &</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _load_context:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> LoadContext</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'_</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> -></span><span style=color:#dfc479> Result</span><span style=color:#c0c5ce>&lt;Self</span><span>::</span><span style=color:#dfc479>Asset</span><span style=color:#c0c5ce>, Self</span><span>::</span><span style=color:#dfc479>Error</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> bytes</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reader</span><span style=color:#c594c5>.</span><span style=color:#69c>read_to_end</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> bytes</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.await?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> custom_asset</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ron</span><span>::</span><span style=color:#c0c5ce>de</span><span>::</span><span style=color:#69c>from_bytes</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomAsset</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>bytes</span><span style=color:#d19a66>)</span><span style=color:#c594c5>?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Ok</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>custom_asset</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> extensions</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#c594c5> &</span><span>[</span><span style=color:#c594c5>&</span><span style=color:#e5c07b>str</span><span>] {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span>[</span><span style=color:#9fc37f>"custom"</span><span>]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Asset</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TypePath</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Blob</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    bytes:</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>u8</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TypePath</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> BlobAssetLoader</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Possible errors that can be produced by [`BlobAssetLoader`]</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[non_exhaustive]</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Error</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> BlobAssetLoaderError</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> An [IO](std::io) Error</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[error(</span><span style=color:#9fc37f>"Could not load file: </span><span style=color:#d19a66>{0}</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#69c>    Io</span><span style=color:#d19a66>(#[from]</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>io</span><span>::</span><span style=color:#dfc479>Error</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> AssetLoader</span><span style=color:#c594c5> for</span><span style=color:#dfc479> BlobAssetLoader</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Asset</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Blob</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Settings</span><span style=color:#c594c5> =</span><span style=color:#d19a66> ()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Error</span><span style=color:#c594c5> =</span><span style=color:#dfc479> BlobAssetLoaderError</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    async fn</span><span style=color:#69c> load</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#c0c5ce>self,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reader:</span><span style=color:#c594c5> &mut dyn</span><span style=color:#dfc479> Reader</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _settings:</span><span style=color:#c594c5> &</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _load_context:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> LoadContext</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'_</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> -></span><span style=color:#dfc479> Result</span><span style=color:#c0c5ce>&lt;Self</span><span>::</span><span style=color:#dfc479>Asset</span><span style=color:#c0c5ce>, Self</span><span>::</span><span style=color:#dfc479>Error</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>        info!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Loading Blob..."</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> bytes</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reader</span><span style=color:#c594c5>.</span><span style=color:#69c>read_to_end</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> bytes</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.await?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#dfc479>        Ok</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Blob</span><span> {</span><span style=color:#c0c5ce> bytes</span><span> }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>State</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_asset</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomAsset</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_asset</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Blob</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_asset_loader</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomAssetLoader</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_asset_loader</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>BlobAssetLoader</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, print_on_load</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> State</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    handle:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomAsset</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    other_handle:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomAsset</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    blob:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Blob</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    printed:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> state:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>State</span><span style=color:#c0c5ce>>, asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Recommended way to load an asset</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    state</span><span style=color:#c594c5>.</span><span>handle </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"data/asset.custom"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // File extensions are optional, but are recommended for project management and last-resort inference</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    state</span><span style=color:#c594c5>.</span><span>other_handle </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"data/asset_no_extension"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Will use BlobAssetLoader instead of CustomAssetLoader thanks to type inference</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    state</span><span style=color:#c594c5>.</span><span>blob </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"data/asset.custom"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> print_on_load</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> state:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>State</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    custom_assets:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomAsset</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    blob_assets:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Blob</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> custom_asset</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> custom_assets</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>handle</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> other_custom_asset</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> custom_assets</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>other_handle</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> blob</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> blob_assets</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>blob</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Can't print results if the assets aren't ready</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> state</span><span style=color:#c594c5>.</span><span>printed {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> custom_asset</span><span style=color:#c594c5>.</span><span style=color:#69c>is_none</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>        info!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Custom Asset Not Ready"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> other_custom_asset</span><span style=color:#c594c5>.</span><span style=color:#69c>is_none</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>        info!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Other Custom Asset Not Ready"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> blob</span><span style=color:#c594c5>.</span><span style=color:#69c>is_none</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>        info!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Blob Not Ready"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#61afef>    info!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Custom asset loaded: </span><span style=color:#d19a66>{:?}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, custom_asset</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>    info!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Custom asset loaded: </span><span style=color:#d19a66>{:?}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, other_custom_asset</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>    info!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Blob Size: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f> Bytes"</span><span style=color:#c0c5ce>, blob</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span>bytes</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Once printed, we won't print again</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    state</span><span style=color:#c594c5>.</span><span>printed </span><span style=color:#c594c5>=</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/Assets/custom-asset/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

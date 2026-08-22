@@ -1,0 +1,788 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Game Menu" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/games/game-menu/ property=og:url><meta content=https://bevy.org/examples-webgpu/games/game-menu/../static/screenshots/Games/game_menu.png property=og:image><meta content="A simple game menu" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Game Menu</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Games / Game Menu</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/showcase/game_menu.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/games/game-menu/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example will display a simple menu using Bevy UI where you can start a new game, change some settings or quit. There is no actual game, it will just display the current settings for 5 seconds before going back to the menu.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>game_menu.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>prelude</span><span>::*</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> TEXT_COLOR</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.9</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.9</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.9</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Enum that will be used as a global state for the game</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Eq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Hash</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> States</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> GameState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[default]</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Splash</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Menu</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Game</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// One of the two settings that can be set through the menu. It will be a resource in the app</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Eq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> DisplayQuality</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Low</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Medium</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    High</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Setting</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>T</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>(</span><span style=color:#dfc479>T</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// One of the two settings that can be set through the menu. It will be a resource in the app</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Eq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Volume</span><span style=color:#d19a66>(</span><span style=color:#b48ead>u32</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Insert as resource the initial value for the settings resources</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>DisplayQuality</span><span>::</span><span style=color:#dfc479>Medium</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#69c>Volume</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>7</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Declare the game state, whose starting value is determined by the `Default` trait</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_state</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>GameState</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Adds the plugins for each state</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>((</span><span style=color:#c0c5ce>splash</span><span>::</span><span style=color:#c0c5ce>splash_plugin, menu</span><span>::</span><span style=color:#c0c5ce>menu_plugin, game</span><span>::</span><span style=color:#c0c5ce>game_plugin</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Camera2d</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>mod</span><span> splash {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>prelude</span><span>::*</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    use</span><span style=color:#e5c07b;font-style:italic> super</span><span>::</span><span style=color:#dfc479>GameState</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This plugin will display a splash screen with Bevy logo for 1 second before switching to the menu</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub fn</span><span style=color:#69c> splash_plugin</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>app:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> App</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // As this plugin is managing the splash screen, it will focus on the state `GameState::Splash`</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // When entering the state, spawn everything needed for this screen</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#69c>OnEnter</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#dfc479>Splash</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, splash_setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // While in this state, run the `countdown` system</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, countdown</span><span style=color:#c594c5>.</span><span style=color:#69c>run_if</span><span style=color:#d19a66>(</span><span style=color:#69c>in_state</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#dfc479>Splash</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Tag component used to tag entities added on the splash screen</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    struct</span><span style=color:#dfc479> OnSplashScreen</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Newtype to use a `Timer` for this screen as a resource</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    struct</span><span style=color:#dfc479> SplashTimer</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Timer</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> splash_setup</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> icon</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"branding/icon.png"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Display the logo</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // This entity will be despawned when exiting the state</span></span>
+<span class=giallo-l><span style=color:#69c>            DespawnOnExit</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#dfc479>Splash</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            OnSplashScreen</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>            children!</span><span>[</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                ImageNode</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>icon</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // This will set the logo to be 200px wide, and auto adjust its height</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>200</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Insert the timer as a resource</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#69c>SplashTimer</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Timer</span><span>::</span><span style=color:#69c>from_seconds</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>, TimerMode</span><span>::</span><span style=color:#dfc479>Once</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Tick the timer, and change state when finished</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> countdown</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> game_state:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>NextState</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>GameState</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> timer:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SplashTimer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> timer</span><span style=color:#c594c5>.</span><span style=color:#69c>tick</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta</span><span style=color:#d19a66>())</span><span style=color:#c594c5>.</span><span style=color:#69c>is_finished</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            game_state</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#dfc479>Menu</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>mod</span><span> game {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::{</span><span style=color:#dfc479>BLUE</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> LIME</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    use</span><span style=color:#e5c07b;font-style:italic> super</span><span>::{</span><span style=color:#dfc479>DisplayQuality</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> GameState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Volume</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TEXT_COLOR</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This plugin will contain the game. In this case, it's just be a screen that will</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // display the current settings for 5 seconds before returning to the menu</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub fn</span><span style=color:#69c> game_plugin</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>app:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> App</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#69c>OnEnter</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#dfc479>Game</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, game_setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, game</span><span style=color:#c594c5>.</span><span style=color:#69c>run_if</span><span style=color:#d19a66>(</span><span style=color:#69c>in_state</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#dfc479>Game</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Tag component used to tag entities added on the game screen</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    struct</span><span style=color:#dfc479> OnGameScreen</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    struct</span><span style=color:#dfc479> GameTimer</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Timer</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> game_setup</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        display_quality:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DisplayQuality</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        volume:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Volume</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>            DespawnOnExit</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#dfc479>Game</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // center children</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            OnGameScreen</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>            children!</span><span>[</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // This will display its children in a column, from top to bottom</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // `align_items` will align children on the cross axis. Here the main axis is</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // vertical (column), so the cross axis is horizontal. This will center the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // children</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                BackgroundColor</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>BLACK)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                children!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Will be back to the menu shortly..."</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>67.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        TextColor</span><span style=color:#d19a66>(TEXT_COLOR)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            margin: UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>50</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Text</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            margin:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>50</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                        children!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            (</span></span>
+<span class=giallo-l><span style=color:#69c>                                TextSpan</span><span style=color:#d19a66>(</span><span style=color:#61afef>format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"quality: </span><span style=color:#d19a66>{:?}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span><span> *</span><span style=color:#c0c5ce>display_quality</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                                TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                    font_size:</span><span style=color:#dfc479> FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>50.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                                TextColor</span><span style=color:#d19a66>(BLUE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                                TextSpan</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>" - "</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                                TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                    font_size:</span><span style=color:#dfc479> FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>50.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                                TextColor</span><span style=color:#d19a66>(TEXT_COLOR)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            (</span></span>
+<span class=giallo-l><span style=color:#69c>                                TextSpan</span><span style=color:#d19a66>(</span><span style=color:#61afef>format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"volume: </span><span style=color:#d19a66>{:?}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span><span> *</span><span style=color:#c0c5ce>volume</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                                TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                    font_size:</span><span style=color:#dfc479> FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>50.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                                TextColor</span><span style=color:#d19a66>(LIME</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ]</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ]</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Spawn a 5 seconds timer to trigger going back to the menu</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#69c>GameTimer</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Timer</span><span>::</span><span style=color:#69c>from_seconds</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>5.0</span><span style=color:#c0c5ce>, TimerMode</span><span>::</span><span style=color:#dfc479>Once</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Tick the timer, and change state when finished</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> game</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> game_state:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>NextState</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>GameState</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> timer:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>GameTimer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> timer</span><span style=color:#c594c5>.</span><span style=color:#69c>tick</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta</span><span style=color:#d19a66>())</span><span style=color:#c594c5>.</span><span style=color:#69c>is_finished</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            game_state</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#dfc479>Menu</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>mod</span><span> menu {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app</span><span>::</span><span style=color:#dfc479>AppExit</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>css</span><span>::</span><span style=color:#dfc479>CRIMSON</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        ecs</span><span>::</span><span style=color:#c0c5ce>component</span><span>::</span><span style=color:#dfc479>Mutable</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        ecs</span><span>::</span><span style=color:#c0c5ce>spawn</span><span>::{</span><span style=color:#dfc479>SpawnIter</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SpawnWith</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    use</span><span style=color:#e5c07b;font-style:italic> super</span><span>::{</span><span style=color:#dfc479>DisplayQuality</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> GameState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Setting</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Volume</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TEXT_COLOR</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This plugin manages the menu, with 5 different screens:</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // - a main menu with "New Game", "Settings", "Quit"</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // - a settings menu with two submenus and a back button</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // - two settings screen with a setting that can be set and a back button</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub fn</span><span style=color:#69c> menu_plugin</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>app:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> App</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // At start, the menu is not enabled. This will be changed in `menu_setup` when</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // entering the `GameState::Menu` state.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Current screen in the menu is handled by an independent state from `GameState`</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>init_state</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MenuState</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#69c>OnEnter</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#dfc479>Menu</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, menu_setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Systems to handle the main menu screen</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#69c>OnEnter</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>Main</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, main_menu_setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Systems to handle the settings menu screen</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#69c>OnEnter</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>Settings</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, settings_menu_setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Systems to handle the display settings screen</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#69c>                OnEnter</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>SettingsDisplay</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                display_settings_menu_setup,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Update</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#c0c5ce>setting_button</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DisplayQuality</span><span style=color:#c0c5ce>></span><span style=color:#c594c5>.</span><span style=color:#69c>run_if</span><span style=color:#d19a66>(</span><span style=color:#69c>in_state</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>SettingsDisplay</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Systems to handle the sound settings screen</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#69c>OnEnter</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>SettingsSound</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, sound_settings_menu_setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Update</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                setting_button</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Volume</span><span style=color:#c0c5ce>></span><span style=color:#c594c5>.</span><span style=color:#69c>run_if</span><span style=color:#d19a66>(</span><span style=color:#69c>in_state</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>SettingsSound</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Common systems to all screens that handles buttons behavior</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Update</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#c0c5ce>menu_action, button_system</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>run_if</span><span style=color:#d19a66>(</span><span style=color:#69c>in_state</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#dfc479>Menu</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // State used for the current menu screen</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Eq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Hash</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> States</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    enum</span><span style=color:#e5c07b> MenuState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Main</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Settings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SettingsDisplay</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SettingsSound</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        #[default]</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Disabled</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Tag component used to tag entities added on the main menu screen</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    struct</span><span style=color:#dfc479> OnMainMenuScreen</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Tag component used to tag entities added on the settings menu screen</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    struct</span><span style=color:#dfc479> OnSettingsMenuScreen</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Tag component used to tag entities added on the display settings menu screen</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    struct</span><span style=color:#dfc479> OnDisplaySettingsMenuScreen</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Tag component used to tag entities added on the sound settings menu screen</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    struct</span><span style=color:#dfc479> OnSoundSettingsMenuScreen</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    const</span><span style=color:#d19a66> NORMAL_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.15</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.15</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.15</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    const</span><span style=color:#d19a66> HOVERED_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.25</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.25</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.25</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    const</span><span style=color:#d19a66> HOVERED_PRESSED_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.25</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.65</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.25</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    const</span><span style=color:#d19a66> PRESSED_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.35</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.75</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.35</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Tag component used to mark which setting is currently selected</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    struct</span><span style=color:#dfc479> SelectedOption</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // All actions that can be triggered from a button click</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    enum</span><span style=color:#e5c07b> MenuButtonAction</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Play</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Settings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SettingsDisplay</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SettingsSound</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        BackToMainMenu</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        BackToSettings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Quit</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This system handles changing all buttons color based on mouse interaction</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> button_system</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> interaction_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Interaction</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>SelectedOption</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span><span style=color:#dfc479>Changed</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Interaction</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Button</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        >,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>interaction,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> background_color, selected</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> interaction_query</span><span> {</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>background_color</span><span style=color:#c594c5> = match</span><span style=color:#d19a66> (</span><span>*</span><span style=color:#c0c5ce>interaction, selected</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#dfc479>Interaction</span><span>::</span><span style=color:#dfc479>Pressed</span><span style=color:#c0c5ce>, _</span><span style=color:#d19a66>)</span><span style=color:#c594c5> |</span><span style=color:#d19a66> (</span><span style=color:#dfc479>Interaction</span><span>::</span><span style=color:#e5c07b>None</span><span style=color:#c0c5ce>,</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>_</span><span style=color:#d19a66>))</span><span> =></span><span style=color:#d19a66> PRESSED_BUTTON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#dfc479>Interaction</span><span>::</span><span style=color:#dfc479>Hovered</span><span style=color:#c0c5ce>,</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>_</span><span style=color:#d19a66>))</span><span> =></span><span style=color:#d19a66> HOVERED_PRESSED_BUTTON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#dfc479>Interaction</span><span>::</span><span style=color:#dfc479>Hovered</span><span style=color:#c0c5ce>,</span><span style=color:#e5c07b> None</span><span style=color:#d19a66>)</span><span> =></span><span style=color:#d19a66> HOVERED_BUTTON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#dfc479>Interaction</span><span>::</span><span style=color:#e5c07b>None</span><span style=color:#c0c5ce>,</span><span style=color:#e5c07b> None</span><span style=color:#d19a66>)</span><span> =></span><span style=color:#d19a66> NORMAL_BUTTON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This system updates the settings when a new value for a setting is selected, and marks</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // the button as the one currently selected</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> setting_button</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>T</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Resource</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mutability</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Mutable</span><span style=color:#c0c5ce>></span><span> +</span><span style=color:#dfc479> Component</span><span> +</span><span style=color:#dfc479> PartialEq</span><span> +</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        interaction_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Interaction</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Setting</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>T</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> Entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span><span style=color:#dfc479>Changed</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Interaction</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Button</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        >,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        selected_query:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SelectedOption</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> setting:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>T</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>previous_button,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> previous_button_color</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> selected_query</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>interaction, button_setting, entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>interaction_query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span> *</span><span style=color:#c0c5ce>interaction</span><span style=color:#c594c5> ==</span><span style=color:#dfc479> Interaction</span><span>::</span><span style=color:#dfc479>Pressed</span><span style=color:#c594c5> &&</span><span> *</span><span style=color:#c0c5ce>setting</span><span style=color:#c594c5> !=</span><span style=color:#c0c5ce> button_setting</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> {</span></span>
+<span class=giallo-l><span>                *</span><span style=color:#c0c5ce>previous_button_color</span><span style=color:#c594c5> =</span><span style=color:#d19a66> NORMAL_BUTTON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>previous_button</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SelectedOption</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#dfc479>SelectedOption</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                *</span><span style=color:#c0c5ce>setting</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> button_setting</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> menu_setup</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> menu_state:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>NextState</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MenuState</span><span style=color:#c0c5ce>>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        menu_state</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>Main</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> main_menu_setup</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Common style for all buttons on the screen</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> button_node</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>300</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>65</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            margin:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> button_icon_node</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>30</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // This takes the icons out of the flexbox flow, to be positioned exactly</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type:</span><span style=color:#dfc479> PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The icon will be close to the left border of the button</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>10</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> button_text_font</span><span style=color:#c594c5> =</span><span style=color:#dfc479> TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            font_size:</span><span style=color:#dfc479> FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>33.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> right_icon</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"textures/Game Icons/right.png"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> wrench_icon</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"textures/Game Icons/wrench.png"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> exit_icon</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"textures/Game Icons/exitRight.png"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>            DespawnOnExit</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>Main</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            OnMainMenuScreen</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>            children!</span><span>[</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                BackgroundColor</span><span style=color:#d19a66>(CRIMSON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                children!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Display the game name</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Bevy Game Menu UI"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>67.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        TextColor</span><span style=color:#d19a66>(TEXT_COLOR)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            margin: UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>50</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Display three buttons for each action available from the main menu:</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // - new game</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // - settings</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // - quit</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Button</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        button_node</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        BackgroundColor</span><span style=color:#d19a66>(NORMAL_BUTTON)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        MenuButtonAction</span><span>::</span><span style=color:#dfc479>Play</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                        children!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            (</span><span style=color:#dfc479>ImageNode</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>right_icon</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, button_icon_node</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                                Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"New Game"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                button_text_font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                                TextColor</span><span style=color:#d19a66>(TEXT_COLOR)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ]</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Button</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        button_node</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        BackgroundColor</span><span style=color:#d19a66>(NORMAL_BUTTON)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        MenuButtonAction</span><span>::</span><span style=color:#dfc479>Settings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                        children!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            (</span><span style=color:#dfc479>ImageNode</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>wrench_icon</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, button_icon_node</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                                Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Settings"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                button_text_font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                                TextColor</span><span style=color:#d19a66>(TEXT_COLOR)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ]</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Button</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        button_node,</span></span>
+<span class=giallo-l><span style=color:#69c>                        BackgroundColor</span><span style=color:#d19a66>(NORMAL_BUTTON)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        MenuButtonAction</span><span>::</span><span style=color:#dfc479>Quit</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                        children!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            (</span><span style=color:#dfc479>ImageNode</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>exit_icon</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, button_icon_node</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                            (</span><span style=color:#dfc479>Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Quit"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, button_text_font,</span><span style=color:#69c> TextColor</span><span style=color:#d19a66>(TEXT_COLOR)</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ]</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ]</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> settings_menu_setup</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> button_node</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>200</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>65</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            margin:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> button_text_style</span><span style=color:#c594c5> =</span><span style=color:#d19a66> (</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font_size:</span><span style=color:#dfc479> FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>33.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            TextColor</span><span style=color:#d19a66>(TEXT_COLOR)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>            DespawnOnExit</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>Settings</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            OnSettingsMenuScreen</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>            children!</span><span>[</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                BackgroundColor</span><span style=color:#d19a66>(CRIMSON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Children</span><span>::</span><span style=color:#69c>spawn</span><span style=color:#d19a66>(</span><span style=color:#69c>SpawnIter</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span>                    [</span></span>
+<span class=giallo-l><span style=color:#d19a66>                        (</span><span style=color:#c0c5ce>MenuButtonAction</span><span>::</span><span style=color:#dfc479>SettingsDisplay</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "Display"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                        (</span><span style=color:#c0c5ce>MenuButtonAction</span><span>::</span><span style=color:#dfc479>SettingsSound</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "Sound"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                        (</span><span style=color:#c0c5ce>MenuButtonAction</span><span>::</span><span style=color:#dfc479>BackToMainMenu</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "Back"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ]</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>into_iter</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>map</span><span style=color:#d19a66>(</span><span style=color:#c594c5>move |</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>action, text</span><span style=color:#d19a66>)</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>                        (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                            Button</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            button_node</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                            BackgroundColor</span><span style=color:#d19a66>(NORMAL_BUTTON)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            action,</span></span>
+<span class=giallo-l><span style=color:#61afef>                            children!</span><span>[</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>text</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, button_text_style</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                        )</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#d19a66>                ))</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> display_settings_menu_setup</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, display_quality:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DisplayQuality</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        fn</span><span style=color:#69c> button_node</span><span style=color:#d19a66>()</span><span> -></span><span style=color:#dfc479> Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>200</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>65</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                margin:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        fn</span><span style=color:#69c> button_text_style</span><span style=color:#d19a66>()</span><span> -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Bundle</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    font_size:</span><span style=color:#dfc479> FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>33.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                TextColor</span><span style=color:#d19a66>(TEXT_COLOR)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> display_quality</span><span style=color:#c594c5> =</span><span> *</span><span style=color:#c0c5ce>display_quality;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>            DespawnOnExit</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>SettingsDisplay</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            OnDisplaySettingsMenuScreen</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>            children!</span><span>[</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                BackgroundColor</span><span style=color:#d19a66>(CRIMSON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                children!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Create a new `Node`, this time not setting its `flex_direction`. It will</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // use the default value, `FlexDirection::Row`, from left to right.</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        BackgroundColor</span><span style=color:#d19a66>(CRIMSON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Children</span><span>::</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                            // Display a label for the current setting</span></span>
+<span class=giallo-l><span style=color:#69c>                            Spawn</span><span style=color:#d19a66>((</span><span style=color:#c0c5ce>Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Display Quality"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#69c> button_text_style</span><span style=color:#d19a66>()))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                            SpawnWith</span><span style=color:#d19a66>(</span><span style=color:#c594c5>move |</span><span style=color:#c0c5ce>parent:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> ChildSpawner</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                                for</span><span style=color:#c0c5ce> quality_setting</span><span style=color:#c594c5> in</span><span> [</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                    DisplayQuality</span><span>::</span><span style=color:#dfc479>Low</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                    DisplayQuality</span><span>::</span><span style=color:#dfc479>Medium</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                    DisplayQuality</span><span>::</span><span style=color:#dfc479>High</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                                ] {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                                    let mut</span><span style=color:#c0c5ce> entity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> parent</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                                        Button</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                                        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                            width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>150</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                            height:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>65</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                                            ..</span><span style=color:#69c>button_node</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                                        BackgroundColor</span><span style=color:#d19a66>(NORMAL_BUTTON)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                                        Setting</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>quality_setting</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                                        children!</span><span>[</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                            Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#61afef>format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>{quality_setting:?}</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                                            button_text_style</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                                        )</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                                    if</span><span style=color:#c0c5ce> display_quality</span><span style=color:#c594c5> ==</span><span style=color:#c0c5ce> quality_setting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                        entity</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#dfc479>SelectedOption</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                                    }</span></span>
+<span class=giallo-l><span>                                }</span></span>
+<span class=giallo-l><span>                            }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#d19a66>                        ))</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Display the back button to return to the settings screen</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Button</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        button_node</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        BackgroundColor</span><span style=color:#d19a66>(NORMAL_BUTTON)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        MenuButtonAction</span><span>::</span><span style=color:#dfc479>BackToSettings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                        children!</span><span>[</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Back"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#69c> button_text_style</span><span style=color:#d19a66>())</span><span>]</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span></span>
+<span class=giallo-l><span>                ]</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> sound_settings_menu_setup</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, volume:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Volume</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> button_node</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>200</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>65</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            margin:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>all</span><span style=color:#d19a66>(</span><span style=color:#69c>px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>20</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> button_text_style</span><span style=color:#c594c5> =</span><span style=color:#d19a66> (</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font_size:</span><span style=color:#dfc479> FontSize</span><span>::</span><span style=color:#69c>Px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>33.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            TextColor</span><span style=color:#d19a66>(TEXT_COLOR)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> volume</span><span style=color:#c594c5> =</span><span> *</span><span style=color:#c0c5ce>volume;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> button_node_clone</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> button_node</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>            DespawnOnExit</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>SettingsSound</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#69c> percent</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>100</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            OnSoundSettingsMenuScreen</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>            children!</span><span>[</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                BackgroundColor</span><span style=color:#d19a66>(CRIMSON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                children!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        BackgroundColor</span><span style=color:#d19a66>(CRIMSON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Children</span><span>::</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>                            Spawn</span><span style=color:#d19a66>((</span><span style=color:#c0c5ce>Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Volume"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, button_text_style</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                            SpawnWith</span><span style=color:#d19a66>(</span><span style=color:#c594c5>move |</span><span style=color:#c0c5ce>parent:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> ChildSpawner</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                                for</span><span style=color:#c0c5ce> volume_setting</span><span style=color:#c594c5> in</span><span> [</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 4</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 6</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 8</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 9</span><span>] {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                                    let mut</span><span style=color:#c0c5ce> entity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> parent</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                                        Button</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                                        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                            width:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>30</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                            height:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>65</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                                            ..</span><span style=color:#c0c5ce>button_node_clone</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>                                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                                        BackgroundColor</span><span style=color:#d19a66>(NORMAL_BUTTON)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                                        Setting</span><span style=color:#d19a66>(</span><span style=color:#69c>Volume</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>volume_setting</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                                    if</span><span style=color:#c0c5ce> volume</span><span style=color:#c594c5> ==</span><span style=color:#69c> Volume</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>volume_setting</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                        entity</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#dfc479>SelectedOption</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                                    }</span></span>
+<span class=giallo-l><span>                                }</span></span>
+<span class=giallo-l><span>                            }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#d19a66>                        ))</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Button</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        button_node,</span></span>
+<span class=giallo-l><span style=color:#69c>                        BackgroundColor</span><span style=color:#d19a66>(NORMAL_BUTTON)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        MenuButtonAction</span><span>::</span><span style=color:#dfc479>BackToSettings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                        children!</span><span>[</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Back"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, button_text_style</span><span style=color:#d19a66>)</span><span>]</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    )</span></span>
+<span class=giallo-l><span>                ]</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> menu_action</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        interaction_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Interaction</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>MenuButtonAction</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span><span style=color:#dfc479>Changed</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Interaction</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Button</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        >,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> app_exit_writer:</span><span style=color:#dfc479> MessageWriter</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppExit</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> menu_state:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>NextState</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MenuState</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> game_state:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>NextState</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>GameState</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>interaction, menu_button_action</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>interaction_query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span> *</span><span style=color:#c0c5ce>interaction</span><span style=color:#c594c5> ==</span><span style=color:#dfc479> Interaction</span><span>::</span><span style=color:#dfc479>Pressed</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                match</span><span style=color:#c0c5ce> menu_button_action</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    MenuButtonAction</span><span>::</span><span style=color:#dfc479>Quit</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        app_exit_writer</span><span style=color:#c594c5>.</span><span style=color:#69c>write</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>AppExit</span><span>::</span><span style=color:#dfc479>Success</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    MenuButtonAction</span><span>::</span><span style=color:#dfc479>Play</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        game_state</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#dfc479>Game</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        menu_state</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>Disabled</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    MenuButtonAction</span><span>::</span><span style=color:#dfc479>Settings</span><span> =></span><span style=color:#c0c5ce> menu_state</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>Settings</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    MenuButtonAction</span><span>::</span><span style=color:#dfc479>SettingsDisplay</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        menu_state</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>SettingsDisplay</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    MenuButtonAction</span><span>::</span><span style=color:#dfc479>SettingsSound</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        menu_state</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>SettingsSound</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    MenuButtonAction</span><span>::</span><span style=color:#dfc479>BackToMainMenu</span><span> =></span><span style=color:#c0c5ce> menu_state</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>Main</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    MenuButtonAction</span><span>::</span><span style=color:#dfc479>BackToSettings</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        menu_state</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MenuState</span><span>::</span><span style=color:#dfc479>Settings</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/Games/game-menu/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

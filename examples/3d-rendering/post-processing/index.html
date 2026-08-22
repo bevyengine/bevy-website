@@ -1,0 +1,370 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Built-in postprocessing" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/3d-rendering/post-processing/ property=og:url><meta content="https://bevy.org/examples/3d-rendering/post-processing/../static/screenshots/3D Rendering/post_processing.png" property=og:image><meta content="Demonstrates the built-in postprocessing features" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Built-in postprocessing</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>3D Rendering / Built-in postprocessing</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/3d/post_processing.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/3d-rendering/post-processing/>here</a>.</aside></div><div class="example__explanation media-content"><p>Demonstrates Bevy's built-in postprocessing features.<p>Includes:<ul><li>Chromatic Aberration<li>Vignette<li>Lens Distortion</ul></div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>post_processing.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>PI</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#dfc479>Hdr</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    light</span><span>::</span><span style=color:#dfc479>CascadeShadowConfigBuilder</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    post_process</span><span>::</span><span style=color:#c0c5ce>effect_stack</span><span>::{</span><span style=color:#dfc479>ChromaticAberration</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> LensDistortion</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Vignette</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The number of units per frame to add to or subtract from intensity when the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> arrow keys are held.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> ADJUSTMENT_SPEED</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.005</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The maximum supported chromatic aberration intensity level.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> MAX_CHROMATIC_ABERRATION_INTENSITY</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.4</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The settings that the user can control.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> AppSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The index of the currently selected UI item.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    selected:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The intensity of the chromatic aberration effect.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    chromatic_aberration_intensity:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The intensity of the vignette effect.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    vignette_intensity:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The radius of the vignette effect.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    vignette_radius:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The smoothness of the vignette effect.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    vignette_smoothness:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The roundness of the vignette effect.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    vignette_roundness:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The edge compensation of the vignette effect.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    vignette_edge_compensation:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The intensity of the lens distortion effect.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    lens_distortion_intensity:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Distortion strength multiplier for the horizontal direction.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    lens_distortion_multiplier_x:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Distortion strength multiplier for the vertical direction.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    lens_distortion_multiplier_y:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The entry point.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppSettings</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, handle_keyboard_input</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Update</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span><span style=color:#c0c5ce>update_chromatic_aberration_settings, update_help_text</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>run_if</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>resource_changed</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppSettings</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>after</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>handle_keyboard_input</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the example scene and spawns the UI.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the camera.</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_camera</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>asset_server</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Create the scene.</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_scene</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>asset_server</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the help text.</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_text</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the camera, including the [`ChromaticAberration`] component.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_camera</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AssetServer</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Hdr</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DistanceFog</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color: Color</span><span>::</span><span style=color:#69c>srgb_u8</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>43</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 44</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 47</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            falloff: FogFalloff</span><span>::</span><span style=color:#dfc479>Linear</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                start:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                end:</span><span style=color:#e79e6d> 8.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        EnvironmentMapLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_map: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"environment_maps/pisa_diffuse_rgb9e5_zstd.ktx2"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_map: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"environment_maps/pisa_specular_rgb9e5_zstd.ktx2"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            intensity:</span><span style=color:#e79e6d> 2000.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Include the `ChromaticAberration` component.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        ChromaticAberration</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Include the `Vignette` component.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Vignette</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Include the `LensDistortion` component.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        LensDistortion</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the scene.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This is just the tonemapping test scene, chosen for the fact that it uses a</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> variety of colors.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_scene</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AssetServer</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the main scene.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>(</span><span style=color:#69c>WorldAssetRoot</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        GltfAssetLabel</span><span>::</span><span style=color:#69c>Scene</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>from_asset</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"models/TonemappingTest/TonemappingTest.gltf"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the flight helmet.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        WorldAssetRoot</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            asset_server</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GltfAssetLabel</span><span>::</span><span style=color:#69c>Scene</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>from_asset</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"models/FlightHelmet/FlightHelmet.gltf"</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.5</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_rotation</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_rotation_y</span><span style=color:#d19a66>(</span><span>-</span><span style=color:#e79e6d>0.15</span><span> *</span><span style=color:#d19a66> PI))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the light.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DirectionalLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            illuminance:</span><span style=color:#e79e6d> 15000.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            shadow_maps_enabled:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_rotation</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_euler</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>ZYX</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> PI</span><span> * -</span><span style=color:#e79e6d>0.15</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> PI</span><span> * -</span><span style=color:#e79e6d>0.15</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        CascadeShadowConfigBuilder</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            maximum_distance:</span><span style=color:#e79e6d> 3.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            first_cascade_far_bound:</span><span style=color:#e79e6d> 0.9</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>build</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the help text.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_text</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            top:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> AppSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span style=color:#d19a66>()</span><span> -></span><span style=color:#c0c5ce> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> vignette_default</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vignette</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> lens_distortion</span><span style=color:#c594c5> =</span><span style=color:#dfc479> LensDistortion</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            selected:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            chromatic_aberration_intensity:</span><span style=color:#dfc479> ChromaticAberration</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span>intensity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vignette_intensity: vignette_default</span><span style=color:#c594c5>.</span><span>intensity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vignette_radius: vignette_default</span><span style=color:#c594c5>.</span><span>radius</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vignette_smoothness: vignette_default</span><span style=color:#c594c5>.</span><span>smoothness</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vignette_roundness: vignette_default</span><span style=color:#c594c5>.</span><span>roundness</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vignette_edge_compensation: vignette_default</span><span style=color:#c594c5>.</span><span>edge_compensation</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            lens_distortion_intensity: lens_distortion</span><span style=color:#c594c5>.</span><span>intensity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            lens_distortion_multiplier_x: lens_distortion</span><span style=color:#c594c5>.</span><span>multiplier</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            lens_distortion_multiplier_y: lens_distortion</span><span style=color:#c594c5>.</span><span>multiplier</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Handles requests from the user to change the chromatic aberration intensity.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> handle_keyboard_input</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> app_settings:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppSettings</span><span style=color:#c0c5ce>>, input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowUp</span><span style=color:#d19a66>)</span><span style=color:#c594c5> &&</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>selected</span><span style=color:#c594c5> ></span><span style=color:#e79e6d> 0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_settings</span><span style=color:#c594c5>.</span><span>selected </span><span style=color:#c594c5>-=</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowDown</span><span style=color:#d19a66>)</span><span style=color:#c594c5> &&</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>selected</span><span style=color:#c594c5> &lt;</span><span style=color:#e79e6d> 8</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_settings</span><span style=color:#c594c5>.</span><span>selected </span><span style=color:#c594c5>+=</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowLeft</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        delta</span><span style=color:#c594c5> -=</span><span style=color:#d19a66> ADJUSTMENT_SPEED</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowRight</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        delta</span><span style=color:#c594c5> +=</span><span style=color:#d19a66> ADJUSTMENT_SPEED</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // If no arrow key was pressed, just bail out.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 0.0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    match</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>selected {</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        0</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>chromatic_aberration_intensity </span><span style=color:#c594c5>=</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>chromatic_aberration_intensity +</span><span style=color:#c0c5ce> delta</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>clamp</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> MAX_CHROMATIC_ABERRATION_INTENSITY)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        1</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>vignette_intensity </span><span style=color:#c594c5>=</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>vignette_intensity +</span><span style=color:#c0c5ce> delta</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        2</span><span> =></span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>vignette_radius </span><span style=color:#c594c5>=</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>vignette_radius +</span><span style=color:#c0c5ce> delta</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        3</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>vignette_smoothness </span><span style=color:#c594c5>=</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>vignette_smoothness +</span><span style=color:#c0c5ce> delta</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.01</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        4</span><span> =></span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>vignette_roundness </span><span style=color:#c594c5>=</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>vignette_roundness +</span><span style=color:#c0c5ce> delta</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.01</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        5</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>vignette_edge_compensation </span><span style=color:#c594c5>=</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>vignette_edge_compensation +</span><span style=color:#c0c5ce> delta</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        6</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_intensity </span><span style=color:#c594c5>=</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_intensity +</span><span style=color:#c0c5ce> delta</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span style=color:#d19a66>(</span><span>-</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        7</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_multiplier_x </span><span style=color:#c594c5>=</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_multiplier_x +</span><span style=color:#c0c5ce> delta</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        8</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_multiplier_y </span><span style=color:#c594c5>=</span></span>
+<span class=giallo-l><span style=color:#d19a66>                (</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_multiplier_y +</span><span style=color:#c0c5ce> delta</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _</span><span> => {}</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Updates the [`ChromaticAberration`] settings per the [`AppSettings`].</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_chromatic_aberration_settings</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> chromatic_aberration:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> ChromaticAberration</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> vignette:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Vignette</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> lens_distortion:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> LensDistortion</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app_settings:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppSettings</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> intensity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>chromatic_aberration_intensity</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Pick a reasonable maximum sample size for the intensity to avoid an</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // artifact whereby the individual samples appear instead of producing</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // smooth streaks of color.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Don't take this formula too seriously; it hasn't been heavily tuned.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> max_samples</span><span style=color:#c594c5> =</span><span style=color:#d19a66> ((</span><span style=color:#c0c5ce>intensity</span><span> -</span><span style=color:#e79e6d> 0.02</span><span style=color:#d19a66>)</span><span> /</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>0.20</span><span> -</span><span style=color:#e79e6d> 0.02</span><span style=color:#d19a66>)</span><span> *</span><span style=color:#e79e6d> 56.0</span><span> +</span><span style=color:#e79e6d> 8.0</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>clamp</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>8.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 64.0</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>round</span><span style=color:#d19a66>()</span><span style=color:#c594c5> as</span><span style=color:#b48ead> u32</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> chromatic_aberration</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> chromatic_aberration</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        chromatic_aberration</span><span style=color:#c594c5>.</span><span>intensity </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> intensity;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        chromatic_aberration</span><span style=color:#c594c5>.</span><span>max_samples </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> max_samples;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> vignette</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> vignette</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        vignette</span><span style=color:#c594c5>.</span><span>intensity </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>vignette_intensity</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        vignette</span><span style=color:#c594c5>.</span><span>radius </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>vignette_radius</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        vignette</span><span style=color:#c594c5>.</span><span>smoothness </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>vignette_smoothness</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        vignette</span><span style=color:#c594c5>.</span><span>roundness </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>vignette_roundness</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        vignette</span><span style=color:#c594c5>.</span><span>edge_compensation </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>vignette_edge_compensation</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> lens_distortion</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> lens_distortion</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        lens_distortion</span><span style=color:#c594c5>.</span><span>intensity </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_intensity</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        lens_distortion</span><span style=color:#c594c5>.</span><span>multiplier</span><span style=color:#c594c5>.</span><span>x </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_multiplier_x</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        lens_distortion</span><span style=color:#c594c5>.</span><span>multiplier</span><span style=color:#c594c5>.</span><span>y </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_multiplier_y</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Updates the help text at the bottom of the screen to reflect the current</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> [`AppSettings`].</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_help_text</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> text:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>>, app_settings:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppSettings</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text</span><span style=color:#c594c5>.</span><span style=color:#69c>clear</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> text_list</span><span style=color:#c594c5> =</span><span> [</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Chromatic aberration intensity: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>chromatic_aberration_intensity</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Vignette intensity: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>vignette_intensity</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Vignette radius: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, app_settings</span><span style=color:#c594c5>.</span><span>vignette_radius</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Vignette smoothness: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>vignette_smoothness</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Vignette roundness: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>vignette_roundness</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Vignette edge_compensation: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>vignette_edge_compensation</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Lens Distortion intensity: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_intensity</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Lens Distortion multiplier x: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_multiplier_x</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        format!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Lens Distortion multiplier y: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>lens_distortion_multiplier_y</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>i, val</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> text_list</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>enumerate</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> ==</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>selected {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            text</span><span style=color:#c594c5>.</span><span style=color:#69c>push_str</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"> "</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        text</span><span style=color:#c594c5>.</span><span style=color:#69c>push_str</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>val</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text</span><span style=color:#c594c5>.</span><span style=color:#69c>push_str</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>(Press Up or Down to select)</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>(Press Left or Right to change)"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/3D Rendering/post-processing/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

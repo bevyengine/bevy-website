@@ -1,0 +1,405 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Post Processing - Custom Render Pass" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/shaders/custom-post-processing/ property=og:url><meta content=https://bevy.org/examples-webgpu/shaders/custom-post-processing/../static/screenshots/Shaders/custom_post_processing.png property=og:image><meta content="A custom post processing effect, using a custom render pass that runs after the main pass" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Post Processing - Custom Render Pass</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Shaders / Post Processing - Custom Render Pass</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/shader_advanced/custom_post_processing.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/shaders/custom-post-processing/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example shows how to create a custom post-processing effect that runs after the main pass and reads the texture generated by the main pass.<p>The example shader is a very simple implementation of chromatic aberration. To adapt this example for 2D, replace all instances of 3D structures (such as <code>Core3d</code>, etc.) with their corresponding 2D counterparts.<p>This is a fairly low level example and assumes some familiarity with rendering concepts and wgpu.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>custom_post_processing.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    core_pipeline</span><span>::{</span><span style=color:#c0c5ce>schedule</span><span>::</span><span style=color:#dfc479>Core3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Core3dSystems</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> FullscreenShader</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        extract_component</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ComponentUniforms</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DynamicUniformIndex</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ExtractComponent</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ExtractComponentPlugin</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            UniformComponentPlugin</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_resource</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            binding_types</span><span>::{sampler</span><span style=color:#c0c5ce>,</span><span> texture_2d</span><span style=color:#c0c5ce>,</span><span> uniform_buffer}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        renderer</span><span>::{</span><span style=color:#dfc479>RenderContext</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderDevice</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ViewQuery</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        view</span><span>::</span><span style=color:#dfc479>ViewTarget</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        RenderApp</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderStartup</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This example uses a shader source file from the assets subdirectory</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SHADER_ASSET_PATH</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "shaders/post_processing.wgsl"</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>((</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PostProcessPlugin</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>rotate, update_settings</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> It is generally encouraged to set up post processing effects as a plugin</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> PostProcessPlugin</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Plugin</span><span style=color:#c594c5> for</span><span style=color:#dfc479> PostProcessPlugin</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> build</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self, app:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> App</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The settings will be a component that lives in the main world but will</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // be extracted to the render world every frame.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // This makes it possible to control the effect from the main world.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // This plugin will take care of extracting it automatically.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // It's important to derive [`ExtractComponent`] on [`PostProcessSettings`]</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // for this plugin to work correctly.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ExtractComponentPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PostProcessSettings</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The settings will also be the data used in the shader.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // This plugin will prepare the component for the GPU by creating a uniform buffer</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // and writing the data to that buffer every frame.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            UniformComponentPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PostProcessSettings</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // We need to get the render app from the main app</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>render_app</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> app</span><span style=color:#c594c5>.</span><span style=color:#69c>get_sub_app_mut</span><span style=color:#d19a66>(</span><span style=color:#dfc479>RenderApp</span><span style=color:#d19a66>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>RenderStartup</span><span style=color:#c0c5ce>, init_post_process_pipeline</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Core3d</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            post_process_system</span><span style=color:#c594c5>.</span><span style=color:#69c>in_set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Core3dSystems</span><span>::</span><span style=color:#dfc479>PostProcess</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> PostProcessBindGroupCache</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    cached:</span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#dfc479>TextureViewId</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> BindGroup</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> post_process_system</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    view:</span><span style=color:#dfc479> ViewQuery</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#dfc479>ViewTarget</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#dfc479>PostProcessSettings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#dfc479>DynamicUniformIndex</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PostProcessSettings</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    post_process_pipeline:</span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PostProcessPipeline</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pipeline_cache:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PipelineCache</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    settings_uniforms:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ComponentUniforms</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PostProcessSettings</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> cache:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PostProcessBindGroupCache</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> ctx:</span><span style=color:#dfc479> RenderContext</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>post_process_pipeline</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> post_process_pipeline</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>view_target, _post_process_settings, settings_index</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> view</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>pipeline</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> pipeline_cache</span><span style=color:#c594c5>.</span><span style=color:#69c>get_render_pipeline</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>post_process_pipeline</span><span style=color:#c594c5>.</span><span>pipeline_id</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>    else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>settings_binding</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> settings_uniforms</span><span style=color:#c594c5>.</span><span style=color:#69c>uniforms</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>binding</span><span style=color:#d19a66>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This will start a new "post process write", obtaining two texture</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // views from the view target - a `source` and a `destination`.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // `source` is the "current" main texture and you _must_ write into</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // `destination` because calling `post_process_write()` on the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // [`ViewTarget`] will internally flip the [`ViewTarget`]'s main</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // texture to the `destination` texture. Failing to do so will cause</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // the current main texture information to be lost.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> post_process</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> view_target</span><span style=color:#c594c5>.</span><span style=color:#69c>post_process_write</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> bind_group</span><span style=color:#c594c5> = match &mut</span><span style=color:#c0c5ce> cache</span><span style=color:#c594c5>.</span><span>cached {</span></span>
+<span class=giallo-l><span style=color:#e5c07b>        Some</span><span style=color:#d19a66>((</span><span style=color:#c0c5ce>texture_id, bind_group</span><span style=color:#d19a66>))</span><span style=color:#c594c5> if</span><span style=color:#c0c5ce> post_process</span><span style=color:#c594c5>.</span><span>source</span><span style=color:#c594c5>.</span><span style=color:#69c>id</span><span style=color:#d19a66>()</span><span style=color:#c594c5> ==</span><span> *</span><span style=color:#c0c5ce>texture_id</span><span> =></span><span style=color:#c0c5ce> bind_group,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        cached</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The bind_group gets created each frame.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            //</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Normally, you would create a bind_group in the Queue set,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // but this doesn't work with the post_process_write().</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The reason it doesn't work is because each post_process_write will alternate the source/destination.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The only way to have the correct source/destination for the bind_group</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // is to make sure you get it during the node execution.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> bind_group</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ctx</span><span style=color:#c594c5>.</span><span style=color:#69c>render_device</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>create_bind_group</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "post_process_bind_group"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &</span><span style=color:#c0c5ce>pipeline_cache</span><span style=color:#c594c5>.</span><span style=color:#69c>get_bind_group_layout</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>post_process_pipeline</span><span style=color:#c594c5>.</span><span>layout</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // It's important for this to match the BindGroupLayout defined in the PostProcessPipeline</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &</span><span style=color:#c0c5ce>BindGroupEntries</span><span>::</span><span style=color:#69c>sequential</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Make sure to use the source view</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    post_process</span><span style=color:#c594c5>.</span><span>source</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Use the sampler created for the pipeline</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    &</span><span style=color:#c0c5ce>post_process_pipeline</span><span style=color:#c594c5>.</span><span>sampler</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Set the settings binding</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    settings_binding</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                ))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>_, bind_group</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> cached</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>((</span><span style=color:#c0c5ce>post_process</span><span style=color:#c594c5>.</span><span>source</span><span style=color:#c594c5>.</span><span style=color:#69c>id</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>, bind_group</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            bind_group</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> render_pass</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ctx</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>command_encoder</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>begin_render_pass</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>RenderPassDescriptor</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            label:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"post_process_pass"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color_attachments:</span><span style=color:#c594c5> &</span><span>[</span><span style=color:#e5c07b>Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>RenderPassColorAttachment</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // We need to specify the post process destination view here</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // to make sure we write to the appropriate texture.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                view: post_process</span><span style=color:#c594c5>.</span><span>destination</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                depth_slice:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                resolve_target:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                ops:</span><span style=color:#dfc479> Operations</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#d19a66>)</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            depth_stencil_attachment:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            timestamp_writes:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            occlusion_query_set:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            multiview_mask:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render_pass</span><span style=color:#c594c5>.</span><span style=color:#69c>set_pipeline</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>pipeline</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // By passing in the index of the post process settings on this view, we ensure</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // that in the event that multiple settings were sent to the GPU (as would be the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // case with multiple cameras), we use the correct one.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render_pass</span><span style=color:#c594c5>.</span><span style=color:#69c>set_bind_group</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>, bind_group,</span><span style=color:#c594c5> &</span><span>[</span><span style=color:#c0c5ce>settings_index</span><span style=color:#c594c5>.</span><span style=color:#69c>index</span><span style=color:#d19a66>()</span><span>]</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render_pass</span><span style=color:#c594c5>.</span><span style=color:#69c>draw</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0</span><span>..</span><span style=color:#e79e6d>3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#e79e6d>1</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// This contains global data used by the render pipeline. This will be created once on startup.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> PostProcessPipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    layout:</span><span style=color:#dfc479> BindGroupLayoutDescriptor</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    sampler:</span><span style=color:#dfc479> Sampler</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pipeline_id:</span><span style=color:#dfc479> CachedRenderPipelineId</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> init_post_process_pipeline</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render_device:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderDevice</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    fullscreen_shader:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>FullscreenShader</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pipeline_cache:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PipelineCache</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We need to define the bind group layout used for our pipeline</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> layout</span><span style=color:#c594c5> =</span><span style=color:#dfc479> BindGroupLayoutDescriptor</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>        "post_process_bind_group_layout"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#c0c5ce>BindGroupLayoutEntries</span><span>::</span><span style=color:#69c>sequential</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The layout entries will only be visible in the fragment stage</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ShaderStages</span><span>::</span><span style=color:#d19a66>FRAGMENT</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // The screen texture</span></span>
+<span class=giallo-l><span style=color:#69c>                texture_2d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>TextureSampleType</span><span>::</span><span style=color:#dfc479>Float</span><span> {</span><span style=color:#c0c5ce> filterable:</span><span style=color:#d19a66> true</span><span> }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // The sampler that will be used to sample the screen texture</span></span>
+<span class=giallo-l><span style=color:#69c>                sampler</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>SamplerBindingType</span><span>::</span><span style=color:#dfc479>Filtering</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // The settings uniform that will control the effect</span></span>
+<span class=giallo-l><span style=color:#69c>                uniform_buffer</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PostProcessSettings</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>(true)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We can create the sampler here since it won't change at runtime and doesn't depend on the view</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> sampler</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> render_device</span><span style=color:#c594c5>.</span><span style=color:#69c>create_sampler</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>SamplerDescriptor</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Get the shader handle</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> shader</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(SHADER_ASSET_PATH)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This will setup a fullscreen triangle for the vertex state.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> vertex_state</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> fullscreen_shader</span><span style=color:#c594c5>.</span><span style=color:#69c>to_vertex_state</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> pipeline_id</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> pipeline_cache</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This will add the pipeline to the cache and queue its creation</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>queue_render_pipeline</span><span style=color:#d19a66>(</span><span style=color:#dfc479>RenderPipelineDescriptor</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            label:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"post_process_pipeline"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            layout:</span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#c0c5ce>layout</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vertex: vertex_state,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            fragment:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>FragmentState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                shader,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Make sure this matches the entry point of your shader.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // It can be anything as long as it matches here and in the shader.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                targets:</span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#e5c07b>Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>ColorTargetState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    format:</span><span style=color:#dfc479> TextureFormat</span><span>::</span><span style=color:#dfc479>Rgba8UnormSrgb</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    blend:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    write_mask:</span><span style=color:#dfc479> ColorWrites</span><span>::</span><span style=color:#d19a66>ALL</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#d19a66>)</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#dfc479>PostProcessPipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        layout,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        sampler,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pipeline_id,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// This is the component that will get passed to the shader</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ExtractComponent</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ShaderType</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> PostProcessSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    intensity:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // WebGL2 structs must be 16 byte aligned.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[cfg(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "webgl2"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    _webgl2_padding:</span><span style=color:#dfc479> Vec3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Set up a simple 3D scene</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // camera</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Make sure you change the TextureFormat of the ColorTargetState</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // if you enable Hdr directly or through features like Bloom.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_translation</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5.0</span><span style=color:#d19a66>))</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Camera</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            clear_color: Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Add the setting to the camera.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This component is also used to determine on which camera to run the post processing effect.</span></span>
+<span class=giallo-l><span style=color:#dfc479>        PostProcessSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            intensity:</span><span style=color:#e79e6d> 0.02</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // cube</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgb</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.8</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.6</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Rotates</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // light</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DirectionalLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        illuminance:</span><span style=color:#e79e6d> 1_000</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Rotates</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Rotates any entity around the x and y axis</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> rotate</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Rotates</span><span style=color:#c0c5ce>>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_x</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.55</span><span> *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_z</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.15</span><span> *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Change the intensity over time to show that the effect is controlled from the main world</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_settings</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> settings:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> PostProcessSettings</span><span style=color:#c0c5ce>>, time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> setting</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> settings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> intensity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>sin</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>elapsed_secs</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Make it loop periodically</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        intensity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>sin</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>intensity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Remap it to 0..1 because the intensity can't be negative</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        intensity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> intensity</span><span> *</span><span style=color:#e79e6d> 0.5</span><span> +</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Scale it to a more reasonable level</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        intensity</span><span style=color:#c594c5> *=</span><span style=color:#e79e6d> 0.015</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Set the intensity.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This will then be extracted to the render world and uploaded to the GPU automatically by the [`UniformComponentPlugin`]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        setting</span><span style=color:#c594c5>.</span><span>intensity </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> intensity;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div><input class=tabs__radio id=tab1 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab1><code>shaders/post_processing.wgsl</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=wgsl><span class=giallo-l><span style=color:#7f848e>// This shader computes the chromatic aberration effect</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>// Since post processing is a fullscreen effect, we use the fullscreen vertex shader provided by bevy.</span></span>
+<span class=giallo-l><span style=color:#7f848e>// This will import a vertex shader that renders a single fullscreen triangle.</span></span>
+<span class=giallo-l><span style=color:#7f848e>//</span></span>
+<span class=giallo-l><span style=color:#7f848e>// A fullscreen triangle is a single triangle that covers the entire screen.</span></span>
+<span class=giallo-l><span style=color:#7f848e>// The box in the top left in that diagram is the screen. The 4 x are the corner of the screen</span></span>
+<span class=giallo-l><span style=color:#7f848e>//</span></span>
+<span class=giallo-l><span style=color:#7f848e>// Y axis</span></span>
+<span class=giallo-l><span style=color:#7f848e>//  1 |  x-----x......</span></span>
+<span class=giallo-l><span style=color:#7f848e>//  0 |  |  s  |  . ´</span></span>
+<span class=giallo-l><span style=color:#7f848e>// -1 |  x_____x´</span></span>
+<span class=giallo-l><span style=color:#7f848e>// -2 |  :  .´</span></span>
+<span class=giallo-l><span style=color:#7f848e>// -3 |  :´</span></span>
+<span class=giallo-l><span style=color:#7f848e>//    +---------------  X axis</span></span>
+<span class=giallo-l><span style=color:#7f848e>//      -1  0  1  2  3</span></span>
+<span class=giallo-l><span style=color:#7f848e>//</span></span>
+<span class=giallo-l><span style=color:#7f848e>// As you can see, the triangle ends up bigger than the screen.</span></span>
+<span class=giallo-l><span style=color:#7f848e>//</span></span>
+<span class=giallo-l><span style=color:#7f848e>// You don't need to worry about this too much since bevy will compute the correct UVs for you.</span></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>import bevy_core_pipeline</span><span>::</span><span style=color:#e06c75>fullscreen_vertex_shader</span><span>::</span><span style=color:#e5c07b>FullscreenVertexOutput</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@group(</span><span style=color:#d19a66>0</span><span>) @binding(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> screen_texture</span><span>: </span><span style=color:#e06c75>texture_2d</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>;</span></span>
+<span class=giallo-l><span>@group(</span><span style=color:#d19a66>0</span><span>) @binding(</span><span style=color:#d19a66>1</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> texture_sampler</span><span>: </span><span style=color:#e06c75>sampler</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>struct</span><span style=color:#e5c07b> PostProcessSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e06c75>    intensity</span><span>: </span><span style=color:#c678dd>f32</span><span>,</span></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>ifdef</span><span> SIXTEEN_BYTE_ALIGNMENT</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // WebGL2 structs must be 16 byte aligned.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    _webgl2_padding</span><span>: </span><span style=color:#c678dd>vec3</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>></span></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>endif</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l><span>@group(</span><span style=color:#d19a66>0</span><span>) @binding(</span><span style=color:#d19a66>2</span><span>)</span><span style=color:#c678dd> var</span><span>&lt;</span><span style=color:#c678dd>uniform</span><span>></span><span style=color:#e06c75> settings</span><span>: </span><span style=color:#e5c07b>PostProcessSettings</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@fragment</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> fragment</span><span>(</span><span style=color:#e06c75>in</span><span>: </span><span style=color:#e5c07b>FullscreenVertexOutput</span><span>) -> @location(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // Chromatic aberration strength</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> offset_strength</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> settings</span><span>.intensity;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // Sample each color channel with an arbitrary shift</span></span>
+<span class=giallo-l><span style=color:#c678dd>    return vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>(</span></span>
+<span class=giallo-l><span style=color:#61afef>        textureSample</span><span>(</span><span style=color:#e06c75>screen_texture</span><span>,</span><span style=color:#e06c75> texture_sampler</span><span>,</span><span style=color:#e06c75> in</span><span>.uv +</span><span style=color:#c678dd> vec2</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>(</span><span style=color:#e06c75>offset_strength</span><span>, -</span><span style=color:#e06c75>offset_strength</span><span>)).r,</span></span>
+<span class=giallo-l><span style=color:#61afef>        textureSample</span><span>(</span><span style=color:#e06c75>screen_texture</span><span>,</span><span style=color:#e06c75> texture_sampler</span><span>,</span><span style=color:#e06c75> in</span><span>.uv +</span><span style=color:#c678dd> vec2</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>(-</span><span style=color:#e06c75>offset_strength</span><span>,</span><span style=color:#d19a66> 0.0</span><span>)).g,</span></span>
+<span class=giallo-l><span style=color:#61afef>        textureSample</span><span>(</span><span style=color:#e06c75>screen_texture</span><span>,</span><span style=color:#e06c75> texture_sampler</span><span>,</span><span style=color:#e06c75> in</span><span>.uv +</span><span style=color:#c678dd> vec2</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>(</span><span style=color:#d19a66>0.0</span><span>,</span><span style=color:#e06c75> offset_strength</span><span>)).b,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        1.0</span></span>
+<span class=giallo-l><span>    );</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/Shaders/custom-post-processing/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

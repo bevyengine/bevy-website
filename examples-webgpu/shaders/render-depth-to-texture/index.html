@@ -1,0 +1,498 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Render Depth to Texture" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/shaders/render-depth-to-texture/ property=og:url><meta content=https://bevy.org/examples-webgpu/shaders/render-depth-to-texture/../static/screenshots/Shaders/render_depth_to_texture.png property=og:image><meta content="Demonstrates how to use depth-only cameras" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Render Depth to Texture</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Shaders / Render Depth to Texture</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/shader_advanced/render_depth_to_texture.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/shaders/render-depth-to-texture/>here</a>.</aside></div><div class="example__explanation media-content"><p>Demonstrates how to use depth-only cameras.<p>A <em>depth-only camera</em> is a camera that renders only to a depth buffer, not to a color buffer. That depth buffer can then be used in shaders for various special effects.<p>To create a depth-only camera, we create a [<code>Camera3d</code>] and set its [<code>RenderTarget</code>] to [<code>RenderTarget::None</code>] to disable creation of a color buffer. Then we add a system to the Core3d schedule that copies the [<code>bevy::render::view::ViewDepthTexture</code>] that Bevy creates for that camera to a texture. This texture can then be attached to a material and sampled in the shader.<p>This demo consists of a rotating cube with a depth-only camera pointed at it. The depth texture from the depth-only camera appears on a plane. You can use the WASD keys to make the depth-only camera orbit around the cube.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>render_depth_to_texture.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::{</span><span style=color:#dfc479>FRAC_PI_2</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PI</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset</span><span>::</span><span style=color:#dfc479>RenderAssetUsages</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#dfc479>RenderTarget</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>css</span><span>::</span><span style=color:#dfc479>LIME</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    core_pipeline</span><span>::{</span><span style=color:#c0c5ce>prepass</span><span>::</span><span style=color:#dfc479>DepthPrepass</span><span style=color:#c0c5ce>, schedule</span><span>::</span><span style=color:#dfc479>Core3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Core3dSystems</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    image</span><span>::{</span><span style=color:#dfc479>ImageCompareFunction</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ImageSampler</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ImageSamplerDescriptor</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    math</span><span>::</span><span style=color:#c0c5ce>ops</span><span>::{acos</span><span style=color:#c0c5ce>,</span><span> atan2</span><span style=color:#c0c5ce>,</span><span> sin_cos}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        camera</span><span>::</span><span style=color:#dfc479>ExtractedCamera</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        extract_resource</span><span>::{</span><span style=color:#dfc479>ExtractResource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ExtractResourcePlugin</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_asset</span><span>::</span><span style=color:#dfc479>RenderAssets</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_resource</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AsBindGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Extent3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Origin3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TexelCopyTextureInfo</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureAspect</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureDimension</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextureFormat</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        renderer</span><span>::{</span><span style=color:#dfc479>RenderContext</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ViewQuery</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        texture</span><span>::</span><span style=color:#dfc479>GpuImage</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        view</span><span>::</span><span style=color:#dfc479>ViewDepthTexture</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        RenderApp</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    shader</span><span>::</span><span style=color:#dfc479>ShaderRef</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A marker component for a rotating cube.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> RotatingCube</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The material that displays the contents of the depth buffer.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This material is placed on the plane.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Asset</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TypePath</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AsBindGroup</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ShowDepthTextureMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> A copy of the depth texture that the depth-only camera produced.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[texture(0</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> sample_type </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "depth"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[sampler(1</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> sampler_type </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "comparison"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    depth_texture:</span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Holds a copy of the depth buffer that the depth-only camera produces.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> We need to make a copy for two reasons:</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> 1. The Bevy renderer automatically creates and maintains depth buffers on</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e>    its own. There's no mechanism to fetch the depth buffer for a camera outside</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e>    the render app. Thus it can't easily be attached to a material.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> 2. `wgpu` doesn't allow applications to simultaneously render to and sample</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e>    from a standard depth texture, so a copy must be made regardless.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> DemoDepthTexture</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> [Spherical coordinates], used to implement the camera orbiting</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> functionality.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Note that these are in the mathematics convention, not the physics</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> convention. In a real application, one would probably use the physics</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> convention, but for familiarity's sake we stick to the most common</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> convention here.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> [Spherical coordinates]: https://en.wikipedia.org/wiki/Spherical_coordinate_system</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> SphericalCoordinates</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The radius, in world units.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    radius:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The elevation angle (latitude).</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    inclination:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The azimuth angle (longitude).</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    azimuth:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The path to the shader that renders the depth texture.</span></span>
+<span class=giallo-l><span style=color:#c678dd>static</span><span style=color:#d19a66> SHADER_ASSET_PATH</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "shaders/show_depth_texture_material.wgsl"</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The size in texels of a depth texture.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> DEPTH_TEXTURE_SIZE</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> u32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 256</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The rate at which the user can move the camera, in radians per second.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> CAMERA_MOVEMENT_SPEED</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The entry point.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> app</span><span style=color:#c594c5> =</span><span style=color:#dfc479> App</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>MaterialPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ShowDepthTextureMaterial</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>ExtractResourcePlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoDepthTexture</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoDepthTexture</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, rotate_cube</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, draw_camera_gizmo</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, move_camera</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> render_app</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> app</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>get_sub_app_mut</span><span style=color:#d19a66>(</span><span style=color:#dfc479>RenderApp</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>expect</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Render app should be present"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render_app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Core3d</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        copy_depth_texture_system</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>after</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Core3dSystems</span><span>::</span><span style=color:#dfc479>Prepass</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>before</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Core3dSystems</span><span>::</span><span style=color:#dfc479>MainPass</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app</span><span style=color:#c594c5>.</span><span style=color:#69c>run</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> copy_depth_texture_system</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    view:</span><span style=color:#dfc479> ViewQuery</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>ExtractedCamera</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ViewDepthTexture</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    demo_depth_texture:</span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoDepthTexture</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    image_assets:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderAssets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>GpuImage</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> ctx:</span><span style=color:#dfc479> RenderContext</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>demo_depth_texture</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> demo_depth_texture</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>camera, depth_texture</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> view</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Make sure we only run on the depth-only camera.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We could make a marker component for that camera and extract it to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // the render world, but using `order` as a tag to tell the main camera</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // and the depth-only camera apart works in a pinch.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5>.</span><span>order </span><span style=color:#c594c5>>=</span><span style=color:#e79e6d> 0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>demo_depth_image</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> image_assets</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>demo_depth_texture</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>id</span><span style=color:#d19a66>())</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> command_encoder</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ctx</span><span style=color:#c594c5>.</span><span style=color:#69c>command_encoder</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    command_encoder</span><span style=color:#c594c5>.</span><span style=color:#69c>push_debug_group</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"copy depth to demo texture"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    command_encoder</span><span style=color:#c594c5>.</span><span style=color:#69c>copy_texture_to_texture</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TexelCopyTextureInfo</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            texture:</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>depth_texture</span><span style=color:#c594c5>.</span><span>texture</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            mip_level:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            origin: Origin3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            aspect: TextureAspect</span><span>::</span><span style=color:#dfc479>DepthOnly</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TexelCopyTextureInfo</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            texture:</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>demo_depth_image</span><span style=color:#c594c5>.</span><span>texture</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            mip_level:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            origin: Origin3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            aspect: TextureAspect</span><span>::</span><span style=color:#dfc479>DepthOnly</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Extent3d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#d19a66> DEPTH_TEXTURE_SIZE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#d19a66> DEPTH_TEXTURE_SIZE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            depth_or_array_layers:</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    command_encoder</span><span style=color:#c594c5>.</span><span style=color:#69c>pop_debug_group</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the scene.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> standard_materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> show_depth_texture_materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ShowDepthTextureMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    demo_depth_texture:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoDepthTexture</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_rotating_cube</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands,</span><span style=color:#c594c5> &mut</span><span style=color:#c0c5ce> meshes,</span><span style=color:#c594c5> &mut</span><span style=color:#c0c5ce> standard_materials</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_plane</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#c0c5ce> commands,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#c0c5ce> meshes,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#c0c5ce> show_depth_texture_materials,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#c0c5ce>demo_depth_texture,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_light</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_depth_only_camera</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_main_camera</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_instructions</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the main rotating cube.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_rotating_cube</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    meshes:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    standard_materials:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> cube_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>3.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 3.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 3.0</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> rotating_cube_material_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> standard_materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        base_color: Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        unlit:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>cube_handle</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>rotating_cube_material_handle</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        RotatingCube</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Spawns the plane that shows the depth texture.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_plane</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    meshes:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    show_depth_texture_materials:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ShowDepthTextureMaterial</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    demo_depth_texture:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>DemoDepthTexture</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> plane_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Plane3d</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Z</span><span style=color:#c0c5ce>, Vec2</span><span>::</span><span style=color:#69c>splat</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>2.0</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> show_depth_texture_material</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> show_depth_texture_materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#dfc479>ShowDepthTextureMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        depth_texture:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>demo_depth_texture</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>plane_handle</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>show_depth_texture_material</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>10.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 4.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_scale</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>2.5</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns a light.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_light</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span><span style=color:#c0c5ce>PointLight</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>, Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>5.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 6.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 7.0</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the depth-only camera.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_depth_only_camera</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span>-</span><span style=color:#e79e6d>4.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>5.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5.0</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Camera</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Make sure that we render from this depth-only camera *before*</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // rendering from the main camera.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            order:</span><span> -</span><span style=color:#e79e6d>1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#c0c5ce>Camera</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // We specify no color render target, for maximum efficiency.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        RenderTarget</span><span>::</span><span style=color:#e5c07b>None</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // When specifying no render target, we must manually specify</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // the viewport size. Otherwise, Bevy won't know how big to make</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // the depth buffer.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            size: UVec2</span><span>::</span><span style=color:#69c>splat</span><span style=color:#d19a66>(DEPTH_TEXTURE_SIZE)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // We need to disable multisampling or the depth texture will be</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // multisampled, which adds complexity we don't care about for this</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // demo.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Msaa</span><span>::</span><span style=color:#dfc479>Off</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Cameras with no render target render *nothing* by default. To get</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // them to render something, we must add a prepass that specifies what</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // we want to render: in this case, depth.</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DepthPrepass</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the main camera that renders to the window.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_main_camera</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>5.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 30.0</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span style=color:#d19a66>(</span><span style=color:#69c>vec3</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>5.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Disable antialiasing just for simplicity's sake.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Msaa</span><span>::</span><span style=color:#dfc479>Off</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the instructional text at the top of the screen.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_instructions</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Use WASD to move the secondary camera"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            top:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#c0c5ce>Node</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spins the cube a bit every frame.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> rotate_cube</span><span style=color:#d19a66>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> cubes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RotatingCube</span><span style=color:#c0c5ce>>>, time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> cubes</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_x</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>1.5</span><span> *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_y</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>1.1</span><span> *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_z</span><span style=color:#d19a66>(</span><span>-</span><span style=color:#e79e6d>1.3</span><span> *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Material</span><span style=color:#c594c5> for</span><span style=color:#dfc479> ShowDepthTextureMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> fragment_shader</span><span style=color:#d19a66>()</span><span> -></span><span style=color:#dfc479> ShaderRef</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>        SHADER_ASSET_PATH</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> FromWorld</span><span style=color:#c594c5> for</span><span style=color:#dfc479> DemoDepthTexture</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> from_world</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>world:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> World</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#c0c5ce> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> images</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> world</span><span style=color:#c594c5>.</span><span style=color:#69c>resource_mut</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>></span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Create a new 32-bit floating point depth texture.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> depth_image</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Image</span><span>::</span><span style=color:#69c>new_uninit</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Extent3d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#d19a66> DEPTH_TEXTURE_SIZE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#d19a66> DEPTH_TEXTURE_SIZE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                depth_or_array_layers:</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            TextureDimension</span><span>::</span><span style=color:#dfc479>D2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            TextureFormat</span><span>::</span><span style=color:#dfc479>Depth32Float</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            RenderAssetUsages</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Create a sampler. Note that this needs to specify a `compare`</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // function in order to be compatible with depth textures.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        depth_image</span><span style=color:#c594c5>.</span><span>sampler </span><span style=color:#c594c5>=</span><span style=color:#dfc479> ImageSampler</span><span>::</span><span style=color:#69c>Descriptor</span><span style=color:#d19a66>(</span><span style=color:#dfc479>ImageSamplerDescriptor</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            label:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"custom depth image sampler"</span><span style=color:#c594c5>.</span><span style=color:#69c>to_owned</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            compare:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>ImageCompareFunction</span><span>::</span><span style=color:#dfc479>Always</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#dfc479>ImageSamplerDescriptor</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> depth_image_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> images</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>depth_image</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#69c>        DemoDepthTexture</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>depth_image_handle</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> ExtractResource</span><span style=color:#c594c5> for</span><span style=color:#dfc479> DemoDepthTexture</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Source</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> Self;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> extract_resource</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>source:</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>Self</span><span>::</span><span style=color:#dfc479>Source</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#c0c5ce> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Share the `DemoDepthTexture` resource over to the render world so</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // that our system can access it.</span></span>
+<span class=giallo-l><span style=color:#d19a66>        (</span><span>*</span><span style=color:#c0c5ce>source</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Draws an outline of the depth texture on the screen.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> draw_camera_gizmo</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>cameras:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>GlobalTransform</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> gizmos:</span><span style=color:#dfc479> Gizmos</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>camera, transform</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>cameras</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // As above, we use the order as a cheap tag to tell the depth texture</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // apart from the main texture.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5>.</span><span>order </span><span style=color:#c594c5>>=</span><span style=color:#e79e6d> 0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Draw a cone representing the camera.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        gizmos</span><span style=color:#c594c5>.</span><span style=color:#69c>primitive_3d</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &</span><span style=color:#dfc479>Cone</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                radius:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#e79e6d> 3.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Isometry3d</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                transform</span><span style=color:#c594c5>.</span><span style=color:#69c>translation</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // We have to rotate here because `Cone` primitives are oriented</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // along +Y and cameras point along +Z.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotation</span><span style=color:#d19a66>()</span><span> *</span><span style=color:#c0c5ce> Quat</span><span>::</span><span style=color:#69c>from_rotation_x</span><span style=color:#d19a66>(FRAC_PI_2)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            LIME</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Orbits the cube when WASD is pressed.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> move_camera</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> cameras:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Transform</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    keyboard:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>camera,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> transform</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> cameras</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Only affect the depth camera.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5>.</span><span>order </span><span style=color:#c594c5>>=</span><span style=color:#e79e6d> 0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Convert the camera's position from Cartesian to spherical coordinates.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> spherical_coords</span><span style=color:#c594c5> =</span><span style=color:#dfc479> SphericalCoordinates</span><span>::</span><span style=color:#69c>from_cartesian</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Modify those spherical coordinates as appropriate.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> changed</span><span style=color:#c594c5> =</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> keyboard</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyW</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            spherical_coords</span><span style=color:#c594c5>.</span><span>inclination </span><span style=color:#c594c5>-=</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>()</span><span> *</span><span style=color:#d19a66> CAMERA_MOVEMENT_SPEED</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            changed</span><span style=color:#c594c5> =</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> keyboard</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyS</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            spherical_coords</span><span style=color:#c594c5>.</span><span>inclination </span><span style=color:#c594c5>+=</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>()</span><span> *</span><span style=color:#d19a66> CAMERA_MOVEMENT_SPEED</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            changed</span><span style=color:#c594c5> =</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> keyboard</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyA</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            spherical_coords</span><span style=color:#c594c5>.</span><span>azimuth </span><span style=color:#c594c5>+=</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>()</span><span> *</span><span style=color:#d19a66> CAMERA_MOVEMENT_SPEED</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            changed</span><span style=color:#c594c5> =</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> keyboard</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyD</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            spherical_coords</span><span style=color:#c594c5>.</span><span>azimuth </span><span style=color:#c594c5>-=</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>()</span><span> *</span><span style=color:#d19a66> CAMERA_MOVEMENT_SPEED</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            changed</span><span style=color:#c594c5> =</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // If they were changed, convert from spherical coordinates back to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Cartesian ones, and update the camera's transform.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> changed</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            spherical_coords</span><span style=color:#c594c5>.</span><span>inclination </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> spherical_coords</span><span style=color:#c594c5>.</span><span>inclination</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.01</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> PI</span><span> -</span><span style=color:#e79e6d> 0.01</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            transform</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> spherical_coords</span><span style=color:#c594c5>.</span><span style=color:#69c>to_cartesian</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            transform</span><span style=color:#c594c5>.</span><span style=color:#69c>look_at</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> SphericalCoordinates</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> [Converts] from Cartesian coordinates to spherical coordinates.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> [Converts]: https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> from_cartesian</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>p:</span><span style=color:#dfc479> Vec3</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> SphericalCoordinates</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> radius</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> p</span><span style=color:#c594c5>.</span><span style=color:#69c>length</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SphericalCoordinates</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            radius,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            inclination:</span><span style=color:#69c> acos</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>p</span><span style=color:#c594c5>.</span><span>y /</span><span style=color:#c0c5ce> radius</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            azimuth:</span><span style=color:#69c> atan2</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>p</span><span style=color:#c594c5>.</span><span>z</span><span style=color:#c0c5ce>, p</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> [Converts] from spherical coordinates to Cartesian coordinates.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> [Converts]: https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> to_cartesian</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>self</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> Vec3</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>sin_inclination, cos_inclination</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#69c> sin_cos</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>self</span><span style=color:#c594c5>.</span><span>inclination</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>sin_azimuth, cos_azimuth</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#69c> sin_cos</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>self</span><span style=color:#c594c5>.</span><span>azimuth</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        self</span><span style=color:#c594c5>.</span><span>radius</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#69c> vec3</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                sin_inclination</span><span> *</span><span style=color:#c0c5ce> cos_azimuth,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                cos_inclination,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                sin_inclination</span><span> *</span><span style=color:#c0c5ce> sin_azimuth,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div><input class=tabs__radio id=tab1 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab1><code>shaders/show_depth_texture_material.wgsl</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=wgsl><span class=giallo-l><span>#</span><span style=color:#e06c75>import bevy_pbr</span><span>::</span><span style=color:#e06c75>forward_io</span><span>::</span><span style=color:#e5c07b>VertexOutput</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@group(#{MATERIAL_BIND_GROUP}) @binding(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> depth_texture</span><span>: </span><span style=color:#e06c75>texture_depth_2d</span><span>;</span></span>
+<span class=giallo-l><span>@group(#{MATERIAL_BIND_GROUP}) @binding(</span><span style=color:#d19a66>1</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> depth_sampler</span><span>: </span><span style=color:#e06c75>sampler_comparison</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@fragment</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> fragment</span><span>(</span><span style=color:#e06c75>input</span><span>: </span><span style=color:#e5c07b>VertexOutput</span><span>) -> @location(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // Just draw the depth.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> st</span><span style=color:#56b6c2> =</span><span style=color:#c678dd> vec2</span><span>&lt;</span><span style=color:#c678dd>i32</span><span>>(</span><span style=color:#e06c75>input</span><span>.uv *</span><span style=color:#c678dd> vec2</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>(</span><span style=color:#61afef>textureDimensions</span><span>(</span><span style=color:#e06c75>depth_texture</span><span>).xy));</span></span>
+<span class=giallo-l><span style=color:#c678dd>    return</span><span style=color:#61afef> vec4</span><span>(</span><span style=color:#61afef>vec3</span><span>(</span><span style=color:#61afef>textureLoad</span><span>(</span><span style=color:#e06c75>depth_texture</span><span>,</span><span style=color:#e06c75> st</span><span>,</span><span style=color:#d19a66> 0</span><span>)),</span><span style=color:#d19a66> 1.0</span><span>);</span></span>
+<span class=giallo-l><span>}```</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/Shaders/render-depth-to-texture/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

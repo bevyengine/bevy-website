@@ -1,0 +1,429 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Deferred Rendering" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/3d-rendering/deferred-rendering/ property=og:url><meta content="https://bevy.org/examples/3d-rendering/deferred-rendering/../static/screenshots/3D Rendering/deferred_rendering.png" property=og:image><meta content="Renders meshes with both forward and deferred pipelines" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Deferred Rendering</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>3D Rendering / Deferred Rendering</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/3d/deferred_rendering.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/3d-rendering/deferred-rendering/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example compares Forward, Forward + Prepass, and Deferred rendering.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>deferred_rendering.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::*</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    anti_alias</span><span>::</span><span style=color:#c0c5ce>fxaa</span><span>::</span><span style=color:#dfc479>Fxaa</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    core_pipeline</span><span>::</span><span style=color:#c0c5ce>prepass</span><span>::{</span><span style=color:#dfc479>DeferredPrepass</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DepthPrepass</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MotionVectorPrepass</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> NormalPrepass</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    image</span><span>::</span><span style=color:#dfc479>ImageLoaderSettings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    light</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>        CascadeShadowConfigBuilder</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DirectionalLightShadowMap</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> NotShadowCaster</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> NotShadowReceiver</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    material</span><span>::</span><span style=color:#dfc479>OpaqueRendererMethod</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    math</span><span>::ops</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pbr</span><span>::</span><span style=color:#dfc479>DefaultOpaqueRendererMethod</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>DefaultOpaqueRendererMethod</span><span>::</span><span style=color:#69c>deferred</span><span style=color:#d19a66>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DirectionalLightShadowMap</span><span> {</span><span style=color:#c0c5ce> size:</span><span style=color:#e79e6d> 4096</span><span> }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#69c>Pause</span><span style=color:#d19a66>(true))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>setup, setup_parallax</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>animate_light_direction, switch_mode, spin</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // MSAA needs to be off for Deferred rendering</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Msaa</span><span>::</span><span style=color:#dfc479>Off</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DistanceFog</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color: Color</span><span>::</span><span style=color:#69c>srgb_u8</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>43</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 44</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 47</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            falloff: FogFalloff</span><span>::</span><span style=color:#dfc479>Linear</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                start:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                end:</span><span style=color:#e79e6d> 8.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        EnvironmentMapLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_map: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"environment_maps/pisa_diffuse_rgb9e5_zstd.ktx2"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_map: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"environment_maps/pisa_specular_rgb9e5_zstd.ktx2"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            intensity:</span><span style=color:#e79e6d> 2000.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DepthPrepass</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        MotionVectorPrepass</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DeferredPrepass</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Fxaa</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DirectionalLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            illuminance:</span><span style=color:#e79e6d> 15_000</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            shadow_maps_enabled:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        CascadeShadowConfigBuilder</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            num_cascades:</span><span style=color:#e79e6d> 3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            maximum_distance:</span><span style=color:#e79e6d> 10.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>build</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_rotation</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_euler</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>ZYX</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#d19a66>FRAC_PI_4))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // FlightHelmet</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> helmet_scene</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>GltfAssetLabel</span><span>::</span><span style=color:#69c>Scene</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>from_asset</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"models/FlightHelmet/FlightHelmet.gltf"</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>(</span><span style=color:#69c>WorldAssetRoot</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>helmet_scene</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        WorldAssetRoot</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>helmet_scene</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span>-</span><span style=color:#e79e6d>4.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>3.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> forward_mat:</span><span style=color:#dfc479> StandardMaterial</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    forward_mat</span><span style=color:#c594c5>.</span><span>opaque_render_method </span><span style=color:#c594c5>=</span><span style=color:#dfc479> OpaqueRendererMethod</span><span>::</span><span style=color:#dfc479>Forward</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> forward_mat_h</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>forward_mat</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Plane</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Plane3d</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>size</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>50.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 50.0</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>forward_mat_h</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> cube_h</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> sphere_h</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Sphere</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.125</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>uv</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>32</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 18</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Cubes</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>cube_h</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>forward_mat_h</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span>-</span><span style=color:#e79e6d>0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.2</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>cube_h</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>forward_mat_h</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> sphere_color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>10.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 4.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> sphere_pos</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.4</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.8</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Emissive sphere</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> unlit_mat:</span><span style=color:#dfc479> StandardMaterial</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> sphere_color</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    unlit_mat</span><span style=color:#c594c5>.</span><span>unlit </span><span style=color:#c594c5>=</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>sphere_h</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>unlit_mat</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        sphere_pos,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        NotShadowCaster</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Light</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        PointLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            intensity:</span><span style=color:#e79e6d> 800.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            radius:</span><span style=color:#e79e6d> 0.125</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            shadow_maps_enabled:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color: sphere_color,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        sphere_pos,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spheres</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#e79e6d>6</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> j</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> i</span><span> %</span><span style=color:#e79e6d> 3</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> s_val</span><span style=color:#c594c5> = if</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> &lt;</span><span style=color:#e79e6d> 3</span><span> {</span><span style=color:#e79e6d> 0.0</span><span> }</span><span style=color:#c594c5> else</span><span> {</span><span style=color:#e79e6d> 0.2</span><span> }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> material</span><span style=color:#c594c5> = if</span><span style=color:#c0c5ce> j</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                base_color: Color</span><span>::</span><span style=color:#69c>srgb</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>s_val, s_val,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                perceptual_roughness:</span><span style=color:#e79e6d> 0.089</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                metallic:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> j</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 1</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                base_color: Color</span><span>::</span><span style=color:#69c>srgb</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>s_val,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>, s_val</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                perceptual_roughness:</span><span style=color:#e79e6d> 0.089</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                metallic:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                base_color: Color</span><span>::</span><span style=color:#69c>srgb</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>, s_val, s_val</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                perceptual_roughness:</span><span style=color:#e79e6d> 0.089</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                metallic:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>            Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>sphere_h</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>material</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                j</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#e79e6d> 0.25</span><span> +</span><span style=color:#c594c5> if</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> &lt;</span><span style=color:#e79e6d> 3</span><span> { -</span><span style=color:#e79e6d>0.15</span><span> }</span><span style=color:#c594c5> else</span><span> {</span><span style=color:#e79e6d> 0.15</span><span> } -</span><span style=color:#e79e6d> 0.4</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>                0.125</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                -</span><span style=color:#c0c5ce>j</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#e79e6d> 0.25</span><span> +</span><span style=color:#c594c5> if</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> &lt;</span><span style=color:#e79e6d> 3</span><span> { -</span><span style=color:#e79e6d>0.15</span><span> }</span><span style=color:#c594c5> else</span><span> {</span><span style=color:#e79e6d> 0.15</span><span> } +</span><span style=color:#e79e6d> 0.4</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // sky</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#d19a66>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            base_color: Srgba</span><span>::</span><span style=color:#69c>hex</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"888888"</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            unlit:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            cull_mode:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_scale</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>1_000_000.0</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        NotShadowCaster</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        NotShadowReceiver</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Example instructions</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            top:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>12</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Pause</span><span style=color:#d19a66>(</span><span style=color:#e5c07b>bool</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> animate_light_direction</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DirectionalLight</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pause:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pause</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> pause</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_y</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>()</span><span> *</span><span style=color:#d19a66> PI</span><span> /</span><span style=color:#e79e6d> 5.0</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup_parallax</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The normal map. Note that to generate it in the GIMP image editor, you should</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // open the depth map, and do Filters → Generic → Normal Map</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // You should enable the "flip X" checkbox.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> normal_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>load_builder</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_settings</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The normal map texture is in linear color space. Lighting won't look correct</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // if `is_srgb` is `true`, which is the default.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            |</span><span style=color:#c0c5ce>settings:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> ImageLoaderSettings</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> settings</span><span style=color:#c594c5>.</span><span>is_srgb </span><span style=color:#c594c5>=</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"textures/parallax_example/cube_normal.png"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> cube</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Mesh</span><span>::</span><span style=color:#69c>from</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.15</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.15</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.15</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // NOTE: for normal maps and depth maps to work, the mesh</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // needs tangents generated.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    cube</span><span style=color:#c594c5>.</span><span style=color:#69c>generate_tangents</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> parallax_material</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        perceptual_roughness:</span><span style=color:#e79e6d> 0.4</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        base_color_texture:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"textures/parallax_example/cube_color.png"</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        normal_map_texture:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>normal_handle</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The depth map is a grayscale texture where black is the highest level and</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // white the lowest.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        depth_map:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"textures/parallax_example/cube_depth.png"</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        parallax_depth_scale:</span><span style=color:#e79e6d> 0.09</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        parallax_mapping_method:</span><span style=color:#dfc479> ParallaxMappingMethod</span><span>::</span><span style=color:#dfc479>Relief</span><span> {</span><span style=color:#c0c5ce> max_steps:</span><span style=color:#e79e6d> 4</span><span> }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        max_parallax_layer_count: ops</span><span>::</span><span style=color:#69c>exp2</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>5.0</span><span style=color:#b48ead>f32</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>cube</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>parallax_material</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span style=color:#d19a66>(</span><span style=color:#e79e6d>0.4</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.8</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Spin</span><span> {</span><span style=color:#c0c5ce> speed:</span><span style=color:#e79e6d> 0.3</span><span> }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Spin</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    speed:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spin</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Spin</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>, pause:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pause</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> pause</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> transform, spin</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_local_y</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>spin</span><span style=color:#c594c5>.</span><span>speed *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_local_x</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>spin</span><span style=color:#c594c5>.</span><span>speed *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_local_z</span><span style=color:#d19a66>(</span><span>-</span><span style=color:#c0c5ce>spin</span><span style=color:#c594c5>.</span><span>speed *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> DefaultRenderMode</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[default]</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Deferred</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Forward</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    ForwardPrepass</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> switch_mode</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> text:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    keys:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> default_opaque_renderer_method:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DefaultOpaqueRendererMethod</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    cameras:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> pause:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pause</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> hide_ui:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#e5c07b>bool</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> mode:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DefaultRenderMode</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text</span><span style=color:#c594c5>.</span><span style=color:#69c>clear</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keys</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Space</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pause</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> = !</span><span style=color:#c0c5ce>pause</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keys</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit1</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>mode</span><span style=color:#c594c5> =</span><span style=color:#dfc479> DefaultRenderMode</span><span>::</span><span style=color:#dfc479>Deferred</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        default_opaque_renderer_method</span><span style=color:#c594c5>.</span><span style=color:#69c>set_to_deferred</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>        println!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"DefaultOpaqueRendererMethod: Deferred"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> _</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span style=color:#d19a66>()</span><span> {}</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>cameras</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>NormalPrepass</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DepthPrepass</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#dfc479>MotionVectorPrepass</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DeferredPrepass</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keys</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit2</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>mode</span><span style=color:#c594c5> =</span><span style=color:#dfc479> DefaultRenderMode</span><span>::</span><span style=color:#dfc479>Forward</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        default_opaque_renderer_method</span><span style=color:#c594c5>.</span><span style=color:#69c>set_to_forward</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>        println!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"DefaultOpaqueRendererMethod: Forward"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> _</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span style=color:#d19a66>()</span><span> {}</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>cameras</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>NormalPrepass</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DepthPrepass</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MotionVectorPrepass</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DeferredPrepass</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keys</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit3</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>mode</span><span style=color:#c594c5> =</span><span style=color:#dfc479> DefaultRenderMode</span><span>::</span><span style=color:#dfc479>ForwardPrepass</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        default_opaque_renderer_method</span><span style=color:#c594c5>.</span><span style=color:#69c>set_to_forward</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>        println!</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"DefaultOpaqueRendererMethod: Forward + Prepass"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> _</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span style=color:#d19a66>()</span><span> {}</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>cameras</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#dfc479>NormalPrepass</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DepthPrepass</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span><span style=color:#dfc479>MotionVectorPrepass</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>camera</span><span style=color:#d19a66>)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DeferredPrepass</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keys</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyH</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>hide_ui</span><span style=color:#c594c5> = !</span><span>*</span><span style=color:#c0c5ce>hide_ui;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if !</span><span>*</span><span style=color:#c0c5ce>hide_ui</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        text</span><span style=color:#c594c5>.</span><span style=color:#69c>push_str</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"(H) Hide UI</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        text</span><span style=color:#c594c5>.</span><span style=color:#69c>push_str</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"(Space) Play/Pause</span><span style=color:#56b6c2>\n\n</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        text</span><span style=color:#c594c5>.</span><span style=color:#69c>push_str</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Rendering Method:</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        text</span><span style=color:#c594c5>.</span><span style=color:#69c>push_str</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#61afef>format!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "(1) </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f> Deferred</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if let</span><span style=color:#c0c5ce> DefaultRenderMode</span><span>::</span><span style=color:#dfc479>Deferred</span><span style=color:#c594c5> =</span><span> *</span><span style=color:#c0c5ce>mode</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                ">"</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                ""</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        text</span><span style=color:#c594c5>.</span><span style=color:#69c>push_str</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#61afef>format!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "(2) </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f> Forward</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if let</span><span style=color:#c0c5ce> DefaultRenderMode</span><span>::</span><span style=color:#dfc479>Forward</span><span style=color:#c594c5> =</span><span> *</span><span style=color:#c0c5ce>mode</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                ">"</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                ""</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        text</span><span style=color:#c594c5>.</span><span style=color:#69c>push_str</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#61afef>format!</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "(3) </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f> Forward + Prepass</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if let</span><span style=color:#c0c5ce> DefaultRenderMode</span><span>::</span><span style=color:#dfc479>ForwardPrepass</span><span style=color:#c594c5> =</span><span> *</span><span style=color:#c0c5ce>mode</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                ">"</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                ""</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#d19a66>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/3D Rendering/deferred-rendering/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

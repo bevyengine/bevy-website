@@ -1,0 +1,499 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Manual Mesh 2D" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/2d-rendering/mesh2d-manual/ property=og:url><meta content="https://bevy.org/examples-webgpu/2d-rendering/mesh2d-manual/../static/screenshots/2D Rendering/mesh2d_manual.png" property=og:image><meta content="Renders a custom mesh 'manually' with 'mid-level' renderer apis" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Manual Mesh 2D</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>2D Rendering / Manual Mesh 2D</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/2d/mesh2d_manual.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/2d-rendering/mesh2d-manual/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example shows how to manually render 2d items using "mid level render apis" with a custom pipeline for 2d meshes. It doesn't use the <a href=bevy::sprite_render::Material2d><code>Material2d</code></a> abstraction, but changes the vertex buffer to include vertex color. Check out the "mesh2d" example for simpler / higher level 2d meshes.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>mesh2d_manual.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset</span><span>::</span><span style=color:#dfc479>RenderAssetUsages</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::</span><span style=color:#dfc479>YELLOW</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    core_pipeline</span><span>::</span><span style=color:#c0c5ce>core_2d</span><span>::{</span><span style=color:#dfc479>Transparent2d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> CORE_2D_DEPTH_FORMAT</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    math</span><span>::{ops</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> FloatOrd</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mesh</span><span>::{</span><span style=color:#dfc479>Indices</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MeshVertexAttribute</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> VertexBufferLayout</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mesh</span><span>::</span><span style=color:#dfc479>RenderMesh</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_asset</span><span>::</span><span style=color:#dfc479>RenderAssets</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_phase</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AddRenderCommand</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DrawFunctions</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PhaseItemExtraIndex</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SetItemPipeline</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ViewSortedRenderPhases</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_resource</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>            BlendState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ColorTargetState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ColorWrites</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> CompareFunction</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DepthBiasState</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DepthStencilState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Face</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> FragmentState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MultisampleState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PipelineCache</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            PrimitiveState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PrimitiveTopology</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderPipelineDescriptor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SpecializedRenderPipeline</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SpecializedRenderPipelines</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> StencilFaceState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> StencilState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> VertexFormat</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> VertexState</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            VertexStepMode</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        sync_component</span><span>::{</span><span style=color:#dfc479>SyncComponent</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SyncComponentPlugin</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        sync_world</span><span>::{</span><span style=color:#dfc479>MainEntityHashMap</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderEntity</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        view</span><span>::{</span><span style=color:#dfc479>ExtractedView</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderVisibleEntities</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Extract</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Render</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderApp</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderStartup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderSystems</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    sprite_render</span><span>::{</span></span>
+<span class=giallo-l><span>        extract_mesh2d</span><span style=color:#c0c5ce>,</span><span> init_mesh_2d_pipeline</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DrawMesh2d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Material2dBindGroupId</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Mesh2dPipeline</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Mesh2dPipelineKey</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Mesh2dTransforms</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MeshFlags</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderMesh2dInstance</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SetMesh2dBindGroup</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SetMesh2dViewBindGroup</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>PI</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>((</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ColoredMesh2dPlugin</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, star</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> star</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We will add a new Mesh for the star being created</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Let's define the mesh for the object we want to draw: a nice star.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We will specify here what kind of topology is used to define the mesh,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // that is, how triangles are built from the vertices. We will use a</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // triangle list, meaning that each vertex of the triangle has to be</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // specified. We set `RenderAssetUsages::RENDER_WORLD`, meaning this mesh</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // will not be accessible in future frames from the `meshes` resource, in</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // order to save on memory once it has been uploaded to the GPU.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> star</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Mesh</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        PrimitiveTopology</span><span>::</span><span style=color:#dfc479>TriangleList</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        RenderAssetUsages</span><span>::</span><span style=color:#d19a66>RENDER_WORLD</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Vertices need to have a position attribute. We will use the following</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // vertices (I hope you can spot the star in the schema).</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //        1</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //     10   2</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // 9      0      3</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //     8     4</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //        6</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //   7        5</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // These vertices are specified in 3D space.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> v_pos</span><span style=color:#c594c5> =</span><span style=color:#61afef> vec!</span><span>[[</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>]]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#e79e6d>10</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The angle between each vertex is 1/10 of a full rotation.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> a</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#d19a66> PI</span><span> /</span><span style=color:#e79e6d> 5.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The radius of inner vertices (even indices) is 100. For outer vertices (odd indices) it's 200.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> r</span><span style=color:#c594c5> =</span><span style=color:#d19a66> (</span><span style=color:#e79e6d>1</span><span> -</span><span style=color:#c0c5ce> i</span><span> %</span><span style=color:#e79e6d> 2</span><span style=color:#d19a66>)</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#e79e6d> 100.0</span><span> +</span><span style=color:#e79e6d> 100.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Add the vertex position.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        v_pos</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>(</span><span>[</span><span style=color:#c0c5ce>r</span><span> *</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>sin</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>a</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>, r</span><span> *</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>cos</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>a</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>]</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Set the position attribute</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    star</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_attribute</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Mesh</span><span>::</span><span style=color:#d19a66>ATTRIBUTE_POSITION</span><span style=color:#c0c5ce>, v_pos</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // And a RGB color attribute as well. A built-in `Mesh::ATTRIBUTE_COLOR` exists, but we</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // use a custom vertex attribute here for demonstration purposes.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> v_color:</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>u32</span><span style=color:#c0c5ce>></span><span style=color:#c594c5> =</span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#dfc479>LinearRgba</span><span>::</span><span style=color:#d19a66>BLACK</span><span style=color:#c594c5>.</span><span style=color:#69c>as_u32</span><span style=color:#d19a66>()</span><span>]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    v_color</span><span style=color:#c594c5>.</span><span style=color:#69c>extend_from_slice</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span>[</span><span style=color:#c0c5ce>LinearRgba</span><span>::</span><span style=color:#69c>from</span><span style=color:#d19a66>(YELLOW)</span><span style=color:#c594c5>.</span><span style=color:#69c>as_u32</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span><span style=color:#e79e6d> 10</span><span>]</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    star</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_attribute</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        MeshVertexAttribute</span><span>::</span><span style=color:#69c>new</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"Vertex_Color"</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>, VertexFormat</span><span>::</span><span style=color:#dfc479>Uint32</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        v_color,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Now, we specify the indices of the vertex that are going to compose the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // triangles in our star. Vertices in triangles have to be specified in CCW</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // winding (that will be the front face, colored). Since we are using</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // triangle list, we will specify each triangle as 3 vertices</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //   First triangle: 0, 2, 1</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //   Second triangle: 0, 3, 2</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //   Third triangle: 0, 4, 3</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //   etc</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //   Last triangle: 0, 1, 10</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> indices</span><span style=color:#c594c5> =</span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 10</span><span>]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 2</span><span>..=</span><span style=color:#e79e6d>10</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        indices</span><span style=color:#c594c5>.</span><span style=color:#69c>extend_from_slice</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span>[</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>, i, i</span><span> -</span><span style=color:#e79e6d> 1</span><span>]</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    star</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_indices</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Indices</span><span>::</span><span style=color:#69c>U32</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>indices</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We can now spawn the entities for the star and the camera</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>((</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // We use a marker component to identify the custom colored meshes</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ColoredMesh2d</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The `Handle&lt;Mesh>` needs to be wrapped in a `Mesh2d` for 2D rendering</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh2d</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>star</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Camera2d</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A marker component for colored 2d meshes</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>pub struct</span><span style=color:#dfc479> ColoredMesh2d</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> SyncComponent</span><span style=color:#c594c5> for</span><span style=color:#dfc479> ColoredMesh2d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Target</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> Self;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Custom pipeline for 2d meshes with vertex colors</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>pub struct</span><span style=color:#dfc479> ColoredMesh2dPipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> This pipeline wraps the standard [`Mesh2dPipeline`]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mesh2d_pipeline:</span><span style=color:#dfc479> Mesh2dPipeline</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The shader asset handle.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    shader:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Shader</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> init_colored_mesh_2d_pipeline</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mesh2d_pipeline:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh2dPipeline</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    colored_mesh2d_shader:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ColoredMesh2dShader</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#dfc479>ColoredMesh2dPipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mesh2d_pipeline: mesh2d_pipeline</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Clone the shader from the shader resource we inserted in the plugin.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        shader: colored_mesh2d_shader</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// We implement `SpecializedPipeline` to customize the default rendering from `Mesh2dPipeline`</span></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> SpecializedRenderPipeline</span><span style=color:#c594c5> for</span><span style=color:#dfc479> ColoredMesh2dPipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Key</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Mesh2dPipelineKey</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> specialize</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self, key: Self</span><span>::</span><span style=color:#dfc479>Key</span><span style=color:#d19a66>)</span><span> -></span><span style=color:#dfc479> RenderPipelineDescriptor</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Customize how to store the meshes' vertex attributes in the vertex buffer</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Our meshes only have position and color</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> formats</span><span style=color:#c594c5> =</span><span style=color:#61afef> vec!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Position</span></span>
+<span class=giallo-l><span style=color:#dfc479>            VertexFormat</span><span>::</span><span style=color:#dfc479>Float32x3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Color</span></span>
+<span class=giallo-l><span style=color:#dfc479>            VertexFormat</span><span>::</span><span style=color:#dfc479>Uint32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> vertex_layout</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#dfc479>            VertexBufferLayout</span><span>::</span><span style=color:#69c>from_vertex_formats</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>VertexStepMode</span><span>::</span><span style=color:#dfc479>Vertex</span><span style=color:#c0c5ce>, formats</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> format</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> key</span><span style=color:#c594c5>.</span><span style=color:#69c>target_format</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#dfc479>        RenderPipelineDescriptor</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vertex:</span><span style=color:#dfc479> VertexState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Use our custom shader</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                shader: self</span><span style=color:#c594c5>.</span><span>shader</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Use our custom vertex buffer</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                buffers:</span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#c0c5ce>vertex_layout</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            fragment:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>FragmentState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Use our custom shader</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                shader: self</span><span style=color:#c594c5>.</span><span>shader</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                targets:</span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#e5c07b>Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>ColorTargetState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    format,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    blend:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>BlendState</span><span>::</span><span style=color:#d19a66>ALPHA_BLENDING)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    write_mask:</span><span style=color:#dfc479> ColorWrites</span><span>::</span><span style=color:#d19a66>ALL</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#d19a66>)</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Use the two standard uniforms for 2d meshes</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            layout:</span><span style=color:#61afef> vec!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Bind group 0 is the view uniform</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                self</span><span style=color:#c594c5>.</span><span>mesh2d_pipeline</span><span style=color:#c594c5>.</span><span>view_layout</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Bind group 1 is the mesh uniform</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                self</span><span style=color:#c594c5>.</span><span>mesh2d_pipeline</span><span style=color:#c594c5>.</span><span>mesh_layout</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            primitive:</span><span style=color:#dfc479> PrimitiveState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                cull_mode:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Face</span><span>::</span><span style=color:#dfc479>Back</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                topology: key</span><span style=color:#c594c5>.</span><span style=color:#69c>primitive_topology</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                strip_index_format: key</span><span style=color:#c594c5>.</span><span style=color:#69c>strip_index_format</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            depth_stencil:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>DepthStencilState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                format:</span><span style=color:#d19a66> CORE_2D_DEPTH_FORMAT</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                depth_write_enabled:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(false)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                depth_compare:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#dfc479>CompareFunction</span><span>::</span><span style=color:#dfc479>GreaterEqual</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                stencil:</span><span style=color:#dfc479> StencilState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    front:</span><span style=color:#dfc479> StencilFaceState</span><span>::</span><span style=color:#d19a66>IGNORE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    back:</span><span style=color:#dfc479> StencilFaceState</span><span>::</span><span style=color:#d19a66>IGNORE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    read_mask:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    write_mask:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                bias:</span><span style=color:#dfc479> DepthBiasState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    constant:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    slope_scale:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    clamp:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            multisample:</span><span style=color:#dfc479> MultisampleState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                count: key</span><span style=color:#c594c5>.</span><span style=color:#69c>msaa_samples</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                mask:</span><span style=color:#c594c5> !</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                alpha_to_coverage_enabled:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            label:</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#9fc37f>"colored_mesh2d_pipeline"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// This specifies how to render a colored 2d mesh</span></span>
+<span class=giallo-l><span style=color:#c594c5>type</span><span style=color:#dfc479> DrawColoredMesh2d</span><span style=color:#c594c5> =</span><span style=color:#d19a66> (</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Set the pipeline</span></span>
+<span class=giallo-l><span style=color:#dfc479>    SetItemPipeline</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Set the view uniform as bind group 0</span></span>
+<span class=giallo-l><span style=color:#dfc479>    SetMesh2dViewBindGroup</span><span style=color:#c0c5ce>&lt;0>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Set the mesh uniform as bind group 1</span></span>
+<span class=giallo-l><span style=color:#dfc479>    SetMesh2dBindGroup</span><span style=color:#c0c5ce>&lt;1>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Draw the mesh</span></span>
+<span class=giallo-l><span style=color:#dfc479>    DrawMesh2d</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// The custom shader can be inline like here, included from another file at build time</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// using `include_str!()`, or loaded like any other asset with `asset_server.load()`.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLORED_MESH2D_SHADER</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span style=color:#c594c5> =</span><span style=color:#98c379> r</span><span style=color:#9fc37f>"</span></span>
+<span class=giallo-l><span style=color:#9fc37f>// Import the standard 2d mesh uniforms and set their bind groups</span></span>
+<span class=giallo-l><span style=color:#9fc37f>#import bevy_sprite::mesh2d_functions</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#9fc37f>// The structure of the vertex buffer is as specified in `specialize()`</span></span>
+<span class=giallo-l><span style=color:#9fc37f>struct Vertex {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    @builtin(instance_index) instance_index: u32,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    @location(0) position: vec3&lt;f32>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    @location(1) color: u32,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>};</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#9fc37f>struct VertexOutput {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    // The vertex shader must set the on-screen position of the vertex</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    @builtin(position) clip_position: vec4&lt;f32>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    // We pass the vertex color to the fragment shader in location 0</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    @location(0) color: vec4&lt;f32>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>};</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#9fc37f>/// Entry point for the vertex shader</span></span>
+<span class=giallo-l><span style=color:#9fc37f>@vertex</span></span>
+<span class=giallo-l><span style=color:#9fc37f>fn vertex(vertex: Vertex) -> VertexOutput {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    var out: VertexOutput;</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    // Project the world position of the mesh into screen position</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    let model = mesh2d_functions::get_world_from_local(vertex.instance_index);</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    out.clip_position = mesh2d_functions::mesh2d_position_local_to_clip(model, vec4&lt;f32>(vertex.position, 1.0));</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    // Unpack the `u32` from the vertex buffer into the `vec4&lt;f32>` used by the fragment shader</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    out.color = vec4&lt;f32>((vec4&lt;u32>(vertex.color) >> vec4&lt;u32>(0u, 8u, 16u, 24u)) & vec4&lt;u32>(255u)) / 255.0;</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    return out;</span></span>
+<span class=giallo-l><span style=color:#9fc37f>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#9fc37f>// The input of the fragment shader must correspond to the output of the vertex shader for all `location`s</span></span>
+<span class=giallo-l><span style=color:#9fc37f>struct FragmentInput {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    // The color is interpolated between vertices by default</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    @location(0) color: vec4&lt;f32>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>};</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#9fc37f>/// Entry point for the fragment shader</span></span>
+<span class=giallo-l><span style=color:#9fc37f>@fragment</span></span>
+<span class=giallo-l><span style=color:#9fc37f>fn fragment(in: FragmentInput) -> @location(0) vec4&lt;f32> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>    return in.color;</span></span>
+<span class=giallo-l><span style=color:#9fc37f>}</span></span>
+<span class=giallo-l><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Plugin that renders [`ColoredMesh2d`]s</span></span>
+<span class=giallo-l><span style=color:#c594c5>pub struct</span><span style=color:#dfc479> ColoredMesh2dPlugin</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A resource holding the shader asset handle for the pipeline to take. There are many ways to get</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> the shader into the pipeline - this is just one option.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ColoredMesh2dShader</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Shader</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Our custom pipeline needs its own instance storage</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>pub struct</span><span style=color:#dfc479> RenderColoredMesh2dInstances</span><span style=color:#d19a66>(</span><span style=color:#dfc479>MainEntityHashMap</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderMesh2dInstance</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Plugin</span><span style=color:#c594c5> for</span><span style=color:#dfc479> ColoredMesh2dPlugin</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> build</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>self, app:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> App</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Load our custom shader</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> shaders</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> app</span><span style=color:#c594c5>.</span><span style=color:#69c>world_mut</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>resource_mut</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Shader</span><span style=color:#c0c5ce>>></span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Here, we construct and add the shader asset manually. There are many ways to load this</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // shader, including `embedded_asset`/`load_embedded_asset`.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> shader</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> shaders</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>Shader</span><span>::</span><span style=color:#69c>from_wgsl</span><span style=color:#d19a66>(COLORED_MESH2D_SHADER</span><span style=color:#c0c5ce>,</span><span style=color:#61afef> file!</span><span style=color:#d19a66>()))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_plugins</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>SyncComponentPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ColoredMesh2d</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Register our custom draw function, and add our render systems</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app</span><span style=color:#c594c5>.</span><span style=color:#69c>get_sub_app_mut</span><span style=color:#d19a66>(</span><span style=color:#dfc479>RenderApp</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>unwrap</span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>insert_resource</span><span style=color:#d19a66>(</span><span style=color:#69c>ColoredMesh2dShader</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>shader</span><span style=color:#d19a66>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_render_command</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Transparent2d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DrawColoredMesh2d</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SpecializedRenderPipelines</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ColoredMesh2dPipeline</span><span style=color:#c0c5ce>>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderColoredMesh2dInstances</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                RenderStartup</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                init_colored_mesh_2d_pipeline</span><span style=color:#c594c5>.</span><span style=color:#69c>after</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>init_mesh_2d_pipeline</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                ExtractSchedule</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                extract_colored_mesh2d</span><span style=color:#c594c5>.</span><span style=color:#69c>after</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>extract_mesh2d</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>add_systems</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Render</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                queue_colored_mesh2d</span><span style=color:#c594c5>.</span><span style=color:#69c>in_set</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>RenderSystems</span><span>::</span><span style=color:#dfc479>QueueMeshes</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Extract the [`ColoredMesh2d`] marker component into the render app</span></span>
+<span class=giallo-l><span style=color:#c594c5>pub fn</span><span style=color:#69c> extract_colored_mesh2d</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> previous_len:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>usize</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // When extracting, you must use `Extract` to mark the `SystemParam`s</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // which should be taken from the main world.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    query:</span><span style=color:#dfc479> Extract</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Query</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#d19a66>            (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Entity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                RenderEntity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &</span><span style=color:#dfc479>ViewVisibility</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &</span><span style=color:#dfc479>GlobalTransform</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &</span><span style=color:#dfc479>Mesh2d</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ColoredMesh2d</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        >,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> render_mesh_instances:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderColoredMesh2dInstances</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> values</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec</span><span>::</span><span style=color:#69c>with_capacity</span><span style=color:#d19a66>(</span><span>*</span><span style=color:#c0c5ce>previous_len</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>entity, render_entity, view_visibility, transform, handle</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if !</span><span style=color:#c0c5ce>view_visibility</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> transforms</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Mesh2dTransforms</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            world_from_local: transform</span><span style=color:#c594c5>.</span><span style=color:#69c>affine</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flags:</span><span style=color:#dfc479> MeshFlags</span><span>::</span><span style=color:#69c>empty</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>bits</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        values</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span style=color:#d19a66>((</span><span style=color:#c0c5ce>render_entity,</span><span style=color:#dfc479> ColoredMesh2d</span><span style=color:#d19a66>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_mesh_instances</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            entity</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            RenderMesh2dInstance</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                mesh_asset_id: handle</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>id</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                transforms,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                material_bind_group_id: Material2dBindGroupId</span><span>::</span><span style=color:#69c>default</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                automatic_batching:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                tag:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>    *</span><span style=color:#c0c5ce>previous_len</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> values</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>try_insert_batch</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>values</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Queue the 2d meshes marked with [`ColoredMesh2d`] using our custom pipeline and draw function</span></span>
+<span class=giallo-l><span style=color:#c594c5>pub fn</span><span style=color:#69c> queue_colored_mesh2d</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    transparent_draw_functions:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DrawFunctions</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Transparent2d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    colored_mesh2d_pipeline:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ColoredMesh2dPipeline</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> pipelines:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SpecializedRenderPipelines</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ColoredMesh2dPipeline</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pipeline_cache:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PipelineCache</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render_meshes:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderAssets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderMesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render_mesh_instances:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderColoredMesh2dInstances</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> transparent_render_phases:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ViewSortedRenderPhases</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Transparent2d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    views:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>RenderVisibleEntities</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ExtractedView</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Msaa</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> render_mesh_instances</span><span style=color:#c594c5>.</span><span style=color:#69c>is_empty</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Iterate each view (a camera is a view)</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>visible_entities, view, msaa</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>views</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>transparent_phase</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> transparent_render_phases</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>view</span><span style=color:#c594c5>.</span><span>retained_view_entity</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> draw_colored_mesh2d</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> transparent_draw_functions</span><span style=color:#c594c5>.</span><span style=color:#69c>read</span><span style=color:#d19a66>()</span><span style=color:#c594c5>.</span><span style=color:#69c>id</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DrawColoredMesh2d</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> mesh_key</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Mesh2dPipelineKey</span><span>::</span><span style=color:#69c>from_msaa_samples</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>msaa</span><span style=color:#c594c5>.</span><span style=color:#69c>samples</span><span style=color:#d19a66>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>            |</span><span style=color:#dfc479> Mesh2dPipelineKey</span><span>::</span><span style=color:#69c>from_target_format</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>view</span><span style=color:#c594c5>.</span><span>target_format</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Queue all entities visible to that view</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>visible_entities</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> visible_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh2d</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#d19a66> (</span><span style=color:#c0c5ce>render_entity, visible_entity</span><span style=color:#d19a66>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> visible_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_visible</span><span style=color:#d19a66>()</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh_instance</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> render_mesh_instances</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>visible_entity</span><span style=color:#d19a66>)</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> mesh2d_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> mesh_instance</span><span style=color:#c594c5>.</span><span>mesh_asset_id</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> mesh2d_transforms</span><span style=color:#c594c5> = &</span><span style=color:#c0c5ce>mesh_instance</span><span style=color:#c594c5>.</span><span>transforms</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Get our specialized pipeline</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let mut</span><span style=color:#c0c5ce> mesh2d_key</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> mesh_key;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#e5c07b> Some</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh</span><span style=color:#d19a66>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> render_meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh2d_handle</span><span style=color:#d19a66>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                mesh2d_key</span><span style=color:#c594c5> |=</span><span style=color:#dfc479> Mesh2dPipelineKey</span><span>::</span><span style=color:#69c>from_primitive_topology_and_strip_index</span><span style=color:#d19a66>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>primitive_topology</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>index_format</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> pipeline_id</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    pipelines</span><span style=color:#c594c5>.</span><span style=color:#69c>specialize</span><span style=color:#d19a66>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>pipeline_cache,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>colored_mesh2d_pipeline, mesh2d_key</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> mesh_z</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> mesh2d_transforms</span><span style=color:#c594c5>.</span><span>world_from_local</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>z</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                transparent_phase</span><span style=color:#c594c5>.</span><span style=color:#69c>add_retained</span><span style=color:#d19a66>(</span><span style=color:#dfc479>Transparent2d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    entity:</span><span style=color:#d19a66> (</span><span>*</span><span style=color:#c0c5ce>render_entity,</span><span> *</span><span style=color:#c0c5ce>visible_entity</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    draw_function: draw_colored_mesh2d,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    pipeline: pipeline_id,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // The 2d render items are sorted according to their z value before rendering,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // in order to get correct transparency</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    sort_key:</span><span style=color:#69c> FloatOrd</span><span style=color:#d19a66>(</span><span style=color:#c0c5ce>mesh_z</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // This material is not batched</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    batch_range:</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#e79e6d>1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    extra_index:</span><span style=color:#dfc479> PhaseItemExtraIndex</span><span>::</span><span style=color:#e5c07b>None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    extracted_index:</span><span style=color:#b48ead> usize</span><span>::</span><span style=color:#d19a66>MAX</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    indexed: mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>indexed</span><span style=color:#d19a66>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#d19a66>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/2D Rendering/mesh2d-manual/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>
