@@ -6,7 +6,7 @@ weight = 2
 +++
 
 As a game engine, Bevy offers a wide variety of functionality out-of-the-box.
-It's unlikely that your project will take advantage of all of the features at the same time though.
+It's unlikely that your project will take advantage of every feature at the same time though.
 Keeping every feature enabled will result in increased compilation times and a bloated project binary size.
 However, each project might require a different combination of features.
 
@@ -102,7 +102,7 @@ Features in Rust are _additive_.
 This means that if any crate in your tree enables a feature,
 it will be enabled for all users of the crate.
 
-Be warned that ecosystem crates, or `bevy`'s own subcrates, may enable various features of subcrates.
+Be warned that ecosystem crates, or `bevy`'s own sub-crates, may enable various features of subcrates.
 Simply not enabling them yourself is insufficient.
 
 You can check which features are enabled using `cargo tree -f {p} {f}`.
@@ -114,7 +114,7 @@ or by gating some of their functionality behind feature flags of their own.
 
 {% end %}
 
-## Looking For Duplicate Crates
+## Looking for Duplicate Crates
 
 Unlike in other languages, Rust projects can have multiple different versions of the same dependency.
 This makes it much easier to have complex dependency trees, but can pointlessly bloat both binary size and compilation time.
@@ -158,7 +158,7 @@ These costs scale substantially the more you diverge from upstream, especially i
 As a result, we recommend:
 
 1. Only forking during the final stages of a project's lifecycle, once you are no longer updating Bevy versions.
-2. Only maintaining forks for particularly heavy dependencies, or for critical bug fixes.
+2. Only maintaining forks for particularly heavy dependencies, or for critical bugfixes.
 3. Minimizing divergence from upstream unless there is a good reason to do so.
 4. Committing your `Cargo.lock` file, and carefully testing any updates or upstream changes.
 

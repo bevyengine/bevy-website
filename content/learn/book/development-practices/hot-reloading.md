@@ -37,7 +37,7 @@ If you are also using embedded assets (through the [`load_embedded_asset!`] macr
 [`AssetEvent::Modified`]: https://docs.rs/bevy/latest/bevy/asset/enum.AssetEvent.html
 [`AssetChanged`]: https://docs.rs/bevy/latest/bevy/asset/prelude/struct.AssetChanged.html
 
-## Asset-driven gameplay logic
+## Asset-Driven Gameplay Logic
 
 Asset hot-reloading is so useful and powerful that some projects choose to lean into it,
 and deliberately architect their games to drive important gameplay parameters via assets to ease development and modding.
@@ -96,7 +96,7 @@ use bevy::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// A strongly typed identifier for an object that can be stored in a manifest
-#[derive(Component, Reflect, Serialize, Deserialize)]
+#[derive(Component, Hash, PartialEq, Eq, Reflect, Serialize, Deserialize)]
 pub struct Id<T> {
     value: u64,
     #[reflect(ignore)]
@@ -118,7 +118,7 @@ Because our manifests are asset files, you can take advantage of hot-reloading t
 As your data becomes more complex, your approach should become more sophisticated: break the process into multiple steps to resolve cross-object references, add error handling, and so on.
 
 While this workflow can be powerful and convenient, this pattern is not right for every project.
-There's non-trivial setup work, significant indirection, and you cannot capture arbitrarily complex gameplay logic in data.
+There's nontrivial setup work, significant indirection, and you cannot capture arbitrarily complex gameplay logic in data.
 This pattern is best suited to games that have a large amount of structured gameplay data that needs tuning:
 it would work well for something like an ARPG, but poorly for a walking simulator.
 

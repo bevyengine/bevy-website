@@ -105,7 +105,7 @@ world.add_observer(|event: On<DespawnEnemyUnits>, commands: Commands, enemy_unit
 
 In the above example, we've created an `Observer` that will run its `ObserverSystem` when a `DespawnEnemyUnits` event is triggered. Additionally, we've accessed `Commands` and `Query` as parameters to gain access to the data we need. Within the `ObserverSystem`, we use a `for` loop to despawn every `Enemy` entity that is given in the `enemy_units` query.
 
-It is also worth noting that we can trigger an `Event` within an `ObserverSystem`. Instead of triggering immediately (as is the case when using `World::trigger`), triggering an `Event` inside an `Observer` with `Commands::trigger` will run the newly triggered `ObserverSystem` at the end of the `Command` queue. Once all of the other `Observer` commands that are currently in the queue are run, then the new `ObserverSystem` will be run. Be aware that these events are evaluated _recursively_, and will exit once there are no more events left.
+It is also worth noting that we can trigger an `Event` within an `ObserverSystem`. Instead of triggering immediately (as is the case when using `World::trigger`), triggering an `Event` inside an `Observer` with `Commands::trigger` will run the newly triggered `ObserverSystem` at the end of the `Command` queue. Once all other `Observer` commands that are currently in the queue are run, then the new `ObserverSystem` will be run. Be aware that these events are evaluated _recursively_, and will exit once there are no more events left.
 
 ```rust
 // When Event `A` is triggered, it in turn will trigger Event `B`.
@@ -128,19 +128,19 @@ struct GameActive(bool);
 
 // Global Observer
 app.add_observer(
-    on_damage.run_if(|paused: Res<GamePaused>| !paused.0)
+    on_damage.run_if(|paused: Res<GameActive>| !paused.0)
 );
 
 // Entity Observer
 commands.spawn(Enemy).observe(
-    on_hit.run_if(|paused: Res<GamePaused>| !paused.0)
+    on_hit.run_if(|paused: Res<GameActive>| !paused.0)
 );
 
 // Builder Pattern
 world.spawn(
     Observer::new(DamageEvent)
         .with_entity(Enemy)
-        .run_if(|paused: Res<GamePaused>| !paused.0)
+        .run_if(|paused: Res<GameActive>| !paused.0)
 );
 ```
 
@@ -150,7 +150,7 @@ We also have the ability to chain multiple `.run_if` conditions together, althou
 // Multiple conditions can be chained (AND semantics)
 world.add_observer(
     on_damage
-        .run_if(|paused: Res<GamePaused>| !paused.0)
+        .run_if(|paused: Res<GameActive>| !paused.0)
         .run_if(resource_exists::<Player>)
 );
 ```
@@ -180,7 +180,7 @@ fn setup(mut commands: Commands) {
         // Dereference out of the `player` Single query.
         let (player_entity, mut player_health): (Entity, &mut Health) = *player;
         // Subtract the damage value from player_health.
-        player_health -= player_damage.amount;
+        player_health -= damage_event.amount;
     });
 }
 
@@ -227,7 +227,7 @@ struct Explode {
 }
 ```
 
-With [`EntityEvent`], we are selecting a single `Entity` that will be the target of our event. To determine the selected `Entity`, we need to provide the `EventEntity` with an `event_target` entity. By default, `event_target` will be set to the value inside an `entity` field in a struct (if it exists). Otherwise we can manually specify the `event_target` by using the `#[event_target]` field attribute.
+With [`EntityEvent`], we are selecting a single `Entity` that will be the target of our event. To determine the selected `Entity`, we need to provide the `EntityEvent` with an `event_target` entity. By default, `event_target` will be set to the value inside an `entity` field in a struct (if it exists). Otherwise, we can manually specify the `event_target` by using the `#[event_target]` field attribute.
 
 ```rust
 // A simple EntityEvent:
@@ -289,7 +289,7 @@ world.entity_mut(some_entity).observe(|explode: On<Explode>| {}); // Entity obse
 
 Since [`EntityEvent`] is triggered for individual entities themselves and not for all independent observer entities, we can leverage any [Relations] present on an `Entity` when an `EntityEvent` is activated. This is known as Propagation, or "Event Bubbling", and allows an `EntityEvent` to traverse a hierarchy chain while triggering on each `Entity` in that hierarchy chain.
 
-Propagation has to be explicitly enabled on an `EntityEvent`, and any `Observer` has to opt-in. This is done by setting the `#[entity_event(propagate)]` attribute on an `EntityEvent` and also by allowing the desired `Observer` to allow propagation:
+Propagation has to be explicitly enabled on an `EntityEvent`, and any `Observer` has to opt-in. This is done by setting the `#[entity_event(propagate)]` attribute on an `EntityEvent` and by allowing the desired `Observer` to allow propagation:
 
 ```rust
 // Set the `entity_event(propagate)` attribute.

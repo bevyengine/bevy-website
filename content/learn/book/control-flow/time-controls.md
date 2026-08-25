@@ -107,9 +107,6 @@ The length of time tracks how long the `Timer` will be active for, while the `Ti
 // A new timer that will expire after 5 seconds
 Timer::new(Duration::from_secs(5), TimerMode::Once);
 
-// A new timer that will repeat every 2 minutes
-Timer::new(Duration::from_mins(2), TimerMode::Repeating);
-
 // A new timer specifying a duration in seconds
 Timer::from_seconds(3.0, TimerMode::Once);
 ```
@@ -181,7 +178,7 @@ Instead of having to create a separate ability timer, just change the `TimerMode
 
 ```rust
 fn on_ability_upgrade(
-    mut ability_upgrade: Single<&mut AbilityTimer, With<AbilityUpgrade>
+    mut ability_upgrade: Single<&mut AbilityTimer, With<AbilityUpgrade>>
 ) {
     *ability_upgrade.timer.set_mode(TimerMode::Repeating);
 }
@@ -194,9 +191,9 @@ These can be helpful for giving buffs or debuffs to players or enemies based on 
 ```rust
 fn alter_ability(mut ability_timer: Single<&mut AbilityTimer, With<Ability>>) {
     // Reward the player with nearly unlimited ability use!
-    *ability_timer.set_duration(Duration::from_secs(0.1));
+    *ability_timer.timer.set_duration(Duration::from_secs(1));
     // Or punish them by effectively taking the ability away.
-    *ability_timer.set_duration(Duration::from_secs(10000.0));
+    *ability_timer.timer.set_duration(Duration::from_secs(10000));
 }
 ```
 
@@ -305,9 +302,9 @@ fn automatically_click_cookies(
     for mut cookie_clicker in query.iter_mut() {
         if boost.0 {
             let cookie_boost = 10;
-            cookie_clicker.timer.tick(Duration::from_secs(cookie_boost));
+            cookie_clicker.timer.tick(Duration::from_secs(cookie_boost) * delta_time);
             if cookie_clicker.timer.just_finished() {
-                cookies.0 += cookie_clicker.resources_gained;
+                cookies.0 += cookie_clicker.resources_gained * cookie_clicker.timer.times_finished_this_tick();
                 println!(
                     "Cookie Explosion! {}x Multiplier!",
                     cookie_clicker.timer.times_finished_this_tick()

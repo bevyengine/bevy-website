@@ -8,7 +8,7 @@ status = 'hidden'
 
 Instead of returning early from a system, you could choose to skip it entirely.
 This can reduce the complexity of using your systems by separating concerns of _"what a system does"_ from _"should it run"_.
-Skipping a system entirely can also reduce the overhead involved since it would be cancelled before being dispatched.
+Skipping a system entirely can also reduce the overhead involved since it would be canceled before being dispatched.
 Systems are run in parallel by default, so skipping a system means your application would do less work overall if a system is skipped.
 
 Bevy offers two complementary ways to skip systems: **run conditions** and **fallible system parameters**.
@@ -19,12 +19,12 @@ Run conditions are functions that can be attached to systems via the [`.run_if()
 More specifically, any read-only system which returns `bool` can be used as a run condition.
 This allows you to access information about the [`World`] and even store local state when determining if a system should be run.
 
-For your convenience, Bevy comes with a set of premade run conditions, which can be found by searching for [common conditions] in the Bevy docs.
-These run conditions are domain-specific, thus they are defined as needed by various Bevy subcrates.
+For your convenience, Bevy comes with a set of pre-made run conditions, which can be found by searching for [common conditions] in the Bevy docs.
+These run conditions are domain-specific, thus they are defined as needed by various Bevy sub-crates.
 They might allow you to [only run a system based on input being received], [run a system on a timer], or [run a system when in a certain game state].
 
-Most of these premade run conditions won't run on their own.
-Instead you'll have to provide them with a value which will then return a function that can be then be used as a run condition.
+Most of these pre-made run conditions won't run on their own.
+Instead, you'll have to provide them with a value which will then return a function that can be then be used as a run condition.
 
 Run conditions can also be composed.
 You can chain multiple `.run_if()` calls using AND logic, but there are also various boolean operations provided by the [`SystemCondition`] trait.
@@ -54,10 +54,10 @@ If that data is not found, [`SystemParam`] authors can choose how to proceed:
 - Or the system can be gracefully skipped.
 
 You aren't locked into either panicking or skipping though.
-When system params fail the resulting behavior can be configured (as detailed in the [handling errors] section), but by default failed system parameters will cause a panic.
+When system parameters fail the resulting behavior can be configured (as detailed in the [handling errors] section), but by default failed system parameters will cause a panic.
 
-Alternatively, system params can cause the system that they are part of to be skipped when validation fails.
-This represents an unusual but expected state of the application, which should be handled silently without issue.
+Alternatively, system parameters can cause the system that they are part of to be skipped when validation fails.
+This represents an unusual (but expected) application state, which should be handled silently without issue.
 
 For example, the [`Single`] system parameter works like [`Query`] except that it only succeeds if the query matches exactly one entity.
 If only a single entity matches, the returned value is provided and conveniently unwrapped.

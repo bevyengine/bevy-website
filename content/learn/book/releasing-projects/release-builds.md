@@ -6,7 +6,7 @@ weight = 0
 +++
 
 During compilation, the Rust compiler can make a number of different choices,
-trading off debuggability and compile times against final binary size and performance.
+trading off debugging capabilities and compile times against final binary size and performance.
 
 There are a number of important settings we can experiment with here.
 Compilation settings are recorded in your root `Cargo.toml` file, and should be grouped into [profiles](https://doc.rust-lang.org/cargo/reference/profiles.html) designed for different tasks.
@@ -87,7 +87,7 @@ Modifying this setting will slow down compilation.
 
 Similarly, we can eliminate intra-crate parallelism during compilation by setting `codegen-units = 1`.
 Spreading crate compilation across multiple codegen units speeds up compilation at the cost of increased
-build size and lost optimisation opportunities.
+build size and lost optimization opportunities.
 
 Modifying this setting will slow down compilation.
 

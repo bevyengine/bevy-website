@@ -16,14 +16,14 @@ However, from time to time, you might want to:
 - Maintain a cache of intermediate results to improve efficiency of computation.
 - Avoid allocating a new large data structure each frame.
 
-Bevy itself uses `Local` system params in two prominent places:
+Bevy itself uses `Local` system parameters in two prominent places:
 
 1. As part of the [`MessageReader`] abstraction, keeping track of which events each system has read.
 2. In run conditions like [`on_timer`], to track how much time has run.
 
-## Starting values
+## Starting Values
 
-`Local` system params are always initialized with a default value.
+`Local` system parameters are always initialized with a default value.
 This value is set by either the [`FromWorld`] trait or the [`Default`] trait.
 The [`FromWorld`] trait allows you to access arbitrary data from the world, allowing more complex initialization.
 

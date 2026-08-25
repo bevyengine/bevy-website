@@ -70,7 +70,8 @@ Finally, in your `main` function, call `init_asset` with your asset type to regi
 
 ```rust
 fn main() {
-    App::new(DefaultPlugins)
+    App::new()
+        .add_plugins(DefaultPlugins)
         .init_asset::<Card>()
         .run()
 }
@@ -95,7 +96,8 @@ For this, we need to define an asset loader: Bevy needs to know how it should re
 
 ```rust
 fn main() {
-    App::new(DefaultPlugins)
+    App::new()
+        .add_plugins(DefaultPlugins)
         .init_asset::<Card>()
         .register_asset_loader(CardLoader)
         .run()
