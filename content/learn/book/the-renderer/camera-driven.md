@@ -168,8 +168,9 @@ However, this doesn't adapt to different screen sizes, as players with different
 
 Alternatively, the [`Fixed`] variant allows you to manually specify the size of the projection.
 By providing a `f32` value for both the `width` and `height` fields, the projection will always display the same region of the game world, regardless of any window resizing.
+However, be aware that this will cause the image to stretch, which usually isn't the desired outcome.
 
-The [`AutoMin`] and [`AutoMax`] variants can be used to maintain the aspect ratio of the window, while additionally specifying that the axes can't be smaller than a given minimum or maximum.
+The [`AutoMin`] and [`AutoMax`] variants function similarly to the `WindowSize` variant, with the execption that the axes can't be smaller than a given minimum or maximum.
 
 Finally, the [`FixedVertical`] and [`FixedHorizontal`] will maintain a constant vertical or horizontal value while the other value will match the aspect ratio.
 
