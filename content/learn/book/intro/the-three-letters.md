@@ -13,7 +13,7 @@ Bevy however is relatively unique in how widely it uses these patterns: ECS in B
 ## The E: Entities
 
 **Entities are objects** in our game world.
-This might includes things like players, enemies, inventories, buffs, trees, buildings, cameras, skyboxes, particle effects, etc.
+This includes things like players, enemies, inventories, buffs, trees, buildings, cameras, skyboxes, particle effects, etc.
 
 An entity, by itself, is just an identifier; it does not store any data within it. In order to be useful, it needs to be associated with one or more [components](#the-c-components). [`Entity`] is the "entity identifier" type.
 
@@ -92,7 +92,9 @@ Bevy systems use a technique called [dependency injection](https://en.wikipedia.
 
 Systems usually access entities and their components via [Queries](@/learn/book/intro/the-next-three-letters.md#queries), which will be covered in the next chapter.
 
-Another cool feature: Bevy systems are generally run in parallel automatically. By inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are _disjoint_ and can be updated at the same time. This is particularly important for optimal utilization of multiple CPU cores.
+Bevy systems are generally run in parallel automatically. By inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. This is particularly important for optimal utilization of multiple CPU cores.
+
+For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are _disjoint_ and can be updated at the same time. 
 
 ## The Database Analogy
 
@@ -108,7 +110,7 @@ We won't deny it: these approaches work, and people can and have built great gam
 But by focusing on ECS as the heart of an engine (rather than a tacked on feature), we get significant benefits:
 
 - **Write fast, scalable code by default**:
-  - Most operations in games are of the form "look at each of these objects and do the same thing to them". Because of better [data locality], ECS architectures are much faster at iterating during these operations.
+  - Most operations in games take the shape of "look at each of these objects and do the same thing to them". Because of better [data locality], ECS architectures are much faster at iterating during these operations.
   - Non-ECS-by-default engines either don't receive these benefits at all, or require refactoring your data to use special-cased "fast path" APIs. In Bevy, everything is fast by default using a single, unified API.
 - **Engine code, game code, and library code all look the same**:
   - Because Bevy uses the same ECS API "everywhere" (including the engine itself), there is no line between "engine developer" and "app developer". Want to know how something in the engine works? Check the source! It will use the same patterns you're used to in your app code.
@@ -121,7 +123,7 @@ But by focusing on ECS as the heart of an engine (rather than a tacked on featur
   - Use the same powerful patterns for [control flow](@/learn/book/control-flow/_index.md) everywhere.
 
 Learning to take advantage of _everything_ a modern ECS has to offer will take time, but Bevy's ECS is actually extremely approachable!
-Start simple, and only add in new concepts and patterns when there is a problem to solve. The basics are straightforward, and if you are coming from a "traditional" engine, you can generally start by using the general patterns and structures you are used to.
+Start simple, and only add in new concepts and patterns when there is a problem to solve. The basics are straightforward, and if you are coming from a "traditional" engine, you can start by using the general patterns and structures you are used to.
 
 [data locality]: https://en.wikipedia.org/wiki/Locality_of_reference
 
