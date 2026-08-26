@@ -30,13 +30,13 @@ Over time, the Bevy community has converged on a few standard pieces of advice f
   - Logic that will only be repeated once generally belongs in systems.
 - **Marker components** (using unit structs) are incredibly valuable for extending your design.
   - Filtering by component presence/absence is (generally) faster and clearer than looping through a list of boolean values.
-    - Example: _Quickly look for "all entities that are a `Tower`", or "all entities that are `Chilled`"._
+    - Example:_Quickly look for "all entities that are a `Tower`", or "all entities that are `Chilled`".
   - Try to model meaningful groups at several levels of abstraction and/or along multiple axes.
-    - Example: _`Unit`, `Ant`, `Combatant`, etc._
+    - Example: `Unit`, `Ant`, `Combatant`, etc.
 - Enum components are very expressive, and help reduce bugs.
   - Enums can hold different data in each variant, allowing you to capture information effectively.
   - If you have a fixed number of options for a value, store it as an enum.
-    - Example: _`Team::Red`, `Team::Blue`, `Team::Green`, `Team::Yellow`, etc._
+    - Example: `Team::Red`, `Team::Blue`, `Team::Green`, `Team::Yellow`, etc.
 - Implementing traits like [`Add`] or [`Display`] can provide useful behavior in an idiomatic way.
 - Use [`Deref`] and [`DerefMut`] for tuple structs with a single item ([newtypes]).
   - This allows you to access the internal data with `*my_component` instead of `my_component.0`.
