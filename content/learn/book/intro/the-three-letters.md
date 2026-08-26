@@ -50,8 +50,8 @@ enum Color {
     Blue,
 }
 
-/// A "marker" component for entities which represents a player.
-/// This contains no data and functions as a "tag".
+/// A "marker" component for entities which represents a player. This contains no data. 
+/// It behaves like a "tag" in the ECS / stores no data on the entity.
 #[derive(Component)]
 struct Player;
 ```
@@ -113,9 +113,9 @@ But by focusing on ECS as the heart of an engine (rather than a tacked on featur
   - Most operations in games take the shape of "look at each of these objects and do the same thing to them". Because of better [data locality], ECS architectures are much faster at iterating during these operations.
   - Non-ECS-by-default engines either don't receive these benefits at all, or require refactoring your data to use special-cased "fast path" APIs. In Bevy, everything is fast by default using a single, unified API.
 - **Engine code, game code, and library code all look the same**:
-  - Because Bevy uses the same ECS API "everywhere" (including the engine itself), there is no line between "engine developer" and "app developer". Want to know how something in the engine works? Check the source! It will use the same patterns you're used to in your app code.
+  - Because Bevy uses the same ECS API pretty much everywhere (including the engine itself), there is no line between "engine developer" and "app developer". Want to know how something in the engine works? Check the source! It will use the same patterns you're used to in your app code.
   - This makes [contributing](@/learn/contribute/_index.md) fixes and features to Bevy much easier.
-  - It enables a thriving, heavily interoperable [ecosystem of third-party libraries](https://bevy.org/assets/).
+  - It enables a thriving, heavily interoperable [ecosystem of third-party libraries](https://bevy.org/assets/). The only difference between a third party plugin and a built-in engine feature is what repository it lives in!
 - **A consistent data model**
   - Structure your application using a uniform, flexible [modular architecture](@/learn/book/modular-architecture/_index.md).
   - Debug and inspect every part of your game (including engine internals) using the same [dev tools](@/learn/book/development-practices/_index.md).

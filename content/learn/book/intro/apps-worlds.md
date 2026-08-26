@@ -7,11 +7,11 @@ status = 'hidden'
 +++
 
 The last core concepts every Bevy user needs to understand are used to organize our data.
-A [`World`] stores our ECS data, while an [`App`] stores a [`World`] and controls the outer loop for how our game actually runs.
+A **World** stores our ECS data, while an **App** stores a [`World`] and controls the outer loop for how our game actually runs.
 
 ## Worlds
 
-The world contains all the data that's in your game or application.
+Worlds contain all of the data that's in your game or application.
 Everything we've talked about so far is either data that is *stored* in a [`World`] (entities, components, resources)
 or operations that are *evaluated on* a [`World`] (systems, queries, commands).
 In the database model, the world *is* the database.

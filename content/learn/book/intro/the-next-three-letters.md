@@ -8,7 +8,7 @@ status = 'hidden'
 
 If Entities, Components, and Systems are the first three concepts, then **Resources**, **Queries**, and **Commands** are the next three.
 
-These concepts are core to _Bevy_'s ECS, but they aren't inherent to the ECS architecture. This is an important thing to note: ECS as a general concept is a minimal, baseline set of principles. Bevy ECS is our complete _data model_. We've prioritized building something that is practical, simple, and fun to use. That means going beyond the bounds of traditional ECS!
+These concepts are core to _Bevy_'s ECS, but they aren't inherent to the ECS architecture. This is an important thing to note: ECS as a general concept is a minimal, baseline set of principles. We do not consider Bevy ECS to be constrained by these principles. We've prioritized building something that is capable, easy to understand, and fun to use. That means going beyond the bounds of traditional ECS!
 
 ## Resources
 
@@ -81,7 +81,7 @@ fn main() {
 {% callout(type="info") %}
 Bevy queries let you update massive amounts of game data in a tight, cache-friendly loop.
 
-Going back to our database analogy, a query is a lot like a [SQL SELECT statement](https://www.w3schools.com/sql/sql_select.asp): `SELECT Color, Location from World`
+Going back to our database analogy, a query is a lot like a [SQL SELECT statement](https://www.w3schools.com/sql/sql_select.asp): `SELECT Color, Location FROM World`
 {% end %}
 
 Queries have a lot more functionality than what's shown here.
