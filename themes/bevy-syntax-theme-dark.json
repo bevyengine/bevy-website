@@ -1875,7 +1875,7 @@
 			}
 		},
 		{
-			"scope": "meta.attribute.rust punctuation.brackets.round.rust",
+			"scope": "meta.attribute.rust, meta.interpolation.rust, meta.attribute.rust punctuation.brackets.round.rust",
 			"settings": {
 				"foreground": "#D19A66"
 			}
@@ -2004,12 +2004,6 @@
 			"scope": "punctuation.brackets.round.rust",
 			"settings": {
 				"foreground": "#ABB2BF"
-			}
-		},
-		{
-			"scope": "meta.attribute.rust, meta.interpolation.rust",
-			"settings": {
-				"foreground": "#D19A66"
 			}
 		}
 	]
