@@ -82,7 +82,7 @@
 		{
 			"scope": "variable.language.self.rust",
 			"settings": {
-				"foreground": "#c594c5"
+				"foreground": "#C594C5"
 			}
 		},
 		{
@@ -2003,7 +2003,7 @@
 		{
 			"scope": "punctuation.brackets.round.rust",
 			"settings": {
-				"foreground": "#abb2bf"
+				"foreground": "#ABB2BF"
 			}
 		},
 		{
