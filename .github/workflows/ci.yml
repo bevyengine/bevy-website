@@ -23,7 +23,7 @@ jobs:
           # Full git history is needed to get a proper list of changed files within `mega-linter`
           fetch-depth: 0
       - name: Run Mega Linter
-        uses: oxsecurity/megalinter/flavors/javascript@v7
+        uses: oxsecurity/megalinter/flavors/javascript@v9
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
