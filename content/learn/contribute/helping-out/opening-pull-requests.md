@@ -86,7 +86,8 @@ If you're new to Bevy, here's the workflow we use:
    * You can also use the CLI tool by installing [typos-cli](https://github.com/crate-ci/typos?tab=readme-ov-file#install) and running `typos` to check for typos, and fix them by running `typos -w`.
 8. Push your changes to your fork on GitHub and open a Pull Request.
 9. Respond to any CI failures or review feedback. While CI failures must be fixed before we can merge your PR, you do not need to *agree* with all feedback from your reviews, merely acknowledge that it was given. If you cannot come to an agreement, leave the thread open and defer to a Maintainer or the Project Lead's final judgement.
-10. When your PR is ready to merge, a Maintainer or the Project Lead will review it and suggest final changes. If those changes are minimal they may even apply them directly to speed up merging.
+10. When updating your PR branch, please avoid force pushing as it can disrupt GitHub notifications and make it harder for reviewers to track changes. Instead, merge the main branch into your feature branch when you need to resolve conflicts or update your PR.
+11. When your PR is ready to merge, a Maintainer or the Project Lead will review it and suggest final changes. If those changes are minimal they may even apply them directly to speed up merging.
 
 If you end up adding a new official Bevy crate to the `bevy` repository:
 
