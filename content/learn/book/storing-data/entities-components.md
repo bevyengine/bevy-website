@@ -6,7 +6,8 @@ weight = 1
 status = 'hidden'
 +++
 
-**Entities** are the fundamental objects of your game world, whizzing around, storing cameras, being controlled by the player or tracking the state of a button.
+**Entities** are the fundamental objects of your game world: players, cameras, levels, user interfaces ... everything is an entity!
+
 On its own, the [`Entity`] type is a simple identifier: it has neither behavior nor data.
 Components store this data, and define the overlapping categories that the entity belongs to.
 
