@@ -24,31 +24,35 @@ Labels are our primary tool for organizing work. Here are a few of the most comm
   - `D-Straightforward`: simple bug fixes, API improvements, docs, tests, and examples.
   - `D-Modest`: new features, refactors, and challenging bug fixes.
   - `D-Complex`: rewrites and unusually complex features.
+  - `D-Wicked`: particularly challenging and frustrating problems and features that have defied previous attempts to fix.
   - The `D-Domain-Expert` and `D-Domain-Agnostic` labels are modifiers, which describe if unusually high or low degrees of domain-specific knowledge are required.
   - The `D-Unsafe` label is applied to any code that touches `unsafe` Rust, which requires special skills and scrutiny.
 - **O**: Operating System (e.g. O-Linux, O-Web, O-Windows, ...).
 - **P**: Priority (e.g. P-Critical, P-High, ...).
-  - Most work is not explicitly categorized by priority; volunteer work mostly occurs on an ad hoc basis depending on contributor interests.
+  - `P-Critical`: used for complete breakages or security issues.
+  - `P-High`: problems that result in severe user or contributor disruption.
+  - Most work is not explicitly categorized by priority; volunteer work mostly occurs on an ad hoc basis depending on contributor interests. The goal system is used to collect work, while milestones track regressions and cleanup that need to be resolved before the next release. See [Milestones, Roadmaps and Work Planning](#milestones-roadmaps-and-work-planning) below!
+  - As a result, we have deliberately chosen not to implement prioritization labels such as `P-Low`, and tend to avoid using priority labels for feature work. If a volunteer or user wants to work on low-priority backlog or bug fix work, great! We welcome such contributions, although it will naturally tend to be harder to attract reviews and decision-making energy for such work.
 - **S**: Status. The most common include:
   - `S-Ready-For-Implementation`: this issue is ready for someone to pick it up and open a PR!
-  - `S-Needs-Triage`: this issue needs to be labeled.
+  - `S-Needs-Triage`: this issue or PR needs to be labeled. Add this if you're not fully sure on labelling. Note that PRs do not get this label by default: make sure to check "Unlabelled" as well!
   - `S-Needs-Reproduction`: this issue needs a reproducible example to allow fixes to be tested.
   - `S-Adopt-Me`: the original PR author has no intent to complete the PR, and it should be adopted by another contributor. This PR should be closed, and have an issue linked to track its adoption.
   - `S-Blocked`: cannot move forward until something else changes.
   - `S-Needs-Review`: this PR needs reviewer attention to move forward.
-  - `S-Waiting-On-Author`: the author needs to make changes to this PR before it can be approved.
+  - `S-Waiting-on-Author`: the author needs to make changes to this PR before it can be approved.
   - `S-Ready-For-Final-Review`: this PR has been approved by the community and is ready for a Maintainer to consider merging it.
-  - `S-Needs-Help`: this PR is almost ready to be merged but blocked on a technical issue. Helping to fix it is welcomed.
+  - `S-Needs-Guidance`: this PR is by an author trying to learn something new, whether that's open source in general or a new domain. Be kind and patient while helping them.
   - `S-Nominated-To-Close`: the triage team feels this PR or issue should no longer be considered, but for any reason are leaving it open for further discussion. The triage team will document their reasoning, and if you disagree please feel free to continue the discussion!
 - **X**: Controversiality. In order, these are:
   - `X-Uncontroversial`: everyone should agree that this is a good idea.
   - `X-Contentious`: there's real design thought needed to ensure that this is the right path forward.
-  - `X-Controversial`: there's active disagreement and / or large-scale architectural implications involved.
+  - `X-Needs-SME`: there's active disagreement and / or large-scale architectural implications involved that require a qualified SME to resolve.
   - `X-Blessed`: work that was previously controversial, but whose controversial (but perhaps not technical) elements have been endorsed by the relevant decision makers.
 - **M**: Meta, for supporting work that needs to be done.
   - `M-Release-Note`:  work that should be called out in the blog post due to impact. This decision is usually made by Maintainers, but feel free to nominate a change in the comments if you think it deserves the spotlight!
   - `M-Migration-Guide`: this is a breaking change to Bevy's public API, and requires advice on how to migrate existing code. These changes cannot be shipped in minor versions!
-
+  
  Check Github for a complete and up-to-date list with descriptions at [the engine repo](https://github.com/bevyengine/bevy/labels) or [the website repo](https://github.com/bevyengine/bevy-website/labels).
 You can learn more about labels on [GitHub's documentation](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
 
@@ -58,7 +62,7 @@ When making PRs, try to split out more controversial changes from less controver
 
 ### Examples
 
-Some reasons to apply `X-Controversial` or `X-Contentious` include:
+Some reasons to apply `X-Needs-SME` or `X-Contentious` include:
 
 1. Changes to a project-wide workflow or style.
 2. New architecture for a large feature.
@@ -69,7 +73,7 @@ Some reasons to apply `X-Controversial` or `X-Contentious` include:
 7. Touching licensing information (due to the level of precision required).
 8. Adding root-level files and folders (due to the high level of visibility).
 
-Keep in mind that `X-Contentious` is a lesser form of `X-Controversial`. If you create a PR that _might_ be controversial but no one has objected to yet, consider adding `X-Contentious` so reviewers take extra care to consider the consequences.
+Keep in mind that `X-Contentious` is a lesser form of `X-Needs-SME`. If you create a PR that _might_ be controversial but no one has objected to yet, consider adding `X-Contentious` so reviewers take extra care to consider the consequences.
 
 Some reasons to apply `X-Uncontroversial` include:
 
@@ -123,7 +127,7 @@ There are several paths for PRs to be closed:
 5. SMEs or Maintainers may, and are encouraged, to unilaterally close PRs that fall into one or more of the remaining categories.
 6. In the case of PRs where some members of the community, other than the author, are in favor, and some are opposed, any two relevant SMEs or Maintainers may act in concert to close the PR.
 7. For a PR that has been sitting for a while and became bitrotten, check with the original author if they intend to continue working on it. If not, or without a response, the PR can be labeled with `S-Adopt-Me`, and closed. Tracking adoption progress will happen in a linked issue.
-8. Inactive `X-Controversial` can be closed if relevant SMEs or Maintainers have decided there's no more interest for it. If it's still interesting and controversial, a decision must be made.
+8. Inactive `X-Needs-SME` work can be closed if relevant SMEs or Maintainers have decided there's no more interest for it. If it's still interesting and controversial, a decision must be made.
 9. Majority AI-Generated PRs cannot be merged as per the Bevy org's [AI policy][ai-policy]. Please mark these PRs as `S-Nominated-to-Close` for maintainers to make a final decision.
 
 When closing a PR, check if it has an issue linked. If it does not, you should strongly consider creating an issue and linking the now-closed PR to help make sure the previous work can be discovered and credited.
