@@ -6,6 +6,7 @@ image = "cover.jpg"
 show_image = true
 image_subtitle = "A factory from Exofactory, an in-development factory builder made with Bevy"
 image_subtitle_link = "https://store.steampowered.com/app/3615720/Exofactory/"
+short_excerpt = "Experimental raytraced lighting, cleaner events, richer UI tools, hot patching, DLSS, and faster rendering headline this release."
 +++
 
 Thanks to **278** contributors, **1311** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.17** release on [crates.io](https://crates.io/crates/bevy)!
