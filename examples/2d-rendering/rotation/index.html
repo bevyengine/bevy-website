@@ -1,0 +1,308 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Generic 2D Rotation" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/2d-rendering/rotation/ property=og:url><meta content="https://bevy.org/examples/2d-rendering/rotation/../static/screenshots/2D Rendering/rotation.png" property=og:image><meta content="Demonstrates rotating entities in 2D with quaternions" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Generic 2D Rotation</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>2D Rendering / Generic 2D Rotation</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/2d/rotation.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/2d-rendering/rotation/>here</a>.</aside></div><div class="example__explanation media-content"><p>Demonstrates rotating entities in 2D using quaternions.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>rotation.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span><span style=color:#c0c5ce>math</span><span>::ops</span><span style=color:#c0c5ce>, prelude</span><span>::*}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> BOUNDS</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Vec2</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec2</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>1200.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 640.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#c0c5ce>Time</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Fixed</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>from_hz</span><span>(</span><span style=color:#e79e6d>60.0</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            FixedUpdate</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                player_movement_system,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                snap_to_player_system,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                rotate_to_player_system,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Player component</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Player</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Linear speed in meters per second</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    movement_speed:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Rotation speed in radians per second</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    rotation_speed:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Snap to player ship behavior</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> SnapToPlayer</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Rotate to face player ship behavior</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> RotateToPlayer</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Rotation speed in radians per second</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    rotation_speed:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Add the game's entities to our world and creates an orthographic camera for 2D rendering.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The Bevy coordinate system is the same for 2D and 3D, in terms of 2D this means that:</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> * `X` axis goes from left to right (`+X` points right)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> * `Y` axis goes from bottom to top (`+Y` point up)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> * `Z` axis goes from far to near (`+Z` points towards you, out of the screen)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The origin is at the center of the screen.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> ship_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"textures/simplespace/ship_C.png"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> enemy_a_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"textures/simplespace/enemy_A.png"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> enemy_b_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"textures/simplespace/enemy_B.png"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Camera2d</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Create a minimal UI explaining how to interact with the example</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Up Arrow: Move Forward</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>Left / Right Arrow: Turn"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> horizontal_margin</span><span style=color:#c594c5> =</span><span style=color:#d19a66> BOUNDS</span><span style=color:#c594c5>.</span><span>x /</span><span style=color:#e79e6d> 4.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> vertical_margin</span><span style=color:#c594c5> =</span><span style=color:#d19a66> BOUNDS</span><span style=color:#c594c5>.</span><span>y /</span><span style=color:#e79e6d> 4.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Player controlled ship</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Sprite</span><span>::</span><span style=color:#69c>from_image</span><span>(</span><span style=color:#c0c5ce>ship_handle</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Player</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            movement_speed:</span><span style=color:#e79e6d> 500.0</span><span style=color:#c0c5ce>,</span><span style=color:#8e9aa4>                  // Meters per second</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            rotation_speed: f32</span><span>::</span><span style=color:#69c>to_radians</span><span>(</span><span style=color:#e79e6d>360.0</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#8e9aa4> // Degrees per second</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Enemy that snaps to face the player spawns on the bottom and left</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Sprite</span><span>::</span><span style=color:#69c>from_image</span><span>(</span><span style=color:#c0c5ce>enemy_a_handle</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.0</span><span> -</span><span style=color:#c0c5ce> horizontal_margin,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SnapToPlayer</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Sprite</span><span>::</span><span style=color:#69c>from_image</span><span>(</span><span style=color:#c0c5ce>enemy_a_handle</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span> -</span><span style=color:#c0c5ce> vertical_margin,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SnapToPlayer</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Enemy that rotates to face the player enemy spawns on the top and right</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Sprite</span><span>::</span><span style=color:#69c>from_image</span><span>(</span><span style=color:#c0c5ce>enemy_b_handle</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.0</span><span> +</span><span style=color:#c0c5ce> horizontal_margin,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        RotateToPlayer</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            rotation_speed: f32</span><span>::</span><span style=color:#69c>to_radians</span><span>(</span><span style=color:#e79e6d>45.0</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#8e9aa4> // Degrees per second</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Sprite</span><span>::</span><span style=color:#69c>from_image</span><span>(</span><span style=color:#c0c5ce>enemy_b_handle</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span> +</span><span style=color:#c0c5ce> vertical_margin,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        RotateToPlayer</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            rotation_speed: f32</span><span>::</span><span style=color:#69c>to_radians</span><span>(</span><span style=color:#e79e6d>90.0</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#8e9aa4> // Degrees per second</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Demonstrates applying rotation and movement based on keyboard input.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> player_movement_system</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    keyboard_input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    query:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Player</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Transform</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c0c5ce>ship,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> transform</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> query</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> rotation_factor</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> movement_factor</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowLeft</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        rotation_factor</span><span style=color:#c594c5> +=</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowRight</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        rotation_factor</span><span style=color:#c594c5> -=</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowUp</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        movement_factor</span><span style=color:#c594c5> +=</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Update the ship rotation around the Z axis (perpendicular to the 2D plane of the screen)</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_z</span><span>(</span><span style=color:#c0c5ce>rotation_factor</span><span> *</span><span style=color:#c0c5ce> ship</span><span style=color:#c594c5>.</span><span>rotation_speed *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Get the ship's forward vector by applying the current rotation to the ships initial facing</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // vector</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> movement_direction</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5>.</span><span>rotation *</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Get the distance the ship will move based on direction, the ship's movement speed and delta</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // time</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> movement_distance</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> movement_factor</span><span> *</span><span style=color:#c0c5ce> ship</span><span style=color:#c594c5>.</span><span>movement_speed *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Create the change in translation using the new movement direction and distance</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> translation_delta</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> movement_direction</span><span> *</span><span style=color:#c0c5ce> movement_distance;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Update the ship translation with our new translation delta</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    transform</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>+=</span><span style=color:#c0c5ce> translation_delta;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Bound the ship within the invisible level bounds</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> extents</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#69c>from</span><span>((</span><span style=color:#d19a66>BOUNDS</span><span> /</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    transform</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span style=color:#69c>min</span><span>(</span><span style=color:#c0c5ce>extents</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span>(-</span><span style=color:#c0c5ce>extents</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Demonstrates snapping the enemy ship to face the player ship immediately.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> snap_to_player_system</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#dfc479>With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SnapToPlayer</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Player</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    player_transform:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Player</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Get the player translation in 2D</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> player_translation</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> player_transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span style=color:#69c>xy</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> enemy_transform</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Get the vector from the enemy ship to the player ship in 2D and normalize it.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> to_player</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>player_translation</span><span> -</span><span style=color:#c0c5ce> enemy_transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span style=color:#69c>xy</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>normalize</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Get the quaternion to rotate from the initial enemy facing direction to the direction</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // facing the player</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> rotate_to_player</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Quat</span><span>::</span><span style=color:#69c>from_rotation_arc</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#c0c5ce>, to_player</span><span style=color:#c594c5>.</span><span style=color:#69c>extend</span><span>(</span><span style=color:#e79e6d>0</span><span style=color:#c594c5>.</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Rotate the enemy to face the player</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        enemy_transform</span><span style=color:#c594c5>.</span><span>rotation </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> rotate_to_player;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Demonstrates rotating an enemy ship to face the player ship at a given rotation speed.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This method uses the vector dot product to determine if the enemy is facing the player and</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> if not, which way to rotate to face the player. The dot product on two unit length vectors</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> will return a value between -1.0 and +1.0 which tells us the following about the two vectors:</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> * If the result is 1.0 the vectors are pointing in the same direction, the angle between them is</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e>   0 degrees.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> * If the result is 0.0 the vectors are perpendicular, the angle between them is 90 degrees.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> * If the result is -1.0 the vectors are parallel but pointing in opposite directions, the angle</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e>   between them is 180 degrees.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> * If the result is positive the vectors are pointing in roughly the same direction, the angle</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e>   between them is greater than 0 and less than 90 degrees.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> * If the result is negative the vectors are pointing in roughly opposite directions, the angle</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e>   between them is greater than 90 and less than 180 degrees.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> It is possible to get the angle by taking the arc cosine (`acos`) of the dot product. It is</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> often unnecessary to do this though. Beware than `acos` will return `NaN` if the input is less</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> than -1.0 or greater than 1.0. This can happen even when working with unit vectors due to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> floating point precision loss, so it pays to clamp your dot product value before calling</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> `acos`.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> rotate_to_player_system</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>RotateToPlayer</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Transform</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Player</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    player_transform:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Player</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Get the player translation in 2D</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> player_translation</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> player_transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span style=color:#69c>xy</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>config,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> enemy_transform</span><span>)</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Get the enemy ship forward vector in 2D (already unit length)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> enemy_forward</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>enemy_transform</span><span style=color:#c594c5>.</span><span>rotation *</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>xy</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Get the vector from the enemy ship to the player ship in 2D and normalize it.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> to_player</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>player_translation</span><span> -</span><span style=color:#c0c5ce> enemy_transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span style=color:#69c>xy</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>normalize</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Get the dot product between the enemy forward vector and the direction to the player.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> forward_dot_player</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> enemy_forward</span><span style=color:#c594c5>.</span><span style=color:#69c>dot</span><span>(</span><span style=color:#c0c5ce>to_player</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // If the dot product is approximately 1.0 then the enemy is already facing the player and</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // we can early out.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span> (</span><span style=color:#c0c5ce>forward_dot_player</span><span> -</span><span style=color:#e79e6d> 1.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>abs</span><span>()</span><span style=color:#c0c5ce> &lt;</span><span style=color:#b48ead> f32</span><span>::</span><span style=color:#d19a66>EPSILON</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Get the right vector of the enemy ship in 2D (already unit length)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> enemy_right</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>enemy_transform</span><span style=color:#c594c5>.</span><span>rotation *</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#dfc479>X</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>xy</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Get the dot product of the enemy right vector and the direction to the player ship.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // If the dot product is negative them we need to rotate counter clockwise, if it is</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // positive we need to rotate clockwise. Note that `copysign` will still return 1.0 if the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // dot product is 0.0 (because the player is directly behind the enemy, so perpendicular</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // with the right vector).</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> right_dot_player</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> enemy_right</span><span style=color:#c594c5>.</span><span style=color:#69c>dot</span><span>(</span><span style=color:#c0c5ce>to_player</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Determine the sign of rotation from the right dot player. We need to negate the sign</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // here as the 2D bevy co-ordinate system rotates around +Z, which is pointing out of the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // screen. Due to the right hand rule, positive rotation around +Z is counter clockwise and</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // negative is clockwise.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> rotation_sign</span><span style=color:#c594c5> =</span><span> -</span><span style=color:#b48ead>f32</span><span>::</span><span style=color:#69c>copysign</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>, right_dot_player</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Limit rotation so we don't overshoot the target. We need to convert our dot product to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // an angle here so we can get an angle of rotation to clamp against.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> max_angle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>acos</span><span>(</span><span style=color:#c0c5ce>forward_dot_player</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span>(-</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span>))</span><span style=color:#c0c5ce>;</span><span style=color:#8e9aa4> // Clamp acos for safety</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Calculate angle of rotation with limit</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> rotation_angle</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            rotation_sign</span><span> * (</span><span style=color:#c0c5ce>config</span><span style=color:#c594c5>.</span><span>rotation_speed *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>min</span><span>(</span><span style=color:#c0c5ce>max_angle</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Rotate the enemy to face the player</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        enemy_transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_z</span><span>(</span><span style=color:#c0c5ce>rotation_angle</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/2D Rendering/rotation/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

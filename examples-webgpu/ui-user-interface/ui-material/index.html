@@ -1,0 +1,227 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="UI Material" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/ui-user-interface/ui-material/ property=og:url><meta content="https://bevy.org/examples-webgpu/ui-user-interface/ui-material/../static/screenshots/UI (User Interface)/ui_material.png" property=og:image><meta content="Demonstrates creating and using custom Ui materials" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>UI Material</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>UI (User Interface) / UI Material</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/ui/ui_material.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/ui-user-interface/ui-material/>here</a>.</aside></div><div class="example__explanation media-content"><p>Demonstrates the use of <a href=https://bevy.org/examples-webgpu/ui-user-interface/ui-material/UiMaterial><code>UiMaterials</code></a> and how to change material values</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>ui_material.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>css</span><span>::</span><span style=color:#dfc479>DARK_BLUE</span><span style=color:#c0c5ce>, prelude</span><span>::*</span><span style=color:#c0c5ce>, reflect</span><span>::</span><span style=color:#dfc479>TypePath</span><span style=color:#c0c5ce>, render</span><span>::</span><span style=color:#c0c5ce>render_resource</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    shader</span><span>::</span><span style=color:#dfc479>ShaderRef</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This example uses a shader source file from the assets subdirectory</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SHADER_ASSET_PATH</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "shaders/custom_ui_material.wgsl"</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#c0c5ce>UiMaterialPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomUiMaterial</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>default</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, animate</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> ui_materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomUiMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Camera so we can see UI</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Camera2d</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_children</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>parent</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> banner_scale_factor</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            parent</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>905.0</span><span> *</span><span style=color:#c0c5ce> banner_scale_factor</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>363.0</span><span> *</span><span style=color:#c0c5ce> banner_scale_factor</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    border: UiRect</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>20</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>20</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                MaterialNode</span><span>(</span><span style=color:#c0c5ce>ui_materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>CustomUiMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    color: LinearRgba</span><span>::</span><span style=color:#d19a66>WHITE</span><span style=color:#c594c5>.</span><span style=color:#69c>to_f32_array</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    slider: Vec4</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>0.5</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    color_texture: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"branding/banner.png"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    border_color: LinearRgba</span><span>::</span><span style=color:#d19a66>WHITE</span><span style=color:#c594c5>.</span><span style=color:#69c>to_f32_array</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // UI material nodes can have outlines and shadows like any other UI node</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Outline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>2</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    offset:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    color:</span><span style=color:#d19a66> DARK_BLUE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>AsBindGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Asset</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TypePath</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CustomUiMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Color multiplied with the image</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[uniform(0)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color:</span><span style=color:#dfc479> Vec4</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Represents how much of the image is visible</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Goes from 0 to 1</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> A `Vec4` is used here because Bevy with webgl2 requires that uniforms are 16-byte aligned but only the first component is read.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[uniform(1)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    slider:</span><span style=color:#dfc479> Vec4</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Image used to represent the slider</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[texture(2)]</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[sampler(3)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color_texture:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Color of the image's border</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[uniform(4)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    border_color:</span><span style=color:#dfc479> Vec4</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> UiMaterial</span><span style=color:#c594c5> for</span><span style=color:#dfc479> CustomUiMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> fragment_shader</span><span>() -></span><span style=color:#dfc479> ShaderRef</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>        SHADER_ASSET_PATH</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Fills the slider slowly over 2 seconds and resets it</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Also updates the color of the image to a rainbow color</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> animate</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomUiMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>MaterialNode</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomUiMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> duration</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> handle</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>q</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> material</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>handle</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // rainbow color effect</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> new_color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>hsl</span><span>((</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>elapsed_secs</span><span>() *</span><span style=color:#e79e6d> 60.0</span><span>) %</span><span style=color:#e79e6d> 360.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> border_color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>hsl</span><span>((</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>elapsed_secs</span><span>() *</span><span style=color:#e79e6d> 60.0</span><span>) %</span><span style=color:#e79e6d> 360.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.75</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.75</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            material</span><span style=color:#c594c5>.</span><span>color </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> new_color</span><span style=color:#c594c5>.</span><span style=color:#69c>to_linear</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>to_vec4</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            material</span><span style=color:#c594c5>.</span><span>slider</span><span style=color:#c594c5>.</span><span>x </span><span style=color:#c594c5>=</span></span>
+<span class=giallo-l><span>                ((</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>elapsed_secs</span><span>() % (</span><span style=color:#c0c5ce>duration</span><span> *</span><span style=color:#e79e6d> 2.0</span><span>)) -</span><span style=color:#c0c5ce> duration</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>abs</span><span>() /</span><span style=color:#c0c5ce> duration;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            material</span><span style=color:#c594c5>.</span><span>border_color </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> border_color</span><span style=color:#c594c5>.</span><span style=color:#69c>to_linear</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>to_vec4</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div><input class=tabs__radio id=tab1 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab1><code>shaders/custom_ui_material.wgsl</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=wgsl><span class=giallo-l><span style=color:#7f848e>// Draws a progress bar with properties defined in CustomUiMaterial</span></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>import bevy_ui</span><span>::</span><span style=color:#e06c75>ui_vertex_output</span><span>::</span><span style=color:#e5c07b>UiVertexOutput</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@group(</span><span style=color:#d19a66>1</span><span>) @binding(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> var</span><span>&lt;</span><span style=color:#c678dd>uniform</span><span>></span><span style=color:#e06c75> color</span><span>: </span><span style=color:#c678dd>vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>;</span></span>
+<span class=giallo-l><span>@group(</span><span style=color:#d19a66>1</span><span>) @binding(</span><span style=color:#d19a66>1</span><span>)</span><span style=color:#c678dd> var</span><span>&lt;</span><span style=color:#c678dd>uniform</span><span>></span><span style=color:#e06c75> slider</span><span>: </span><span style=color:#c678dd>vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>;</span></span>
+<span class=giallo-l><span>@group(</span><span style=color:#d19a66>1</span><span>) @binding(</span><span style=color:#d19a66>2</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> material_color_texture</span><span>: </span><span style=color:#e06c75>texture_2d</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>;</span></span>
+<span class=giallo-l><span>@group(</span><span style=color:#d19a66>1</span><span>) @binding(</span><span style=color:#d19a66>3</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> material_color_sampler</span><span>: </span><span style=color:#e06c75>sampler</span><span>;</span></span>
+<span class=giallo-l><span>@group(</span><span style=color:#d19a66>1</span><span>) @binding(</span><span style=color:#d19a66>4</span><span>)</span><span style=color:#c678dd> var</span><span>&lt;</span><span style=color:#c678dd>uniform</span><span>></span><span style=color:#e06c75> border_color</span><span>: </span><span style=color:#c678dd>vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@fragment</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> fragment</span><span>(</span><span style=color:#e06c75>in</span><span>: </span><span style=color:#e5c07b>UiVertexOutput</span><span>) -> @location(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> output_color</span><span style=color:#56b6c2> =</span><span style=color:#61afef> textureSample</span><span>(</span><span style=color:#e06c75>material_color_texture</span><span>,</span><span style=color:#e06c75> material_color_sampler</span><span>,</span><span style=color:#e06c75> in</span><span>.uv) *</span><span style=color:#e06c75> color</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // half size of the UI node</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> half_size</span><span style=color:#56b6c2> =</span><span style=color:#d19a66> 0.5</span><span> *</span><span style=color:#e06c75> in</span><span>.size;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // position relative to the center of the UI node</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> p</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> in</span><span>.uv *</span><span style=color:#e06c75> in</span><span>.size -</span><span style=color:#e06c75> half_size</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // thickness of the border closest to the current position</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> b</span><span style=color:#56b6c2> =</span><span style=color:#61afef> vec2</span><span>(</span></span>
+<span class=giallo-l><span style=color:#61afef>        select</span><span>(</span><span style=color:#e06c75>in</span><span>.border_widths.x,</span><span style=color:#e06c75> in</span><span>.border_widths.z,</span><span style=color:#d19a66> 0</span><span>. &lt;</span><span style=color:#e06c75> p</span><span>.x),</span></span>
+<span class=giallo-l><span style=color:#61afef>        select</span><span>(</span><span style=color:#e06c75>in</span><span>.border_widths.y,</span><span style=color:#e06c75> in</span><span>.border_widths.w,</span><span style=color:#d19a66> 0</span><span>. &lt;</span><span style=color:#e06c75> p</span><span>.y)</span></span>
+<span class=giallo-l><span>    );</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // select radius for the nearest corner</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> rs</span><span style=color:#56b6c2> =</span><span style=color:#61afef> select</span><span>(</span><span style=color:#e06c75>in</span><span>.border_radius.xy,</span><span style=color:#e06c75> in</span><span>.border_radius.wz,</span><span style=color:#d19a66> 0.0</span><span> &lt;</span><span style=color:#e06c75> p</span><span>.y);</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> radius</span><span style=color:#56b6c2> =</span><span style=color:#61afef> select</span><span>(</span><span style=color:#e06c75>rs</span><span>.x,</span><span style=color:#e06c75> rs</span><span>.y,</span><span style=color:#d19a66> 0.0</span><span> &lt;</span><span style=color:#e06c75> p</span><span>.x);</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // distance along each axis from the corner</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> d</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> half_size</span><span> -</span><span style=color:#61afef> abs</span><span>(</span><span style=color:#e06c75>p</span><span>);</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // if the distance to the edge from the current position on any axis </span></span>
+<span class=giallo-l><span style=color:#7f848e>    // is less than the border width on that axis then the position is within </span></span>
+<span class=giallo-l><span style=color:#7f848e>    // the border and we return the border color</span></span>
+<span class=giallo-l><span style=color:#c678dd>    if</span><span style=color:#e06c75> d</span><span>.x &lt;</span><span style=color:#e06c75> b</span><span>.x </span><span style=color:#56b6c2>||</span><span style=color:#e06c75> d</span><span>.y &lt;</span><span style=color:#e06c75> b</span><span>.y {</span></span>
+<span class=giallo-l><span style=color:#7f848e>        // select radius for the nearest corner</span></span>
+<span class=giallo-l><span style=color:#c678dd>        let</span><span style=color:#e06c75> rs</span><span style=color:#56b6c2> =</span><span style=color:#61afef> select</span><span>(</span><span style=color:#e06c75>in</span><span>.border_radius.xy,</span><span style=color:#e06c75> in</span><span>.border_radius.wz,</span><span style=color:#d19a66> 0.0</span><span> &lt;</span><span style=color:#e06c75> p</span><span>.y);</span></span>
+<span class=giallo-l><span style=color:#c678dd>        let</span><span style=color:#e06c75> radius</span><span style=color:#56b6c2> =</span><span style=color:#61afef> select</span><span>(</span><span style=color:#e06c75>rs</span><span>.x,</span><span style=color:#e06c75> rs</span><span>.y,</span><span style=color:#d19a66> 0.0</span><span> &lt;</span><span style=color:#e06c75> p</span><span>.x);</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>        // determine if the point is inside the curved corner and return the corresponding color</span></span>
+<span class=giallo-l><span style=color:#c678dd>        let</span><span style=color:#e06c75> q</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> radius</span><span> -</span><span style=color:#e06c75> d</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>        if</span><span style=color:#e06c75> radius</span><span> &lt;</span><span style=color:#61afef> min</span><span>(</span><span style=color:#61afef>max</span><span>(</span><span style=color:#e06c75>q</span><span>.x,</span><span style=color:#e06c75> q</span><span>.y),</span><span style=color:#d19a66> 0.0</span><span>) +</span><span style=color:#61afef> length</span><span>(</span><span style=color:#61afef>vec2</span><span>(</span><span style=color:#61afef>max</span><span>(</span><span style=color:#e06c75>q</span><span>.x,</span><span style=color:#d19a66> 0.0</span><span>),</span><span style=color:#61afef> max</span><span>(</span><span style=color:#e06c75>q</span><span>.y,</span><span style=color:#d19a66> 0.0</span><span>))) {</span></span>
+<span class=giallo-l><span style=color:#c678dd>            return</span><span style=color:#61afef> vec4</span><span>(</span><span style=color:#d19a66>0.0</span><span>);</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c678dd> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c678dd>            return</span><span style=color:#e06c75> border_color</span><span>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // sample the texture at this position if it's to the left of the slider value</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // otherwise return a fully transparent color</span></span>
+<span class=giallo-l><span style=color:#c678dd>    if</span><span style=color:#e06c75> in</span><span>.uv.x &lt;</span><span style=color:#e06c75> slider</span><span>.x {</span></span>
+<span class=giallo-l><span style=color:#c678dd>        let</span><span style=color:#e06c75> output_color</span><span style=color:#56b6c2> =</span><span style=color:#61afef> textureSample</span><span>(</span><span style=color:#e06c75>material_color_texture</span><span>,</span><span style=color:#e06c75> material_color_sampler</span><span>,</span><span style=color:#e06c75> in</span><span>.uv) *</span><span style=color:#e06c75> color</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>        return</span><span style=color:#e06c75> output_color</span><span>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c678dd> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c678dd>        return</span><span style=color:#61afef> vec4</span><span>(</span><span style=color:#d19a66>0.0</span><span>);</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/UI (User Interface)/ui-material/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

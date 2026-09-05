@@ -1,0 +1,386 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Run physics in a fixed timestep" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/movement/physics-in-fixed-timestep/ property=og:url><meta content=https://bevy.org/examples/movement/physics-in-fixed-timestep/../static/screenshots/Movement/physics_in_fixed_timestep.png property=og:image><meta content="Handles input, physics, and rendering in an industry-standard way by using a fixed timestep" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Run physics in a fixed timestep</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Movement / Run physics in a fixed timestep</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/movement/physics_in_fixed_timestep.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/movement/physics-in-fixed-timestep/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example shows how to properly handle player input, advance a physics simulation in a fixed timestep, and display the results.<p>The classic source for how and why this is done is Glenn Fiedler's article <a href=https://gafferongames.com/post/fix_your_timestep/ rel=external>Fix Your Timestep!</a>. For a more Bevy-centric source, see <a href=https://bevy-cheatbook.github.io/fundamentals/fixed-timestep.html rel=external>this cheatbook entry</a>.<h2 id=motivation>Motivation</h2><p>The naive way of moving a player is to just update their position like so:<pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=plain><span class=giallo-l><span>transform.translation += velocity;</span></span></code></pre><p>The issue here is that the player's movement speed will be tied to the frame rate. Faster machines will move the player faster, and slower machines will move the player slower. In fact, you can observe this today when running some old games that did it this way on modern hardware! The player will move at a breakneck pace.<p>The more sophisticated way is to update the player's position based on the time that has passed:<pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=plain><span class=giallo-l><span>transform.translation += velocity * time.delta_secs();</span></span></code></pre><p>This way, velocity represents a speed in units per second, and the player will move at the same speed regardless of the frame rate.<p>However, this can still be problematic if the frame rate is very low or very high. If the frame rate is very low, the player will move in large jumps. This may lead to a player moving in such large jumps that they pass through walls or other obstacles. In general, you cannot expect a physics simulation to behave nicely with <em>any</em> delta time. Ideally, we want to have some stability in what kinds of delta times we feed into our physics simulation.<p>The solution is using a fixed timestep. This means that we advance the physics simulation by a fixed amount at a time. If the real time that passed between two frames is less than the fixed timestep, we simply don't advance the physics simulation at all. If it is more, we advance the physics simulation multiple times until we catch up. You can read more about how Bevy implements this in the documentation for <a href=https://docs.rs/bevy/latest/bevy/time/struct.Fixed.html rel=external><code>bevy::time::Fixed</code></a>.<p>This leaves us with a last problem, however. If our physics simulation may advance zero or multiple times per frame, there may be frames in which the player's position did not need to be updated at all, and some where it is updated by a large amount that resulted from running the physics simulation multiple times. This is physically correct, but visually jarring. Imagine a player moving in a straight line, but depending on the frame rate, they may sometimes advance by a large amount and sometimes not at all. Visually, we want the player to move smoothly. This is why we need to separate the player's position in the physics simulation from the player's position in the visual representation. The visual representation can then be interpolated smoothly based on the previous and current actual player position in the physics simulation.<p>This is a tradeoff: every visual frame is now slightly lagging behind the actual physical frame, but in return, the player's movement will appear smooth. There are other ways to compute the visual representation of the player, such as extrapolation. See the <a href=https://cbournhonesque.github.io/lightyear/book/concepts/advanced_replication/visual_interpolation.html rel=external>documentation of the lightyear crate</a> for a nice overview of the different methods and their respective tradeoffs.<p>If we decide to use a fixed timestep, our game logic should mostly go in the <code>FixedUpdate</code> schedule. One notable exception is the camera. Cameras should update as often as possible, or the player will very quickly notice choppy movement if it's only updated at the same rate as the physics simulation. So, we use a variable timestep for the camera, updating its transform every frame. The question now is which schedule to use. That depends on whether the camera data is required for the physics simulation to run or not. For example, in 3D games, the camera rotation often determines which direction the player moves when pressing "W", so we need to rotate the camera <em>before</em> the fixed timestep. In contrast, the translation of the camera depends on what the physics simulation has calculated for the player's position. Therefore, we need to update the camera's translation <em>after</em> the fixed timestep. Fortunately, we can get smooth movement by simply using the interpolated player translation for the camera as well.<h2 id=implementation>Implementation</h2><ul><li>The player's inputs since the last physics update are stored in the <code>AccumulatedInput</code> component.<li>The player's velocity is stored in a <code>Velocity</code> component. This is the speed in units per second.<li>The player's current position in the physics simulation is stored in a <code>PhysicalTranslation</code> component.<li>The player's previous position in the physics simulation is stored in a <code>PreviousPhysicalTranslation</code> component.<li>The player's visual representation is stored in Bevy's regular <code>Transform</code> component.<li>Every frame, we go through the following steps:<li>Accumulate the player's input and set the current speed in the <code>handle_input</code> system. This is run in the <code>RunFixedMainLoop</code> schedule, ordered in <code>RunFixedMainLoopSystems::BeforeFixedMainLoop</code>, which runs before the fixed timestep loop. This is run every frame.<li>Rotate the camera based on the player's input. This is also run in <code>RunFixedMainLoopSystems::BeforeFixedMainLoop</code>.<li>Advance the physics simulation by one fixed timestep in the <code>advance_physics</code> system. Accumulated input is consumed here. This is run in the <code>FixedUpdate</code> schedule, which runs zero or multiple times per frame.<li>Update the player's visual representation in the <code>interpolate_rendered_transform</code> system. This interpolates between the player's previous and current position in the physics simulation. It is run in the <code>RunFixedMainLoop</code> schedule, ordered in <code>RunFixedMainLoopSystems::AfterFixedMainLoop</code>, which runs after the fixed timestep loop. This is run every frame.<li>Update the camera's translation to the player's interpolated translation. This is also run in <code>RunFixedMainLoopSystems::AfterFixedMainLoop</code>.</ul><h2 id=controls>Controls</h2><table><thead><tr><th style=text-align:left>Key Binding<th style=text-align:left>Action<tbody><tr><td style=text-align:left><code>W</code><td style=text-align:left>Move up<tr><td style=text-align:left><code>S</code><td style=text-align:left>Move down<tr><td style=text-align:left><code>A</code><td style=text-align:left>Move left<tr><td style=text-align:left><code>D</code><td style=text-align:left>Move right<tr><td style=text-align:left>Mouse<td style=text-align:left>Rotate camera</table></div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>physics_in_fixed_timestep.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>FRAC_PI_2</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::tailwind</span><span style=color:#c0c5ce>, input</span><span>::</span><span style=color:#c0c5ce>mouse</span><span>::</span><span style=color:#dfc479>AccumulatedMouseMotion</span><span style=color:#c0c5ce>, prelude</span><span>::*}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DidFixedTimestepRunThisFrame</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>spawn_text, spawn_player, spawn_environment</span><span>))</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // At the beginning of each frame, clear the flag that indicates whether the fixed timestep has run this frame.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>PreUpdate</span><span style=color:#c0c5ce>, clear_fixed_timestep_flag</span><span>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // At the beginning of each fixed timestep, set the flag that indicates whether the fixed timestep has run this frame.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>FixedPreUpdate</span><span style=color:#c0c5ce>, set_fixed_time_step_flag</span><span>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Advance the physics simulation using a fixed timestep.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>FixedUpdate</span><span style=color:#c0c5ce>, advance_physics</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The `RunFixedMainLoop` schedule allows us to schedule systems to run before and after the fixed timestep loop.</span></span>
+<span class=giallo-l><span style=color:#dfc479>            RunFixedMainLoop</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span></span>
+<span class=giallo-l><span>                (</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // The camera needs to be rotated before the physics simulation is advanced in before the fixed timestep loop,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // so that the physics simulation can use the current rotation.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Note that if we ran it in `Update`, it would be too late, as the physics simulation would already have been advanced.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // If we ran this in `FixedUpdate`, it would sometimes not register player input, as that schedule may run zero times per frame.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    rotate_camera,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Accumulate our input before the fixed timestep loop to tell the physics simulation what it should do during the fixed timestep.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    accumulate_input,</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>chain</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>in_set</span><span>(</span><span style=color:#c0c5ce>RunFixedMainLoopSystems</span><span>::</span><span style=color:#dfc479>BeforeFixedMainLoop</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                (</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Clear our accumulated input after it was processed during the fixed timestep.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // By clearing the input *after* the fixed timestep, we can still use `AccumulatedInput` inside `FixedUpdate` if we need it.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    clear_input</span><span style=color:#c594c5>.</span><span style=color:#69c>run_if</span><span>(</span><span style=color:#c0c5ce>did_fixed_timestep_run_this_frame</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // The player's visual representation needs to be updated after the physics simulation has been advanced.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // This could be run in `Update`, but if we run it here instead, the systems in `Update`</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // will be working with the `Transform` that will actually be shown on screen.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    interpolate_rendered_transform,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // The camera can then use the interpolated transform to position itself correctly.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    translate_camera,</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>chain</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>in_set</span><span>(</span><span style=color:#c0c5ce>RunFixedMainLoopSystems</span><span>::</span><span style=color:#dfc479>AfterFixedMainLoop</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A vector representing the player's input, accumulated over all frames that ran</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> since the last time the physics simulation was advanced.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> AccumulatedInput</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The player's movement input (WASD).</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    movement:</span><span style=color:#dfc479> Vec2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Other input that could make sense would be e.g.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // boost: bool</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A vector representing the player's velocity in the physics simulation.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Velocity</span><span>(</span><span style=color:#dfc479>Vec3</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The actual position of the player in the physics simulation.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This is separate from the `Transform`, which is merely a visual representation.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> If you want to make sure that this component is always initialized</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> with the same value as the `Transform`'s translation, you can</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> use a [component lifecycle hook](https://docs.rs/bevy/latest/bevy/ecs/component/struct.ComponentHooks.html)</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> PhysicalTranslation</span><span>(</span><span style=color:#dfc479>Vec3</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The value [`PhysicalTranslation`] had in the last fixed timestep.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Used for interpolation in the `interpolate_rendered_transform` system.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> PreviousPhysicalTranslation</span><span>(</span><span style=color:#dfc479>Vec3</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawn the player and a 3D camera. We could also spawn the camera as a child of the player,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> but in practice, they are usually spawned separately so that the player's rotation does not</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> influence the camera's rotation.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_player</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span><span style=color:#c0c5ce>Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>, CameraSensitivity</span><span>::</span><span style=color:#69c>default</span><span>()))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Name</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Player"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>0.3</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        AccumulatedInput</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Velocity</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        PhysicalTranslation</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        PreviousPhysicalTranslation</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawn a field of floating spheres to fly around in</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_environment</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> sphere_material</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>SKY_200</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> sphere_mesh</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Sphere</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0.3</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> spheres_in_x</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 6</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> spheres_in_y</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 4</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> spheres_in_z</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 10</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> distance</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 3.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> x</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#c0c5ce>spheres_in_x</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> y</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#c0c5ce>spheres_in_y</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            for</span><span style=color:#c0c5ce> z</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#c0c5ce>spheres_in_z</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> translation</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    x</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#c0c5ce> distance</span><span> - (</span><span style=color:#c0c5ce>spheres_in_x</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> -</span><span style=color:#e79e6d> 1.0</span><span>) *</span><span style=color:#c0c5ce> distance</span><span> /</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    y</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#c0c5ce> distance</span><span> - (</span><span style=color:#c0c5ce>spheres_in_y</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> -</span><span style=color:#e79e6d> 1.0</span><span>) *</span><span style=color:#c0c5ce> distance</span><span> /</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    z</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#c0c5ce> distance</span><span> - (</span><span style=color:#c0c5ce>spheres_in_z</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> -</span><span style=color:#e79e6d> 1.0</span><span>) *</span><span style=color:#c0c5ce> distance</span><span> /</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    Name</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Sphere"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    Transform</span><span>::</span><span style=color:#69c>from_translation</span><span>(</span><span style=color:#c0c5ce>translation</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    Mesh3d</span><span>(</span><span style=color:#c0c5ce>sphere_mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>sphere_material</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        DirectionalLight</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_to</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span>(-</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>3.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span>)</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawn a bit of UI text to explain how to move the player.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_text</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> font</span><span style=color:#c594c5> =</span><span style=color:#dfc479> TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        font_size:</span><span style=color:#dfc479> FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>25.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            bottom:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        children!</span><span>[</span></span>
+<span class=giallo-l><span>            (</span><span style=color:#c0c5ce>Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Move the player with WASD"</span><span>)</span><span style=color:#c0c5ce>, font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span><span style=color:#dfc479>Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Rotate the camera with the mouse"</span><span>)</span><span style=color:#c0c5ce>, font</span><span>)</span></span>
+<span class=giallo-l><span>        ]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> rotate_camera</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    accumulated_mouse_motion:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AccumulatedMouseMotion</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    player:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>CameraSensitivity</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> transform, camera_sensitivity</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> player</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> accumulated_mouse_motion</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5> !=</span><span style=color:#dfc479> Vec2</span><span>::</span><span style=color:#d19a66>ZERO</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Note that we are not multiplying by delta time here.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The reason is that for mouse movement, we already get the full movement that happened since the last frame.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This means that if we multiply by delta time, we will get a smaller rotation than intended by the user.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> delta_yaw</span><span style=color:#c594c5> =</span><span> -</span><span style=color:#c0c5ce>delta</span><span style=color:#c594c5>.</span><span>x *</span><span style=color:#c0c5ce> camera_sensitivity</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> delta_pitch</span><span style=color:#c594c5> =</span><span> -</span><span style=color:#c0c5ce>delta</span><span style=color:#c594c5>.</span><span>y *</span><span style=color:#c0c5ce> camera_sensitivity</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span> (</span><span style=color:#c0c5ce>yaw, pitch, roll</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5>.</span><span>rotation</span><span style=color:#c594c5>.</span><span style=color:#69c>to_euler</span><span>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>YXZ</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> yaw</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> yaw</span><span> +</span><span style=color:#c0c5ce> delta_yaw;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // If the pitch was ±¹⁄₂ π, the camera would look straight up or down.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // When the user wants to move the camera back to the horizon, which way should the camera face?</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The camera has no way of knowing what direction was "forward" before landing in that extreme position,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // so the direction picked will for all intents and purposes be arbitrary.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Another issue is that for mathematical reasons, the yaw will effectively be flipped when the pitch is at the extremes.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // To not run into these issues, we clamp the pitch to a safe range.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        const</span><span style=color:#d19a66> PITCH_LIMIT</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#d19a66> FRAC_PI_2</span><span> -</span><span style=color:#e79e6d> 0.01</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> pitch</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>pitch</span><span> +</span><span style=color:#c0c5ce> delta_pitch</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span>(-</span><span style=color:#d19a66>PITCH_LIMIT</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> PITCH_LIMIT</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span>rotation </span><span style=color:#c594c5>=</span><span style=color:#dfc479> Quat</span><span>::</span><span style=color:#69c>from_euler</span><span>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>YXZ</span><span style=color:#c0c5ce>, yaw, pitch, roll</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CameraSensitivity</span><span>(</span><span style=color:#dfc479>Vec2</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> CameraSensitivity</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span>() -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        Self</span><span>(</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // These factors are just arbitrary mouse sensitivity values.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // It's often nicer to have a faster horizontal sensitivity than vertical.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // We use a component for them so that we can make them user-configurable at runtime</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // for accessibility reasons.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // It also allows you to inspect them in an editor if you `Reflect` the component.</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Vec2</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0.003</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.002</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Handle keyboard input and accumulate it in the `AccumulatedInput` component.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> There are many strategies for how to handle all the input that happened since the last fixed timestep.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This is a very simple one: we just use the last available input.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> That strategy works fine for us since the user continuously presses the input keys in this example.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> If we had some kind of instantaneous action like activating a boost ability, we would need to remember that that input</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> was pressed at some point since the last fixed timestep.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> accumulate_input</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    keyboard_input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    player:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> AccumulatedInput</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Velocity</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Since Bevy's 3D renderer assumes SI units, this has the unit of meters per second.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Note that about 1.5 is the average walking speed of a human.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    const</span><span style=color:#d19a66> SPEED</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 4.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> input,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> velocity</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> player</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Reset the input to zero before reading the new input. As mentioned above, we can only do this</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // because this is continuously pressed by the user. Do not reset e.g. whether the user wants to boost.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input</span><span style=color:#c594c5>.</span><span>movement </span><span style=color:#c594c5>=</span><span style=color:#dfc479> Vec2</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyW</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        input</span><span style=color:#c594c5>.</span><span>movement</span><span style=color:#c594c5>.</span><span>y </span><span style=color:#c594c5>+=</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyS</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        input</span><span style=color:#c594c5>.</span><span>movement</span><span style=color:#c594c5>.</span><span>y </span><span style=color:#c594c5>-=</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyA</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        input</span><span style=color:#c594c5>.</span><span>movement</span><span style=color:#c594c5>.</span><span>x </span><span style=color:#c594c5>-=</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyD</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        input</span><span style=color:#c594c5>.</span><span>movement</span><span style=color:#c594c5>.</span><span>x </span><span style=color:#c594c5>+=</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Remap the 2D input to Bevy's 3D coordinate system.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Pressing W makes `input.y` go up. Since Bevy assumes that -Z is forward, we make our new Z equal to -input.y</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> input_3d</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec3</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        x: input</span><span style=color:#c594c5>.</span><span>movement</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        y:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        z:</span><span> -</span><span style=color:#c0c5ce>input</span><span style=color:#c594c5>.</span><span>movement</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Rotate the input so that forward is aligned with the camera's forward direction.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> rotated_input</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5>.</span><span>rotation *</span><span style=color:#c0c5ce> input_3d;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We need to normalize and scale because otherwise</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // diagonal movement would be faster than horizontal or vertical movement.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We use `clamp_length_max` instead of `.normalize_or_zero()` because gamepad input</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // may be smaller than 1.0 when the player is pushing the stick just a little bit.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    velocity</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> rotated_input</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp_length_max</span><span>(</span><span style=color:#e79e6d>1.0</span><span>) *</span><span style=color:#d19a66> SPEED</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A simple resource that tells us whether the fixed timestep ran this frame.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>pub struct</span><span style=color:#dfc479> DidFixedTimestepRunThisFrame</span><span>(</span><span style=color:#e5c07b>bool</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Reset the flag at the start of every frame.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> clear_fixed_timestep_flag</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> did_fixed_timestep_run_this_frame:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DidFixedTimestepRunThisFrame</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    did_fixed_timestep_run_this_frame</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Set the flag during each fixed timestep.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> set_fixed_time_step_flag</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> did_fixed_timestep_run_this_frame:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DidFixedTimestepRunThisFrame</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    did_fixed_timestep_run_this_frame</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> did_fixed_timestep_run_this_frame</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    did_fixed_timestep_run_this_frame:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DidFixedTimestepRunThisFrame</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) -></span><span style=color:#e5c07b> bool</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    did_fixed_timestep_run_this_frame</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Clear the input after it was processed in the fixed timestep.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> clear_input</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> input:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> AccumulatedInput</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span>    **</span><span style=color:#c0c5ce>input</span><span style=color:#c594c5> =</span><span style=color:#dfc479> AccumulatedInput</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Advance the physics simulation by one fixed timestep. This may run zero or multiple times per frame.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Note that since this runs in `FixedUpdate`, `Res&lt;Time>` would be `Res&lt;Time&lt;Fixed>>` automatically.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> We are being explicit here for clarity.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> advance_physics</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    fixed_time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Fixed</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#dfc479> PhysicalTranslation</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#dfc479> PreviousPhysicalTranslation</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#dfc479>Velocity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> current_physical_translation,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> previous_physical_translation, velocity</span><span>)</span><span style=color:#c594c5> in</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>()</span></span>
+<span class=giallo-l><span>    {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        previous_physical_translation</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> current_physical_translation</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        current_physical_translation</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> +=</span><span style=color:#c0c5ce> velocity</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> *</span><span style=color:#c0c5ce> fixed_time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> interpolate_rendered_transform</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    fixed_time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Fixed</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#dfc479>PhysicalTranslation</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#dfc479>PreviousPhysicalTranslation</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> transform, current_physical_translation, previous_physical_translation</span><span>)</span><span style=color:#c594c5> in</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>()</span></span>
+<span class=giallo-l><span>    {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> previous</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> previous_physical_translation</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> current</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> current_physical_translation</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The overstep fraction is a value between 0 and 1 that tells us how far we are between two fixed timesteps.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> alpha</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> fixed_time</span><span style=color:#c594c5>.</span><span style=color:#69c>overstep_fraction</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> rendered_translation</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> previous</span><span style=color:#c594c5>.</span><span style=color:#69c>lerp</span><span>(</span><span style=color:#c0c5ce>current, alpha</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> rendered_translation;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Sync the camera's position with the player's interpolated position</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> translate_camera</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> camera:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    player:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#dfc479>With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AccumulatedInput</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> player</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/Movement/physics-in-fixed-timestep/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

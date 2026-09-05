@@ -1,0 +1,664 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Many Cubes" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/stress-tests/many-cubes/ property=og:url><meta content="https://bevy.org/examples/stress-tests/many-cubes/../static/screenshots/Stress Tests/many_cubes.png" property=og:image><meta content="Simple benchmark to test per-entity draw overhead. Run with the `sphere` argument to test frustum culling" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Many Cubes</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Stress Tests / Many Cubes</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/stress_tests/many_cubes.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/stress-tests/many-cubes/>here</a>.</aside></div><div class="example__explanation media-content"><p>Simple benchmark to test per-entity draw overhead.<p>To measure performance realistically, be sure to run this in release mode. <code>cargo run --example many_cubes --release</code><p>By default, this arranges the meshes in a spherical pattern that distributes the meshes evenly.<p>See <code>cargo run --example many_cubes --release -- --help</code> for more options.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>many_cubes.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::{</span><span style=color:#c0c5ce>f64</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>PI</span><span style=color:#c0c5ce>, str</span><span>::</span><span style=color:#dfc479>FromStr</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> argh</span><span>::</span><span style=color:#dfc479>FromArgs</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset</span><span>::</span><span style=color:#dfc479>RenderAssetUsages</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#c0c5ce>visibility</span><span>::{</span><span style=color:#dfc479>NoCpuCulling</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> NoFrustumCulling</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    diagnostic</span><span>::{</span><span style=color:#dfc479>FrameTimeDiagnosticsPlugin</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> LogDiagnosticsPlugin</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    light</span><span>::</span><span style=color:#dfc479>NotShadowCaster</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    math</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        ops</span><span>::{cbrt</span><span style=color:#c0c5ce>,</span><span> sqrt}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DVec2</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DVec3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    post_process</span><span>::</span><span style=color:#c0c5ce>motion_blur</span><span>::</span><span style=color:#dfc479>MotionBlur</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        batching</span><span>::</span><span style=color:#dfc479>NoAutomaticBatching</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_resource</span><span>::{</span><span style=color:#dfc479>Extent3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureDimension</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureFormat</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        view</span><span>::</span><span style=color:#dfc479>NoIndirectDrawing</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    window</span><span>::{</span><span style=color:#dfc479>PresentMode</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> WindowResolution</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    winit</span><span>::</span><span style=color:#dfc479>WinitSettings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> chacha20</span><span>::</span><span style=color:#dfc479>ChaCha8Rng</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> rand</span><span>::{</span><span style=color:#c0c5ce>seq</span><span>::</span><span style=color:#dfc479>IndexedRandom</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RngExt</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SeedableRng</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>FromArgs</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> `many_cubes` stress test</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Args</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> how the cube instances should be positioned.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(option</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> default </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "Layout::Sphere"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    layout:</span><span style=color:#dfc479> Layout</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> whether to step the camera animation by a fixed amount such that each frame is the same across runs.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(switch)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    benchmark:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> whether to vary the material data in each instance.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(switch)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    vary_material_data_per_instance:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> the number of different textures from which to randomly select the material base color. 0 means no textures.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(option</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> default </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "0"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    material_texture_count:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> the number of different meshes from which to randomly select. Clamped to at least 1.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(option</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> default </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "1"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mesh_count:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> the number of cubes</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(option</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> default </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "1600000"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    instance_count:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> whether to disable all frustum culling. Stresses queuing and batching as all mesh material entities in the scene are always drawn.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(switch)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    no_frustum_culling:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> whether to disable automatic batching. Skips batching resulting in heavy stress on render pass draw command encoding.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(switch)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    no_automatic_batching:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> whether to disable indirect drawing.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(switch)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    no_indirect_drawing:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> whether to disable CPU culling.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(switch)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    no_cpu_culling:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> whether to enable directional light cascaded shadow mapping.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(switch)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    shadows:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> whether to continuously rotate individual cubes.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(switch)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    rotate_cubes:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> animate the cube materials by updating the material from the cpu each frame</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(switch)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    animate_materials:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> whether to enable motion blur.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[argh(switch)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    motion_blur:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> Layout</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Cube</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[default]</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Sphere</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Dense</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> FromStr</span><span style=color:#c594c5> for</span><span style=color:#dfc479> Layout</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Err</span><span style=color:#c594c5> =</span><span style=color:#dfc479> String</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> from_str</span><span>(</span><span style=color:#c0c5ce>s:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span>) -></span><span style=color:#dfc479> Result</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>Self</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> Self</span><span>::</span><span style=color:#dfc479>Err</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span style=color:#c0c5ce> s</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "cube"</span><span> =></span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c594c5>Self</span><span>::</span><span style=color:#dfc479>Cube</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "sphere"</span><span> =></span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c594c5>Self</span><span>::</span><span style=color:#dfc479>Sphere</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "dense"</span><span> =></span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c594c5>Self</span><span>::</span><span style=color:#dfc479>Dense</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            _</span><span> =></span><span style=color:#dfc479> Err</span><span>(</span><span style=color:#61afef>format!</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "Unknown layout value: '</span><span style=color:#d19a66>{s}</span><span style=color:#9fc37f>', valid options: 'cube', 'sphere', 'dense'"</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // `from_env` panics on the web</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[cfg(not(target_arch </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "wasm32"</span><span style=color:#d19a66>))]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> args:</span><span style=color:#dfc479> Args</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> argh</span><span>::</span><span style=color:#69c>from_env</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[cfg(target_arch </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "wasm32"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Args</span><span>::</span><span style=color:#69c>from_args</span><span>(</span><span style=color:#c594c5>&</span><span>[]</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span>[])</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> app</span><span style=color:#c594c5> =</span><span style=color:#dfc479> App</span><span>::</span><span style=color:#69c>new</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_plugins</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DefaultPlugins</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#dfc479>WindowPlugin</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            primary_window:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#dfc479>Window</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                present_mode: PresentMode</span><span>::</span><span style=color:#dfc479>AutoNoVsync</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                resolution: WindowResolution</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>1920</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1080</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_scale_factor_override</span><span>(</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        FrameTimeDiagnosticsPlugin</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        LogDiagnosticsPlugin</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>    .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#c0c5ce>WinitSettings</span><span>::</span><span style=color:#69c>continuous</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>    .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>    .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, print_mesh_count</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>layout </span><span style=color:#c594c5>!=</span><span style=color:#dfc479> Layout</span><span>::</span><span style=color:#dfc479>Dense</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, move_camera</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>rotate_cubes {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, rotate_cubes</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>animate_materials {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, update_materials</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#c0c5ce>args</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> WIDTH</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> usize</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 200</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> HEIGHT</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> usize</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 200</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    args:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Args</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mesh_assets:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    material_assets:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    images:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#61afef>    warn!</span><span>(</span><span style=color:#61afef>include_str!</span><span>(</span><span style=color:#9fc37f>"warning_string.txt"</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> images</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> images</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> material_assets</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> material_assets</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mesh_assets</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> mesh_assets</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5> =</span><span style=color:#69c> init_meshes</span><span>(</span><span style=color:#c0c5ce>args, mesh_assets</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> material_textures</span><span style=color:#c594c5> =</span><span style=color:#69c> init_textures</span><span>(</span><span style=color:#c0c5ce>args, images</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5> =</span><span style=color:#69c> init_materials</span><span>(</span><span style=color:#c0c5ce>args,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>material_textures, material_assets</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We're seeding the PRNG here to make this example deterministic for testing purposes.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This isn't strictly required in practical use unless you need your app to be deterministic.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> material_rng</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ChaCha8Rng</span><span>::</span><span style=color:#69c>seed_from_u64</span><span>(</span><span style=color:#e79e6d>42</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    match</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>layout {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Layout</span><span>::</span><span style=color:#dfc479>Sphere</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // NOTE: This pattern is good for testing performance of culling as it provides roughly</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // the same number of visible meshes regardless of the viewing angle.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> n_points:</span><span style=color:#b48ead> usize</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>instance_count</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // NOTE: f64 is used to avoid precision issues that produce visual artifacts in the distribution</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> radius</span><span style=color:#c594c5> =</span><span style=color:#d19a66> WIDTH</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f64</span><span> *</span><span style=color:#e79e6d> 2.5</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> golden_ratio</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.5</span><span style=color:#b48ead>f64</span><span> * (</span><span style=color:#e79e6d>1.0</span><span style=color:#b48ead>f64</span><span> +</span><span style=color:#e79e6d> 5.0</span><span style=color:#b48ead>f64</span><span style=color:#c594c5>.</span><span style=color:#69c>sqrt</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            for</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#c0c5ce>n_points</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> spherical_polar_theta_phi</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#69c>                    fibonacci_spiral_on_sphere</span><span>(</span><span style=color:#c0c5ce>golden_ratio, i, n_points</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> unit_sphere_p</span><span style=color:#c594c5> =</span><span style=color:#69c> spherical_polar_to_cartesian</span><span>(</span><span style=color:#c0c5ce>spherical_polar_theta_phi</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span> (</span><span style=color:#c0c5ce>mesh, transform</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>                        Mesh3d</span><span>(</span><span style=color:#c0c5ce>mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Transform</span><span>::</span><span style=color:#69c>from_translation</span><span>((</span><span style=color:#c0c5ce>radius</span><span> *</span><span style=color:#c0c5ce> unit_sphere_p</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>as_vec3</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>                            .</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                            .</span><span style=color:#69c>mul_transform</span><span>(*</span><span style=color:#c0c5ce>transform</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>insert_if</span><span>(</span><span style=color:#dfc479>NoFrustumCulling</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> ||</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>no_frustum_culling)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>insert_if</span><span>(</span><span style=color:#dfc479>NoAutomaticBatching</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> ||</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>no_automatic_batching)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>insert_if</span><span>(</span><span style=color:#dfc479>NoCpuCulling</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> ||</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>no_cpu_culling)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // camera</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let mut</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#c0c5ce>Camera3d</span><span>::</span><span style=color:#69c>default</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>no_indirect_drawing {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                camera</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#dfc479>NoIndirectDrawing</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>no_cpu_culling {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                camera</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#dfc479>NoCpuCulling</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>motion_blur {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                camera</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    MotionBlur</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                        // Use an unrealistically large shutter angle so that motion blur is clearly visible.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        shutter_angle:</span><span style=color:#e79e6d> 3.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ..</span><span style=color:#c0c5ce>Default</span><span>::</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // MSAA and MotionBlur are not compatible on WebGL.</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    #[cfg(all(</span></span>
+<span class=giallo-l><span style=color:#d19a66>                        feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "webgl2"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                        target_arch </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "wasm32"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>                        not(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "webgpu"</span><span style=color:#d19a66>)</span></span>
+<span class=giallo-l><span style=color:#d19a66>                    ))]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    Msaa</span><span>::</span><span style=color:#dfc479>Off</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Inside-out box around the meshes onto which shadows are cast (though you cannot see them...)</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>                Mesh3d</span><span>(</span><span style=color:#c0c5ce>mesh_assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>from_size</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#c0c5ce>radius</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#e79e6d> 2.2</span><span>))))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>material_assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>StandardMaterial</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Transform</span><span>::</span><span style=color:#69c>from_scale</span><span>(-</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ONE</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                NotShadowCaster</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Layout</span><span>::</span><span style=color:#dfc479>Cube</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // NOTE: This pattern is good for demonstrating that frustum culling is working correctly</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // as the number of visible meshes rises and falls depending on the viewing angle.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> scale</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 2.5</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Scale the width and height by the same factor so that we have the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // right number of instances.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Because of the moiré pattern check and the fact that we're</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // spawning 4 instances per trip around the inner loop below, we're</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // solving the following equation for the factor variable:</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            //</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            //      4 * (9/10 * factor * width * 9/10 * factor * height) = count</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            //</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The solution is the value below.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> factor</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#e79e6d>5.0</span><span> /</span><span style=color:#e79e6d> 9.0</span><span>) *</span><span style=color:#69c> sqrt</span><span>(</span><span style=color:#c0c5ce>args</span><span style=color:#c594c5>.</span><span>instance_count </span><span style=color:#c594c5>as</span><span style=color:#b48ead> f32</span><span>)</span></span>
+<span class=giallo-l><span>                / (</span><span style=color:#69c>sqrt</span><span>(</span><span style=color:#d19a66>HEIGHT</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>) *</span><span style=color:#69c> sqrt</span><span>(</span><span style=color:#d19a66>WIDTH</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> dimensions</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#69c>vec2</span><span>(</span><span style=color:#d19a66>WIDTH</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> HEIGHT</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>) *</span><span style=color:#c0c5ce> factor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>ceil</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>as_uvec2</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>            for</span><span style=color:#c0c5ce> x</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#c0c5ce>dimensions</span><span style=color:#c594c5>.</span><span>x {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                for</span><span style=color:#c0c5ce> y</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#c0c5ce>dimensions</span><span style=color:#c594c5>.</span><span>y {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // introduce spaces to break any kind of moiré pattern</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    if</span><span style=color:#c0c5ce> x</span><span> %</span><span style=color:#e79e6d> 10</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 0</span><span style=color:#c594c5> ||</span><span style=color:#c0c5ce> y</span><span> %</span><span style=color:#e79e6d> 10</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // cube</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>                            Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                            MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>((</span><span style=color:#c0c5ce>x</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>) *</span><span style=color:#c0c5ce> scale,</span><span> (</span><span style=color:#c0c5ce>y</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>) *</span><span style=color:#c0c5ce> scale,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>insert_if</span><span>(</span><span style=color:#dfc479>NoCpuCulling</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> ||</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>no_cpu_culling)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>                            Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                            MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span></span>
+<span class=giallo-l><span>                                (</span><span style=color:#c0c5ce>x</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>) *</span><span style=color:#c0c5ce> scale,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                dimensions</span><span style=color:#c594c5>.</span><span>y </span><span style=color:#c594c5>as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#c0c5ce> scale,</span></span>
+<span class=giallo-l><span>                                (</span><span style=color:#c0c5ce>y</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>) *</span><span style=color:#c0c5ce> scale,</span></span>
+<span class=giallo-l><span>                            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>insert_if</span><span>(</span><span style=color:#dfc479>NoCpuCulling</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> ||</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>no_cpu_culling)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>                            Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                            MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>((</span><span style=color:#c0c5ce>x</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>) *</span><span style=color:#c0c5ce> scale,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>y</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>) *</span><span style=color:#c0c5ce> scale</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>insert_if</span><span>(</span><span style=color:#dfc479>NoCpuCulling</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> ||</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>no_cpu_culling)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>                            Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                            MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>x</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>) *</span><span style=color:#c0c5ce> scale,</span><span> (</span><span style=color:#c0c5ce>y</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>) *</span><span style=color:#c0c5ce> scale</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>insert_if</span><span>(</span><span style=color:#dfc479>NoCpuCulling</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> ||</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>no_cpu_culling)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // camera</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> center</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.5</span></span>
+<span class=giallo-l><span>                *</span><span style=color:#c0c5ce> scale</span></span>
+<span class=giallo-l><span>                *</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    dimensions</span><span style=color:#c594c5>.</span><span>x </span><span style=color:#c594c5>as</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    dimensions</span><span style=color:#c594c5>.</span><span>y </span><span style=color:#c594c5>as</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    dimensions</span><span style=color:#c594c5>.</span><span>x </span><span style=color:#c594c5>as</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span><span style=color:#c0c5ce>Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>, Transform</span><span>::</span><span style=color:#69c>from_translation</span><span>(</span><span style=color:#c0c5ce>center</span><span>)))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Inside-out box around the meshes onto which shadows are cast (though you cannot see them...)</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>                Mesh3d</span><span>(</span><span style=color:#c0c5ce>mesh_assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>from_size</span><span>(</span><span style=color:#e79e6d>2.0</span><span> *</span><span style=color:#e79e6d> 1.1</span><span> *</span><span style=color:#c0c5ce> center</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>material_assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>StandardMaterial</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Transform</span><span>::</span><span style=color:#69c>from_scale</span><span>(-</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ONE</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_translation</span><span>(</span><span style=color:#c0c5ce>center</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                NotShadowCaster</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Layout</span><span>::</span><span style=color:#dfc479>Dense</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // NOTE: This pattern is good for demonstrating a dense configuration of cubes</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // overlapping each other, all within the camera frustum.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> count</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>instance_count</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> size</span><span style=color:#c594c5> =</span><span style=color:#69c> cbrt</span><span>(</span><span style=color:#c0c5ce>count</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>round</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> gap</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 1.25</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>            for</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#c0c5ce>count</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> x</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> %</span><span style=color:#c0c5ce> size;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> y</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>i</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> /</span><span style=color:#c0c5ce> size</span><span>) %</span><span style=color:#c0c5ce> size;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> z</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> / (</span><span style=color:#c0c5ce>size</span><span> *</span><span style=color:#c0c5ce> size</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> pos</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>x</span><span> *</span><span style=color:#c0c5ce> gap, y</span><span> *</span><span style=color:#c0c5ce> gap, z</span><span> *</span><span style=color:#c0c5ce> gap</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>                        Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> material_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Transform</span><span>::</span><span style=color:#69c>from_translation</span><span>(</span><span style=color:#c0c5ce>pos</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>insert_if</span><span>(</span><span style=color:#dfc479>NoCpuCulling</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> ||</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>no_cpu_culling)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // camera</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>100.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 90.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 100.0</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>10.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DirectionalLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            shadow_maps_enabled: args</span><span style=color:#c594c5>.</span><span>shadows</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> init_textures</span><span>(</span><span style=color:#c0c5ce>args:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Args</span><span style=color:#c0c5ce>, images:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>></span><span>) -></span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We're seeding the PRNG here to make this example deterministic for testing purposes.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This isn't strictly required in practical use unless you need your app to be deterministic.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> color_rng</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ChaCha8Rng</span><span>::</span><span style=color:#69c>seed_from_u64</span><span>(</span><span style=color:#e79e6d>42</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> color_bytes:</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>u8</span><span style=color:#c0c5ce>></span><span style=color:#c594c5> =</span><span> (</span><span style=color:#e79e6d>0</span><span>..(</span><span style=color:#c0c5ce>args</span><span style=color:#c594c5>.</span><span>material_texture_count *</span><span style=color:#e79e6d> 4</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>map</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>i</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span> (</span><span style=color:#c0c5ce>i</span><span> %</span><span style=color:#e79e6d> 4</span><span>)</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 3</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e79e6d>                255</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                color_rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random</span><span>()</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>collect</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color_bytes</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>chunks</span><span>(</span><span style=color:#e79e6d>4</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>map</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>pixel</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            images</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Image</span><span>::</span><span style=color:#69c>new_fill</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Extent3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                TextureDimension</span><span>::</span><span style=color:#dfc479>D2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                pixel,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                TextureFormat</span><span>::</span><span style=color:#dfc479>Rgba8UnormSrgb</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                RenderAssetUsages</span><span>::</span><span style=color:#d19a66>RENDER_WORLD</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>collect</span><span>()</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> init_materials</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    args:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Args</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    textures:</span><span style=color:#c594c5> &</span><span>[</span><span style=color:#dfc479>Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>></span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    assets:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) -></span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> capacity</span><span style=color:#c594c5> = if</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>vary_material_data_per_instance {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        args</span><span style=color:#c594c5>.</span><span>instance_count</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        args</span><span style=color:#c594c5>.</span><span>material_texture_count</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    .</span><span style=color:#69c>max</span><span>(</span><span style=color:#e79e6d>1</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec</span><span>::</span><span style=color:#69c>with_capacity</span><span>(</span><span style=color:#c0c5ce>capacity</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    materials</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span>(</span><span style=color:#c0c5ce>assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        base_color: Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        base_color_texture: textures</span><span style=color:#c594c5>.</span><span style=color:#69c>first</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>cloned</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>    }))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We're seeding the PRNG here to make this example deterministic for testing purposes.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This isn't strictly required in practical use unless you need your app to be deterministic.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> color_rng</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ChaCha8Rng</span><span>::</span><span style=color:#69c>seed_from_u64</span><span>(</span><span style=color:#e79e6d>42</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> texture_rng</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ChaCha8Rng</span><span>::</span><span style=color:#69c>seed_from_u64</span><span>(</span><span style=color:#e79e6d>42</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    materials</span><span style=color:#c594c5>.</span><span style=color:#69c>extend</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        std</span><span>::</span><span style=color:#c0c5ce>iter</span><span>::</span><span style=color:#69c>repeat_with</span><span>(</span><span style=color:#c594c5>||</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                base_color: Color</span><span>::</span><span style=color:#69c>srgb_u8</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    color_rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    color_rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    color_rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                base_color_texture: textures</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> texture_rng</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>cloned</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            })</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>take</span><span>(</span><span style=color:#c0c5ce>capacity</span><span> -</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    materials</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> init_meshes</span><span>(</span><span style=color:#c0c5ce>args:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Args</span><span style=color:#c0c5ce>, assets:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>></span><span>) -></span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> Transform</span><span>)</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> capacity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>mesh_count</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span>(</span><span style=color:#e79e6d>1</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We're seeding the PRNG here to make this example deterministic for testing purposes.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This isn't strictly required in practical use unless you need your app to be deterministic.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> radius_rng</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ChaCha8Rng</span><span>::</span><span style=color:#69c>seed_from_u64</span><span>(</span><span style=color:#e79e6d>42</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> variant</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    std</span><span>::</span><span style=color:#c0c5ce>iter</span><span>::</span><span style=color:#69c>repeat_with</span><span>(</span><span style=color:#c594c5>||</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> radius</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> radius_rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_range</span><span>(</span><span style=color:#e79e6d>0.25</span><span style=color:#b48ead>f32</span><span>..=</span><span style=color:#e79e6d>0.75</span><span style=color:#b48ead>f32</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span> (</span><span style=color:#c0c5ce>handle, transform</span><span>)</span><span style=color:#c594c5> = match</span><span style=color:#c0c5ce> variant</span><span> %</span><span style=color:#e79e6d> 15</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            0</span><span> => (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>Cuboid</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    half_size: Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#c0c5ce>radius</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            1</span><span> => (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>Capsule3d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    radius,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    half_length: radius,</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            2</span><span> => (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>Circle</span><span> {</span><span style=color:#c0c5ce> radius</span><span> })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Z</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            3</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let mut</span><span style=color:#c0c5ce> vertices</span><span style=color:#c594c5> =</span><span> [</span><span style=color:#dfc479>Vec2</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>;</span><span style=color:#e79e6d> 3</span><span>]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> dtheta</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#b48ead>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#d19a66>TAU</span><span> /</span><span style=color:#e79e6d> 3.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                for</span><span> (</span><span style=color:#c0c5ce>i, vertex</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> vertices</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>enumerate</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    let</span><span> (</span><span style=color:#c0c5ce>s, c</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>sin_cos</span><span>(</span><span style=color:#c0c5ce>i</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#c0c5ce> dtheta</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    *</span><span style=color:#c0c5ce>vertex</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec2</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>c, s</span><span>) *</span><span style=color:#c0c5ce> radius;</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>                (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>Triangle2d</span><span> {</span><span style=color:#c0c5ce> vertices</span><span> })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Z</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            4</span><span> => (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>Rectangle</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    half_size: Vec2</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#c0c5ce>radius</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Z</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            v</span><span style=color:#c594c5> if</span><span> (</span><span style=color:#e79e6d>5</span><span>..=</span><span style=color:#e79e6d>8</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>contains</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>v</span><span>) => (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>RegularPolygon</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    circumcircle:</span><span style=color:#dfc479> Circle</span><span> {</span><span style=color:#c0c5ce> radius</span><span> }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    sides: v,</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Z</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            9</span><span> => (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>Cylinder</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    radius,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    half_height: radius,</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            10</span><span> => (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>Ellipse</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    half_size: Vec2</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>radius,</span><span style=color:#e79e6d> 0.5</span><span> *</span><span style=color:#c0c5ce> radius</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Z</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            11</span><span> => (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    Plane3d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        normal: Dir3</span><span>::</span><span style=color:#d19a66>NEG_Z</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        half_size: Vec2</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>0.5</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>mesh</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>size</span><span>(</span><span style=color:#c0c5ce>radius, radius</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            12</span><span> => (</span><span style=color:#c0c5ce>assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>Sphere</span><span> {</span><span style=color:#c0c5ce> radius</span><span> })</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            13</span><span> => (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>Torus</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    minor_radius:</span><span style=color:#e79e6d> 0.5</span><span> *</span><span style=color:#c0c5ce> radius,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    major_radius: radius,</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            14</span><span> => (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                assets</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>Capsule2d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    radius,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    half_length: radius,</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Z</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            _</span><span> =></span><span style=color:#61afef> unreachable!</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        variant</span><span style=color:#c594c5> +=</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#c0c5ce>handle, transform</span><span>)</span></span>
+<span class=giallo-l><span>    })</span></span>
+<span class=giallo-l><span style=color:#c594c5>    .</span><span style=color:#69c>take</span><span>(</span><span style=color:#c0c5ce>capacity</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>    .</span><span style=color:#69c>collect</span><span>()</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// NOTE: This epsilon value is apparently optimal for optimizing for the average</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// nearest-neighbor distance. See:</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// http://extremelearning.com.au/how-to-evenly-distribute-points-on-a-sphere-more-effectively-than-the-canonical-fibonacci-lattice/</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// for details.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> EPSILON</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f64</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.36</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> fibonacci_spiral_on_sphere</span><span>(</span><span style=color:#c0c5ce>golden_ratio:</span><span style=color:#b48ead> f64</span><span style=color:#c0c5ce>, i:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>, n:</span><span style=color:#b48ead> usize</span><span>) -></span><span style=color:#dfc479> DVec2</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    DVec2</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>        PI</span><span> *</span><span style=color:#e79e6d> 2</span><span style=color:#c594c5>.</span><span> * (</span><span style=color:#c0c5ce>i</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f64</span><span> /</span><span style=color:#c0c5ce> golden_ratio</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#b48ead>        f64</span><span>::</span><span style=color:#69c>acos</span><span>(</span><span style=color:#e79e6d>1.0</span><span> -</span><span style=color:#e79e6d> 2.0</span><span> * (</span><span style=color:#c0c5ce>i</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f64</span><span> +</span><span style=color:#d19a66> EPSILON</span><span>) / (</span><span style=color:#c0c5ce>n</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f64</span><span> -</span><span style=color:#e79e6d> 1.0</span><span> +</span><span style=color:#e79e6d> 2.0</span><span> *</span><span style=color:#d19a66> EPSILON</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spherical_polar_to_cartesian</span><span>(</span><span style=color:#c0c5ce>p:</span><span style=color:#dfc479> DVec2</span><span>) -></span><span style=color:#dfc479> DVec3</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c0c5ce>sin_theta, cos_theta</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> p</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c594c5>.</span><span style=color:#69c>sin_cos</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c0c5ce>sin_phi, cos_phi</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> p</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c594c5>.</span><span style=color:#69c>sin_cos</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#dfc479>    DVec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>cos_theta</span><span> *</span><span style=color:#c0c5ce> sin_phi, sin_theta</span><span> *</span><span style=color:#c0c5ce> sin_phi, cos_phi</span><span>)</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// System for rotating the camera</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> move_camera</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    args:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Args</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> camera_transform:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.15</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c594c5> if</span><span style=color:#c0c5ce> args</span><span style=color:#c594c5>.</span><span>benchmark {</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            1.0</span><span> /</span><span style=color:#e79e6d> 60.0</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_z</span><span>(</span><span style=color:#c0c5ce>delta</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_x</span><span>(</span><span style=color:#c0c5ce>delta</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// System for printing the number of meshes on every tick of the timer</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> print_mesh_count</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> timer:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PrintingTimer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    sprites:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Mesh3d</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ViewVisibility</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    timer</span><span style=color:#c594c5>.</span><span style=color:#69c>tick</span><span>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> timer</span><span style=color:#c594c5>.</span><span style=color:#69c>just_finished</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#61afef>        info!</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Meshes: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f> - Visible Meshes </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            sprites</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            sprites</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>filter</span><span>(</span><span style=color:#c594c5>|</span><span>(</span><span style=color:#c0c5ce>_, vis</span><span>)</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> vis</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>count</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> PrintingTimer</span><span>(</span><span style=color:#dfc479>Timer</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> PrintingTimer</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span>() -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        Self</span><span>(</span><span style=color:#dfc479>Timer</span><span>::</span><span style=color:#69c>from_seconds</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>, TimerMode</span><span>::</span><span style=color:#dfc479>Repeating</span><span>))</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_materials</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>, time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> elapsed</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>elapsed_secs</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>i,</span><span> (</span><span style=color:#c0c5ce>_, material</span><span>))</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>enumerate</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> hue</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>elapsed</span><span> +</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#e79e6d> 0.005</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>rem_euclid</span><span>(</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This is much faster than using base_color.set_hue(hue), and in a tight loop it shows.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> color</span><span style=color:#c594c5> =</span><span style=color:#69c> fast_hue_to_rgb</span><span>(</span><span style=color:#c0c5ce>hue</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        material</span><span style=color:#c594c5>.</span><span>base_color </span><span style=color:#c594c5>=</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>linear_rgb</span><span>(</span><span style=color:#c0c5ce>color</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c0c5ce>, color</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c0c5ce>, color</span><span style=color:#c594c5>.</span><span>z)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> rotate_cubes</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#dfc479>With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh3d</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>NotShadowCaster</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    query</span><span style=color:#c594c5>.</span><span style=color:#69c>par_iter_mut</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>for_each</span><span>(</span><span style=color:#c594c5>|mut</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_y</span><span>(</span><span style=color:#e79e6d>10.0</span><span> *</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[inline]</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> fast_hue_to_rgb</span><span>(</span><span style=color:#c0c5ce>hue:</span><span style=color:#b48ead> f32</span><span>) -></span><span style=color:#dfc479> Vec3</span><span> {</span></span>
+<span class=giallo-l><span>    (</span><span style=color:#c0c5ce>hue</span><span> *</span><span style=color:#e79e6d> 6.0</span><span> -</span><span style=color:#69c> vec3</span><span>(</span><span style=color:#e79e6d>3.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 4.0</span><span>))</span><span style=color:#c594c5>.</span><span style=color:#69c>abs</span><span>() *</span><span style=color:#69c> vec3</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>1.0</span><span>) +</span><span style=color:#69c> vec3</span><span>(-</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span>)</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/Stress Tests/many-cubes/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

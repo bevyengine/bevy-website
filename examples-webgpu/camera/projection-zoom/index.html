@@ -1,0 +1,230 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Projection Zoom" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/camera/projection-zoom/ property=og:url><meta content=https://bevy.org/examples-webgpu/camera/projection-zoom/../static/screenshots/Camera/projection_zoom.png property=og:image><meta content="Shows how to zoom orthographic and perspective projection cameras." property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Projection Zoom</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Camera / Projection Zoom</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/camera/projection_zoom.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/camera/projection-zoom/>here</a>.</aside></div><div class="example__explanation media-content"><p>Shows how to zoom orthographic and perspective projection cameras.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>projection_zoom.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::{</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>PI</span><span style=color:#c0c5ce>, ops</span><span>::</span><span style=color:#dfc479>Range</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span><span style=color:#c0c5ce>camera</span><span>::</span><span style=color:#dfc479>ScalingMode</span><span style=color:#c0c5ce>, input</span><span>::</span><span style=color:#c0c5ce>mouse</span><span>::</span><span style=color:#dfc479>AccumulatedMouseScroll</span><span style=color:#c0c5ce>, prelude</span><span>::*}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CameraSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The height of the viewport in world units when the orthographic camera's scale is 1</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> orthographic_viewport_height:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Clamp the orthographic camera's scale to this range</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> orthographic_zoom_range:</span><span style=color:#dfc479> Range</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>f32</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Multiply mouse wheel inputs by this factor when using the orthographic camera</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> orthographic_zoom_speed:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Clamp perspective camera's field of view to this range</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> perspective_zoom_range:</span><span style=color:#dfc479> Range</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>f32</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Multiply mouse wheel inputs by this factor when using the perspective camera</span></span>
+<span class=giallo-l><span style=color:#c594c5>    pub</span><span style=color:#c0c5ce> perspective_zoom_speed:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#dfc479>CameraSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            orthographic_viewport_height:</span><span style=color:#e79e6d> 5</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // In orthographic projections, we specify camera scale relative to a default value of 1,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // in which one unit in world space corresponds to one pixel.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            orthographic_zoom_range:</span><span style=color:#e79e6d> 0.1</span><span>..</span><span style=color:#e79e6d>10.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // This value was hand-tuned to ensure that zooming in and out feels smooth but not slow.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            orthographic_zoom_speed:</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Perspective projections use field of view, expressed in radians. We would</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // normally not set it to more than π, which represents a 180° FOV.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            perspective_zoom_range:</span><span> (</span><span style=color:#d19a66>PI</span><span> /</span><span style=color:#e79e6d> 5</span><span style=color:#c594c5>.</span><span>)..(</span><span style=color:#d19a66>PI</span><span> -</span><span style=color:#e79e6d> 0.2</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Changes in FOV are much more noticeable due to its limited range in radians</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            perspective_zoom_speed:</span><span style=color:#e79e6d> 0.05</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>setup, instructions</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>switch_projection, zoom</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Set up a simple 3D scene</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_settings:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CameraSettings</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Name</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Camera"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Projection</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#dfc479>OrthographicProjection</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // We can set the scaling mode to FixedVertical to keep the viewport height constant as its aspect ratio changes.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The viewport height is the height of the camera's view in world units when the scale is 1.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            scaling_mode: ScalingMode</span><span>::</span><span style=color:#dfc479>FixedVertical</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                viewport_height: camera_settings</span><span style=color:#c594c5>.</span><span>orthographic_viewport_height</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // This is the default value for scale for orthographic projections.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // To zoom in and out, change this value, rather than `ScalingMode` or the camera's position.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            scale:</span><span style=color:#e79e6d> 1</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#c0c5ce>OrthographicProjection</span><span>::</span><span style=color:#69c>default_3d</span><span>()</span></span>
+<span class=giallo-l><span>        })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>5.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Name</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Plane"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Plane3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>size</span><span>(</span><span style=color:#e79e6d>5.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5.0</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            base_color: Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Turning off culling keeps the plane visible when viewed from beneath.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            cull_mode:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Name</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Fox"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        WorldAssetRoot</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#c0c5ce>GltfAssetLabel</span><span>::</span><span style=color:#69c>Scene</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>from_asset</span><span>(</span><span style=color:#9fc37f>"models/animated/Fox.glb"</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Note: the scale adjustment is purely an accident of our fox model, which renders</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // HUGE unless mitigated!</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_translation</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>0.0</span><span>))</span><span style=color:#c594c5>.</span><span style=color:#69c>with_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>0.025</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Name</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Light"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        PointLight</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>3.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 8.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> instructions</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Name</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Instructions"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Scroll mouse wheel to zoom in/out</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            Space: switch between orthographic and perspective projections"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> switch_projection</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> camera:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Projection</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_settings:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CameraSettings</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    keyboard_input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Space</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Switch projection type</span></span>
+<span class=giallo-l><span>        **</span><span style=color:#c0c5ce>camera</span><span style=color:#c594c5> = match</span><span> **</span><span style=color:#c0c5ce>camera</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Projection</span><span>::</span><span style=color:#69c>Orthographic</span><span>(</span><span style=color:#c0c5ce>_</span><span>) =></span><span style=color:#dfc479> Projection</span><span>::</span><span style=color:#69c>Perspective</span><span>(</span><span style=color:#dfc479>PerspectiveProjection</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                fov: camera_settings</span><span style=color:#c594c5>.</span><span>perspective_zoom_range</span><span style=color:#c594c5>.</span><span>start</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Projection</span><span>::</span><span style=color:#69c>Perspective</span><span>(</span><span style=color:#c0c5ce>_</span><span>) =></span><span style=color:#dfc479> Projection</span><span>::</span><span style=color:#69c>Orthographic</span><span>(</span><span style=color:#dfc479>OrthographicProjection</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                scaling_mode: ScalingMode</span><span>::</span><span style=color:#dfc479>FixedVertical</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    viewport_height: camera_settings</span><span style=color:#c594c5>.</span><span>orthographic_viewport_height</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#c0c5ce>OrthographicProjection</span><span>::</span><span style=color:#69c>default_3d</span><span>()</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            _</span><span> =></span><span style=color:#c594c5> return</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> zoom</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Projection</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_settings:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CameraSettings</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mouse_wheel_input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AccumulatedMouseScroll</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Usually, you won't need to handle both types of projection,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // but doing so makes for a more complete example.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    match</span><span> *</span><span style=color:#c0c5ce>camera</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Projection</span><span>::</span><span style=color:#69c>Orthographic</span><span>(</span><span style=color:#c594c5>ref mut</span><span style=color:#c0c5ce> orthographic</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // We want scrolling up to zoom in, decreasing the scale, so we negate the delta.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> delta_zoom</span><span style=color:#c594c5> =</span><span> -</span><span style=color:#c0c5ce>mouse_wheel_input</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c594c5>.</span><span>y *</span><span style=color:#c0c5ce> camera_settings</span><span style=color:#c594c5>.</span><span>orthographic_zoom_speed</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // When changing scales, logarithmic changes are more intuitive.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // To get this effect, we add 1 to the delta, so that a delta of 0</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // results in no multiplicative effect, positive values result in a multiplicative increase,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // and negative values result in multiplicative decreases.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> multiplicative_zoom</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 1</span><span style=color:#c594c5>.</span><span> +</span><span style=color:#c0c5ce> delta_zoom;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>            orthographic</span><span style=color:#c594c5>.</span><span>scale </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>orthographic</span><span style=color:#c594c5>.</span><span>scale *</span><span style=color:#c0c5ce> multiplicative_zoom</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                camera_settings</span><span style=color:#c594c5>.</span><span>orthographic_zoom_range</span><span style=color:#c594c5>.</span><span>start</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                camera_settings</span><span style=color:#c594c5>.</span><span>orthographic_zoom_range</span><span style=color:#c594c5>.</span><span>end</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Projection</span><span>::</span><span style=color:#69c>Perspective</span><span>(</span><span style=color:#c594c5>ref mut</span><span style=color:#c0c5ce> perspective</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // We want scrolling up to zoom in, decreasing the scale, so we negate the delta.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> delta_zoom</span><span style=color:#c594c5> =</span><span> -</span><span style=color:#c0c5ce>mouse_wheel_input</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c594c5>.</span><span>y *</span><span style=color:#c0c5ce> camera_settings</span><span style=color:#c594c5>.</span><span>perspective_zoom_speed</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Adjust the field of view, but keep it within our stated range.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            perspective</span><span style=color:#c594c5>.</span><span>fov </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>perspective</span><span style=color:#c594c5>.</span><span>fov +</span><span style=color:#c0c5ce> delta_zoom</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                camera_settings</span><span style=color:#c594c5>.</span><span>perspective_zoom_range</span><span style=color:#c594c5>.</span><span>start</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                camera_settings</span><span style=color:#c594c5>.</span><span>perspective_zoom_range</span><span style=color:#c594c5>.</span><span>end</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _</span><span> => ()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/Camera/projection-zoom/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

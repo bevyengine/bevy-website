@@ -1,0 +1,431 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Asset Saving with Subassets" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/assets/asset-saving-with-subassets/ property=og:url><meta content=https://bevy.org/examples/assets/asset-saving-with-subassets/../static/screenshots/Assets/asset_saving_with_subassets.png property=og:image><meta content="Demonstrates how to save an asset with subassets" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Asset Saving with Subassets</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Assets / Asset Saving with Subassets</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/asset/asset_saving_with_subassets.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/assets/asset-saving-with-subassets/>here</a>.</aside><aside class="callout callout--warning"><h3 class=warning>Feature flag required</h3><p>The code in this example requires these feature flags to be enabled in order to function: <code>"ui_picking"</code>, <code>"sprite_picking"</code>.</aside></div><div class="example__explanation media-content"><p>This example demonstrates how to save assets that include subassets.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>asset_saving_with_subassets.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        io</span><span>::{</span><span style=color:#dfc479>Reader</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Writer</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        saver</span><span>::{save_using_saver</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AssetSaver</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SavedAsset</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SavedAssetBuilder</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        AssetLoader</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AssetPath</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AsyncWriteExt</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> LoadContext</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::tailwind</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input</span><span>::</span><span style=color:#c0c5ce>common_conditions</span><span>::input_just_pressed</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    tasks</span><span>::</span><span style=color:#dfc479>IoTaskPool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> serde</span><span>::{</span><span style=color:#dfc479>Deserialize</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Serialize</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#dfc479>AssetPlugin</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // This is just overriding the default asset paths to scope this to the correct example</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // folder. You can generally skip this in your own projects.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            file_path:</span><span style=color:#9fc37f> "examples/asset/saved_assets"</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#c0c5ce>Default</span><span>::</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#c0c5ce>box_editing_plugin</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_asset</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>OneBox</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_asset</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ManyBoxes</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>register_asset_loader</span><span>(</span><span style=color:#dfc479>ManyBoxesLoader</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            PreUpdate</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                perform_save</span><span style=color:#c594c5>.</span><span style=color:#69c>run_if</span><span>(</span><span style=color:#69c>input_just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>F5</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    start_load</span><span style=color:#c594c5>.</span><span style=color:#69c>run_if</span><span>(</span><span style=color:#69c>input_just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>F6</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    wait_for_pending_loads,</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>chain</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> ASSET_PATH</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "my_scene.boxes"</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A system that takes the scene data, passes it to a task, and saves that scene data to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> [`ASSET_PATH`].</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> perform_save</span><span>(</span><span style=color:#c0c5ce>boxes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Sprite</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Transform</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Box</span><span style=color:#c0c5ce>>>, asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // First we extract all the data needed to produce an asset we can save.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> boxes</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> boxes</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>map</span><span>(</span><span style=color:#c594c5>|</span><span>(</span><span style=color:#c0c5ce>sprite, transform</span><span>)</span><span style=color:#c594c5>|</span><span style=color:#dfc479> OneBox</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position: transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span style=color:#69c>xy</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color: sprite</span><span style=color:#c594c5>.</span><span>color</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>collect</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Vec</span><span style=color:#c0c5ce>&lt;_>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#dfc479>    IoTaskPool</span><span>::</span><span style=color:#69c>get</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#c594c5>async move</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Build a `SavedAsset` instance from the boxes we extracted.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let mut</span><span style=color:#c0c5ce> builder</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> SavedAssetBuilder</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> ASSET_PATH</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let mut</span><span style=color:#c0c5ce> many_boxes</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ManyBoxes</span><span> {</span><span style=color:#c0c5ce> boxes:</span><span style=color:#61afef> vec!</span><span>[] }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            for</span><span> (</span><span style=color:#c0c5ce>index, one_box</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>enumerate</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                many_boxes</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span>boxes</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>push</span><span>(</span><span style=color:#c0c5ce>builder</span><span style=color:#c594c5>.</span><span style=color:#69c>add_labeled_asset_with_new_handle</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        index</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        SavedAsset</span><span>::</span><span style=color:#69c>from_asset</span><span>(</span><span style=color:#c0c5ce>one_box</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> saved_asset</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> builder</span><span style=color:#c594c5>.</span><span style=color:#69c>build</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>many_boxes</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Save the asset using the provided saver.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            match</span><span style=color:#69c> save_using_saver</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &</span><span style=color:#dfc479>ManyBoxesSaver</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &</span><span style=color:#d19a66>ASSET_PATH</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                saved_asset,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .await</span></span>
+<span class=giallo-l><span>            {</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Ok</span><span>(()) =></span><span style=color:#61afef> info!</span><span>(</span><span style=color:#9fc37f>"Completed save of </span><span style=color:#d19a66>{ASSET_PATH}</span><span style=color:#9fc37f>"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Err</span><span>(</span><span style=color:#c0c5ce>err</span><span>) =></span><span style=color:#61afef> error!</span><span>(</span><span style=color:#9fc37f>"Failed to save asset: </span><span style=color:#d19a66>{err}</span><span style=color:#9fc37f>"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>detach</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A system the starts loading [`ASSET_PATH`].</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> start_load</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#69c>PendingLoad</span><span>(</span><span style=color:#c0c5ce>asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#d19a66>ASSET_PATH</span><span>)))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Marks that a handle is currently loading.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Once loading is complete, the [`ManyBoxes`] data will be spawned.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> PendingLoad</span><span>(</span><span style=color:#dfc479>Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ManyBoxes</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Waits for any [`PendingLoad`]s to complete, and spawns in their boxes when they do.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> wait_for_pending_loads</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    loads:</span><span style=color:#dfc479> Populated</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>PendingLoad</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    many_boxes:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ManyBoxes</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    one_boxes:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>OneBox</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    existing_boxes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Box</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>entity, load</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> loads</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>many_boxes</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> many_boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>load</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>entity</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>despawn</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> entity</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> existing_boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>entity</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>despawn</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> box_handle</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> many_boxes</span><span style=color:#c594c5>.</span><span>boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>one_box</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> one_boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>box_handle</span><span>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Sprite</span><span>::</span><span style=color:#69c>from_color</span><span>(</span><span style=color:#c0c5ce>one_box</span><span style=color:#c594c5>.</span><span>color</span><span style=color:#c0c5ce>, Vec2</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>100.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 100.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Transform</span><span>::</span><span style=color:#69c>from_translation</span><span>(</span><span style=color:#c0c5ce>one_box</span><span style=color:#c594c5>.</span><span>position</span><span style=color:#c594c5>.</span><span style=color:#69c>extend</span><span>(</span><span style=color:#e79e6d>0.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Pickable</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Box</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> An asset representing a single box.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Asset</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TypePath</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Serialize</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deserialize</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> OneBox</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The position of the box.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    position:</span><span style=color:#dfc479> Vec2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The color of the box.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color:</span><span style=color:#dfc479> Color</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> An asset representing many boxes.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Asset</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TypePath</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ManyBoxes</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Stores handles to all the boxes that should be spawned.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Note: in this trivial example, it seems more reasonable to just store [`Vec&lt;OneBox>`], but</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> in a more realistic example this could be something like a whole [`Mesh`] (where a handle</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> makes more sense). We use a handle here to demonstrate saving subassets as well.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    boxes:</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>OneBox</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A serializable version of [`ManyBoxes`].</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Serialize</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deserialize</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> SerializableManyBoxes</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The boxes that exist in this scene.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    boxes:</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>OneBox</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Am asset saver to save [`ManyBoxes`] assets.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>TypePath</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ManyBoxesSaver</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> AssetSaver</span><span style=color:#c594c5> for</span><span style=color:#dfc479> ManyBoxesSaver</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Asset</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ManyBoxes</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Error</span><span style=color:#c594c5> =</span><span style=color:#dfc479> BevyError</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> OutputLoader</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ManyBoxesLoader</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Settings</span><span style=color:#c594c5> =</span><span> ()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    async fn</span><span style=color:#69c> save</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &self</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        writer:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Writer</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        asset:</span><span style=color:#dfc479> SavedAsset</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'_</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> '_</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> Self</span><span>::</span><span style=color:#dfc479>Asset</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _settings:</span><span style=color:#c594c5> &Self</span><span>::</span><span style=color:#dfc479>Settings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _asset_path:</span><span style=color:#dfc479> AssetPath</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'_</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>    ) -></span><span style=color:#dfc479> Result</span><span style=color:#c0c5ce>&lt;</span><span>()</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> Self</span><span>::</span><span style=color:#dfc479>Error</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> boxes</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span>boxes</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>map</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>handle</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                asset</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>get_labeled_by_id</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>OneBox</span><span style=color:#c0c5ce>></span><span>(</span><span style=color:#c0c5ce>handle</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>unwrap</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>get</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>clone</span><span>()</span></span>
+<span class=giallo-l><span>            })</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>collect</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Note: serializing to string isn't ideal since we can't do a streaming write, but this is</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // fine for an example.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> serialized</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ron</span><span>::</span><span style=color:#69c>to_string</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>SerializableManyBoxes</span><span> {</span><span style=color:#c0c5ce> boxes</span><span> })</span><span style=color:#c594c5>?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        writer</span><span style=color:#c594c5>.</span><span style=color:#69c>write_all</span><span>(</span><span style=color:#c0c5ce>serialized</span><span style=color:#c594c5>.</span><span style=color:#69c>as_bytes</span><span>())</span><span style=color:#c594c5>.await?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#dfc479>        Ok</span><span>(())</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> An asset loader for loading [`ManyBoxes`] assets.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>TypePath</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ManyBoxesLoader</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> AssetLoader</span><span style=color:#c594c5> for</span><span style=color:#dfc479> ManyBoxesLoader</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Asset</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ManyBoxes</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Error</span><span style=color:#c594c5> =</span><span style=color:#dfc479> BevyError</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Settings</span><span style=color:#c594c5> =</span><span> ()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    async fn</span><span style=color:#69c> load</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &self</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reader:</span><span style=color:#c594c5> &mut dyn</span><span style=color:#dfc479> Reader</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _settings:</span><span style=color:#c594c5> &Self</span><span>::</span><span style=color:#dfc479>Settings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        load_context:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> LoadContext</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'_</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>    ) -></span><span style=color:#dfc479> Result</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>Self</span><span>::</span><span style=color:#dfc479>Asset</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> Self</span><span>::</span><span style=color:#dfc479>Error</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> bytes</span><span style=color:#c594c5> =</span><span style=color:#61afef> vec!</span><span>[]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reader</span><span style=color:#c594c5>.</span><span style=color:#69c>read_to_end</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> bytes</span><span>)</span><span style=color:#c594c5>.await?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> serialized:</span><span style=color:#dfc479> SerializableManyBoxes</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ron</span><span>::</span><span style=color:#c0c5ce>de</span><span>::</span><span style=color:#69c>from_bytes</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>bytes</span><span>)</span><span style=color:#c594c5>?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Add the boxes as subassets.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> result_boxes</span><span style=color:#c594c5> =</span><span style=color:#61afef> vec!</span><span>[]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span> (</span><span style=color:#c0c5ce>index, one_box</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> serialized</span><span style=color:#c594c5>.</span><span>boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>into_iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>enumerate</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            result_boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span>(</span><span style=color:#c0c5ce>load_context</span><span style=color:#c594c5>.</span><span style=color:#69c>add_labeled_asset</span><span>(</span><span style=color:#c0c5ce>index</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>, one_box</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#dfc479>        Ok</span><span>(</span><span style=color:#dfc479>ManyBoxes</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            boxes: result_boxes,</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> extensions</span><span>(</span><span style=color:#c594c5>&self</span><span>) -></span><span style=color:#c594c5> &</span><span>[</span><span style=color:#c594c5>&</span><span style=color:#e5c07b>str</span><span>] {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span>[</span><span style=color:#9fc37f>"boxes"</span><span>]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Plugin for doing all the box-editing.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This doesn't really have anything to do with asset saving, but provides a real use-case.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> box_editing_plugin</span><span>(</span><span style=color:#c0c5ce>app:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> App</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>spawn_box</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>start_rotate_box_hue</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>end_rotate_box_hue_on_release</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>end_rotate_box_hue_on_out</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, rotate_hue</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>stop_propagate_on_clicked_box</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>drag_box</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Box</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the initial scene.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Camera2d</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#69c>Text</span><span>(</span></span>
+<span class=giallo-l><span style=color:#98c379>        r</span><span style=color:#9fc37f>"LMB (on background) - spawn new box</span></span>
+<span class=giallo-l><span style=color:#9fc37f>LMB (on box) - drag to move</span></span>
+<span class=giallo-l><span style=color:#9fc37f>RMB (on box) - rotate colors</span></span>
+<span class=giallo-l><span style=color:#9fc37f>F5 - Save boxes</span></span>
+<span class=giallo-l><span style=color:#9fc37f>F6 - Load boxes"</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns a new box whenever you left-click on the background.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_box</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Press</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    window:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>()</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Window</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>GlobalTransform</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> event</span><span style=color:#c594c5>.</span><span>button </span><span style=color:#c594c5>!=</span><span style=color:#dfc479> PointerButton</span><span>::</span><span style=color:#dfc479>Primary</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if !</span><span style=color:#c0c5ce>window</span><span style=color:#c594c5>.</span><span style=color:#69c>contains</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>entity) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c0c5ce>camera, camera_transform</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c0c5ce>click_point</span><span>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        camera</span><span style=color:#c594c5>.</span><span style=color:#69c>viewport_to_world_2d</span><span>(</span><span style=color:#c0c5ce>camera_transform, event</span><span style=color:#c594c5>.</span><span>pointer_location</span><span style=color:#c594c5>.</span><span>position)</span></span>
+<span class=giallo-l><span style=color:#c594c5>    else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Sprite</span><span>::</span><span style=color:#69c>from_color</span><span>(</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>RED_500</span><span style=color:#c0c5ce>, Vec2</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>100.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 100.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_translation</span><span>(</span><span style=color:#c0c5ce>click_point</span><span style=color:#c594c5>.</span><span style=color:#69c>extend</span><span>(</span><span style=color:#e79e6d>0.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Pickable</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Box</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A component to rotate the hue of a sprite every frame.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> RotateHue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Rotates the hue of each [`Sprite`] tagged with [`RotateHue`].</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> rotate_hue</span><span>(</span><span style=color:#c0c5ce>time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> sprites:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Sprite</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RotateHue</span><span style=color:#c0c5ce>>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> sprite</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> sprites</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Make a full rotation every 2 seconds.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        sprite</span><span style=color:#c594c5>.</span><span>color </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> sprite</span><span style=color:#c594c5>.</span><span>color</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_hue</span><span>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>() *</span><span style=color:#e79e6d> 180.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Starts rotating the hue of a box that has been right-clicked.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> start_rotate_box_hue</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Press</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    boxes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>()</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Box</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> event</span><span style=color:#c594c5>.</span><span>button </span><span style=color:#c594c5>!=</span><span style=color:#dfc479> PointerButton</span><span>::</span><span style=color:#dfc479>Secondary</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if !</span><span style=color:#c0c5ce>boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>contains</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>entity) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>entity)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#dfc479>RotateHue</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Stops rotating the box hue if it's right-click is released.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> end_rotate_box_hue_on_release</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Release</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    boxes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>()</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#dfc479>With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Box</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RotateHue</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> event</span><span style=color:#c594c5>.</span><span>button </span><span style=color:#c594c5>!=</span><span style=color:#dfc479> PointerButton</span><span>::</span><span style=color:#dfc479>Secondary</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if !</span><span style=color:#c0c5ce>boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>contains</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>entity) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>entity)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RotateHue</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Stops rotating the box hue if the cursor moves off the entity.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> end_rotate_box_hue_on_out</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Out</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    boxes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>()</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#dfc479>With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Box</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RotateHue</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if !</span><span style=color:#c0c5ce>boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>contains</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>entity) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>entity)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RotateHue</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Blocks propagation of pointer press events on left-clicked boxes.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> stop_propagate_on_clicked_box</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Press</span><span style=color:#c0c5ce>>>, boxes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>()</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Box</span><span style=color:#c0c5ce>>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> event</span><span style=color:#c594c5>.</span><span>button </span><span style=color:#c594c5>!=</span><span style=color:#dfc479> PointerButton</span><span>::</span><span style=color:#dfc479>Primary</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if !</span><span style=color:#c0c5ce>boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>contains</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>entity) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event</span><span style=color:#c594c5>.</span><span style=color:#69c>propagate</span><span>(</span><span style=color:#d19a66>false</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Drags a box when you left-click on one.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> drag_box</span><span>(</span><span style=color:#c0c5ce>event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Drag</span><span style=color:#c0c5ce>>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> boxes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Box</span><span style=color:#c0c5ce>>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> event</span><span style=color:#c594c5>.</span><span>button </span><span style=color:#c594c5>!=</span><span style=color:#dfc479> PointerButton</span><span>::</span><span style=color:#dfc479>Primary</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> transform</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> boxes</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>entity)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This is wrong in general (e.g., doesn't consider scale), but it's close enough for our</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // purposes.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    transform</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>+=</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/Assets/asset-saving-with-subassets/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>
