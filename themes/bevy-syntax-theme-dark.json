@@ -80,6 +80,12 @@
 			}
 		},
 		{
+			"scope": "variable.language.self.rust",
+			"settings": {
+				"foreground": "#C594C5"
+			}
+		},
+		{
 			"scope": "support.constant.edge",
 			"settings": {
 				"foreground": "#C678DD"
@@ -1869,7 +1875,7 @@
 			}
 		},
 		{
-			"scope": "meta.attribute.rust, meta.interpolation.rust",
+			"scope": "meta.attribute.rust, meta.interpolation.rust, meta.attribute.rust punctuation.brackets.round.rust",
 			"settings": {
 				"foreground": "#D19A66"
 			}
@@ -1935,19 +1941,13 @@
 			}
 		},
 		{
-			"scope": "variable.language.self.rust",
-			"settings": {
-				"foreground": "#C0C5CE"
-			}
-		},
-		{
 			"scope": "punctuation.brackets.angle.rust,  punctuation.comma.rust, punctuation.semi.rust",
 			"settings": {
 				"foreground": "#C0C5CE"
 			}
 		},
 		{
-			"scope": "punctuation.brackets.attribute.rust, punctuation.brackets.round.rust, punctuation.definition.interpolation.rust",
+			"scope": "punctuation.brackets.attribute.rust, punctuation.definition.interpolation.rust",
 			"settings": {
 				"foreground": "#D19A66"
 			}
@@ -1998,6 +1998,12 @@
 			"scope": "support.type.property-name.toml",
 			"settings": {
 				"foreground": "#E06C75"
+			}
+		},
+		{
+			"scope": "punctuation.brackets.round.rust",
+			"settings": {
+				"foreground": "#ABB2BF"
 			}
 		}
 	]
