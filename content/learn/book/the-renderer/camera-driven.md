@@ -39,7 +39,7 @@ commands.spawn(Camera::default());
 
 However, a `Camera` component doesn't contain enough information on it's own.
 Like we mentioned above, a [`CameraRenderGraph`] component also needs to be present in order for the camera to actually produce a rendered image.
-If you forget to include a `CameraRenderGraph` component, your game will emit an `error` at runtime.
+If you forget to include a `CameraRenderGraph` component, your game will emit an error at runtime.
 
 ```rust
 // Create a new camera entity that uses the `Core3D` render graph.
@@ -170,7 +170,7 @@ Alternatively, the [`Fixed`] variant allows you to manually specify the size of 
 By providing a `f32` value for both the `width` and `height` fields, the projection will always display the same region of the game world, regardless of any window resizing.
 However, be aware that this will cause the image to stretch, which usually isn't the desired outcome.
 
-The [`AutoMin`] and [`AutoMax`] variants function similarly to the `WindowSize` variant, with the execption that the axes can't be smaller than a given minimum or maximum.
+The [`AutoMin`] and [`AutoMax`] variants function similarly to the `WindowSize` variant, with the exception that the axes can't be smaller than a given minimum or maximum.
 
 Finally, the [`FixedVertical`] and [`FixedHorizontal`] will maintain a constant vertical or horizontal value while the other value will match the aspect ratio.
 
@@ -277,18 +277,20 @@ fn spawn_player(mut commands: Commands) {
 }
 ```
 
-A render layer is just a `bitmask` value, which means we aren't limited to only a single render layer.
+A render layer is a bitmask value, which means we aren't limited to only a single render layer.
 You can add a `Camera` or other entity to multiple render layers by using the [`RenderLayers::from_layers()`] method and passing in a reference to an array of `usize` values.
 `RenderLayers` also provides a number of methods that correspond to different bitwise operations, allowing you to compare and contrast the render layers of different entities.
 
 ```rust
-fn merge_layers(
-    mut layer_query: Query<&mut RenderLayers>,
+// This function spawns a new light on layers 0 and 1.
+fn add_light_to_render_layer(
+    mut commands: Commands,
 ) {
-    // Add all entities with a `RenderLayers` component to layer 3.
-    layer_query.iter_mut().for_each(|mut layers| {
-        layers.with(3);
-    });
+    commands.spawn((
+        PointLight::default(),
+        Transform::from_translation(Vec3::new(0.0, 0.0, 10.0)),
+        RenderLayers::layer(0).with(1),
+    ));
 }
 ```
 
@@ -346,7 +348,7 @@ Simply spawn your `Camera2d` or `Camera3d` and your UI elements will be displaye
 
 If you start using multiple cameras, you can use the [`UiTargetCamera`] component to indicate a specific camera to render the UI to.
 `UiTargetCamera` is a wrapper around an `Entity` id value for a `Camera` entity.
-Add it to the entity containing the UI elements and your UI will be rendered to the `Camera`s [`RenderTarget`] while also respecting the `Camera`s `Viewport` and scale.
+Add it to the entity containing the UI elements and your UI will be rendered to the `Camera`'s [`RenderTarget`] while also respecting the `Camera`s `Viewport` and scale.
 
 If you don't specify a [`UiTargetCamera`], then UI `Node`s are rendered to the default `Camera`, which is marked by the [`IsDefaultUiCamera`] marker component.
 You can specify the default `Camera` by inserting the [`IsDefaultUiCamera`] marker component into a camera entity.
