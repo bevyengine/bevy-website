@@ -95,7 +95,7 @@ Each render phase we set up contains the "instructions" for how a part of those 
 For example, an opaque phase describes how the objects are arranged relative to each other from the camera's perspective, and a transparency phase describes if some objects can be seen through other objects.
 
 Remember that data that's been assigned into [`BindGroup`]s?
-We use these groupings to represent the individual objects that the camera sees (see the [Cameras page](/learn/book/the-renderer/camera-driven) for more information) in each render phase (aptly called [`PhaseItem`]s).
+We use these groupings to represent the individual objects that the camera sees (see the [Cameras page](@/learn/book/the-renderer/camera-driven.md) for more information) in each render phase (aptly called [`PhaseItem`]s).
 Each `PhaseItem` is assigned a [`Draw`] function, which is the final combination of instructions for how that item will be displayed on screen.
 Finally, for each `Draw` function, a draw call is created which will tell the GPU what to display on the screen.
 

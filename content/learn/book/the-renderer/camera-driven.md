@@ -11,7 +11,7 @@ You can think of a `Camera` as a specific view of what's happening in your game.
 A camera could see over a character's shoulder, hover over top of the scene, or even be placed at eye level to show a first-person perspective.
 
 Internally, cameras are used in several places throughout the rendering process.
-As we saw in the [Pipelined Rendering page](/learn/book/the-renderer/render-pipelines), Bevy copies data from the Main `World` into a Render `World` before sending it off to the GPU for rendering.
+As we saw in the [Pipelined Rendering page](@/learn/book/the-renderer/render-pipelines.md), Bevy copies data from the Main `World` into a Render `World` before sending it off to the GPU for rendering.
 Each `Camera` acts as filter for that data, letting the renderer know what data should be rendered and what data can be ignored based on what the `Camera` can see.
 
 Cameras also dictate what render systems will run based on a [`CameraRenderGraph`] component.
