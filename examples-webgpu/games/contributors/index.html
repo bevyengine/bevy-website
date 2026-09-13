@@ -1,0 +1,439 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content=Contributors property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/games/contributors/ property=og:url><meta content=https://bevy.org/examples-webgpu/games/contributors/../static/screenshots/Games/contributors.png property=og:image><meta content="Displays each contributor as a bouncy bevy-ball!" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Contributors</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Games / Contributors</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/showcase/contributors.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/games/contributors/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example displays each contributor to the bevy source code as a bouncing bevy-ball.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>contributors.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span><span style=color:#c0c5ce>math</span><span>::</span><span style=color:#c0c5ce>bounding</span><span>::</span><span style=color:#dfc479>Aabb2d</span><span style=color:#c0c5ce>, prelude</span><span>::*}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> chacha20</span><span>::</span><span style=color:#dfc479>ChaCha8Rng</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> rand</span><span>::{</span><span style=color:#dfc479>RngExt</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SeedableRng</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    collections</span><span>::</span><span style=color:#dfc479>HashMap</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    env</span><span>::</span><span style=color:#dfc479>VarError</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    hash</span><span>::{</span><span style=color:#dfc479>DefaultHasher</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Hash</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Hasher</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    io</span><span>::{</span><span style=color:#c594c5>self</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> BufRead</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> BufReader</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    process</span><span>::</span><span style=color:#dfc479>Stdio</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SelectionTimer</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SharedRng</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>setup_contributor_selection, setup</span><span>))</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Systems are chained for determinism only</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>gravity, movement, collisions, selection</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>chain</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>type</span><span style=color:#dfc479> Contributors</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>String</span><span style=color:#c0c5ce>,</span><span style=color:#b48ead> usize</span><span>)</span><span style=color:#c0c5ce>>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ContributorSelection</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    order:</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    idx:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> SelectionTimer</span><span>(</span><span style=color:#dfc479>Timer</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> SelectionTimer</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span>() -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        Self</span><span>(</span><span style=color:#dfc479>Timer</span><span>::</span><span style=color:#69c>from_seconds</span><span>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>            SHOWCASE_TIMER_SECS</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            TimerMode</span><span>::</span><span style=color:#dfc479>Repeating</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ContributorDisplay</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Contributor</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    name:</span><span style=color:#dfc479> String</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    num_commits:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    hue:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Velocity</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    translation:</span><span style=color:#dfc479> Vec3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    rotation:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// We're using a shared seeded RNG here to make this example deterministic for testing purposes.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// This isn't strictly required in practical use unless you need your app to be deterministic.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> SharedRng</span><span>(</span><span style=color:#dfc479>ChaCha8Rng</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> SharedRng</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span>() -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        Self</span><span>(</span><span style=color:#dfc479>ChaCha8Rng</span><span>::</span><span style=color:#69c>seed_from_u64</span><span>(</span><span style=color:#e79e6d>10223163112</span><span>))</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> GRAVITY</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 9.821</span><span> *</span><span style=color:#e79e6d> 100.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SPRITE_SIZE</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 75.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SELECTED</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Hsla</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Hsla</span><span>::</span><span style=color:#69c>hsl</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.9</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.7</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> DESELECTED</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Hsla</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Hsla</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.92</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SELECTED_Z_OFFSET</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 100.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SHOWCASE_TIMER_SECS</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 3.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> CONTRIBUTORS_LIST</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span>[</span><span style=color:#c594c5>&</span><span style=color:#e5c07b>str</span><span>]</span><span style=color:#c594c5> = &</span><span>[</span><span style=color:#9fc37f>"Carter Anderson"</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "And Many More"</span><span>]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup_contributor_selection</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> rng:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SharedRng</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> contribs</span><span style=color:#c594c5> =</span><span style=color:#69c> contributors_or_fallback</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> texture_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"branding/icon.png"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> contributor_selection</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ContributorSelection</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        order:</span><span style=color:#dfc479> Vec</span><span>::</span><span style=color:#69c>with_capacity</span><span>(</span><span style=color:#c0c5ce>contribs</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        idx:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>name, num_commits</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> contribs</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_range</span><span>(-</span><span style=color:#e79e6d>400.0</span><span>..</span><span style=color:#e79e6d>400.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_range</span><span>(</span><span style=color:#e79e6d>0.0</span><span>..</span><span style=color:#e79e6d>400.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> dir</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_range</span><span>(-</span><span style=color:#e79e6d>1.0</span><span>..</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> velocity</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>dir</span><span> *</span><span style=color:#e79e6d> 500.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> hue</span><span style=color:#c594c5> =</span><span style=color:#69c> name_to_hue</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>name</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Some sprites should be flipped for variety</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> flipped</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> entity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Contributor</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    name,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    num_commits,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    hue,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Velocity</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    translation: velocity,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    rotation:</span><span> -</span><span style=color:#c0c5ce>dir</span><span> *</span><span style=color:#e79e6d> 5.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Sprite</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    image: texture_handle</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    custom_size:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>Vec2</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#d19a66>SPRITE_SIZE</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    color:</span><span style=color:#d19a66> DESELECTED</span><span style=color:#c594c5>.</span><span style=color:#69c>with_hue</span><span>(</span><span style=color:#c0c5ce>hue</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    flip_x: flipped,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                transform,</span></span>
+<span class=giallo-l><span>            ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        contributor_selection</span><span style=color:#c594c5>.</span><span>order</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span>(</span><span style=color:#c0c5ce>entity</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#c0c5ce>contributor_selection</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Camera2d</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> text_style</span><span style=color:#c594c5> =</span><span style=color:#dfc479> TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        font: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"fonts/FiraSans-Bold.ttf"</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        font_size:</span><span style=color:#dfc479> FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>60.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Contributor showcase"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            text_style</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ContributorDisplay</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_child</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            TextSpan</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>30</span><span style=color:#c594c5>.</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#c0c5ce>text_style</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Finds the next contributor to display and selects the entity</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> selection</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> timer:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SelectionTimer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> contributor_selection:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ContributorSelection</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    contributor_root:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#dfc479>With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ContributorDisplay</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Text</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Contributor</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Sprite</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Transform</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> writer:</span><span style=color:#dfc479> TextUiWriter</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if !</span><span style=color:#c0c5ce>timer</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>tick</span><span>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>just_finished</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Deselect the previous contributor</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> entity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> contributor_selection</span><span style=color:#c594c5>.</span><span>order[</span><span style=color:#c0c5ce>contributor_selection</span><span style=color:#c594c5>.</span><span>idx]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c0c5ce>contributor,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> sprite,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> transform</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> query</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>entity</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#69c>        deselect</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> sprite, contributor,</span><span style=color:#c594c5> &mut</span><span style=color:#c0c5ce> transform</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Select the next contributor</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span> (</span><span style=color:#c0c5ce>contributor_selection</span><span style=color:#c594c5>.</span><span>idx +</span><span style=color:#e79e6d> 1</span><span>)</span><span style=color:#c594c5> &lt;</span><span style=color:#c0c5ce> contributor_selection</span><span style=color:#c594c5>.</span><span>order</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        contributor_selection</span><span style=color:#c594c5>.</span><span>idx </span><span style=color:#c594c5>+=</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        contributor_selection</span><span style=color:#c594c5>.</span><span>idx </span><span style=color:#c594c5>=</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> entity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> contributor_selection</span><span style=color:#c594c5>.</span><span>order[</span><span style=color:#c0c5ce>contributor_selection</span><span style=color:#c594c5>.</span><span>idx]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c0c5ce>contributor,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> sprite,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> transform</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> query</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>entity</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> entity</span><span style=color:#c594c5> =</span><span> *</span><span style=color:#c0c5ce>contributor_root;</span></span>
+<span class=giallo-l><span style=color:#69c>        select</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &mut</span><span style=color:#c0c5ce> sprite,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            contributor,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &mut</span><span style=color:#c0c5ce> transform,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            entity,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &mut</span><span style=color:#c0c5ce> writer,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Change the tint color to the "selected" color, bring the object to the front</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> and display the name.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> select</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    sprite:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Sprite</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    contributor:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Contributor</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    transform:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    entity:</span><span style=color:#dfc479> Entity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    writer:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> TextUiWriter</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    sprite</span><span style=color:#c594c5>.</span><span>color </span><span style=color:#c594c5>=</span><span style=color:#d19a66> SELECTED</span><span style=color:#c594c5>.</span><span style=color:#69c>with_hue</span><span>(</span><span style=color:#c0c5ce>contributor</span><span style=color:#c594c5>.</span><span>hue)</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>z </span><span style=color:#c594c5>+=</span><span style=color:#d19a66> SELECTED_Z_OFFSET</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    writer</span><span style=color:#c594c5>.</span><span style=color:#69c>text</span><span>(</span><span style=color:#c0c5ce>entity,</span><span style=color:#e79e6d> 0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clone_from</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>contributor</span><span style=color:#c594c5>.</span><span>name)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    *</span><span style=color:#c0c5ce>writer</span><span style=color:#c594c5>.</span><span style=color:#69c>text</span><span>(</span><span style=color:#c0c5ce>entity,</span><span style=color:#e79e6d> 1</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>        "</span><span style=color:#56b6c2>\n</span><span style=color:#d19a66>{}</span><span style=color:#9fc37f> commit</span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        contributor</span><span style=color:#c594c5>.</span><span>num_commits</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> contributor</span><span style=color:#c594c5>.</span><span>num_commits</span><span style=color:#c594c5> ></span><span style=color:#e79e6d> 1</span><span> {</span><span style=color:#9fc37f> "s"</span><span> }</span><span style=color:#c594c5> else</span><span> {</span><span style=color:#9fc37f> ""</span><span> }</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    writer</span><span style=color:#c594c5>.</span><span style=color:#69c>color</span><span>(</span><span style=color:#c0c5ce>entity,</span><span style=color:#e79e6d> 0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> sprite</span><span style=color:#c594c5>.</span><span>color</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Change the tint color to the "deselected" color and push</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> the object to the back.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> deselect</span><span>(</span><span style=color:#c0c5ce>sprite:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Sprite</span><span style=color:#c0c5ce>, contributor:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Contributor</span><span style=color:#c0c5ce>, transform:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Transform</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    sprite</span><span style=color:#c594c5>.</span><span>color </span><span style=color:#c594c5>=</span><span style=color:#d19a66> DESELECTED</span><span style=color:#c594c5>.</span><span style=color:#69c>with_hue</span><span>(</span><span style=color:#c0c5ce>contributor</span><span style=color:#c594c5>.</span><span>hue)</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>z </span><span style=color:#c594c5>-=</span><span style=color:#d19a66> SELECTED_Z_OFFSET</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Applies gravity to all entities with a velocity.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> gravity</span><span>(</span><span style=color:#c0c5ce>time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> velocity_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Velocity</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> velocity</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> velocity_query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        velocity</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>y </span><span style=color:#c594c5>-=</span><span style=color:#d19a66> GRAVITY</span><span> *</span><span style=color:#c0c5ce> delta;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Checks for collisions of contributor-birbs.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> On collision with left-or-right wall it resets the horizontal</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> velocity. On collision with the ground it applies an upwards</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> force.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> collisions</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    window:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Window</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Velocity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Transform</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Contributor</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> rng:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SharedRng</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c0c5ce>window</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> window</span><span style=color:#c594c5>.</span><span style=color:#69c>single</span><span>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> window_size</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> window</span><span style=color:#c594c5>.</span><span style=color:#69c>size</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> collision_area</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Aabb2d</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>Vec2</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>window_size</span><span> -</span><span style=color:#d19a66> SPRITE_SIZE</span><span>) /</span><span style=color:#e79e6d> 2</span><span style=color:#c594c5>.</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The maximum height the birbs should try to reach is one birb below the top of the window.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> max_bounce_height</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>window_size</span><span style=color:#c594c5>.</span><span>y -</span><span style=color:#d19a66> SPRITE_SIZE</span><span> *</span><span style=color:#e79e6d> 2.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span>(</span><span style=color:#e79e6d>0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> min_bounce_height</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> max_bounce_height</span><span> *</span><span style=color:#e79e6d> 0.4</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> velocity,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> transform</span><span>)</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Clamp the translation to not go out of the bounds</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c594c5> &lt;</span><span style=color:#c0c5ce> collision_area</span><span style=color:#c594c5>.</span><span>min</span><span style=color:#c594c5>.</span><span>y {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>y </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> collision_area</span><span style=color:#c594c5>.</span><span>min</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // How high this birb will bounce.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> bounce_height</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_range</span><span>(</span><span style=color:#c0c5ce>min_bounce_height</span><span>..=</span><span style=color:#c0c5ce>max_bounce_height</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Apply the velocity that would bounce the birb up to bounce_height.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            velocity</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>y </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>bounce_height</span><span> *</span><span style=color:#d19a66> GRAVITY</span><span> *</span><span style=color:#e79e6d> 2</span><span style=color:#c594c5>.</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>sqrt</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Birbs might hit the ceiling if the window is resized.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // If they do, bounce them.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c594c5> ></span><span style=color:#c0c5ce> collision_area</span><span style=color:#c594c5>.</span><span>max</span><span style=color:#c594c5>.</span><span>y {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>y </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> collision_area</span><span style=color:#c594c5>.</span><span>max</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            velocity</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>y </span><span style=color:#c594c5>*=</span><span> -</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // On side walls flip the horizontal velocity</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c594c5> &lt;</span><span style=color:#c0c5ce> collision_area</span><span style=color:#c594c5>.</span><span>min</span><span style=color:#c594c5>.</span><span>x {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>x </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> collision_area</span><span style=color:#c594c5>.</span><span>min</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            velocity</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>x </span><span style=color:#c594c5>*=</span><span> -</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            velocity</span><span style=color:#c594c5>.</span><span>rotation </span><span style=color:#c594c5>*=</span><span> -</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c594c5> ></span><span style=color:#c0c5ce> collision_area</span><span style=color:#c594c5>.</span><span>max</span><span style=color:#c594c5>.</span><span>x {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>x </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> collision_area</span><span style=color:#c594c5>.</span><span>max</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            velocity</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span>x </span><span style=color:#c594c5>*=</span><span> -</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            velocity</span><span style=color:#c594c5>.</span><span>rotation </span><span style=color:#c594c5>*=</span><span> -</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Apply velocity to positions and rotations.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> movement</span><span>(</span><span style=color:#c0c5ce>time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Velocity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Transform</span><span>)</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>velocity,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> transform</span><span>)</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>+=</span><span style=color:#c0c5ce> delta</span><span> *</span><span style=color:#c0c5ce> velocity</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_z</span><span>(</span><span style=color:#c0c5ce>velocity</span><span style=color:#c594c5>.</span><span>rotation *</span><span style=color:#c0c5ce> delta</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> thiserror</span><span>::</span><span style=color:#dfc479>Error</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> LoadContributorsError</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[error(</span><span style=color:#9fc37f>"An IO error occurred while reading the git log."</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#69c>    Io</span><span>(</span><span style=color:#d19a66>#[from]</span><span style=color:#c0c5ce> io</span><span>::</span><span style=color:#dfc479>Error</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[error(</span><span style=color:#9fc37f>"The CARGO_MANIFEST_DIR environment variable was not set."</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#69c>    Var</span><span>(</span><span style=color:#d19a66>#[from]</span><span style=color:#dfc479> VarError</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[error(</span><span style=color:#9fc37f>"The git process did not return a stdout handle."</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Stdout</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Get the names and commit counts of all contributors from the git log.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This function only works if `git` is installed and</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> the program is run through `cargo`.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> contributors</span><span>() -></span><span style=color:#dfc479> Result</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Contributors</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> LoadContributorsError</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> manifest_dir</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>env</span><span>::</span><span style=color:#69c>var</span><span>(</span><span style=color:#9fc37f>"CARGO_MANIFEST_DIR"</span><span>)</span><span style=color:#c594c5>?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> cmd</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>process</span><span>::</span><span style=color:#dfc479>Command</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"git"</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>args</span><span>([</span><span style=color:#9fc37f>"--no-pager"</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "log"</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "--pretty=format:%an"</span><span>])</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>current_dir</span><span>(</span><span style=color:#c0c5ce>manifest_dir</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>stdout</span><span>(</span><span style=color:#c0c5ce>Stdio</span><span>::</span><span style=color:#69c>piped</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>()</span><span style=color:#c594c5>?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> stdout</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> cmd</span><span style=color:#c594c5>.</span><span>stdout</span><span style=color:#c594c5>.</span><span style=color:#69c>take</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>ok_or</span><span>(</span><span style=color:#c0c5ce>LoadContributorsError</span><span>::</span><span style=color:#dfc479>Stdout</span><span>)</span><span style=color:#c594c5>?</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Take the list of commit author names and collect them into a HashMap,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // keeping a count of how many commits they authored.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> contributors</span><span style=color:#c594c5> =</span><span style=color:#dfc479> BufReader</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>stdout</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>lines</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>map_while</span><span>(</span><span style=color:#c0c5ce>Result</span><span>::</span><span style=color:#c0c5ce>ok</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>fold</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        HashMap</span><span>::</span><span style=color:#69c>new</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        |mut</span><span style=color:#c0c5ce> acc, word</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>acc</span><span style=color:#c594c5>.</span><span style=color:#69c>entry</span><span>(</span><span style=color:#c0c5ce>word</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>or_insert</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c594c5> +=</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            acc</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#dfc479>    Ok</span><span>(</span><span style=color:#c0c5ce>contributors</span><span style=color:#c594c5>.</span><span style=color:#69c>into_iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>collect</span><span>())</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Get the contributors list, or fall back to a default value if</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> it's unavailable or we're in CI</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> contributors_or_fallback</span><span>() -></span><span style=color:#dfc479> Contributors</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> get_default</span><span style=color:#c594c5> = ||</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>        CONTRIBUTORS_LIST</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>cycle</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>take</span><span>(</span><span style=color:#e79e6d>1000</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>map</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>name</span><span style=color:#c594c5>|</span><span> (</span><span style=color:#c0c5ce>name</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>collect</span><span>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#61afef> cfg!</span><span>(</span><span style=color:#c0c5ce>feature</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "bevy_ci_testing"</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#69c> get_default</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#69c>    contributors</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap_or_else</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>_</span><span style=color:#c594c5>|</span><span style=color:#69c> get_default</span><span>())</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Give each unique contributor name a particular hue that is stable between runs.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> name_to_hue</span><span>(</span><span style=color:#c0c5ce>s:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span>) -></span><span style=color:#b48ead> f32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> hasher</span><span style=color:#c594c5> =</span><span style=color:#dfc479> DefaultHasher</span><span>::</span><span style=color:#69c>new</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    s</span><span style=color:#c594c5>.</span><span style=color:#69c>hash</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> hasher</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    hasher</span><span style=color:#c594c5>.</span><span style=color:#69c>finish</span><span>()</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> /</span><span style=color:#b48ead> u64</span><span>::</span><span style=color:#d19a66>MAX</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#e79e6d> 360</span><span style=color:#c594c5>.</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/Games/contributors/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

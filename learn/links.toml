@@ -1,0 +1,62 @@
+[[links]]
+title = "The Quick Start Guide"
+url = "/learn/quick-start/introduction"
+image = "/assets/book.svg"
+image_alt = "Bevy book"
+description = "Learn the basics of how to use Bevy by following a quick tutorial. If you like learning by examples, you should probably start here."
+
+[[links]]
+title = "Migration Guides"
+url = "/learn/migration-guides/introduction"
+image = "/assets/migration-guides.svg"
+image_alt = "Versions diff"
+description = "Every Bevy update brings new functionality and improvements. Follow these guides to migrate your project to the latest Bevy has to offer!"
+
+[[links]]
+title = "Bevy Rust API Docs"
+url = "https://docs.rs/bevy"
+image = "/assets/rust-logo-light.svg"
+image_alt = "Rust logo"
+description = "Learn how to use Bevy's types, traits and methods using the in-depth reference documentation, complete with inline examples."
+
+[[links]]
+title = "Contributing Guide"
+url = "/learn/contribute/introduction"
+image = "/assets/book.svg"
+image_alt = "A slanted book"
+description = "Learn how to best contribute to the Bevy Project."
+
+[[links]]
+title = "Official Examples"
+url = "https://github.com/bevyengine/bevy/tree/latest/examples#examples"
+image = "/assets/github.svg"
+image_alt = "GitHub logo"
+description = "Examples that show how to use the various features of Bevy."
+
+[[links]]
+title = "Bevy Assets"
+url = "/assets"
+image = "/assets/bevy_icon_dark.svg"
+image_alt = "Bevy logo"
+description = "Find Assets to use in your games. Learn by example with a list of cool Bevy projects. Read community-made tutorials and documentation."
+
+[[links]]
+title = "Bevy Web Examples"
+url = "/examples"
+image = "/assets/bevy_icon_dark.svg"
+image_alt = "Bevy logo"
+description = "Browse bevy examples compiled to wasm and running directly in your browser!"
+
+[[links]]
+title = "Bevy Errors"
+url = "/learn/errors/introduction"
+image = "/assets/bevy_icon_dark.svg"
+image_alt = "Bevy logo"
+description = "List of Bevy's error codes for the current release."
+
+[[links]]
+title = "Frequently Asked Questions"
+url = "/faq"
+image = "/assets/bevy_icon_dark.svg"
+image_alt = "Bevy logo"
+description = "A curated list of answers to questions Bevy users frequently ask."

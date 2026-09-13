@@ -1,0 +1,521 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Directional Navigation" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/ui-user-interface/directional-navigation/ property=og:url><meta content="https://bevy.org/examples-webgpu/ui-user-interface/directional-navigation/../static/screenshots/UI (User Interface)/directional_navigation.png" property=og:image><meta content="Demonstration of automatic directional navigation based on UI element positions" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Directional Navigation</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>UI (User Interface) / Directional Navigation</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/ui/navigation/directional_navigation.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/ui-user-interface/directional-navigation/>here</a>.</aside></div><div class="example__explanation media-content"><p>Demonstrates automatic directional navigation.<p>This shows how to use automatic navigation by simply adding the [<code>AutoDirectionalNavigation</code>] component to UI elements. Navigation is automatically calculated based on screen positions.<p>This is especially useful for:<ul><li>Dynamic UIs where elements may be added, removed, or repositioned<li>Irregular layouts that don't fit a simple grid pattern<li>Prototyping where you want navigation without tedious manual setup</ul><p>The automatic system finds the nearest neighbor in each compass direction for every node, completely eliminating the need to manually specify navigation relationships.<p>For an example that demonstrates automatic directional navigation with manual overrides, refer to the <code>directional_navigation_overrides</code> example.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>directional_navigation.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> core</span><span>::</span><span style=color:#c0c5ce>time</span><span>::</span><span style=color:#dfc479>Duration</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#dfc479>NormalizedRenderTarget</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        directional_navigation</span><span>::{</span><span style=color:#dfc479>AutoNavigationConfig</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DirectionalNavigationPlugin</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        FocusCause</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InputFocus</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InputFocusVisible</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    math</span><span>::{</span><span style=color:#dfc479>CompassOctant</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Dir2</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Rot2</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    picking</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        backend</span><span>::</span><span style=color:#dfc479>HitData</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pointer</span><span>::{</span><span style=color:#dfc479>Location</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PointerId</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    platform</span><span>::</span><span style=color:#c0c5ce>collections</span><span>::</span><span style=color:#dfc479>HashSet</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ui</span><span>::</span><span style=color:#c0c5ce>auto_directional_navigation</span><span>::{</span><span style=color:#dfc479>AutoDirectionalNavigation</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AutoDirectionalNavigator</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>((</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DirectionalNavigationPlugin</span><span>))</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This resource is canonically used to track whether or not to render a focus indicator</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // It starts as false, but we set it to true here as we would like to see the focus indicator</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#69c>InputFocusVisible</span><span>(</span><span style=color:#d19a66>true</span><span>))</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Configure auto-navigation behavior</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#dfc479>AutoNavigationConfig</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Require at least 10% overlap in perpendicular axis for cardinal directions</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            min_alignment_factor:</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Don't connect nodes more than 500 pixels apart between their closest edges</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            max_search_distance:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#e79e6d>500.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Prefer nodes that are well-aligned</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            prefer_aligned:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ActionState</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup_scattered_ui</span><span>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // No manual system needed - just add AutoDirectionalNavigation to entities.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Input is generally handled during PreUpdate</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>PreUpdate</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>process_inputs, navigate</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>chain</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Update</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                highlight_focused_element,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                interact_with_focused_button,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                reset_button_after_interaction,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                update_focus_display</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>run_if</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>input_focus:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocus</span><span style=color:#c0c5ce>></span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> input_focus</span><span style=color:#c594c5>.</span><span style=color:#69c>is_changed</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                update_key_display,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>universal_button_click_behavior</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> NORMAL_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>BLUE_400</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PRESSED_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>BLUE_500</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> FOCUSED_BORDER</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Srgba</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>tailwind</span><span>::</span><span style=color:#d19a66>BLUE_50</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Marker component for the text that displays the currently focused button</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> FocusDisplay</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Marker component for the text that displays the last key pressed</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> KeyDisplay</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Observer for button clicks</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> universal_button_click_behavior</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> click:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Click</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> button_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> ResetTimer</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> button_entity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> click</span><span style=color:#c594c5>.</span><span>entity</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> color,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> reset_timer</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> button_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>button_entity</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        color</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> PRESSED_BUTTON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reset_timer</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Timer</span><span>::</span><span style=color:#69c>from_seconds</span><span>(</span><span style=color:#e79e6d>0.3</span><span style=color:#c0c5ce>, TimerMode</span><span>::</span><span style=color:#dfc479>Once</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        click</span><span style=color:#c594c5>.</span><span style=color:#69c>propagate</span><span>(</span><span style=color:#d19a66>false</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ResetTimer</span><span>(</span><span style=color:#dfc479>Timer</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> reset_button_after_interaction</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> ResetTimer</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> BackgroundColor</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> reset_timer,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> color</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reset_timer</span><span style=color:#c594c5>.</span><span style=color:#69c>tick</span><span>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> reset_timer</span><span style=color:#c594c5>.</span><span style=color:#69c>just_finished</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> NORMAL_BUTTON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawn a scattered layout of buttons to demonstrate automatic navigation.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Unlike a regular grid, these buttons are irregularly positioned,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> but auto-navigation will still figure out the correct connections!</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup_scattered_ui</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> input_focus:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocus</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Camera2d</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Create a full-screen background node</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> root_node</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Instructions</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> instructions</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Text</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "Directional Navigation Demo</span><span style=color:#56b6c2>\n\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                 Use arrow keys or D-pad to navigate.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                 Press Enter or A button to interact.</span><span style=color:#56b6c2>\n\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                 Buttons are scattered irregularly,</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                 but navigation is automatic!"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>20</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>20</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>280</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                padding: UiRect</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>12</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>8</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgba</span><span>(</span><span style=color:#e79e6d>0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.8</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Focus display - shows which button is currently focused</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Focused: None"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        FocusDisplay</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>20</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            bottom:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>80</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>280</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            padding: UiRect</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>12</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>8</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        BackgroundColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgba</span><span>(</span><span style=color:#e79e6d>0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.8</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>20.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Key display - shows the last key pressed</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Last Key: None"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        KeyDisplay</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>20</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            bottom:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>20</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>280</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            padding: UiRect</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>12</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>8</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        BackgroundColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgba</span><span>(</span><span style=color:#e79e6d>0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.8</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>20.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn buttons in a scattered/irregular pattern</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The auto-navigation system will figure out the connections!</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> button_positions</span><span style=color:#c594c5> =</span><span> [</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Top row (irregular spacing)</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#e79e6d>350.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 100.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#e79e6d>520.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 120.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#e79e6d>700.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 90.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Middle-top row</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#e79e6d>380.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 220.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#e79e6d>600.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 240.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Center</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#e79e6d>450.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 340.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#e79e6d>620.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 360.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Lower row</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#e79e6d>360.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 480.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#e79e6d>540.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 460.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#e79e6d>720.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 490.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> first_button</span><span style=color:#c594c5> =</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>i,</span><span> (</span><span style=color:#c0c5ce>x, y</span><span>))</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> button_positions</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>enumerate</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5> = if</span><span style=color:#c0c5ce> i</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 4</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            UiTransform</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                scale:</span><span style=color:#dfc479> Vec2</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>1.2</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                rotation:</span><span style=color:#dfc479> Rot2</span><span>::</span><span style=color:#d19a66>FRAC_PI_2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            UiTransform</span><span>::</span><span style=color:#d19a66>IDENTITY</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> button_entity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Button</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    left:</span><span style=color:#69c> px</span><span>(*</span><span style=color:#c0c5ce>x</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    top:</span><span style=color:#69c> px</span><span>(*</span><span style=color:#c0c5ce>y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>140</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>80</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    border: UiRect</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>4</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>12</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                transform,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // This is the key: just add this component for automatic navigation!</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                AutoDirectionalNavigation</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                ResetTimer</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                BackgroundColor</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#d19a66>NORMAL_BUTTON</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Name</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>format!</span><span>(</span><span style=color:#9fc37f>"Button </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, i</span><span> +</span><span style=color:#e79e6d> 1</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>with_child</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>format!</span><span>(</span><span style=color:#9fc37f>"Button </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, i</span><span> +</span><span style=color:#e79e6d> 1</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                TextLayout</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    justify:</span><span style=color:#dfc479> Justify</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> first_button</span><span style=color:#c594c5>.</span><span style=color:#69c>is_none</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            first_button</span><span style=color:#c594c5> =</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>button_entity</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>root_node</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>add_children</span><span>(</span><span style=color:#c594c5>&</span><span>[</span><span style=color:#c0c5ce>instructions</span><span>])</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Set initial focus</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>button</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> first_button</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        input_focus</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#c0c5ce>button, FocusCause</span><span>::</span><span style=color:#dfc479>Navigated</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Action state and input handling</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Eq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Hash</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> DirectionalNavigationAction</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Up</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Down</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Left</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Right</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Select</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> DirectionalNavigationAction</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> variants</span><span>() -></span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>Self</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>        vec!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> keycode</span><span>(</span><span style=color:#c594c5>&self</span><span>) -></span><span style=color:#dfc479> KeyCode</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span> =></span><span style=color:#dfc479> KeyCode</span><span>::</span><span style=color:#dfc479>ArrowUp</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span> =></span><span style=color:#dfc479> KeyCode</span><span>::</span><span style=color:#dfc479>ArrowDown</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span> =></span><span style=color:#dfc479> KeyCode</span><span>::</span><span style=color:#dfc479>ArrowLeft</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span> =></span><span style=color:#dfc479> KeyCode</span><span>::</span><span style=color:#dfc479>ArrowRight</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span> =></span><span style=color:#dfc479> KeyCode</span><span>::</span><span style=color:#dfc479>Enter</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> gamepad_button</span><span>(</span><span style=color:#c594c5>&self</span><span>) -></span><span style=color:#dfc479> GamepadButton</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span> =></span><span style=color:#dfc479> GamepadButton</span><span>::</span><span style=color:#dfc479>DPadUp</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span> =></span><span style=color:#dfc479> GamepadButton</span><span>::</span><span style=color:#dfc479>DPadDown</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span> =></span><span style=color:#dfc479> GamepadButton</span><span>::</span><span style=color:#dfc479>DPadLeft</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span> =></span><span style=color:#dfc479> GamepadButton</span><span>::</span><span style=color:#dfc479>DPadRight</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span> =></span><span style=color:#dfc479> GamepadButton</span><span>::</span><span style=color:#dfc479>South</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ActionState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pressed_actions:</span><span style=color:#dfc479> HashSet</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DirectionalNavigationAction</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> process_inputs</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> action_state:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ActionState</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    keyboard_input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    gamepad_input:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Gamepad</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    action_state</span><span style=color:#c594c5>.</span><span>pressed_actions</span><span style=color:#c594c5>.</span><span style=color:#69c>clear</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> action</span><span style=color:#c594c5> in</span><span style=color:#dfc479> DirectionalNavigationAction</span><span>::</span><span style=color:#69c>variants</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>action</span><span style=color:#c594c5>.</span><span style=color:#69c>keycode</span><span>()) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            action_state</span><span style=color:#c594c5>.</span><span>pressed_actions</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>action</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> gamepad</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> gamepad_input</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> action</span><span style=color:#c594c5> in</span><span style=color:#dfc479> DirectionalNavigationAction</span><span>::</span><span style=color:#69c>variants</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> gamepad</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>action</span><span style=color:#c594c5>.</span><span style=color:#69c>gamepad_button</span><span>()) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                action_state</span><span style=color:#c594c5>.</span><span>pressed_actions</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>action</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> navigate</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    action_state:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ActionState</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> auto_directional_navigator:</span><span style=color:#dfc479> AutoDirectionalNavigator</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> net_east_west</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> action_state</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span>pressed_actions</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>contains</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span>)</span><span style=color:#c594c5> as</span><span style=color:#b48ead> i8</span></span>
+<span class=giallo-l><span>        -</span><span style=color:#c0c5ce> action_state</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span>pressed_actions</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>contains</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span>)</span><span style=color:#c594c5> as</span><span style=color:#b48ead> i8</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> net_north_south</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> action_state</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span>pressed_actions</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>contains</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span>)</span><span style=color:#c594c5> as</span><span style=color:#b48ead> i8</span></span>
+<span class=giallo-l><span>        -</span><span style=color:#c0c5ce> action_state</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span>pressed_actions</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>contains</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span>)</span><span style=color:#c594c5> as</span><span style=color:#b48ead> i8</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Use Dir2::from_xy to convert input to direction, then convert to CompassOctant</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> maybe_direction</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Dir2</span><span>::</span><span style=color:#69c>from_xy</span><span>(</span><span style=color:#c0c5ce>net_east_west</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>, net_north_south</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>ok</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>map</span><span>(</span><span style=color:#c0c5ce>CompassOctant</span><span>::</span><span style=color:#c0c5ce>from</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>direction</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> maybe_direction</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span style=color:#c0c5ce> auto_directional_navigator</span><span style=color:#c594c5>.</span><span style=color:#69c>navigate</span><span>(</span><span style=color:#c0c5ce>direction</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Ok</span><span>(</span><span style=color:#c0c5ce>_entity</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Successfully navigated</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Err</span><span>(</span><span style=color:#c0c5ce>_e</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Navigation failed (no neighbor in that direction)</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_focus_display</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    button_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Name</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Button</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> display_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>FocusDisplay</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> text</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> display_query</span><span style=color:#c594c5>.</span><span style=color:#69c>single_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>focused_entity</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> input_focus</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c0c5ce>name</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> button_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>focused_entity</span><span>) {</span></span>
+<span class=giallo-l><span>                **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span>(</span><span style=color:#9fc37f>"Focused: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, name</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span>                **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "Focused: Unknown"</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span>            **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "Focused: None"</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_key_display</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    keyboard_input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    gamepad_input:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Gamepad</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> display_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyDisplay</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> text</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> display_query</span><span style=color:#c594c5>.</span><span style=color:#69c>single_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Check for keyboard inputs</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> action</span><span style=color:#c594c5> in</span><span style=color:#dfc479> DirectionalNavigationAction</span><span>::</span><span style=color:#69c>variants</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>action</span><span style=color:#c594c5>.</span><span style=color:#69c>keycode</span><span>()) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> key_name</span><span style=color:#c594c5> = match</span><span style=color:#c0c5ce> action</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span> =></span><span style=color:#9fc37f> "Up Arrow"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span> =></span><span style=color:#9fc37f> "Down Arrow"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span> =></span><span style=color:#9fc37f> "Left Arrow"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span> =></span><span style=color:#9fc37f> "Right Arrow"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span> =></span><span style=color:#9fc37f> "Enter"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span>(</span><span style=color:#9fc37f>"Last Key: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, key_name</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Check for gamepad inputs</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> gamepad</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> gamepad_input</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            for</span><span style=color:#c0c5ce> action</span><span style=color:#c594c5> in</span><span style=color:#dfc479> DirectionalNavigationAction</span><span>::</span><span style=color:#69c>variants</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                if</span><span style=color:#c0c5ce> gamepad</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>action</span><span style=color:#c594c5>.</span><span style=color:#69c>gamepad_button</span><span>()) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    let</span><span style=color:#c0c5ce> button_name</span><span style=color:#c594c5> = match</span><span style=color:#c0c5ce> action</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Up</span><span> =></span><span style=color:#9fc37f> "D-Pad Up"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Down</span><span> =></span><span style=color:#9fc37f> "D-Pad Down"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Left</span><span> =></span><span style=color:#9fc37f> "D-Pad Left"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Right</span><span> =></span><span style=color:#9fc37f> "D-Pad Right"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span> =></span><span style=color:#9fc37f> "A Button"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span>(</span><span style=color:#9fc37f>"Last Key: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, button_name</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> highlight_focused_element</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus_visible:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocusVisible</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> BorderColor</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>entity,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> border_color</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> input_focus</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>()</span><span style=color:#c594c5> ==</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>entity</span><span>)</span><span style=color:#c594c5> &&</span><span style=color:#c0c5ce> input_focus_visible</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> {</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>border_color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> BorderColor</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#d19a66>FOCUSED_BORDER</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>border_color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> BorderColor</span><span>::</span><span style=color:#d19a66>DEFAULT</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> interact_with_focused_button</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    action_state:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ActionState</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InputFocus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> action_state</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span>pressed_actions</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>contains</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>DirectionalNavigationAction</span><span>::</span><span style=color:#dfc479>Select</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        && let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>focused_entity</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> input_focus</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>()</span></span>
+<span class=giallo-l><span>    {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>trigger</span><span>(</span><span style=color:#c0c5ce>Pointer</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            PointerId</span><span>::</span><span style=color:#dfc479>Mouse</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Location</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                target: NormalizedRenderTarget</span><span>::</span><span style=color:#e5c07b>None</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    width:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    height:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                position: Vec2</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Click</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                button: PointerButton</span><span>::</span><span style=color:#dfc479>Primary</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                hit:</span><span style=color:#dfc479> HitData</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    camera: Entity</span><span>::</span><span style=color:#d19a66>PLACEHOLDER</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    depth:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    position:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    normal:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    extra:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                count:</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                duration: Duration</span><span>::</span><span style=color:#69c>from_secs_f32</span><span>(</span><span style=color:#e79e6d>0.1</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            focused_entity,</span></span>
+<span class=giallo-l><span>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/UI (User Interface)/directional-navigation/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>
