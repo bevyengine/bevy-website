@@ -33,6 +33,9 @@ Labels are our primary tool for organizing work. Here are a few of the most comm
   - `P-High`: problems that result in severe user or contributor disruption.
   - Most work is not explicitly categorized by priority; volunteer work mostly occurs on an ad hoc basis depending on contributor interests. The goal system is used to collect work, while milestones track regressions and cleanup that need to be resolved before the next release. See [Milestones, Roadmaps and Work Planning](#milestones-roadmaps-and-work-planning) below!
   - As a result, we have deliberately chosen not to implement prioritization labels such as `P-Low`, and tend to avoid using priority labels for feature work. If a volunteer or user wants to work on low-priority backlog or bug fix work, great! We welcome such contributions, although it will naturally tend to be harder to attract reviews and decision-making energy for such work.
+- **I**: Impact (e.g. I-Unsound, I-Regression, I-Crash)
+  - Captures the severity of a problem in a qualititative way at a glance.
+  - This information is most helpful for determining which work must be included in a given release, but is also valuable for finding particularly disruptive problems to fix.
 - **S**: Status. The most common include:
   - `S-Ready-For-Implementation`: this issue is ready for someone to pick it up and open a PR!
   - `S-Needs-Triage`: this issue or PR needs to be labeled. Add this if you're not fully sure on labelling. Note that PRs do not get this label by default: make sure to check "Unlabelled" as well!
