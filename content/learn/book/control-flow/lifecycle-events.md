@@ -120,7 +120,7 @@ When this happens, the `event_target` of the `EntityEvent` is filled by the `Ent
 pub struct MyComponent;
 
 // This observer will trigger whenever `MyComponent` is added to any Entity. 
-world.add_observer(|add: On<Add, MyComponent>| {
+world.add_observer(|add: On<Add<MyComponent>>| {
     println!("MyComponent added to {}", add.entity);
 });
 ```
@@ -140,7 +140,7 @@ Using `Observers`, we'd have to structure our code like such:
 struct PlayerName(pub String);
 
 // Then we add an Observer that will watch for `PlayerName` being added.
-commands.add_observer(|print_name: On<Add, PlayerName>, player_query: Query<&PlayerName>| {
+commands.add_observer(|print_name: On<Add<PlayerName>>, player_query: Query<&PlayerName>| {
     let new_name = player_query.get(print_name.entity).unwrap().0;
     println!("Spawned: {}", new_name);
 });
