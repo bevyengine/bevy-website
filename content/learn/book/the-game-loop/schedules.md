@@ -97,8 +97,8 @@ Much like in [`Main`], [`FixedMain`] provides several schedules that are execute
 
 Every time the [`Main`] schedule is run, the [`RunFixedMainLoop`] schedule will check to see how many "ticks" have occurred since the last time the `Main` schedule was run.
 This is done by accessing the [`Time<Fixed>`] resource, which contains the rate at which our "fixed" schedules will be run (64 times a second by default).
-If enough time has passed (calculated by calling the [`Time<Fixed>::overstep()`] method), then the [`FixedMain`] schedule is run.
-Because of the way we check this, it's possible for [`FixedMain`] to run multiple times during a single [`RunFixedMainLoop`] if multiple "ticks" have passed.
+If enough time has passed (as calculated by Bevy calling the [`Time<Fixed>::overstep()`] method), then the [`FixedMain`] schedule is run.
+Because of the way Bevy checks this, it's possible for [`FixedMain`] to run multiple times during a single [`RunFixedMainLoop`] if multiple "ticks" have passed.
 Likewise, if frame generation happens faster than the "tick"-rate, [`RunFixedMainLoop`] might not run [`FixedMain`] at all during a specific frame.
 
 {% callout(type="info") %}
@@ -136,10 +136,10 @@ For gameplay systems needing to run at a fixed rate (like physics, AI behaviors,
 
 ## Adding Custom Schedules
 
-The repeating game loop is set up by the [`ScheduleRunnerPlugin`],
+Bevy's repeating game loop is set up by the [`ScheduleRunnerPlugin`],
 which is included as part of both [`MinimalPlugins`] and [`DefaultPlugins`].
 
-That plugin causes your app to repeatedly run the [`Main`] schedule, which is a schedule that loops over a vector of schedules.
+This plugin causes your app to repeatedly run the [`Main`] schedule, which is a schedule that loops over a vector of schedules.
 While it is rarely helpful, you can add your own schedules to this game loop, by modifying the [`MainScheduleOrder`].
 To create your own schedule, simply define a [`ScheduleLabel`], and add your systems to your app under that schedule label.
 
@@ -207,6 +207,7 @@ app.add_systems(
 
 [introduction]: @/learn/book/intro/the-three-letters.md#the-s-systems
 
+[`IntoScheduleConfigs`]: https://docs.rs/bevy/latest/bevy/prelude/trait.IntoScheduleConfigs.html
 [`IntoScheduleConfigs::chain()`]: https://docs.rs/bevy/latest/bevy/prelude/trait.IntoScheduleConfigs.html#method.chain
 [`IntoScheduleConfigs::before()`]: https://docs.rs/bevy/latest/bevy/prelude/trait.IntoScheduleConfigs.html#method.before
 [`IntoScheduleConfigs::after()`]: https://docs.rs/bevy/latest/bevy/prelude/trait.IntoScheduleConfigs.html#method.after
