@@ -81,7 +81,10 @@ fn main() {
 {% callout(type="info") %}
 Bevy queries let you update massive amounts of game data in a tight, cache-friendly loop.
 
-Going back to our database analogy, a query is a lot like a [SQL SELECT statement](https://www.w3schools.com/sql/sql_select.asp): `SELECT Color, Location FROM World`
+Going back to our database analogy, a query is a lot like a [SQL SELECT statement](https://www.w3schools.com/sql/sql_select.asp). Using the previous example:
+
+- `Query<(&Poison, &mut Life)>` would be similar to `SELECT Poison, Life FROM World`.
+- `Query<&mut Poison>` would be similar to `SELECT Poison FROM World`.
 {% end %}
 
 Queries have a lot more functionality than what's shown here.
