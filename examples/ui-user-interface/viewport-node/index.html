@@ -1,0 +1,188 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Viewport Node" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/ui-user-interface/viewport-node/ property=og:url><meta content="https://bevy.org/examples/ui-user-interface/viewport-node/../static/screenshots/UI (User Interface)/viewport_node.png" property=og:image><meta content="Demonstrates how to create a viewport node with picking support" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Viewport Node</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>UI (User Interface) / Viewport Node</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/ui/widgets/viewport_node.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/ui-user-interface/viewport-node/>here</a>.</aside></div><div class="example__explanation media-content"><p>A simple scene to demonstrate spawning a viewport widget. The example will demonstrate how to pick entities visible in the widget's view.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>viewport_node.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset</span><span>::</span><span style=color:#dfc479>RenderAssetUsages</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#dfc479>RenderTarget</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    picking</span><span>::</span><span style=color:#c0c5ce>pointer</span><span>::</span><span style=color:#dfc479>PointerInteraction</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::</span><span style=color:#c0c5ce>render_resource</span><span>::{</span><span style=color:#dfc479>TextureDimension</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureFormat</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureUsages</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ui</span><span>::</span><span style=color:#c0c5ce>widget</span><span>::</span><span style=color:#dfc479>ViewportNode</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>((</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MeshPickingPlugin</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, test</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, draw_mesh_intersections</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Reflect</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[reflect(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Shape</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> test</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> images:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn a UI camera</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#c0c5ce>Camera3d</span><span>::</span><span style=color:#69c>default</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Set up an texture for the 3D camera to render to.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The size of the texture will be based on the viewport's ui size.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> image</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Image</span><span>::</span><span style=color:#69c>new_uninit</span><span>(</span></span>
+<span class=giallo-l><span style=color:#69c>        default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        TextureDimension</span><span>::</span><span style=color:#dfc479>D2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        TextureFormat</span><span>::</span><span style=color:#dfc479>Bgra8UnormSrgb</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        RenderAssetUsages</span><span>::</span><span style=color:#69c>all</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    image</span><span style=color:#c594c5>.</span><span>texture_descriptor</span><span style=color:#c594c5>.</span><span>usage </span><span style=color:#c594c5>=</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TextureUsages</span><span>::</span><span style=color:#d19a66>TEXTURE_BINDING</span><span style=color:#c594c5> |</span><span style=color:#dfc479> TextureUsages</span><span>::</span><span style=color:#d19a66>COPY_DST</span><span style=color:#c594c5> |</span><span style=color:#dfc479> TextureUsages</span><span>::</span><span style=color:#d19a66>RENDER_ATTACHMENT</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> image_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> images</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>image</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the 3D camera</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Camera</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Render this camera before our UI camera</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                order:</span><span> -</span><span style=color:#e79e6d>1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            RenderTarget</span><span>::</span><span style=color:#69c>Image</span><span>(</span><span style=color:#c0c5ce>image_handle</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn something for the 3D camera to look at</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>            Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>5.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5.0</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>10.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Shape</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // We can observe pointer events on our objects as normal, the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // `bevy::ui::widget::viewport_picking` system will take care of ensuring our viewport</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // clicks pass through</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>observe</span><span>(</span><span style=color:#c0c5ce>on_drag_cuboid</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn our viewport widget</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>50</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>50</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>200</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>200</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border: UiRect</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>5</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            BorderColor</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ViewportNode</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>camera</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>observe</span><span>(</span><span style=color:#c0c5ce>on_drag_viewport</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_drag_viewport</span><span>(</span><span style=color:#c0c5ce>drag:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Drag</span><span style=color:#c0c5ce>>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> node_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Node</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#61afef> matches!</span><span>(</span><span style=color:#c0c5ce>drag</span><span style=color:#c594c5>.</span><span>button</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PointerButton</span><span>::</span><span style=color:#dfc479>Secondary</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> node</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> node_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>drag</span><span style=color:#c594c5>.</span><span>entity)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        if let</span><span> (</span><span style=color:#dfc479>Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#c0c5ce>top</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#c0c5ce>left</span><span>))</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>node</span><span style=color:#c594c5>.</span><span>top</span><span style=color:#c0c5ce>, node</span><span style=color:#c594c5>.</span><span>left) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            node</span><span style=color:#c594c5>.</span><span>left </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#c0c5ce>left</span><span> +</span><span style=color:#c0c5ce> drag</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c594c5>.</span><span>x)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            node</span><span style=color:#c594c5>.</span><span>top </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#c0c5ce>top</span><span> +</span><span style=color:#c0c5ce> drag</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c594c5>.</span><span>y)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_drag_cuboid</span><span>(</span><span style=color:#c0c5ce>drag:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pointer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Drag</span><span style=color:#c0c5ce>>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> transform_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#61afef> matches!</span><span>(</span><span style=color:#c0c5ce>drag</span><span style=color:#c594c5>.</span><span>button</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PointerButton</span><span>::</span><span style=color:#dfc479>Primary</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> transform_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>drag</span><span style=color:#c594c5>.</span><span>entity)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_y</span><span>(</span><span style=color:#c0c5ce>drag</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c594c5>.</span><span>x *</span><span style=color:#e79e6d> 0.02</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_x</span><span>(</span><span style=color:#c0c5ce>drag</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c594c5>.</span><span>y *</span><span style=color:#e79e6d> 0.02</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> draw_mesh_intersections</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pointers:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>PointerInteraction</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    untargetable:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Shape</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> gizmos:</span><span style=color:#dfc479> Gizmos</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>point, normal</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> pointers</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>flat_map</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>interaction</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> interaction</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>filter_map</span><span>(</span><span style=color:#c594c5>|</span><span>(</span><span style=color:#c0c5ce>entity, hit</span><span>)</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if !</span><span style=color:#c0c5ce>untargetable</span><span style=color:#c594c5>.</span><span style=color:#69c>contains</span><span>(*</span><span style=color:#c0c5ce>entity</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                hit</span><span style=color:#c594c5>.</span><span>position</span><span style=color:#c594c5>.</span><span style=color:#69c>zip</span><span>(</span><span style=color:#c0c5ce>hit</span><span style=color:#c594c5>.</span><span>normal)</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                None</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span>    {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        gizmos</span><span style=color:#c594c5>.</span><span style=color:#69c>arrow</span><span>(</span><span style=color:#c0c5ce>point, point</span><span> +</span><span style=color:#c0c5ce> normal</span><span style=color:#c594c5>.</span><span style=color:#69c>normalize</span><span>() *</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>, Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/UI (User Interface)/viewport-node/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

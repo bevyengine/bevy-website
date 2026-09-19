@@ -1,0 +1,654 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content=Transmission property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/3d-rendering/transmission/ property=og:url><meta content="https://bevy.org/examples-webgpu/3d-rendering/transmission/../static/screenshots/3D Rendering/transmission.png" property=og:image><meta content="Showcases light transmission in the PBR material" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Transmission</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>3D Rendering / Transmission</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/3d/transmission.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/3d-rendering/transmission/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example showcases light transmission<h2 id=controls>Controls</h2><table><thead><tr><th style=text-align:left>Key Binding<th style=text-align:left>Action<tbody><tr><td style=text-align:left><code>J</code>/<code>K</code>/<code>L</code>/<code>;</code><td style=text-align:left>Change Screen Space Transmission Quality<tr><td style=text-align:left><code>O</code> / <code>P</code><td style=text-align:left>Decrease / Increase Screen Space Transmission Steps<tr><td style=text-align:left><code>1</code> / <code>2</code><td style=text-align:left>Decrease / Increase Diffuse Transmission<tr><td style=text-align:left><code>Q</code> / <code>W</code><td style=text-align:left>Decrease / Increase Specular Transmission<tr><td style=text-align:left><code>A</code> / <code>S</code><td style=text-align:left>Decrease / Increase Thickness<tr><td style=text-align:left><code>Z</code> / <code>X</code><td style=text-align:left>Decrease / Increase IOR<tr><td style=text-align:left><code>E</code> / <code>R</code><td style=text-align:left>Decrease / Increase Perceptual Roughness<tr><td style=text-align:left><code>U</code> / <code>I</code><td style=text-align:left>Decrease / Increase Reflectance<tr><td style=text-align:left>Arrow Keys<td style=text-align:left>Control Camera<tr><td style=text-align:left><code>C</code><td style=text-align:left>Randomize Colors<tr><td style=text-align:left><code>H</code><td style=text-align:left>Toggle HDR + Bloom<tr><td style=text-align:left><code>D</code><td style=text-align:left>Toggle Depth Prepass<tr><td style=text-align:left><code>T</code><td style=text-align:left>Toggle TAA</table></div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>transmission.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>PI</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::{</span><span style=color:#dfc479>Exposure</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Hdr</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>css</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    core_pipeline</span><span>::{</span><span style=color:#c0c5ce>prepass</span><span>::</span><span style=color:#dfc479>DepthPrepass</span><span style=color:#c0c5ce>, tonemapping</span><span>::</span><span style=color:#dfc479>Tonemapping</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    light</span><span>::{</span><span style=color:#dfc479>NotShadowCaster</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PointLightShadowMap</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TransmittedShadowReceiver</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    math</span><span>::ops</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pbr</span><span>::{</span><span style=color:#dfc479>ScreenSpaceTransmission</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ScreenSpaceTransmissionQuality</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    post_process</span><span>::</span><span style=color:#c0c5ce>bloom</span><span>::</span><span style=color:#dfc479>Bloom</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        camera</span><span>::</span><span style=color:#dfc479>TemporalJitter</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        view</span><span>::{</span><span style=color:#dfc479>ColorGrading</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ColorGradingGlobal</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// *Note:* TAA is not _required_ for specular transmission, but</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// it _greatly enhances_ the look of the resulting blur effects.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Sadly, it's not available under WebGL.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[cfg(any(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "webgpu"</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> not(target_arch </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "wasm32"</span><span style=color:#d19a66>)))]</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>anti_alias</span><span>::</span><span style=color:#c0c5ce>taa</span><span>::</span><span style=color:#dfc479>TemporalAntiAliasing</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> rand</span><span>::random</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#69c>ClearColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#dfc479>PointLightShadowMap</span><span> {</span><span style=color:#c0c5ce> size:</span><span style=color:#e79e6d> 2048</span><span> })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#dfc479>GlobalAmbientLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            brightness:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>example_control_system, flicker_system</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> set up a simple 3D scene</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> icosphere_mesh</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Sphere</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0.9</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>ico</span><span>(</span><span style=color:#e79e6d>7</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> cube_mesh</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0.7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.7</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> plane_mesh</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Plane3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>size</span><span>(</span><span style=color:#e79e6d>2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> cylinder_mesh</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Cylinder</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>resolution</span><span>(</span><span style=color:#e79e6d>50</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Cube #1</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>cube_mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>StandardMaterial</span><span>::</span><span style=color:#69c>default</span><span>()))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.25</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>2.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_rotation</span><span>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_euler</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            EulerRot</span><span>::</span><span style=color:#d19a66>XYZ</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            1.4</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            3.7</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            21.3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ExampleControls</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Cube #2</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>cube_mesh</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>StandardMaterial</span><span>::</span><span style=color:#69c>default</span><span>()))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(-</span><span style=color:#e79e6d>0.75</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.7</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>2.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_rotation</span><span>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_euler</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            EulerRot</span><span>::</span><span style=color:#d19a66>XYZ</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            0.4</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            2.3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            4.7</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ExampleControls</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Candle</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>cylinder_mesh</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            base_color: Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.9</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#e79e6d> 0.7</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            perceptual_roughness:</span><span style=color:#e79e6d> 0.32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            thickness:</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(-</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ExampleControls</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Candle Flame</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> scaled_white</span><span style=color:#c594c5> =</span><span style=color:#dfc479> LinearRgba</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#d19a66>ANTIQUE_WHITE</span><span>) *</span><span style=color:#e79e6d> 20</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> scaled_orange</span><span style=color:#c594c5> =</span><span style=color:#dfc479> LinearRgba</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#d19a66>ORANGE_RED</span><span>) *</span><span style=color:#e79e6d> 4</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> emissive</span><span style=color:#c594c5> =</span><span style=color:#dfc479> LinearRgba</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        red: scaled_white</span><span style=color:#c594c5>.</span><span>red +</span><span style=color:#c0c5ce> scaled_orange</span><span style=color:#c594c5>.</span><span>red</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        green: scaled_white</span><span style=color:#c594c5>.</span><span>green +</span><span style=color:#c0c5ce> scaled_orange</span><span style=color:#c594c5>.</span><span>green</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        blue: scaled_white</span><span style=color:#c594c5>.</span><span>blue +</span><span style=color:#c0c5ce> scaled_orange</span><span style=color:#c594c5>.</span><span>blue</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        alpha:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>icosphere_mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            emissive,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(-</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.15</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Flicker</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        NotShadowCaster</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Glass Sphere</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>icosphere_mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            base_color: Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#e79e6d> 0.9</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            thickness:</span><span style=color:#e79e6d> 1.8</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ior:</span><span style=color:#e79e6d> 1.5</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            perceptual_roughness:</span><span style=color:#e79e6d> 0.12</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ExampleControls</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // R Sphere</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>icosphere_mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            base_color:</span><span style=color:#d19a66> RED</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#e79e6d> 0.9</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            thickness:</span><span style=color:#e79e6d> 1.8</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ior:</span><span style=color:#e79e6d> 1.5</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            perceptual_roughness:</span><span style=color:#e79e6d> 0.12</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>0.5</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ExampleControls</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // G Sphere</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>icosphere_mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            base_color:</span><span style=color:#d19a66> LIME</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#e79e6d> 0.9</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            thickness:</span><span style=color:#e79e6d> 1.8</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ior:</span><span style=color:#e79e6d> 1.5</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            perceptual_roughness:</span><span style=color:#e79e6d> 0.12</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>0.5</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ExampleControls</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // B Sphere</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>icosphere_mesh</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            base_color:</span><span style=color:#d19a66> BLUE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#e79e6d> 0.9</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            thickness:</span><span style=color:#e79e6d> 1.8</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ior:</span><span style=color:#e79e6d> 1.5</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            perceptual_roughness:</span><span style=color:#e79e6d> 0.12</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(-</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>0.5</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ExampleControls</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Chessboard Plane</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> black_material</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        base_color: Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reflectance:</span><span style=color:#e79e6d> 0.3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        perceptual_roughness:</span><span style=color:#e79e6d> 0.8</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> white_material</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        base_color: Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        reflectance:</span><span style=color:#e79e6d> 0.3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        perceptual_roughness:</span><span style=color:#e79e6d> 0.8</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> x</span><span style=color:#c594c5> in</span><span> -</span><span style=color:#e79e6d>3</span><span>..</span><span style=color:#e79e6d>4</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> z</span><span style=color:#c594c5> in</span><span> -</span><span style=color:#e79e6d>3</span><span>..</span><span style=color:#e79e6d>4</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>                Mesh3d</span><span>(</span><span style=color:#c0c5ce>plane_mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                MeshMaterial3d</span><span>(</span><span style=color:#c594c5>if</span><span> (</span><span style=color:#c0c5ce>x</span><span> +</span><span style=color:#c0c5ce> z</span><span>) %</span><span style=color:#e79e6d> 2</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    black_material</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    white_material</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#c0c5ce>x</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>, z</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> *</span><span style=color:#e79e6d> 2.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                ExampleControls</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    color:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    specular_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    diffuse_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Paper</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>plane_mesh</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            base_color: Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#e79e6d> 0.6</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            perceptual_roughness:</span><span style=color:#e79e6d> 0.8</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            reflectance:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            double_sided:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            cull_mode:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>3.0</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>with_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>with_rotation</span><span>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_euler</span><span>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>XYZ</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> PI</span><span> /</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TransmittedShadowReceiver</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ExampleControls</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Candle Light</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(-</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        PointLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color: Color</span><span>::</span><span style=color:#69c>from</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                LinearRgba</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#d19a66>ANTIQUE_WHITE</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>mix</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>LinearRgba</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#d19a66>ORANGE_RED</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            intensity:</span><span style=color:#e79e6d> 4_000.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            radius:</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            range:</span><span style=color:#e79e6d> 5.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            shadow_maps_enabled:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Flicker</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Camera</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.8</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 7.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ColorGrading</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            global:</span><span style=color:#dfc479> ColorGradingGlobal</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                post_saturation:</span><span style=color:#e79e6d> 1.2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Tonemapping</span><span>::</span><span style=color:#dfc479>TonyMcMapface</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Exposure</span><span> {</span><span style=color:#c0c5ce> ev100:</span><span style=color:#e79e6d> 6.0</span><span> }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        #[cfg(any(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "webgpu"</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> not(target_arch </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "wasm32"</span><span style=color:#d19a66>)))]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Msaa</span><span>::</span><span style=color:#dfc479>Off</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        #[cfg(any(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "webgpu"</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> not(target_arch </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "wasm32"</span><span style=color:#d19a66>)))]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        TemporalAntiAliasing</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        EnvironmentMapLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            intensity:</span><span style=color:#e79e6d> 25.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_map: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"environment_maps/pisa_diffuse_rgb9e5_zstd.ktx2"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_map: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"environment_maps/pisa_specular_rgb9e5_zstd.ktx2"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Bloom</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Controls Text</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ExampleDisplay</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Flicker</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ExampleControls</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    diffuse_transmission:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    specular_transmission:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ExampleState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    diffuse_transmission:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    specular_transmission:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    thickness:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ior:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    perceptual_roughness:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    reflectance:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    auto_camera:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ExampleDisplay</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> ExampleState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span>() -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ExampleState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_transmission:</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_transmission:</span><span style=color:#e79e6d> 0.9</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            thickness:</span><span style=color:#e79e6d> 1.8</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ior:</span><span style=color:#e79e6d> 1.5</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            perceptual_roughness:</span><span style=color:#e79e6d> 0.12</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            reflectance:</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            auto_camera:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> example_control_system</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    controllable:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>MeshMaterial3d</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ExampleControls</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span>        (</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Entity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &mut</span><span style=color:#dfc479> ScreenSpaceTransmission</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>DepthPrepass</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>TemporalJitter</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Hdr</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera3d</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> display:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ExampleDisplay</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> state:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ExampleState</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit2</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>diffuse_transmission </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>diffuse_transmission +</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>min</span><span>(</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit1</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>diffuse_transmission </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>diffuse_transmission -</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span>(</span><span style=color:#e79e6d>0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyW</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>specular_transmission </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>specular_transmission +</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>min</span><span>(</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyQ</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>specular_transmission </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>specular_transmission -</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span>(</span><span style=color:#e79e6d>0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyS</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>thickness </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>thickness +</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>min</span><span>(</span><span style=color:#e79e6d>5.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyA</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>thickness </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>thickness -</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span>(</span><span style=color:#e79e6d>0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyX</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>ior </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>ior +</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>min</span><span>(</span><span style=color:#e79e6d>3.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyZ</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>ior </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>ior -</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span>(</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyI</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>reflectance </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>reflectance +</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>min</span><span>(</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyU</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>reflectance </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>reflectance -</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span>(</span><span style=color:#e79e6d>0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyR</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>perceptual_roughness </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>perceptual_roughness +</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>min</span><span>(</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyE</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>perceptual_roughness </span><span style=color:#c594c5>=</span><span> (</span><span style=color:#c0c5ce>state</span><span style=color:#c594c5>.</span><span>perceptual_roughness -</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>max</span><span>(</span><span style=color:#e79e6d>0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> randomize_colors</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyC</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>material_handle, controls</span><span>)</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>controllable</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> material</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>material_handle</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> controls</span><span style=color:#c594c5>.</span><span>specular_transmission {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            material</span><span style=color:#c594c5>.</span><span>specular_transmission </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> state</span><span style=color:#c594c5>.</span><span>specular_transmission</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            material</span><span style=color:#c594c5>.</span><span>thickness </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> state</span><span style=color:#c594c5>.</span><span>thickness</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            material</span><span style=color:#c594c5>.</span><span>ior </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> state</span><span style=color:#c594c5>.</span><span>ior</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            material</span><span style=color:#c594c5>.</span><span>perceptual_roughness </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> state</span><span style=color:#c594c5>.</span><span>perceptual_roughness</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            material</span><span style=color:#c594c5>.</span><span>reflectance </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> state</span><span style=color:#c594c5>.</span><span>reflectance</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> controls</span><span style=color:#c594c5>.</span><span>diffuse_transmission {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            material</span><span style=color:#c594c5>.</span><span>diffuse_transmission </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> state</span><span style=color:#c594c5>.</span><span>diffuse_transmission</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> controls</span><span style=color:#c594c5>.</span><span>color </span><span style=color:#c594c5>&&</span><span style=color:#c0c5ce> randomize_colors</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            material</span><span style=color:#c594c5>.</span><span>base_color </span><span style=color:#c594c5>=</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Color</span><span>::</span><span style=color:#69c>srgba</span><span>(</span><span style=color:#69c>random</span><span>()</span><span style=color:#c0c5ce>,</span><span style=color:#69c> random</span><span>()</span><span style=color:#c0c5ce>,</span><span style=color:#69c> random</span><span>()</span><span style=color:#c0c5ce>, material</span><span style=color:#c594c5>.</span><span>base_color</span><span style=color:#c594c5>.</span><span style=color:#69c>alpha</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        camera_entity,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> transmission,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        mut</span><span style=color:#c0c5ce> camera_transform,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        depth_prepass,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        temporal_jitter,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        hdr,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyH</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> hdr</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>camera_entity</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Hdr</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>camera_entity</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#dfc479>Hdr</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[cfg(any(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "webgpu"</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> not(target_arch </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "wasm32"</span><span style=color:#d19a66>)))]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyD</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> depth_prepass</span><span style=color:#c594c5>.</span><span style=color:#69c>is_none</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>camera_entity</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#dfc479>DepthPrepass</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>camera_entity</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DepthPrepass</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>    #[cfg(any(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "webgpu"</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> not(target_arch </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "wasm32"</span><span style=color:#d19a66>)))]</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyT</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> temporal_jitter</span><span style=color:#c594c5>.</span><span style=color:#69c>is_none</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>camera_entity</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>insert</span><span>((</span><span style=color:#c0c5ce>TemporalJitter</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>, TemporalAntiAliasing</span><span>::</span><span style=color:#69c>default</span><span>()))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>camera_entity</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>TemporalJitter</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TemporalAntiAliasing</span><span>)</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyO</span><span>)</span><span style=color:#c594c5> &&</span><span style=color:#c0c5ce> transmission</span><span style=color:#c594c5>.</span><span>steps</span><span style=color:#c594c5> ></span><span style=color:#e79e6d> 0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transmission</span><span style=color:#c594c5>.</span><span>steps </span><span style=color:#c594c5>-=</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyP</span><span>)</span><span style=color:#c594c5> &&</span><span style=color:#c0c5ce> transmission</span><span style=color:#c594c5>.</span><span>steps</span><span style=color:#c594c5> &lt;</span><span style=color:#e79e6d> 4</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transmission</span><span style=color:#c594c5>.</span><span>steps </span><span style=color:#c594c5>+=</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyJ</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transmission</span><span style=color:#c594c5>.</span><span>quality </span><span style=color:#c594c5>=</span><span style=color:#dfc479> ScreenSpaceTransmissionQuality</span><span>::</span><span style=color:#dfc479>Low</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyK</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transmission</span><span style=color:#c594c5>.</span><span>quality </span><span style=color:#c594c5>=</span><span style=color:#dfc479> ScreenSpaceTransmissionQuality</span><span>::</span><span style=color:#dfc479>Medium</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyL</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transmission</span><span style=color:#c594c5>.</span><span>quality </span><span style=color:#c594c5>=</span><span style=color:#dfc479> ScreenSpaceTransmissionQuality</span><span>::</span><span style=color:#dfc479>High</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Semicolon</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transmission</span><span style=color:#c594c5>.</span><span>quality </span><span style=color:#c594c5>=</span><span style=color:#dfc479> ScreenSpaceTransmissionQuality</span><span>::</span><span style=color:#dfc479>Ultra</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> rotation</span><span style=color:#c594c5> = if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowRight</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>auto_camera </span><span style=color:#c594c5>=</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowLeft</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>auto_camera </span><span style=color:#c594c5>=</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        -</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> state</span><span style=color:#c594c5>.</span><span>auto_camera {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>() *</span><span style=color:#e79e6d> 0.25</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        0.0</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> distance_change</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowDown</span><span>)</span><span style=color:#c594c5> &&</span><span style=color:#c0c5ce> camera_transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span style=color:#69c>length</span><span>()</span><span style=color:#c0c5ce> &lt;</span><span style=color:#e79e6d> 25.0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowUp</span><span>)</span><span style=color:#c594c5> &&</span><span style=color:#c0c5ce> camera_transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span style=color:#69c>length</span><span>()</span><span style=color:#c0c5ce> ></span><span style=color:#e79e6d> 2.0</span><span> {</span></span>
+<span class=giallo-l><span>            -</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            0.0</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_transform</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>*=</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>exp</span><span>(</span><span style=color:#c0c5ce>distance_change</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_around</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Quat</span><span>::</span><span style=color:#69c>from_euler</span><span>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>XYZ</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>, rotation,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    display</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span>(</span></span>
+<span class=giallo-l><span style=color:#61afef>        concat!</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            " J / K / L / ;  Screen Space Specular Transmissive Quality: </span><span style=color:#d19a66>{:?}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "         O / P  Screen Space Specular Transmissive Steps: </span><span style=color:#d19a66>{}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "         1 / 2  Diffuse Transmission: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "         Q / W  Specular Transmission: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "         A / S  Thickness: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "         Z / X  IOR: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "         E / R  Perceptual Roughness: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "         U / I  Reflectance: </span><span style=color:#d19a66>{:.2}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "    Arrow Keys  Control Camera</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "             C  Randomize Colors</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "             H  HDR + Bloom: </span><span style=color:#d19a66>{}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "             D  Depth Prepass: </span><span style=color:#d19a66>{}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "             T  TAA: </span><span style=color:#d19a66>{}</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transmission</span><span style=color:#c594c5>.</span><span>quality</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transmission</span><span style=color:#c594c5>.</span><span>steps</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>diffuse_transmission</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>specular_transmission</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>thickness</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>ior</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>perceptual_roughness</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        state</span><span style=color:#c594c5>.</span><span>reflectance</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> hdr</span><span> {</span><span style=color:#9fc37f> "ON "</span><span> }</span><span style=color:#c594c5> else</span><span> {</span><span style=color:#9fc37f> "OFF"</span><span> }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#61afef> cfg!</span><span>(</span><span style=color:#69c>any</span><span>(</span><span style=color:#c0c5ce>feature</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "webgpu"</span><span style=color:#c0c5ce>,</span><span style=color:#69c> not</span><span>(</span><span style=color:#c0c5ce>target_arch</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "wasm32"</span><span>))) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> depth_prepass</span><span style=color:#c594c5>.</span><span style=color:#69c>is_some</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "ON "</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "OFF"</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "N/A (WebGL)"</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#61afef> cfg!</span><span>(</span><span style=color:#69c>any</span><span>(</span><span style=color:#c0c5ce>feature</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "webgpu"</span><span style=color:#c0c5ce>,</span><span style=color:#69c> not</span><span>(</span><span style=color:#c0c5ce>target_arch</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "wasm32"</span><span>))) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> temporal_jitter</span><span style=color:#c594c5>.</span><span style=color:#69c>is_some</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                if</span><span style=color:#c0c5ce> depth_prepass</span><span style=color:#c594c5>.</span><span style=color:#69c>is_some</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                    "ON "</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                    "N/A (Needs Depth Prepass)"</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "OFF"</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "N/A (WebGL)"</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> flicker_system</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> flame:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#dfc479>With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Flicker</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh3d</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    light:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> PointLight</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Transform</span><span>)</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#dfc479>With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Flicker</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh3d</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> s</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>elapsed_secs</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> a</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>cos</span><span>(</span><span style=color:#c0c5ce>s</span><span> *</span><span style=color:#e79e6d> 6.0</span><span>) *</span><span style=color:#e79e6d> 0.0125</span><span> +</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>cos</span><span>(</span><span style=color:#c0c5ce>s</span><span> *</span><span style=color:#e79e6d> 4.0</span><span>) *</span><span style=color:#e79e6d> 0.025</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> b</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>cos</span><span>(</span><span style=color:#c0c5ce>s</span><span> *</span><span style=color:#e79e6d> 5.0</span><span>) *</span><span style=color:#e79e6d> 0.0125</span><span> +</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>cos</span><span>(</span><span style=color:#c0c5ce>s</span><span> *</span><span style=color:#e79e6d> 3.0</span><span>) *</span><span style=color:#e79e6d> 0.025</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> c</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>cos</span><span>(</span><span style=color:#c0c5ce>s</span><span> *</span><span style=color:#e79e6d> 7.0</span><span>) *</span><span style=color:#e79e6d> 0.0125</span><span> +</span><span style=color:#c0c5ce> ops</span><span>::</span><span style=color:#69c>cos</span><span>(</span><span style=color:#c0c5ce>s</span><span> *</span><span style=color:#e79e6d> 2.0</span><span>) *</span><span style=color:#e79e6d> 0.025</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> light,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> light_transform</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> light</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    light</span><span style=color:#c594c5>.</span><span>intensity </span><span style=color:#c594c5>=</span><span style=color:#e79e6d> 4_000.0</span><span> +</span><span style=color:#e79e6d> 3000.0</span><span> * (</span><span style=color:#c0c5ce>a</span><span> +</span><span style=color:#c0c5ce> b</span><span> +</span><span style=color:#c0c5ce> c</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    flame</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>=</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#69c>new</span><span>(-</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.23</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    flame</span><span style=color:#c594c5>.</span><span style=color:#69c>look_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span>(-</span><span style=color:#e79e6d>1.0</span><span> -</span><span style=color:#c0c5ce> c,</span><span style=color:#e79e6d> 1.7</span><span> -</span><span style=color:#c0c5ce> b,</span><span style=color:#e79e6d> 0.0</span><span> -</span><span style=color:#c0c5ce> a</span><span>)</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>X</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    flame</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate</span><span>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_euler</span><span>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>XYZ</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> PI</span><span> /</span><span style=color:#e79e6d> 2.0</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    light_transform</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>=</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#69c>new</span><span>(-</span><span style=color:#e79e6d>1.0</span><span> -</span><span style=color:#c0c5ce> c,</span><span style=color:#e79e6d> 1.7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span> -</span><span style=color:#c0c5ce> a</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    flame</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>=</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#69c>new</span><span>(-</span><span style=color:#e79e6d>1.0</span><span> -</span><span style=color:#c0c5ce> c,</span><span style=color:#e79e6d> 1.23</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span> -</span><span style=color:#c0c5ce> a</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/3D Rendering/transmission/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

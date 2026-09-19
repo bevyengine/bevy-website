@@ -1,0 +1,437 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content=Atmosphere property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/3d-rendering/atmosphere/ property=og:url><meta content="https://bevy.org/examples-webgpu/3d-rendering/atmosphere/../static/screenshots/3D Rendering/atmosphere.png" property=og:image><meta content="A scene showcasing pbr atmospheric scattering" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Atmosphere</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>3D Rendering / Atmosphere</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/3d/atmosphere.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/3d-rendering/atmosphere/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example showcases pbr atmospheric scattering</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>atmosphere.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#d19a66>#[cfg(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "free_camera"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>camera_controller</span><span>::</span><span style=color:#c0c5ce>free_camera</span><span>::{</span><span style=color:#dfc479>FreeCamera</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> FreeCameraPlugin</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>PI</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    anti_alias</span><span>::</span><span style=color:#c0c5ce>taa</span><span>::</span><span style=color:#dfc479>TemporalAntiAliasing</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#dfc479>Exposure</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>css</span><span>::</span><span style=color:#dfc479>BLACK</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    core_pipeline</span><span>::</span><span style=color:#c0c5ce>tonemapping</span><span>::</span><span style=color:#dfc479>Tonemapping</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    image</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ImageAddressMode</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ImageFilterMode</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ImageLoaderSettings</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ImageSampler</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ImageSamplerDescriptor</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input</span><span>::</span><span style=color:#c0c5ce>keyboard</span><span>::</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    light</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        atmosphere</span><span>::</span><span style=color:#dfc479>ScatteringMedium</span><span style=color:#c0c5ce>, light_consts</span><span>::lux</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Atmosphere</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AtmosphereEnvironmentMapLight</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        FogVolume</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> VolumetricFog</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> VolumetricLight</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pbr</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>        AtmosphereMode</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AtmosphereSettings</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DefaultOpaqueRendererMethod</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ExtendedMaterial</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        MaterialExtension</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ScreenSpaceReflections</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    post_process</span><span>::</span><span style=color:#c0c5ce>bloom</span><span>::</span><span style=color:#dfc479>Bloom</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::</span><span style=color:#c0c5ce>render_resource</span><span>::{</span><span style=color:#dfc479>AsBindGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ShaderType</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    shader</span><span>::</span><span style=color:#dfc479>ShaderRef</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> GameState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    paused:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> AtmospherePresets</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    earth:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ScatteringMedium</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mars:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ScatteringMedium</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#c0c5ce>DefaultOpaqueRendererMethod</span><span>::</span><span style=color:#69c>deferred</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#69c>ClearColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#c0c5ce>GameState</span><span>::</span><span style=color:#69c>default</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#c0c5ce>GlobalAmbientLight</span><span>::</span><span style=color:#d19a66>NONE</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DefaultPlugins</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>            #[cfg(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "free_camera"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#dfc479>            FreeCameraPlugin</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#c0c5ce>MaterialPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ExtendedMaterial</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Water</span><span style=color:#c0c5ce>>></span><span>::</span><span style=color:#69c>default</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Startup</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span><span style=color:#c0c5ce>setup_camera_fog, setup_terrain_scene, print_controls</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>dynamic_scene, atmosphere_controls</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> print_controls</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#61afef>    println!</span><span>(</span><span style=color:#9fc37f>"Atmosphere Example Controls:"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>    println!</span><span>(</span><span style=color:#9fc37f>"    1          - Switch to lookup texture rendering method"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>    println!</span><span>(</span><span style=color:#9fc37f>"    2          - Switch to raymarched rendering method"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>    println!</span><span>(</span><span style=color:#9fc37f>"    3          - Switch to Earth atmosphere"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>    println!</span><span>(</span><span style=color:#9fc37f>"    4          - Switch to Mars atmosphere"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>    println!</span><span>(</span><span style=color:#9fc37f>"    Enter      - Pause/Resume sun motion"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>    println!</span><span>(</span><span style=color:#9fc37f>"    Up/Down    - Increase/Decrease exposure"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> atmosphere_controls</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    keyboard_input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> planet_atmosphere:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Atmosphere</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> GlobalTransform</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> camera_settings:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> AtmosphereSettings</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera3d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    atmosphere_presets:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AtmospherePresets</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> game_state:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>GameState</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> camera_exposure:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Exposure</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera3d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit3</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> atmosphere,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> transform</span><span>)</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> planet_atmosphere</span><span> {</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>atmosphere</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Atmosphere</span><span>::</span><span style=color:#69c>earth</span><span>(</span><span style=color:#c0c5ce>atmosphere_presets</span><span style=color:#c594c5>.</span><span>earth</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>transform</span><span style=color:#c594c5> =</span><span style=color:#dfc479> GlobalTransform</span><span>::</span><span style=color:#69c>from_translation</span><span>(-</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span> *</span><span style=color:#c0c5ce> atmosphere</span><span style=color:#c594c5>.</span><span>inner_radius)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>            println!</span><span>(</span><span style=color:#9fc37f>"Switched to Earth atmosphere"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit4</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> atmosphere,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> transform</span><span>)</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> planet_atmosphere</span><span> {</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>atmosphere</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Atmosphere</span><span>::</span><span style=color:#69c>mars</span><span>(</span><span style=color:#c0c5ce>atmosphere_presets</span><span style=color:#c594c5>.</span><span>mars</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>transform</span><span style=color:#c594c5> =</span><span style=color:#dfc479> GlobalTransform</span><span>::</span><span style=color:#69c>from_translation</span><span>(-</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span> *</span><span style=color:#c0c5ce> atmosphere</span><span style=color:#c594c5>.</span><span>inner_radius)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>            println!</span><span>(</span><span style=color:#9fc37f>"Switched to Mars atmosphere"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit1</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for mut</span><span style=color:#c0c5ce> settings</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> camera_settings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            settings</span><span style=color:#c594c5>.</span><span>rendering_method </span><span style=color:#c594c5>=</span><span style=color:#dfc479> AtmosphereMode</span><span>::</span><span style=color:#dfc479>LookupTexture</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>            println!</span><span>(</span><span style=color:#9fc37f>"Switched to lookup texture rendering method"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit2</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for mut</span><span style=color:#c0c5ce> settings</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> camera_settings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            settings</span><span style=color:#c594c5>.</span><span>rendering_method </span><span style=color:#c594c5>=</span><span style=color:#dfc479> AtmosphereMode</span><span>::</span><span style=color:#dfc479>Raymarched</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>            println!</span><span>(</span><span style=color:#9fc37f>"Switched to raymarched rendering method"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Enter</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        game_state</span><span style=color:#c594c5>.</span><span>paused </span><span style=color:#c594c5>= !</span><span style=color:#c0c5ce>game_state</span><span style=color:#c594c5>.</span><span>paused</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowUp</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for mut</span><span style=color:#c0c5ce> exposure</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> camera_exposure</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            exposure</span><span style=color:#c594c5>.</span><span>ev100 </span><span style=color:#c594c5>-=</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>() *</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard_input</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>ArrowDown</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for mut</span><span style=color:#c0c5ce> exposure</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> camera_exposure</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            exposure</span><span style=color:#c594c5>.</span><span>ev100 </span><span style=color:#c594c5>+=</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>() *</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup_camera_fog</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> scattering_mediums:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ScatteringMedium</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> earth_medium</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> scattering_mediums</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>ScatteringMedium</span><span>::</span><span style=color:#69c>earth</span><span>(</span><span style=color:#e79e6d>256</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 256</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mars_phase</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"textures/mars_mie_phase.ktx2"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mars_medium</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> scattering_mediums</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>ScatteringMedium</span><span>::</span><span style=color:#69c>mars</span><span>(</span><span style=color:#e79e6d>256</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 256</span><span style=color:#c0c5ce>, mars_phase</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#dfc479>AtmospherePresets</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        earth: earth_medium</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mars: mars_medium</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn earth atmosphere</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#c0c5ce>Atmosphere</span><span>::</span><span style=color:#69c>earth</span><span>(</span><span style=color:#c0c5ce>earth_medium</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(-</span><span style=color:#e79e6d>2.8</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.045</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Can be adjusted to change the rendering quality</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        AtmosphereSettings</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The directional light illuminance used in this scene</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // (the one recommended for use with this feature) is</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // quite bright, so raising the exposure compensation helps</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // bring the scene to a nicer brightness range.</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Exposure</span><span> {</span><span style=color:#c0c5ce> ev100:</span><span style=color:#e79e6d> 13.0</span><span> }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Tonemapper chosen just because it looked good with the scene, any</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // tonemapper would be fine :)</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Tonemapping</span><span>::</span><span style=color:#dfc479>AcesFitted</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Bloom gives the sun a much more natural look.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Bloom</span><span>::</span><span style=color:#d19a66>NATURAL</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Enables the atmosphere to drive reflections and ambient lighting (IBL) for this view</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        AtmosphereEnvironmentMapLight</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        #[cfg(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "free_camera"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        FreeCamera</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        VolumetricFog</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ambient_intensity:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Msaa</span><span>::</span><span style=color:#dfc479>Off</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        TemporalAntiAliasing</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ScreenSpaceReflections</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            min_perceptual_roughness:</span><span style=color:#e79e6d> 0.0</span><span>..</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Terrain</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A custom [`ExtendedMaterial`] that creates animated water ripples.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Asset</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TypePath</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AsBindGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Water</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The normal map image.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Note that, like all normal maps, this must not be loaded as sRGB.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[texture(100)]</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[sampler(101)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    normals:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Parameters to the water shader.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[uniform(102)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    settings:</span><span style=color:#dfc479> WaterSettings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Parameters to the water shader.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>ShaderType</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> WaterSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> How much to displace each octave each frame, in the u and v directions.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Two octaves are packed into each `vec4`.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    octave_vectors:</span><span> [</span><span style=color:#dfc479>Vec4</span><span style=color:#c0c5ce>;</span><span style=color:#e79e6d> 2</span><span>]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> How wide the waves are in each octave.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    octave_scales:</span><span style=color:#dfc479> Vec4</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> How high the waves are in each octave.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    octave_strengths:</span><span style=color:#dfc479> Vec4</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> MaterialExtension</span><span style=color:#c594c5> for</span><span style=color:#dfc479> Water</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> deferred_fragment_shader</span><span>() -></span><span style=color:#dfc479> ShaderRef</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>        "shaders/water_material.wgsl"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup_terrain_scene</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> water_materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ExtendedMaterial</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Water</span><span style=color:#c0c5ce>>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Sun</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DirectionalLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            shadow_maps_enabled:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // lux::RAW_SUNLIGHT is recommended for use with this feature, since</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // other values approximate sunlight *post-scattering* in various</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // conditions. RAW_SUNLIGHT in comparison is the illuminance of the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // sun unfiltered by the atmosphere, so it is the proper input for</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // sunlight to be filtered by the atmosphere.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            illuminance: lux</span><span>::</span><span style=color:#d19a66>RAW_SUNLIGHT</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.4</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        VolumetricLight</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // spawn the fog volume</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        FogVolume</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>10.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 10.0</span><span>))</span><span style=color:#c594c5>.</span><span style=color:#69c>with_translation</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span> *</span><span style=color:#e79e6d> 0.5</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Terrain</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Terrain</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        WorldAssetRoot</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#c0c5ce>GltfAssetLabel</span><span>::</span><span style=color:#69c>Scene</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>from_asset</span><span>(</span><span style=color:#9fc37f>"models/terrain/terrain.glb"</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(-</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.5</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>with_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>0.5</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>with_rotation</span><span>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_rotation_y</span><span>(</span><span style=color:#d19a66>PI</span><span> /</span><span style=color:#e79e6d> 2.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#69c>    spawn_water</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#c0c5ce> commands,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#c0c5ce>asset_server,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#c0c5ce> meshes,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#c0c5ce> water_materials,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Spawns the water plane.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_water</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    meshes:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    water_materials:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ExtendedMaterial</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Water</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Plane3d</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span style=color:#c0c5ce>, Vec2</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>1.0</span><span>))))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            water_materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>ExtendedMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                base:</span><span style=color:#dfc479> StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    base_color:</span><span style=color:#d19a66> BLACK</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    perceptual_roughness:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                extension:</span><span style=color:#dfc479> Water</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    normals: asset_server</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>load_builder</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>with_settings</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>settings:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> ImageLoaderSettings</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            settings</span><span style=color:#c594c5>.</span><span>is_srgb </span><span style=color:#c594c5>=</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            settings</span><span style=color:#c594c5>.</span><span>sampler </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> ImageSampler</span><span>::</span><span style=color:#69c>Descriptor</span><span>(</span><span style=color:#dfc479>ImageSamplerDescriptor</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                address_mode_u: ImageAddressMode</span><span>::</span><span style=color:#dfc479>Repeat</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                address_mode_v: ImageAddressMode</span><span>::</span><span style=color:#dfc479>Repeat</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                mag_filter: ImageFilterMode</span><span>::</span><span style=color:#dfc479>Linear</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                min_filter: ImageFilterMode</span><span>::</span><span style=color:#dfc479>Linear</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                            })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"textures/water_normals.png"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // These water settings are just random values to create some</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // variety.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    settings:</span><span style=color:#dfc479> WaterSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        octave_vectors:</span><span> [</span></span>
+<span class=giallo-l><span style=color:#69c>                            vec4</span><span>(</span><span style=color:#e79e6d>0.080</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.059</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.073</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.062</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                            vec4</span><span>(</span><span style=color:#e79e6d>0.153</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.138</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.149</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.195</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        octave_scales:</span><span style=color:#69c> vec4</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.1</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 7.9</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 14.9</span><span>) *</span><span style=color:#e79e6d> 500.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        octave_strengths:</span><span style=color:#69c> vec4</span><span>(</span><span style=color:#e79e6d>0.16</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.18</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.093</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.044</span><span>) *</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>100.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> dynamic_scene</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> suns:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DirectionalLight</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    sun_motion_state:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>GameState</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Only rotate the sun if motion is not paused</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if !</span><span style=color:#c0c5ce>sun_motion_state</span><span style=color:#c594c5>.</span><span>paused {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        suns</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>for_each</span><span>(</span><span style=color:#c594c5>|mut</span><span style=color:#c0c5ce> tf</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> tf</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_x</span><span>(-</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>() *</span><span style=color:#d19a66> PI</span><span> /</span><span style=color:#e79e6d> 10.0</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div><input class=tabs__radio id=tab1 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab1><code>shaders/water_material.wgsl</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=wgsl><span class=giallo-l><span style=color:#7f848e>// A shader that creates water ripples by overlaying 4 normal maps on top of one</span></span>
+<span class=giallo-l><span style=color:#7f848e>// another.</span></span>
+<span class=giallo-l><span style=color:#7f848e>//</span></span>
+<span class=giallo-l><span style=color:#7f848e>// This is used in the `ssr` example. It only supports deferred rendering.</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>import bevy_pbr</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_deferred_functions</span><span>::</span><span style=color:#e06c75>deferred_output</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_fragment</span><span>::</span><span style=color:#e06c75>pbr_input_from_standard_material</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>    prepass_io</span><span>::{</span><span style=color:#e5c07b>VertexOutput</span><span>,</span><span style=color:#e5c07b> FragmentOutput</span><span>},</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>import bevy_render</span><span>::</span><span style=color:#e06c75>globals</span><span>::</span><span style=color:#e5c07b>Globals</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>// Parameters to the water shader.</span></span>
+<span class=giallo-l><span style=color:#c678dd>struct</span><span style=color:#e5c07b> WaterSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // How much to displace each octave each frame, in the u and v directions.</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // Two octaves are packed into each `vec4`.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    octave_vectors</span><span>: </span><span style=color:#c678dd>array</span><span>&lt;</span><span style=color:#c678dd>vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span><span style=color:#d19a66> 2</span><span>>,</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // How wide the waves are in each octave.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    octave_scales</span><span>: </span><span style=color:#c678dd>vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // How high the waves are in each octave.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    octave_strengths</span><span>: </span><span style=color:#c678dd>vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@group(</span><span style=color:#d19a66>0</span><span>) @binding(</span><span style=color:#d19a66>1</span><span>)</span><span style=color:#c678dd> var</span><span>&lt;</span><span style=color:#c678dd>uniform</span><span>></span><span style=color:#e06c75> globals</span><span>: </span><span style=color:#e5c07b>Globals</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@group(#{MATERIAL_BIND_GROUP}) @binding(</span><span style=color:#d19a66>100</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> water_normals_texture</span><span>: </span><span style=color:#e06c75>texture_2d</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>;</span></span>
+<span class=giallo-l><span>@group(#{MATERIAL_BIND_GROUP}) @binding(</span><span style=color:#d19a66>101</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> water_normals_sampler</span><span>: </span><span style=color:#e06c75>sampler</span><span>;</span></span>
+<span class=giallo-l><span>@group(#{MATERIAL_BIND_GROUP}) @binding(</span><span style=color:#d19a66>102</span><span>)</span><span style=color:#c678dd> var</span><span>&lt;</span><span style=color:#c678dd>uniform</span><span>></span><span style=color:#e06c75> water_settings</span><span>: </span><span style=color:#e5c07b>WaterSettings</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>// Samples a single octave of noise and returns the resulting normal.</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> sample_noise_octave</span><span>(</span><span style=color:#e06c75>uv</span><span>: </span><span style=color:#c678dd>vec2</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span><span style=color:#e06c75> strength</span><span>: </span><span style=color:#c678dd>f32</span><span>) -></span><span style=color:#c678dd> vec3</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e5c07b> N</span><span style=color:#56b6c2> =</span><span style=color:#61afef> textureSample</span><span>(</span><span style=color:#e06c75>water_normals_texture</span><span>,</span><span style=color:#e06c75> water_normals_sampler</span><span>,</span><span style=color:#e06c75> uv</span><span>).rbg *</span><span style=color:#d19a66> 2.0</span><span> -</span><span style=color:#d19a66> 1.0</span><span>;</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // This isn't slerp, but it's good enough.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    return</span><span style=color:#61afef> normalize</span><span>(</span><span style=color:#61afef>mix</span><span>(</span><span style=color:#61afef>vec3</span><span>(</span><span style=color:#d19a66>0.0</span><span>,</span><span style=color:#d19a66> 1.0</span><span>,</span><span style=color:#d19a66> 0.0</span><span>),</span><span style=color:#e5c07b> N</span><span>,</span><span style=color:#e06c75> strength</span><span>)); </span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>// Samples all four octaves of noise and returns the resulting normal.</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> sample_noise</span><span>(</span><span style=color:#e06c75>uv</span><span>: </span><span style=color:#c678dd>vec2</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span><span style=color:#e06c75> time</span><span>: </span><span style=color:#c678dd>f32</span><span>) -></span><span style=color:#c678dd> vec3</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> uv0</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> uv</span><span> *</span><span style=color:#e06c75> water_settings</span><span>.octave_scales[</span><span style=color:#d19a66>0</span><span>] +</span><span style=color:#e06c75> water_settings</span><span>.octave_vectors[</span><span style=color:#d19a66>0</span><span>].xy *</span><span style=color:#e06c75> time</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> uv1</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> uv</span><span> *</span><span style=color:#e06c75> water_settings</span><span>.octave_scales[</span><span style=color:#d19a66>1</span><span>] +</span><span style=color:#e06c75> water_settings</span><span>.octave_vectors[</span><span style=color:#d19a66>0</span><span>].zw *</span><span style=color:#e06c75> time</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> uv2</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> uv</span><span> *</span><span style=color:#e06c75> water_settings</span><span>.octave_scales[</span><span style=color:#d19a66>2</span><span>] +</span><span style=color:#e06c75> water_settings</span><span>.octave_vectors[</span><span style=color:#d19a66>1</span><span>].xy *</span><span style=color:#e06c75> time</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> uv3</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> uv</span><span> *</span><span style=color:#e06c75> water_settings</span><span>.octave_scales[</span><span style=color:#d19a66>3</span><span>] +</span><span style=color:#e06c75> water_settings</span><span>.octave_vectors[</span><span style=color:#d19a66>1</span><span>].zw *</span><span style=color:#e06c75> time</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>    return</span><span style=color:#61afef> normalize</span><span>(</span></span>
+<span class=giallo-l><span style=color:#61afef>        sample_noise_octave</span><span>(</span><span style=color:#e06c75>uv0</span><span>,</span><span style=color:#e06c75> water_settings</span><span>.octave_strengths[</span><span style=color:#d19a66>0</span><span>]) +</span></span>
+<span class=giallo-l><span style=color:#61afef>        sample_noise_octave</span><span>(</span><span style=color:#e06c75>uv1</span><span>,</span><span style=color:#e06c75> water_settings</span><span>.octave_strengths[</span><span style=color:#d19a66>1</span><span>]) +</span></span>
+<span class=giallo-l><span style=color:#61afef>        sample_noise_octave</span><span>(</span><span style=color:#e06c75>uv2</span><span>,</span><span style=color:#e06c75> water_settings</span><span>.octave_strengths[</span><span style=color:#d19a66>2</span><span>]) +</span></span>
+<span class=giallo-l><span style=color:#61afef>        sample_noise_octave</span><span>(</span><span style=color:#e06c75>uv3</span><span>,</span><span style=color:#e06c75> water_settings</span><span>.octave_strengths[</span><span style=color:#d19a66>3</span><span>])</span></span>
+<span class=giallo-l><span>    );</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@fragment</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> fragment</span><span>(</span><span style=color:#e06c75>in</span><span>: </span><span style=color:#e5c07b>VertexOutput</span><span>, @builtin(</span><span style=color:#e06c75>front_facing</span><span>)</span><span style=color:#e06c75> is_front</span><span>: </span><span style=color:#c678dd>bool</span><span>) -></span><span style=color:#e5c07b> FragmentOutput</span><span> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // Create the PBR input.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    var</span><span style=color:#e06c75> pbr_input</span><span style=color:#56b6c2> =</span><span style=color:#61afef> pbr_input_from_standard_material</span><span>(</span><span style=color:#e06c75>in</span><span>,</span><span style=color:#e06c75> is_front</span><span>);</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // Bump the normal.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_input</span><span>.</span><span style=color:#e5c07b>N</span><span style=color:#56b6c2> =</span><span style=color:#61afef> sample_noise</span><span>(</span><span style=color:#e06c75>in</span><span>.uv,</span><span style=color:#e06c75> globals</span><span>.time);</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // Send the rest to the deferred shader.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    return</span><span style=color:#61afef> deferred_output</span><span>(</span><span style=color:#e06c75>in</span><span>,</span><span style=color:#e06c75> pbr_input</span><span>);</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/3D Rendering/atmosphere/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>
