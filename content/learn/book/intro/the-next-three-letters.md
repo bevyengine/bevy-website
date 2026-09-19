@@ -48,7 +48,7 @@ struct Poison {
 }
 
 #[derive(Component)]
-struct Life {
+struct Health {
     current: u32,
     max: u32,
 }
@@ -61,9 +61,9 @@ fn tick_down_poison(mut query: Query<&mut Poison>) {
     }
 }
 
-fn apply_poison(mut query: Query<(&Poison, &mut Life)>) {
-    for (poison, mut life) in query.iter_mut() {
-        life.current = life.current.saturating_sub(poison.stacks);
+fn apply_poison(mut query: Query<(&Poison, &mut Health)>) {
+    for (poison, mut health) in query.iter_mut() {
+        health.current = health.current.saturating_sub(poison.stacks);
     }
 }
 ```
@@ -84,7 +84,7 @@ Bevy queries let you update massive amounts of game data in a tight, cache-frien
 Going back to our database analogy, a query is a lot like a [SQL SELECT statement](https://www.w3schools.com/sql/sql_select.asp). Using the previous example:
 
 - `Query<&mut Poison>` would be similar to `SELECT Poison FROM World`.
-- `Query<(&Poison, &mut Life)>` would be similar to `SELECT Poison, Life FROM World`.
+- `Query<(&Poison, &mut Health)>` would be similar to `SELECT Poison, Health FROM World`.
 {% end %}
 
 Queries have a lot more functionality than what's shown here.
