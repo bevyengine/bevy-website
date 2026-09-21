@@ -643,12 +643,6 @@ bsn! {
 The default font-size is now `rem(1)` rather than `px(20)`. This is a no-op if you're not changing `RemSize` but it means your
 text will scale by default when you do.
 
-## New CPU UI clipping implementation supporting rotation
-
-{{ heading_metadata(authors=["@Ickshonpe"] prs=[24148]) }}
-
-Until now, Bevy ignored rotation and scaling when clipping UI node overflow, causing content to be distorted or clipped in the wrong place. In Bevy 0.20 overflow clipping now supports rotated clipping regions, using a simplified version of the Sutherland–Hodgman algorithm.Descendants are clipped against each of the clipping regions inherited from their ancestors, instead of against a single axis aligned rectangle. The user-facing overflow API is unchanged.
-
 ## Per-column change ticks
 
 {{ heading_metadata(authors=["@pcwalton", "@SkiFire13"] prs=[25157, 25429]) }}
