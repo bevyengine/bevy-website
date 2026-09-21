@@ -520,7 +520,7 @@ This resulted in improved performance in many cases and also makes future mainte
 
 Upstream of awesome crate [`bevy_editor_cam`](https://github.com/aevyrie/bevy_editor_cam) made by [@aevyrie](https://github.com/aevyrie) as part of `bevy_camera_controller` crate!
 
-## Usage
+### Usage
 
 Add `MeshPickingPlugin` and `DefaultPanOrbitCameraPlugins` plugin.
 
@@ -796,15 +796,15 @@ The new `compressed_image_saver` feature compresses textures into BCn formats (f
 
 Try out the new `compressed_image_saver` example to see it in action.
 
-## Automatic Mipmap Generation
+### Automatic Mipmap Generation
 
 No more manually generating mipmaps! The new backend automatically produces a full mip chain during compression. This means less aliasing when textures are viewed at a distance and better GPU cache utilization — all for free, just by running your textures through the asset processor.
 
-## ASTC for Mobile
+### ASTC for Mobile
 
 To target mobile GPUs, set the `BEVY_COMPRESSED_IMAGE_SAVER_ASTC` environment variable with your desired block size (e.g. `4x4`, `6x6`, `8x8`). Larger blocks give smaller files at the cost of quality. All 14 ASTC block sizes are supported.
 
-## Basis Universal is Still Available
+### Basis Universal is Still Available
 
 The previous Basis Universal compression behavior has been moved to the `compressed_image_saver_universal` feature. This remains the best choice for cross-platform distribution (including WebGPU), since UASTC can be transcoded at load time to whatever format the target GPU supports.
 
