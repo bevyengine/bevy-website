@@ -253,7 +253,7 @@ tweaking their style to your heart's content.
 
 {{ heading_metadata(authors=["@gagnus"] prs=[24847]) }}
 
-## Goals
+### Goals
 
 - Adds a new dropdown select control to feathers, for selecting one of a number of options. It is similar to the existing `FeathersListView` (and indeed is implemented using one), it also uses a `FeathersMenuPopup` to show the selection
 when opened.
@@ -398,20 +398,6 @@ Mesh shaders are not supported on web platforms.
 
 Check out the new `mesh_shader_intro` example for more usage examples.
 
-## TextInput
-
-{{ heading_metadata(authors=["@viridia"] prs=[]) }}
-
-The `EditableText` component has been split into two components, which are now `EditableText`
-and `TextInput`. The `EditableText` component, which lives in the `bevy::text` crate, holds the
-state of a text input field, but no longer has any built-in observers - that is, it does not
-behave like a widget (headless or otherwise), but merely a holder of state.
-
-All of the widget-like behaviors (responding to keystrokes) have been moved to a new `TextInput`
-component which lives in the `bevy::ui_widgets` crate. Not only is the arrangement more consistent
-with the other widgets, but in addition this new component also has properties which are only
-interesting to widgets, like a "read-only" option.
-
 ## Sprite materials
 
 {{ heading_metadata(authors=["@cookie1170"] prs=[25415]) }}
@@ -520,7 +506,7 @@ This resulted in improved performance in many cases and also makes future mainte
 
 Upstream of awesome crate [`bevy_editor_cam`](https://github.com/aevyrie/bevy_editor_cam) made by [@aevyrie](https://github.com/aevyrie) as part of `bevy_camera_controller` crate!
 
-## Usage
+### Usage
 
 Add `MeshPickingPlugin` and `DefaultPanOrbitCameraPlugins` plugin.
 
@@ -643,23 +629,11 @@ bsn! {
 The default font-size is now `rem(1)` rather than `px(20)`. This is a no-op if you're not changing `RemSize` but it means your
 text will scale by default when you do.
 
-## New CPU UI clipping implementation supporting rotation
-
-{{ heading_metadata(authors=["@Ickshonpe"] prs=[24148]) }}
-
-Until now, Bevy ignored rotation and scaling when clipping UI node overflow, causing content to be distorted or clipped in the wrong place. In Bevy 0.20 overflow clipping now supports rotated clipping regions, using a simplified version of the Sutherland–Hodgman algorithm.Descendants are clipped against each of the clipping regions inherited from their ancestors, instead of against a single axis aligned rectangle. The user-facing overflow API is unchanged.
-
 ## Per-column change ticks
 
 {{ heading_metadata(authors=["@pcwalton", "@SkiFire13"] prs=[25157, 25429]) }}
 
 A new summary change tick is now stored per-column, representing the last time any component in that column was changed. This allows skipping the whole column in case no component was changed, as opposed to going through each component checking them individually.
-
-## Fallback Fonts
-
-{{ heading_metadata(authors=["@Ickshonpe"] prs=[24378]) }}
-
-`FontSource` now supports font fallback lists. Use `FontSource::families("Arial, 'Noto Sans', sans-serif")` for CSS-style font family lists, or `FontSource::list([...])` to combine font handles, named families, CSS lists, and generic families.
 
 ## FixedNode
 
@@ -736,16 +710,6 @@ The result is that even if the shuffle results in the order `(A, B, C)`, `C` cou
 `A` and `B` conflict. **This can be desirable to test**, but consider using the single-threaded
 executor to avoid this case.
 
-## RGB primaries and conversion matrices in `bevy_color`
-
-{{ heading_metadata(authors=["@stuartparmenter"] prs=[25393]) }}
-
-`bevy_color` now has a `primaries` module. It holds constants derived from ITU standards:
-
-- `Chromaticity`, the CIE diagram coordinates.
-- `RgbPrimaries`, with constants for `BT709`, `BT2020`, `DISPLAY_P3`, and `ACES_CG`.
-- `RgbPrimaries::matrix_to`, which derives a conversion matrix between any two primary sets.
-
 ## Add scrubbing / dragging to number_input widget
 
 {{ heading_metadata(authors=["@viridia"] prs=[24636, 24701]) }}
@@ -806,15 +770,15 @@ The new `compressed_image_saver` feature compresses textures into BCn formats (f
 
 Try out the new `compressed_image_saver` example to see it in action.
 
-## Automatic Mipmap Generation
+### Automatic Mipmap Generation
 
 No more manually generating mipmaps! The new backend automatically produces a full mip chain during compression. This means less aliasing when textures are viewed at a distance and better GPU cache utilization — all for free, just by running your textures through the asset processor.
 
-## ASTC for Mobile
+### ASTC for Mobile
 
 To target mobile GPUs, set the `BEVY_COMPRESSED_IMAGE_SAVER_ASTC` environment variable with your desired block size (e.g. `4x4`, `6x6`, `8x8`). Larger blocks give smaller files at the cost of quality. All 14 ASTC block sizes are supported.
 
-## Basis Universal is Still Available
+### Basis Universal is Still Available
 
 The previous Basis Universal compression behavior has been moved to the `compressed_image_saver_universal` feature. This remains the best choice for cross-platform distribution (including WebGPU), since UASTC can be transcoded at load time to whatever format the target GPU supports.
 
