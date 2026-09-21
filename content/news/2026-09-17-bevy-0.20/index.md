@@ -253,7 +253,7 @@ tweaking their style to your heart's content.
 
 {{ heading_metadata(authors=["@gagnus"] prs=[24847]) }}
 
-## Goals
+### Goals
 
 - Adds a new dropdown select control to feathers, for selecting one of a number of options. It is similar to the existing `FeathersListView` (and indeed is implemented using one), it also uses a `FeathersMenuPopup` to show the selection
 when opened.
