@@ -73,7 +73,7 @@ Then, when systems are run as part of a Bevy [app](@/learn/book/the-game-loop/ap
 ```rs
 fn main() {
     App::new()
-        .add_systems(Update, (tick_down_poison, apply_poison))
+        .add_systems(Update, (apply_poison, tick_down_poison).chain())
         .run();
 }
 ```
