@@ -736,16 +736,6 @@ The result is that even if the shuffle results in the order `(A, B, C)`, `C` cou
 `A` and `B` conflict. **This can be desirable to test**, but consider using the single-threaded
 executor to avoid this case.
 
-## RGB primaries and conversion matrices in `bevy_color`
-
-{{ heading_metadata(authors=["@stuartparmenter"] prs=[25393]) }}
-
-`bevy_color` now has a `primaries` module. It holds constants derived from ITU standards:
-
-- `Chromaticity`, the CIE diagram coordinates.
-- `RgbPrimaries`, with constants for `BT709`, `BT2020`, `DISPLAY_P3`, and `ACES_CG`.
-- `RgbPrimaries::matrix_to`, which derives a conversion matrix between any two primary sets.
-
 ## Add scrubbing / dragging to number_input widget
 
 {{ heading_metadata(authors=["@viridia"] prs=[24636, 24701]) }}
