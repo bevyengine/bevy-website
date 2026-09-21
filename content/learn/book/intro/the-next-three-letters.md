@@ -48,15 +48,9 @@ struct Poison {
 }
 
 #[derive(Component)]
-struct Life {
+struct Health {
     current: u32,
     max: u32,
-}
-
-fn apply_poison(mut query: Query<(&Poison, &mut Life)>) {
-    for (poison, mut life) in query.iter_mut() {
-        life.current = life.current.saturating_sub(poison.stacks);
-    }
 }
 
 fn tick_down_poison(mut query: Query<&mut Poison>) {
@@ -66,6 +60,12 @@ fn tick_down_poison(mut query: Query<&mut Poison>) {
         }
     }
 }
+
+fn apply_poison(mut query: Query<(&Poison, &mut Health)>) {
+    for (poison, mut health) in query.iter_mut() {
+        health.current = health.current.saturating_sub(poison.stacks);
+    }
+}
 ```
 
 Then, when systems are run as part of a Bevy [app](@/learn/book/the-game-loop/app.md), the engine automatically fetches the requested data, parallelizing work between systems wherever possible:
@@ -73,7 +73,7 @@ Then, when systems are run as part of a Bevy [app](@/learn/book/the-game-loop/ap
 ```rs
 fn main() {
     App::new()
-        .add_systems(Update, (apply_poison, tick_down_poison))
+        .add_systems(Update, (apply_poison, tick_down_poison).chain())
         .run();
 }
 ```
@@ -81,7 +81,10 @@ fn main() {
 {% callout(type="info") %}
 Bevy queries let you update massive amounts of game data in a tight, cache-friendly loop.
 
-Going back to our database analogy, a query is a lot like a [SQL SELECT statement](https://www.w3schools.com/sql/sql_select.asp): `SELECT Color, Location FROM World`
+Going back to our database analogy, a query is a lot like a [SQL SELECT statement](https://www.w3schools.com/sql/sql_select.asp). Using the previous example:
+
+- `Query<&mut Poison>` would be similar to `SELECT Poison FROM World`.
+- `Query<(&Poison, &mut Health)>` would be similar to `SELECT Poison, Health FROM World`.
 {% end %}
 
 Queries have a lot more functionality than what's shown here.
