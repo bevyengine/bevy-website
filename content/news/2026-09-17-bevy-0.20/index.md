@@ -655,12 +655,6 @@ Until now, Bevy ignored rotation and scaling when clipping UI node overflow, cau
 
 A new summary change tick is now stored per-column, representing the last time any component in that column was changed. This allows skipping the whole column in case no component was changed, as opposed to going through each component checking them individually.
 
-## Fallback Fonts
-
-{{ heading_metadata(authors=["@Ickshonpe"] prs=[24378]) }}
-
-`FontSource` now supports font fallback lists. Use `FontSource::families("Arial, 'Noto Sans', sans-serif")` for CSS-style font family lists, or `FontSource::list([...])` to combine font handles, named families, CSS lists, and generic families.
-
 ## FixedNode
 
 {{ heading_metadata(authors=["@Ickshonpe"] prs=[24323]) }}
