@@ -23,7 +23,9 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 {{ heading_metadata(authors=[] prs=[25318, 25626]) }}
 
-BSN landed with a few idiosyncrasies that caused friction in practice. We made some changes to BSN's syntax this cycle in the interest of improving its ergonomics and clarity.
+BSN landed with a few idiosyncrasies that caused friction in practice. We made some changes to BSN's syntax this cycle in the interest of improving its ergonomics and clarity. After this, the syntax _should_ largely be nailed down.
+
+### Explicit scene syntax
 
 All scene references now require `@` prefixes:
 
@@ -32,6 +34,7 @@ All scene references now require `@` prefixes:
 bsn! {
     scene_variable
     scene_function()
+    @SceneComponent
     {scene_expression}
 }
 
@@ -39,11 +42,16 @@ bsn! {
 bsn! {
     @scene_variable
     @scene_function()
+    @SceneComponent
     @{scene_expression}
 }
 ```
 
-This freed us up to make component values _much_ easier to work with.
+In addition to making it easy to spot scene inclusions (and unifying the syntax across cases), this freed us up to make component values _much_ easier to work with!
+
+### No more `template_value` wrappers!
+
+You can now remove all of those pesky `template_value` wrappers from your component values:
 
 ```rust
 // Before
@@ -58,6 +66,8 @@ bsn! {
     component_function()
 }
 ```
+
+### Enums "just work"
 
 Enums no longer require `VariantDefaults` or `FromTemplate`, provided they implement `Default` and `Clone`:
 
@@ -87,7 +97,7 @@ bsn! {
 }
 ```
 
-If you were using an enum that didn't support `VariantDefaults`, you can remove the `template_value` wrapper:
+If you were using an enum that didn't support `VariantDefaults`, you can now remove the `template_value` wrapper:
 
 ```rust
 // Before
@@ -100,7 +110,7 @@ bsn! {
 }
 ```
 
-The "variant defaults" pattern, which relied on defining individual "default" constructors for each variant is what allowed "individual enum field value patching" (ex: `VariantDefaults` and `FromTemplate` would define `Foo::a_default()` and `Foo::b_default()` in the example above). This is no longer supported, as the weirdness factor (and Rust ecosystem compatibility challenges) were too costly. When working with enums in BSN, you must now specify each field in the enum, just like you would in normal Rust (which doesn't have support for individual enum variant defaults).
+The removal of `VariantDefaults` does mean that enums must now have every field specified:
 
 ```rust
 // Before (y field is initialized to its default value)
@@ -114,7 +124,11 @@ bsn! {
 }
 ```
 
-The "builder pattern" previously required a `template_value` wrapper. This can now be removed:
+We believe this tradeoff is worth it, as it increases BSN's compatibility with arbitrary Rust enums. Rust doesn't support "enum variant defaults" anyway! 
+
+### Chained method support
+
+The "builder pattern" (and chained methods generally) previously required a `template_value` wrapper. This can now be removed:
 
 ```rust
 // Before
@@ -142,7 +156,9 @@ bsn! {
 
 In general, you should now be able to remove all `template_value` instances from your BSN declarations!
 
-List syntax in BSN has also been improved. BSN used to use commas to separate entities, with optional `()` around entities to make the boundaries clearer. This resulted in a lot of syntax noise, line noise, and over-indentation:
+### Improved list syntax
+
+BSN previously used commas to separate entities, with optional `()` around entities to make the boundaries clearer. This resulted in a lot of syntax noise, line noise, and over-indentation:
 
 ```rust
 bsn! {
@@ -174,7 +190,7 @@ bsn! {
 }
 ```
 
-BSN now uses `--` to separate entities:
+BSN now uses `--` to separate entities in a list:
 
 ```rust
 bsn! {
@@ -189,7 +205,7 @@ bsn! {
 }
 ```
 
-This gives us the best of all worlds: entities are visually distinct, and there is no over-indentation, line noise, or syntax noise. Both `()` and `,` have been deprecated in this context.
+This gives us the best of all worlds: entities are visually distinct, and there is no over-indentation, line noise, or syntax noise ([the stats](https://github.com/bevyengine/bevy/pull/25678#issuecomment-5547835904) when compared to other competitors in the "markup format" space are very competitive!). Both `()` and `,` have been deprecated in this context.
 
 Using `[]` and `()` for `bsn_list!` (and `bsn!`) is now discouraged / warned against (ex: `bsn_list []`), as it can result in poor rustfmt autoformatting. Instead, use `bsn_list! {}`, which is the only syntax that `rustfmt` won't touch. Don't worry, we
 plan to build a BSN auto-formatter!
@@ -236,99 +252,90 @@ impl Widget {
 world.spawn(bsn!{ @Widget })
 ```
 
-## Even more Feathers widgets
+## More Feathers Widgets
 
-{{ heading_metadata(authors=["@viridia"] prs=[24092]) }}
+{{ heading_metadata(authors=["@viridia", "@gagnus"] prs=[24092, 24847]) }}
 
-Feathers, Bevy's editor-centric UI toolkit, now has more widgets for you to play with:
+Feathers, Bevy's opinionated, editor-centric UI toolkit, now has more widgets for you to play with:
 
-- scrollbar
-- list view
+TODO: Pictures
 
-These remain deliberately opinionated to ensure simplicity and consistency of Bevy's development tools.
-If you would like to use these widgets in your game projects, we encourage you to vendor these into your project,
-tweaking their style to your heart's content.
+### Scrollbar
 
-## FeathersSelect control
+### List View
 
-{{ heading_metadata(authors=["@gagnus"] prs=[24847]) }}
+### Dropdown Selection
 
-### Goals
+### Color Input
+### Color Swatch Grid
+### Lazy Menu
 
-- Adds a new dropdown select control to feathers, for selecting one of a number of options. It is similar to the existing `FeathersListView` (and indeed is implemented using one), it also uses a `FeathersMenuPopup` to show the selection
-when opened.
-- The dropdown scrolls if there are more than `@max_visible` options
-- Adds a helper `caption(...)` function, similar to `label()` which emits `(Text(...) ThemedText)`
-- Adds a `SetSelected` event to the underlying `ListBox` bevy_ui_widgets control, which sets its selected value, similar to how `SetChecked` and `SetSliderValue` work.
+Spawns a menu popup when the menu is opened and _despawns_ it when it is closed. This is in contrast to the normal Menu widget, which just _hides_ the menu
 
-### Usage
+## Number Input Widget Scrubbing / Dragging
 
-Inside a `bsn!` macro use FeathersSelect scene entity and give it a number of options which contain the `FeathersListRow` component
+{{ heading_metadata(authors=["@viridia"] prs=[24636, 24701]) }}
 
-```rust
-(
-  @FeathersSelect {
-      @options: ... a Box<dyn SceneList> set of rows, see feathers_gallery for an example
-      @max_visible: 6,
-  }
-),
-```
+The `FeathersNumberInput` widget has been substantially overhauled, with several new features.
 
-## Feathers Color Input and Color Swatch Grid Widgets
+Blender's [numeric input](https://docs.blender.org/manual/en/latest/interface/controls/buttons/fields.html)
+is great, and we've borrowed its best elements. This includes support for multiple
+editing modes — including "scrubbing" (click-and-drag) and direct keyboard
+entry. The updated feathers widget is now much closer to feature parity with Blender.
 
-{{ heading_metadata(authors=["@viridia"] prs=[25446]) }}
+The widget supports editing numbers of different data types: `f32`, `f64`, `i32` and `i64`.
 
-Feathers has two new widgets for editing colors:
+The behavior of the widget can be configured through the use of several optional components:
 
-- `FeathersColorSwatchGrid` displays a 2D grid of clickable color swatches.
-  Internally, these are radio buttons, so only one can be selected at a time.
-  As radio buttons they support focus and keyboard navigation. The color values
-  can be set from a Vec of colors, and if there are fewer colors in the Vec
-  than there are slots in the grid, the extra slots will be filled with an
-  empty cell placeholder.
-- `FeathersColorInput` is a small button displaying a color swatch. When
-  clicked, it brings up a drop-down menu displaying a color picker that supports
-  both RGB and HSL picking modes. This widget can be placed anywhere that you
-  want to display a color and make it editable. The widget also supports
-  editing via hex, and displays a grid of recently-edited colors.
+- `HardLimit` specifies the minimum and maximum range for the value. If this component is absent,
+  then the natural range of the data type is used.
+- `SoftLimit` specifies the range that is accessible via dragging. Numbers that are entered by
+  typing can exceed this limit.
+- `NumberInputPrecision` is used to specify the number of decimal points of precision when dragging,
+  so that you don't get a bunch of digits jumping around. This only quantizes the value when
+  dragging, not when typing.
+- `Step` is used to indicate the delta value when incrementing and decrementing.
 
-## Headless tab widgets
+When `SoftLimit` is present, the widget will look and feel like a slider: it will draw a slide
+bar in the background, and the drag speed will be calculated such that changes in the bar's size
+will be synchronized with movement of the mouse.
+
+If `SoftLimit` is _not_ present, then the widget behaves more like a "scrubber", where there is
+no slide bar, and drag speed is calculated based on a heuristic that takes into account precision,
+step, and the current input value.
+
+In either of this cases, a non-drag click event will activate "typing" mode, where a value can
+be entered by typing digits.
+
+Like all feathers widgets, this is a "controlled" widget, which means that the internal numeric
+value is not automatically updated, but instead relies on the application's event handlers to
+update the widget state in response to `ValueChange` events. Check out the `feathers_number_input`
+example to see how to write such a handler trivially.
+
+## Headless Tab Widgets
 
 {{ heading_metadata(authors=["@jbuehler23"] prs=[25515]) }}
 
-`bevy_ui_widgets` now has headless tab-strip behavior: a `TabList` container and `Tab` headers, with no built-in visuals.
+`bevy_ui_widgets` now has headless (bring-your-own-visuals) tab behavior: a `TabList` container and `Tab` headers.
 
-Selection is externally owned. `SelectedTab` on the list holds the selected tab; interaction emits `ValueChange<Option<Entity>>` as a request, applied by the app or by the optional `tablist_self_update` observer.
+Selection is managed "externally". `SelectedTab` on the list holds the selected tab; interaction emits `ValueChange<Option<Entity>>` as a request, applied by the app or by the optional `tablist_self_update` observer.
 
-Arrow keys move a roving tab index along the list's axis, Home and End jump to the ends, and Enter or Space activates. `TabActivation::Automatic` selects as focus moves; the default `Manual` keeps focus and selection separate.
-
-Tabs derive `Selected`, install tab accessibility roles, and honor `InteractionDisabled` per tab or on the whole list. Only primary-button clicks change selection.
+Tabs support keyboard shortcuts and integrate with Bevy's focus, interaction, and accessibility systems.
 
 ```rust
-(
-    TabList::default()
+bsn! {
+    TabList
     SelectedTab(Some(first_tab))
     on(tablist_self_update)
     Children [
-        (Tab Children [Text("General")]),
-        (Tab Children [Text("Rendering")]),
+        Tab Children [ Text("General") ]
+        --
+        Tab Children [ Text("Rendering") ]
     ]
-),
+}
 ```
 
 See the `headless_tabs` example for controlled and self-updating tab lists in both orientations.
-
-## Feathers menu improvements
-
-{{ heading_metadata(authors=["@viridia"] prs=[24784]) }}
-
-In addition to `FeathersMenu`, there is now `FeathersLazyMenu`. While the former expects a
-pre-spawned popup entity which is hidden, the latter dynamically spawns the popup when the menu
-is opened, and despawns it when closed. This is the recommended approach for menu popups
-whose list of menu items is long, expensive to keep around, or dynamically-generated.
-
-In addition to `FeathersMenuButton`, there is now also `FeathersMenuToolButton` which works the
-same as a regular menu button but which has the tool button form factor.
 
 ## Solari on Metal
 
@@ -350,12 +357,45 @@ Denoising is not available on Metal yet, DLSS is NVIDIA-only. MetalFX Ray Recons
 
 STUB TODO
 
-## Mesh Shaders.
+## WESL Shaders
+
+{{ heading_metadata(authors=["@tychedelia"] prs=[25088]) }}
+
+Bevy's shaders are now written in [WESL](https://wesl-lang.dev) and the old "Custom Bevy Extended WGSL" language support has been removed.
+
+WESL is a language standard that extends WGSL to add important usability features like modules, imports, conditional compilation, and more.
+Bevy has historically handled these things in our own custom WGSL dialect, but we believe it is better for the wider shader ecosystem (and for us) to adopt a common standard where we can pool resources on language improvements, module ecosystems, and IDE tooling. We've been working closely with the WESL team to evolve the standard in a way that fits well into the Bevy picture.
+
+Custom shaders in the old Bevy WGSL dialect need to
+be translated to WESL and renamed from `.wgsl` to `.wesl`. Plain WGSL files
+with no preprocessor directives will keep working.
+
+### Before: Custom Bevy Extended WGSL
+
+```wgsl
+#import bevy_pbr::forward_io::VertexOutput
+#import "shaders/util.wgsl"::hsv_to_rgb
+#ifdef VERTEX_COLORS
+var<private> tint: vec4<f32>;
+#endif
+@group(2) @binding(#{MATERIAL_BINDING}) var<uniform> color: vec4<f32>;
+```
+
+### After: WESL
+```wgsl
+import bevy_pbr::render::forward_io::VertexOutput;
+import super::util::hsv_to_rgb;
+@if(VERTEX_COLORS)
+var<private> tint: vec4<f32>;
+@group(2) @binding(constants::MATERIAL_BINDING) var<uniform> color: vec4<f32>;
+```
+
+## Mesh Shaders
 
 {{ heading_metadata(authors=[] prs=[25627]) }}
 
 Mesh shaders are now integrated with Bevy's pipeline cache and are available for advanced users to take advantage of.
-Mesh shaders can be used to render
+Mesh shaders can be used to render:
 
 - Meshlets generated using tools like [meshoptimizer](https://meshoptimizer.org/)
 - Procedural grass with dynamic level-of-detail, [as seen here](https://gpuopen.com/learn/mesh_shaders/mesh_shaders-procedural_grass_rendering/)
@@ -398,7 +438,7 @@ Mesh shaders are not supported on web platforms.
 
 Check out the new `mesh_shader_intro` example for more usage examples.
 
-## Sprite materials
+## Sprite Materials
 
 {{ heading_metadata(authors=["@cookie1170"] prs=[25415]) }}
 
@@ -423,7 +463,7 @@ fn get_final_color(sprite_color: vec4<f32>, instance_index: u32) -> vec4<f32>;
 
 Check out the `sprite_material` example to see it in action!
 
-## Extended material 2D
+## 2D Extended Materials
 
 {{ heading_metadata(authors=["@cookie1170"] prs=[25183]) }}
 
@@ -493,7 +533,7 @@ fn spawn_extended_material_mesh(
 
 [`ExtendedMaterial`]: https://docs.rs/bevy/latest/bevy/pbr/struct.ExtendedMaterial.html
 
-## Sprite render backend migration
+## Sprite Render Backend Unification
 
 {{ heading_metadata(authors=["@IceSentry"] prs=[25432]) }}
 
@@ -532,7 +572,7 @@ Full functionality is shown in the `camera/pan_orbit_camera_cad` example
 cargo run --example pan_orbit_camera_cad --features='pan_orbit_camera https 3d_api jpeg'
 ```
 
-## Weak system ordering with chain_weak
+## Weak System Ordering with `chain_weak`
 
 {{ heading_metadata(authors=["@JMS55"] prs=[25128]) }}
 
@@ -583,7 +623,7 @@ through interior mutability on read-only accesses, global state, or other untrac
 methods are **not** respected. Use `chain_weak` only when your systems don't rely
 on such hidden ordering, otherwise stick with `chain`.
 
-## Contextual theming
+## Contextual Theming
 
 {{ heading_metadata(authors=["@viridia"] prs=[24969]) }}
 
@@ -629,11 +669,23 @@ bsn! {
 The default font-size is now `rem(1)` rather than `px(20)`. This is a no-op if you're not changing `RemSize` but it means your
 text will scale by default when you do.
 
-## Per-column change ticks
+## Per-column Change Ticks
 
 {{ heading_metadata(authors=["@pcwalton", "@SkiFire13"] prs=[25157, 25429]) }}
 
-A new summary change tick is now stored per-column, representing the last time any component in that column was changed. This allows skipping the whole column in case no component was changed, as opposed to going through each component checking them individually.
+Components can now opt-in to "column summary change ticks":
+
+```rust
+#[derive(Component)]
+#[component(summary_tick)]
+struct MyComponent {
+    /* fields here */
+}
+```
+
+When enabled, this will store a "column change tick" in addition to a "per-entity change tick", which allows cheaply skipping the whole column of entities when querying for changes, rather than needing to check every entity's component to see if it has changed.
+
+This makes mutations more expensive, as they need to write both the column change tick and the entity change tick, but for entities whose changes are queried often, but change infrequently, this tradeoff can easily be worth it! We've seen change ticks result in a 132x speedup in our GPU mesh extraction code! 
 
 ## FixedNode
 
@@ -641,9 +693,7 @@ A new summary change tick is now stored per-column, representing the last time a
 
 `FixedNode` is a new marker component for Bevy UI.
 
-A UI node entity with the `FixedNode` component is positioned relative to the target camera's viewport rather than its parent element. `FixedNode`s don't inherit their parent's layout, clipping or transform context.
-
-In the Taffy layout (stored in `UiSurface`) there is nothing to distinguish `FixedNode`s and root nodes, so they are treated identically during updates.
+A UI node entity with the `FixedNode` component is positioned relative to the target camera's viewport rather than its parent element. `FixedNode`s don't inherit their parent's layout, clipping or transform context. They behave like a "root node".
 
 ## Elliptical Border Radius
 
@@ -653,20 +703,18 @@ Bevy UI can now draw Nodes with elliptical border geometry.
 
 The fields of `BorderRadius` are now `CornerRadius`s to enable different radius to be set for each axis.
 
-The `BorderRadius` constructor and update functions are no longer `const`, and their parameters take `Into<CornerRadius>`s instead of `Val`s. `CornerRadius` now implements `From<Val>` so most existing code using border radius shouldn't require changes:
-
 ```rust
 let a = BorderRadius::all(CornerRadius::circular(vh(10.)));
 let b = BorderRadius::all(vh(10.)); // a == b
 let c = BorderRadius::top_right(CornerRadius::new(px(10.), px(20.)));
 ```
 
-## Schedule randomization
+## Schedule Randomization
 
 {{ heading_metadata(authors=["@andriyDev"] prs=[25094]) }}
 
-Before a schedule runs (and therefore, your systems), it first computes the order that systems run
-in based on the ordering constraints (`.before()`, `.after()`, `.chain()`) of systems and system
+Before a schedule runs (and therefore, your systems), it first computes the system run order
+based on their ordering constraints (`.before()`, `.after()`, `.chain()`) and system
 sets. However, in addition to this, the schedule must also resolve **conflicts** - if system A and
 system B both mutate component C, and there's no ordering between A and B, the schedule needs to
 pick one to run first. So far, the rule has been that this is non-deterministic.
@@ -709,46 +757,6 @@ unexecuted system whose dependencies are finished and that has no other conflict
 The result is that even if the shuffle results in the order `(A, B, C)`, `C` could run before `B` if
 `A` and `B` conflict. **This can be desirable to test**, but consider using the single-threaded
 executor to avoid this case.
-
-## Add scrubbing / dragging to number_input widget
-
-{{ heading_metadata(authors=["@viridia"] prs=[24636, 24701]) }}
-
-The `FeathersNumberInput` widget has been substantially overhauled, with several new features.
-
-Blender's [numeric input](https://docs.blender.org/manual/en/latest/interface/controls/buttons/fields.html)
-is great, and we've borrowed its best elements. This includes support for multiple
-editing modes — including "scrubbing" (click-and-drag) and direct keyboard
-entry. The updated feathers widget is now much closer to feature parity with Blender.
-
-The widget supports editing numbers of different data types: `f32`, `f64`, `i32` and `i64`.
-
-The behavior of the widget can be configured through the use of several optional components:
-
-- `HardLimit` specifies the minimum and maximum range for the value. If this component is absent,
-  then the natural range of the data type is used.
-- `SoftLimit` specifies the range that is accessible via dragging. Numbers that are entered by
-  typing can exceed this limit.
-- `NumberInputPrecision` is used to specify the number of decimal points of precision when dragging,
-  so that you don't get a bunch of digits jumping around. This only quantizes the value when
-  dragging, not when typing.
-- `Step` is used to indicate the delta value when incrementing and decrementing.
-
-When `SoftLimit` is present, the widget will look and feel like a slider: it will draw a slide
-bar in the background, and the drag speed will be calculated such that changes in the bar's size
-will be synchronized with movement of the mouse.
-
-If `SoftLimit` is _not_ present, then the widget behaves more like a "scrubber", where there is
-no slide bar, and drag speed is calculated based on a heuristic that takes into account precision,
-step, and the current input value.
-
-In either of this cases, a non-drag click event will activate "typing" mode, where a value can
-be entered by typing digits.
-
-Like all feathers widgets, this is a "controlled" widget, which means that the internal numeric
-value is not automatically updated, but instead relies on the application's event handlers to
-update the widget state in response to `ValueChange` events. Check out the `feathers_number_input`
-example to see how to write such a handler trivially.
 
 ## Catching Panics
 
