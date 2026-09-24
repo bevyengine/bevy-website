@@ -361,13 +361,13 @@ If you were using Solari in Bevy 0.19, check if the loss of ReSTIR affects your 
 
 With ReSTIR off, expect reduced shadow quality and missing shadows in motion in scenes with many lights. We are exploring cheaper ways of improving light sampling, without ReSTIR, to improve this in the future.
 
-Besides ReSTIR, Solari's scene management code is now retained (similiar to retained render world optimizations in previous versions of Bevy), and overall much more optimized, leading to _significantly_ reduced CPU costs.
+Besides ReSTIR, Solari's scene management code is now retained (similar to retained render world optimizations in previous versions of Bevy), and overall much more optimized, leading to _significantly_ reduced CPU costs.
 
-Additionally, take a look at the new fields in `SolariLighting`. While we aim to set resonable defaults that will work well across a wide variety of games, there are now many knobs you can tweak to improve performance or quality.
+Additionally, take a look at the new fields in `SolariLighting`. While we aim to set reasonable defaults that will work well across a wide variety of games, there are now many knobs you can tweak to improve performance or quality.
 
 World cache size, per-pixel light sample count, temporal accumulation, and path tracing bounce count can now all be tweaked to improve Solari for your specific game.
 
-### Improved Compability
+### Improved Compatibility
 
 Solari now supports lighting from Atmosphere and EnvironmentMapLights on cameras, in addition to the existing support for DirectionalLight and emissive meshes. We're hoping to add support for the remaining PointLight, SpotLight, and RectLight types in the near future.
 
