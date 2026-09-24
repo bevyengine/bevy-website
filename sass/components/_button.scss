@@ -48,4 +48,11 @@
     --button-border-color: var(--button-pink-border-color);
     --button-text-color: var(--button-pink-text-color);
   }
+
+  &--neutral {
+    --button-bg-color: var(--button-neutral-bg-color);
+    --button-bg-hover-color: var(--button-neutral-bg-hover-color);
+    --button-border-color: var(--button-neutral-border-color);
+    --button-text-color: var(--button-neutral-text-color);
+  }
 }
