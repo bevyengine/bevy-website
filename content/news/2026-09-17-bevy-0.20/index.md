@@ -47,7 +47,7 @@ bsn! {
 }
 ```
 
-In addition to making it easy to spot scene inclusions (and unifying the syntax across cases), this freed us up to make component values _much_ easier to work with!
+In addition to making it easier to spot scene inclusions (and unifying the syntax across cases), this freed us up to make component values _much_ easier to work with!
 
 ### No more `template_value` wrappers!
 
@@ -256,61 +256,39 @@ world.spawn(bsn!{ @Widget })
 
 {{ heading_metadata(authors=["@viridia", "@gagnus"] prs=[24092, 24847]) }}
 
-Feathers, Bevy's opinionated, editor-centric UI toolkit, now has more widgets for you to play with:
+Feathers, Bevy's opinionated editor-centric UI toolkit, now has more widgets for you to play with:
 
-TODO: Pictures
+### Color Input
 
-### Scrollbar
+Bevy now has a compact color input selector that displays a color picker widget popup when clicked. This includes a color wheel selector, RGB, and HSL selectors, and a recently used colors grid.
 
-### List View
+![color input](color_input.jpg)
+
+### List View / Scrollbar
+
+A scrollable, selectable list view.
+
+![scrollbar listview](scrollbar_listview.jpg)
 
 ### Dropdown Selection
 
-### Color Input
-### Color Swatch Grid
+A selection field that when clicked, displays a dropdown containing a list of options to select.
+
+![dropdown](dropdown.jpg)
+
 ### Lazy Menu
 
-Spawns a menu popup when the menu is opened and _despawns_ it when it is closed. This is in contrast to the normal Menu widget, which just _hides_ the menu
+Spawns a menu popup when the menu is opened and _despawns_ it when it is closed. This is in contrast to the normal Menu widget, which just _hides_ the menu.
+
+![lazy menu](lazy_menu.jpg)
 
 ## Number Input Widget Scrubbing / Dragging
 
 {{ heading_metadata(authors=["@viridia"] prs=[24636, 24701]) }}
 
-The `FeathersNumberInput` widget has been substantially overhauled, with several new features.
+The `FeathersNumberInput` widget has been expanded to support both normal text input and scrubbing / dragging. There is a configurable "hard limit" (minimum and maximum value via any input method) and "soft limit" (minimum and maximum value via dragging), in addition to control over floating point precision and step sizes.
 
-Blender's [numeric input](https://docs.blender.org/manual/en/latest/interface/controls/buttons/fields.html)
-is great, and we've borrowed its best elements. This includes support for multiple
-editing modes — including "scrubbing" (click-and-drag) and direct keyboard
-entry. The updated feathers widget is now much closer to feature parity with Blender.
-
-The widget supports editing numbers of different data types: `f32`, `f64`, `i32` and `i64`.
-
-The behavior of the widget can be configured through the use of several optional components:
-
-- `HardLimit` specifies the minimum and maximum range for the value. If this component is absent,
-  then the natural range of the data type is used.
-- `SoftLimit` specifies the range that is accessible via dragging. Numbers that are entered by
-  typing can exceed this limit.
-- `NumberInputPrecision` is used to specify the number of decimal points of precision when dragging,
-  so that you don't get a bunch of digits jumping around. This only quantizes the value when
-  dragging, not when typing.
-- `Step` is used to indicate the delta value when incrementing and decrementing.
-
-When `SoftLimit` is present, the widget will look and feel like a slider: it will draw a slide
-bar in the background, and the drag speed will be calculated such that changes in the bar's size
-will be synchronized with movement of the mouse.
-
-If `SoftLimit` is _not_ present, then the widget behaves more like a "scrubber", where there is
-no slide bar, and drag speed is calculated based on a heuristic that takes into account precision,
-step, and the current input value.
-
-In either of this cases, a non-drag click event will activate "typing" mode, where a value can
-be entered by typing digits.
-
-Like all feathers widgets, this is a "controlled" widget, which means that the internal numeric
-value is not automatically updated, but instead relies on the application's event handlers to
-update the widget state in response to `ValueChange` events. Check out the `feathers_number_input`
-example to see how to write such a handler trivially.
+<video controls loop><source  src="number_input.mp4" type="video/mp4"/></video>
 
 ## Headless Tab Widgets
 
@@ -442,7 +420,7 @@ Check out the new `mesh_shader_intro` example for more usage examples.
 
 {{ heading_metadata(authors=["@cookie1170"] prs=[25415]) }}
 
-**TODO: Add recording showcasing the `sprite_material` example**
+<video controls loop><source src="sprite_material.mp4" type="video/mp4"/></video>
 
 Until now, Bevy's sprite renderer has been lacking a major feature: the ability to extend it with custom shaders!
 With this release, it's now possible to create custom materials for sprites by implementing the `MaterialExtension2d` trait,
@@ -450,7 +428,7 @@ inserting the `SpriteMaterial` component and adding the `SpriteMaterialPlugin` t
 
 The shader can use functions exported from `bevy_sprite_render::sprite_mesh::functions`, including:
 
-```wesl
+```wgsl
 // Samples the sprite's final color, including the tint and alpha discard, at a given UV.
 fn sample_final_color(uv: vec2<f32>, instance_index: u32) -> vec4<f32>;
 
@@ -471,27 +449,14 @@ Bevy now provides a 2D analog to 3D's [`ExtendedMaterial`], which can be used to
 
 ```rs
 #[derive(AsBindGroup, Reflect, Clone)]
-struct MyExtendedMaterial {
-    // Make sure to make this high enough to not collide with the base material's uniforms!
+struct MyMaterial {
     #[uniform(20)]
-    important_binding: Vec4,
+    value: Vec4,
 }
 
-impl MaterialExtension2d for MyExtendedMaterial {
-    fn vertex_shader() -> Option<ShaderRef> {
-        None // Return `Some` to override the base material's vertex shader
-    }
-
+impl MaterialExtension2d for MyMaterial {
     fn fragment_shader() -> Option<ShaderRef> {
-        None // Return `Some` to override the base material's fragment shader
-    }
-
-    fn depth_bias(&self) -> Option<f32> {
-        None // Return `Some` to override the base material's depth bias
-    }
-
-    fn alpha_mode(&self) -> Option<AlphaMode2d> {
-        None // Return `Some` to override the base material's alpha mode
+        Some("my_material.wesl".into())
     }
 }
 ```
@@ -499,36 +464,16 @@ impl MaterialExtension2d for MyExtendedMaterial {
 This material can now be used in an `ExtendedMaterial2d` struct:
 
 ```rs
-fn main() {
-    App::new()
-        .add_plugins((
-            DefaultPlugins,
-            // Make sure to add a plugin for the material!
-            Material2dPlugin::<ExtendedMaterial2d<ColorMaterial, MyExtendedMaterial>>::default()
-        ))
-        .add_systems(Startup, spawn_extended_material_mesh)
-        .run();
-}
-
-fn spawn_extended_material_mesh(
-    mut commands: Commands,
-    mut materials: ResMut<Assets<ExtendedMaterial2d<ColorMaterial, MyExtendedMaterial>>>,
-) {
-    // Create an extended material with a `ColorMaterial` as the base and `MyExtendedMaterial` as the extension
-    // `ColorMaterial`'s bindings will be available to `MyExtendedMaterial`'s shader
-    let material = ExtendedMaterial2d {
-        base: ColorMaterial::from_color(Color::WHITE),
-        extension: MyExtendedMaterial {
-            important_binding: Vec4::ZERO,
-        },
-    };
-
-    let handle = materials.add(material);
-    commands.spawn((
-        Mesh2d,
-        MeshMaterial2d(handle),
-    ));
-}
+let handle = materials.add(ExtendedMaterial2d {
+    base: ColorMaterial::from_color(Color::WHITE),
+    extension: MyMaterial {
+        value: Vec4::ZERO,
+    },
+});
+commands.spawn((
+    Mesh2d,
+    MeshMaterial2d(handle),
+));
 ```
 
 [`ExtendedMaterial`]: https://docs.rs/bevy/latest/bevy/pbr/struct.ExtendedMaterial.html
@@ -544,11 +489,13 @@ This resulted in improved performance in many cases and also makes future mainte
 
 {{ heading_metadata(authors=["@aevyrie, @taishi-sama"] prs=[25434]) }}
 
-Upstream of awesome crate [`bevy_editor_cam`](https://github.com/aevyrie/bevy_editor_cam) made by [@aevyrie](https://github.com/aevyrie) as part of `bevy_camera_controller` crate!
+<video controls loop><source  src="pan_orbit_cam.mp4" type="video/mp4"/></video>
+
+We have upstreamed the awesome [`bevy_editor_cam`](https://github.com/aevyrie/bevy_editor_cam) made by [@aevyrie](https://github.com/aevyrie) as the new `PanOrbitCamera` in our `bevy_camera_controller` crate!
 
 ### Usage
 
-Add `MeshPickingPlugin` and `DefaultPanOrbitCameraPlugins` plugin.
+Add `MeshPickingPlugin` and `DefaultPanOrbitCameraPlugins`:
 
 ```rust
 app.add_plugins((
@@ -557,7 +504,7 @@ app.add_plugins((
 ))
 ```
 
-Then add `PanOrbitCamera` component on any 3D camera.
+Then add the `PanOrbitCamera` component on any 3D camera.
 
 ```rust
 commands.spawn((
@@ -566,11 +513,7 @@ commands.spawn((
 ))
 ```
 
-Full functionality is shown in the `camera/pan_orbit_camera_cad` example
-
-```sh
-cargo run --example pan_orbit_camera_cad --features='pan_orbit_camera https 3d_api jpeg'
-```
+Full functionality is shown in the `camera/pan_orbit_camera_cad` example.
 
 ## Weak System Ordering with `chain_weak`
 
@@ -669,7 +612,7 @@ bsn! {
 The default font-size is now `rem(1)` rather than `px(20)`. This is a no-op if you're not changing `RemSize` but it means your
 text will scale by default when you do.
 
-## Per-column Change Ticks
+## Per-Column Change Ticks
 
 {{ heading_metadata(authors=["@pcwalton", "@SkiFire13"] prs=[25157, 25429]) }}
 
@@ -698,6 +641,8 @@ A UI node entity with the `FixedNode` component is positioned relative to the ta
 ## Elliptical Border Radius
 
 {{ heading_metadata(authors=["@ickshonpe"] prs=[24779]) }}
+
+![elliptical border radius](elliptical_border_radius.jpg)
 
 Bevy UI can now draw Nodes with elliptical border geometry.
 
@@ -842,6 +787,8 @@ Caused by:
 ## InlineBox and InlineImage
 
 {{ heading_metadata(authors=["@Ickshonpe"] prs=[25710]) }}
+
+![inline image](inline_image.jpg)
 
 `InlineBox` is a new component added to `bevy_text` that allows space to be reserved within text layouts for custom content. Like `TextSpan`, an `InlineBox` entity is only valid when it's a descendant of a root `Text` or `Text2d` entity. `InlineBox` only reserves space, after layout `TextLayoutInfo::inline_boxes` contains the list of boxes and it's left to the user to draw its content. An inline box can be either `InFlow` or `OutOfFlow`. `InFlow` boxes takes up space and flows with the surrounding text. An `OutOfFlow` boxes is given a position as if it is zero-sized and it doesn't displace any text.
 
