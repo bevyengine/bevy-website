@@ -768,6 +768,32 @@ Bevy's systems, commands and observers are able to return errors. You can either
 
 In Bevy 0.xx, these panics now get turned into errors and passed to the fallback error handler. By default this re-panics, but now you can choose whether to log an error and continue, or whatever else you want.
 
+## Faster bulk despawning
+
+{{ heading_metadata(authors=["@loreball"] prs=[25743, 25851]) }}
+
+Sometimes, you just want to despawn a *ton* of things at once.
+This is reasonably common: Bevy's own [`DespawnOnEnter`] and [`DespawnOnExit`] allow you to quickly clean up entities as you swap the state of your game, tidying up menus or resetting the game after a loss.
+While this isn't that much work in total, it's concentrated all at once: if that process is slow, you could see hitches, or longer loading screens.
+
+If you use the new `despawn_all<F: QueryFilter>` command (or one of its siblings) to batch this work,
+the ECS can speed things up through reduced overhead: sharing steps across related operations.
+
+| Entities | `despawn` | `despawn_all` | Speedup |
+| -------- | --------- | ------------- | ------- |
+| 100      | 3.68 µs   | 2.84 µs       | 1.30×   |
+| 1,000    | 25.2 µs   | 15.3 µs       | 1.65×   |
+| 10,000   | 254.9 µs  | 149.7 µs      | 1.70×   |
+| 100,000  | 3.17 ms   | 2.07 ms       | 1.53×   |
+
+_Median of five benchmark runs, AMD Ryzen 9 9950X3D._
+
+If you're using [`DespawnOnEnter`] or [`DespawnOnExit`] you'll see this performance gain for free; no changes to your code needed.
+
+[`DespawnOnExit`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnExit.html
+[`DespawnOnEnter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnEnter.html
+[`despawn_all<F: QueryFilter>`]: https://docs.rs/bevy/0.20/bevy/ecs/system/command/fn.despawn_all.html
+
 ## CompressedImageSaver Improvements
 
 {{ heading_metadata(authors=["@JMS55", "@cwfitzgerald"] prs=[24223]) }}
