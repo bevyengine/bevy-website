@@ -2,12 +2,14 @@
 title = "Bevy 0.20"
 date = 2026-09-17
 [extra]
-show_image = false
+show_image = true
+image = "zorah.jpg"
+image_subtitle = "The Zorah scene rendered in Bevy Solari"
 public_draft = 2582
 status = 'hidden'
 +++
 
-Thanks to **X** contributors, **X** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.20** release on [crates.io](https://crates.io/crates/bevy)!
+Thanks to **227** contributors, **780** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.20** release on [crates.io](https://crates.io/crates/bevy)!
 
 For those who don't know, Bevy is a refreshingly simple data-driven game engine built in Rust. You can check out our [Quick Start Guide](/learn/quick-start) to try it today. It's free and open source forever! You can grab the full [source code](https://github.com/bevyengine/bevy) on GitHub. Check out [Bevy Assets](https://bevy.org/assets) for a collection of community-developed plugins, games, and learning resources.
 
@@ -15,9 +17,59 @@ To update an existing Bevy App or Plugin to **Bevy 0.20**, check out our [0.19 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- **X**: TODO
+- **Solari and DLSS**: Solari, Bevy's realtime pathtraced renderer, is now faster, more accurate, supports more Bevy rendering features, and runs on MacOS via Metal!
+- **BSN Syntax Improvements**: BSN, Bevy's new scene system, had some syntax changes that made it _much_ easier to read and compose
+- **Ready Event**: BSN scene entities now trigger an observable `Ready` event when all of their children have been spawned.
+- **More UI Widgets**: Bevy Feathers, Bevy's opinionated editor-centric UI toolkit, now has Color Input, Scrollable List View, Dropdown Selection, and Lazy Menu widgets. The Number Input widget is now scrubbable / draggable, and we've added Headless Tab Widgets.
+- **WESL Shaders**: Bevy has officially adopted the WESL shader language (a standardized extension of WGSL). WESL is already an improvement over Bevy's old custom WGSL dialect, and we've been working with the WESL team to plan out the future of shader development in Bevy.
+- **Sprite Materials and Extended 2D Materials**: It is now possible to create custom shader materials for Sprites, and 2D mesh materials can now be extended like they can in 3D.
+- **Pan Orbit Camera**: Bevy now has a "pan orbit camera", making it possible to navigate scenes in a CAD-like way.
 
 <!-- more -->
+
+## Solari and DLSS
+
+{{ heading_metadata(authors=["@JMS55", "mate-h", "stuartparmenter"] prs=[]) }}
+
+![zero day](zero_day.jpg)
+
+Solari, Bevy's realtime pathtraced renderer, has seen major improvements to pretty much every aspect of the plugin!
+
+Read [JMS55's blog](https://jms55.github.io/posts/2026-09-18-solari-bevy-0-20) for the technical details, or continue reading below for the high level overview.
+
+### Improved Image Quality
+
+Thanks to improvements in our ReSTIR implementation, rendering is now mostly unbiased, leading to much more accurate lighting.
+
+Additionally, thanks to some other changes, moving objects no longer have shadows that lag behind, and reflections now look significantly less shimmery in motion, especially for non-metallic materials.
+
+### Improved Performance
+
+DLSS-RR has gotten very good in recent updates, and for many scenes, ReSTIR costs a decent chunk of performance, and does not significantly improve image quality.
+
+Due to this, we've decided to make ReSTIR optional, and turn it **off by default**.
+
+If you were using Solari in Bevy 0.19, check if the loss of ReSTIR affects your scene, and if so re-enable `SolariLighting::restir`.
+
+With ReSTIR off, expect reduced shadow quality and missing shadows in motion in scenes with many lights. We are exploring cheaper ways of improving light sampling, without ReSTIR, to improve this in the future.
+
+Besides ReSTIR, Solari's scene management code is now retained (similar to retained render world optimizations in previous versions of Bevy), and overall much more optimized, leading to _significantly_ reduced CPU costs.
+
+Additionally, take a look at the new fields in `SolariLighting`. While we aim to set reasonable defaults that will work well across a wide variety of games, there are now many knobs you can tweak to improve performance or quality.
+
+World cache size, per-pixel light sample count, temporal accumulation, and path tracing bounce count can now all be tweaked to improve Solari for your specific game.
+
+### Improved Compatibility
+
+Solari now supports lighting from Atmosphere and EnvironmentMapLights on cameras, in addition to the existing support for DirectionalLight and emissive meshes. We're hoping to add support for the remaining PointLight, SpotLight, and RectLight types in the near future.
+
+Solari now also runs on macOS, but note that there is currently no built-in denoiser included in `bevy_solari` for macOS. MetalFX Ray Reconstruction might be a possible solution in the future (contributions welcome!)
+
+### DLSS Updates
+
+Finally, our `dlss_wgpu` crate has been updated to support the latest version of DLSS, bringing support for DLSS-RR 4.5, which significantly improves denoising quality in Solari.
+
+If you were using DLSS in Bevy 0.19, make sure to [download and setup](https://github.com/bevyengine/dlss_wgpu#downloading-the-dlss-sdk) the newest version of the DLSS SDK, else you will run into compiler errors.
 
 ## BSN Syntax Improvements
 
@@ -314,48 +366,6 @@ bsn! {
 ```
 
 See the `headless_tabs` example for controlled and self-updating tab lists in both orientations.
-
-## Solari and DLSS
-
-{{ heading_metadata(authors=["@JMS55", "mate-h", "stuartparmenter"] prs=[]) }}
-
-Solari, Bevy's realtime pathtraced renderer, has seen major improvements to pretty much every aspect of the plugin!
-
-Read [JMS55's blog](https://jms55.github.io/posts/2026-09-18-solari-bevy-0-20) for the technical details, or continue reading below for the high level overview.
-
-### Improved Image Quality
-
-Thanks to improvements in our ReSTIR implementation, rendering is now mostly unbiased, leading to much more accurate lighting.
-
-Additionally, thanks to some other changes, moving objects no longer have shadows that lag behind, and reflections now look significantly less shimmery in motion, especially for non-metallic materials.
-
-### Improved Performance
-
-DLSS-RR has gotten very good in recent updates, and for many scenes, ReSTIR costs a decent chunk of performance, and does not significantly improve image quality.
-
-Due to this, we've decided to make ReSTIR optional, and turn it **off by default**.
-
-If you were using Solari in Bevy 0.19, check if the loss of ReSTIR affects your scene, and if so re-enable `SolariLighting::restir`.
-
-With ReSTIR off, expect reduced shadow quality and missing shadows in motion in scenes with many lights. We are exploring cheaper ways of improving light sampling, without ReSTIR, to improve this in the future.
-
-Besides ReSTIR, Solari's scene management code is now retained (similar to retained render world optimizations in previous versions of Bevy), and overall much more optimized, leading to _significantly_ reduced CPU costs.
-
-Additionally, take a look at the new fields in `SolariLighting`. While we aim to set reasonable defaults that will work well across a wide variety of games, there are now many knobs you can tweak to improve performance or quality.
-
-World cache size, per-pixel light sample count, temporal accumulation, and path tracing bounce count can now all be tweaked to improve Solari for your specific game.
-
-### Improved Compatibility
-
-Solari now supports lighting from Atmosphere and EnvironmentMapLights on cameras, in addition to the existing support for DirectionalLight and emissive meshes. We're hoping to add support for the remaining PointLight, SpotLight, and RectLight types in the near future.
-
-Solari now also runs on macOS, but note that there is currently no built-in denoiser included in `bevy_solari` for macOS. MetalFX Ray Reconstruction might be a possible solution in the future (contributions welcome!)
-
-### DLSS Updates
-
-Finally, our `dlss_wgpu` crate has been updated to support the latest version of DLSS, bringing support for DLSS-RR 4.5, which significantly improves denoising quality in Solari.
-
-If you were using DLSS in Bevy 0.19, make sure to [download and setup](https://github.com/bevyengine/dlss_wgpu#downloading-the-dlss-sdk) the newest version of the DLSS SDK, else you will run into compiler errors.
 
 ## WESL Shaders
 
