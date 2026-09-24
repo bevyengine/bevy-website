@@ -76,7 +76,7 @@ jobs:
           fi
 
       - name: Upload Generated Files
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: screenshots-${{ matrix.page }}
           path: screenshots
