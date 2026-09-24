@@ -788,6 +788,8 @@ the ECS can speed things up through reduced overhead: sharing steps across relat
 
 _Median of five benchmark runs, AMD Ryzen 9 9950X3D._
 
+If you're using [`DespawnOnEnter`] or [`DespawnOnExit`] you'll see this performance gain for free; no changes to your code needed.
+
 [`DespawnOnExit`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnExit.html
 [`DespawnOnEnter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnEnter.html
 [`despawn_all<F: QueryFilter>`]: https://docs.rs/bevy/0.20/bevy/ecs/system/command/fn.despawn_all.html
