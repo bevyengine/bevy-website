@@ -854,7 +854,7 @@ That allows us to ship useful bits and pieces incrementally,
 and polish them while we put it all together.
 
 - **.bsn asset format:** With the syntax stabilized, it's time to bring BSN to the file system, creating a human-readable, hot-reloadable file format designed for tool-driven (read: editor) authoring. 
-- **Assets as Entities:** Our asset handling has been steadily improving, but the machinery is still very bespoke: users should need to learn an entire separate mental model to manage asset lifecycles.
+- **Assets as Entities:** Our asset handling has been steadily improving, but the machinery is still very bespoke: users should not need to learn an entire separate mental model to manage asset lifecycles.
 - **Remote inspector:** Browse, modify and mutate entities from external tools, on your machine or on a different device!
 - **More powerful required components:** Wish you could pull in assets, vary values based on other components, or reference resources in required components? Us too: we're hoping to bring this up to par with the `Template` trait that powers BSN, bells and whistles included.
 - **Mutually exclusive components:** A long requested feature: *statically* ensure that your `Player` is never a `Camera`, creating invariants that can be counted on.
