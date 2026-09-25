@@ -254,7 +254,7 @@ world.spawn(bsn!{ @Widget })
 
 ## More Feathers Widgets
 
-{{ heading_metadata(authors=["@viridia", "@gagnus"] prs=[24092, 24847]) }}
+{{ heading_metadata(authors=["@viridia", "@gagnus", "@tmstorey"] prs=[25446, 25079, 24092, 24847, 24784]) }}
 
 Feathers, Bevy's opinionated editor-centric UI toolkit, now has more widgets for you to play with:
 
