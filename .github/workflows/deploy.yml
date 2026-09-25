@@ -48,7 +48,7 @@ jobs:
         if: github.repository_owner == 'bevyengine'
         # When updating to a newer version, remember to also update it
         # in the contribution guide & readme
-        uses: shalzz/zola-deploy-action@v0.19.2
+        uses: shalzz/zola-deploy-action@v0.22.1
         env:
           PAGES_BRANCH: gh-pages
           BUILD_DIR: .

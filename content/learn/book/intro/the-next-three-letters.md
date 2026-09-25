@@ -6,15 +6,16 @@ weight = 4
 status = 'hidden'
 +++
 
-If Entities, Components and Systems are the first three concepts, then **Resources**, **Queries**, and **Commands** are the next three.
-These concepts are core to Bevy's ECS (so much so that they're used in the previous section!), but they aren't inherent to the architecture.
+If Entities, Components, and Systems are the first three concepts, then **Resources**, **Queries**, and **Commands** are the next three.
+
+These concepts are core to _Bevy_'s ECS, but they aren't inherent to the ECS architecture. This is an important thing to note: ECS as a general concept is a minimal, baseline set of principles. We do not consider Bevy ECS to be constrained by these principles. We've prioritized building something that is capable, easy to understand, and fun to use. That means going beyond the bounds of traditional ECS!
 
 ## Resources
 
 **Resources** are global state singletons.
-Unlike [components](/learn/book/intro/the-three-letters#the-c-components), which are reused across multiple entities, resources are unique. For any given resource type (like `Score` in the example below), there can only be one instance in your game world at a time.
+Unlike [components](@/learn/book/intro/the-three-letters.md#the-c-components), which are reused across multiple entities, resources are unique. For any given resource type (like `Score` in the example below), there can only be one instance in your game world at a time.
 
-Like components, resources in Bevy are also "just Rust structs" (or enums).
+Like components, resources in Bevy are also "just Rust types":
 
 ```rs
 #[derive(Resource)]
@@ -34,7 +35,7 @@ fn update_score(mut score: ResMut<Score>) {
 
 ## Queries
 
-**Queries** are used to fetch data from the ECS, either in read only mode (like a [`&`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#references-and-borrowing)), or in mutable access mode (like a [`&mut`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#mutable-references)).
+**Queries** are used to fetch data from the ECS, either in read only mode (like a [`&`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#references-and-borrowing) in Rust), or in mutable access mode (like a [`&mut`](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#mutable-references)).
 When writing a query, you provide a set of components, and Bevy will fetch all entities that have every requested component.
 The entities fetched may also have other components, but only the matching component types will be returned to read or write.
 
@@ -47,15 +48,9 @@ struct Poison {
 }
 
 #[derive(Component)]
-struct Life {
+struct Health {
     current: u32,
     max: u32,
-}
-
-fn apply_poison(mut query: Query<(&Poison, &mut Life)>) {
-    for (poison, mut life) in query.iter_mut() {
-        life.current = life.current.saturating_sub(poison.stacks);
-    }
 }
 
 fn tick_down_poison(mut query: Query<&mut Poison>) {
@@ -65,14 +60,20 @@ fn tick_down_poison(mut query: Query<&mut Poison>) {
         }
     }
 }
+
+fn apply_poison(mut query: Query<(&Poison, &mut Health)>) {
+    for (poison, mut health) in query.iter_mut() {
+        health.current = health.current.saturating_sub(poison.stacks);
+    }
+}
 ```
 
-Then, when systems are run as part of a Bevy [app](/learn/book/the-game-loop/app), the engine automatically fetches the requested data, parallelizing work between systems wherever possible:
+Then, when systems are run as part of a Bevy [app](@/learn/book/the-game-loop/app.md), the engine automatically fetches the requested data, parallelizing work between systems wherever possible:
 
 ```rs
 fn main() {
     App::new()
-        .add_systems(Update, (my_system, my_other_system))
+        .add_systems(Update, (apply_poison, tick_down_poison).chain())
         .run();
 }
 ```
@@ -80,16 +81,19 @@ fn main() {
 {% callout(type="info") %}
 Bevy queries let you update massive amounts of game data in a tight, cache-friendly loop.
 
-Going back to our database analogy, a query is a lot like a [SQL `SELECT` statement](https://www.w3schools.com/sql/sql_select.asp): `SELECT Color, Location from World`
+Going back to our database analogy, a query is a lot like a [SQL SELECT statement](https://www.w3schools.com/sql/sql_select.asp). Using the previous example:
+
+- `Query<&mut Poison>` would be similar to `SELECT Poison FROM World`.
+- `Query<(&Poison, &mut Health)>` would be similar to `SELECT Poison, Health FROM World`.
 {% end %}
 
 Queries have a lot more functionality than what's shown here.
-You can request optional components, fetch the `Entity` associated with each item, add query filters, and much more!
-Queries are covered in more detail in the [Queries](/learn/book/storing-data/queries) chapter.
+You can request optional components, fetch the [`Entity`] associated with each item, add query filters, and much more!
+Queries are covered in more detail in the [Queries](@/learn/book/storing-data/queries.md) chapter.
 
 ## Commands
 
-**Commands** allow for arbitrary, deferred changes to the ECS `World`.
+**Commands** allow for arbitrary, deferred changes to the ECS [`World`].
 They are mostly used for complex write operations, such as spawning entities (as we saw in the previous chapter).
 Any system can access the command queue by adding a `mut commands: Commands` to the function signature:
 
@@ -104,4 +108,7 @@ fn spawn_entities(mut commands: Commands) {
 
 A wide range of built-in commands are provided,
 but you can also write custom commands to queue up any ECS logic you might desire.
-You can read about these in more detail in the [Commands](/learn/book/control-flow/commands) chapter.
+You can read about these in more detail in the [Commands](@/learn/book/control-flow/commands.md) chapter.
+
+[`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
+[`World`]: https://docs.rs/bevy/latest/bevy/ecs/prelude/struct.World.html

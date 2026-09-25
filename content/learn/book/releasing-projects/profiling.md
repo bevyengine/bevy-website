@@ -7,7 +7,7 @@ weight = 0
 
 You cannot optimize what you cannot measure.
 
-If you want to improve the performance of your game, library, or application, you first *must* measure it.
+If you want to improve the performance of your game, library, or application, you first _must_ measure it.
 This involves finding both a baseline to check if your changes worked, and a breakdown of the costs incurred from making those changes.
 
 This process, known as **profiling**, is essential to any serious optimization work.
@@ -27,12 +27,12 @@ Bevy has built-in [tracing](https://github.com/tokio-rs/tracing) spans to make i
 Enable the `trace` cargo feature to enable Bevy's built-in spans.
 
 If you want to include `wgpu` tracing spans when profiling, they are emitted at the `tracing` `info` level.
-You will need to make sure they are not filtered out by the `LogSettings` resource's `filter` member which defaults to `wgpu=error`.
+You will need to make sure they are not filtered out by the [`LogPlugin`]'s `filter` member which defaults to `wgpu=error`.
 This can be done by setting the `RUST_LOG=info` environment variable when running your application.
 
 You also need to select a `tracing` backend using one of the cargo features described in the below sections.
 
-{% callout(type="note") %}
+{% callout(type="info") %}
 When your app is bottlenecked by the GPU, you may encounter frames that have multiple prepare-set systems all taking an unusually long time to complete, and all finishing at about the same time.
 
 See the section on GPU profiling for determining what GPU work is the bottleneck.
@@ -41,6 +41,8 @@ You can find more details in the docs for [`prepare_windows`](https://docs.rs/be
 {% end %}
 
 ![prepare_windows span bug](https://github.com/bevyengine/bevy/assets/2771466/15c0819b-0e07-4665-aa1e-579caa24fece)
+
+[`LogPlugin`]: https://docs.rs/bevy/latest/bevy/log/struct.LogPlugin.html
 
 ### Adding Your Own Spans
 
@@ -98,7 +100,7 @@ If you also want to track memory allocations, at the cost of increased runtime o
 After running your app, you can open the captured profile file (`my_capture.tracy` in the example above) in the Tracy GUI application to see a timeline of the executed spans.
 
 Alternatively, directly run the tracy GUI and then run your application, for live capture.
-However, beware that running the live capture on the same machine will be a competing graphical application, which may impact results. Pre-recording the profile data through the CLI tool is recommended for more accurate traces.
+However, beware that running the live capture on the same machine will be a competing graphical application, which may impact results. Prerecording the profile data through the CLI tool is recommended for more accurate traces.
 
 In any case, you'll see your trace in the GUI window:
 
@@ -139,7 +141,7 @@ It will look something like this:
 
 This approach requires no extra instrumentation and shows finer-grained flame graphs of actual code call trees.
 This is useful when you want to identify the specific function of a "hot spot".
-The downside is that it has higher overhead, so your app will run slower than it normally does.
+The downside is that it will have a higher overhead, so your app will run slower than it normally does.
 
 Install [cargo-flamegraph](https://github.com/flamegraph-rs/flamegraph), [enable debug symbols in your release build](https://github.com/flamegraph-rs/flamegraph#improving-output-when-running-with---release), then run your app using one of the following commands.
 Note that `cargo-flamegraph` forwards arguments to cargo.
@@ -186,20 +188,20 @@ There is no need to create an Xcode project.
 
 1. In the menu bar click on Debug > Debug Executable…
 
-    ![Xcode's menu bar open to Debug > Debug Executable...](https://github.com/user-attachments/assets/efdc5037-0957-4227-b29d-9a789ba17a0a)
+   ![Xcode's menu bar open to Debug > Debug Executable...](https://github.com/user-attachments/assets/efdc5037-0957-4227-b29d-9a789ba17a0a)
 
 2. Select your executable from your project’s target folder.
 3. The Scheme Editor will open. If your assets are not located next to your executable, you can go to the Arguments tab and set `BEVY_ASSET_ROOT` to the absolute path for your project (the parent of your assets folder). The rest of the defaults should be fine.
 
-    ![Xcode's Schema Editor opened to an environment variable configuration](https://github.com/user-attachments/assets/29cafb05-0c49-4777-8d41-8643812e8f6a)
+   ![Xcode's Schema Editor opened to an environment variable configuration](https://github.com/user-attachments/assets/29cafb05-0c49-4777-8d41-8643812e8f6a)
 
 4. Click the play button in the top left and this should start your bevy app.
 
-    ![A cursor hovering over the play button in XCode](https://github.com/user-attachments/assets/859580e2-779b-4db8-8ea6-73cf4ef696c9)
+   ![A cursor hovering over the play button in XCode](https://github.com/user-attachments/assets/859580e2-779b-4db8-8ea6-73cf4ef696c9)
 
 5. Go back to Xcode and click on the Metal icon in the bottom drawer and then Capture in the following the popup menu.
 
-    ![A cursor hovering over the Capture button in the Metal debugging popup menu](https://github.com/user-attachments/assets/c0ce1591-0a53-499b-bd1b-4d89538ea248)
+   ![A cursor hovering over the Capture button in the Metal debugging popup menu](https://github.com/user-attachments/assets/c0ce1591-0a53-499b-bd1b-4d89538ea248)
 
 6. Start debugging and profiling!
 
@@ -213,11 +215,11 @@ While it doesn't provide as much detail as vendor-specific tooling, Tracy can al
 
 When you compile with Bevy's `trace_tracy` feature, GPU spans will show up in a separate row at the top of Tracy, labeled as `RenderQueue`.
 
-{% callout(type="note") %}
+{% callout(type="info") %}
 Due to dynamic clock speeds, GPU timings will have large frame-to-frame variance, unless you use an external tool to lock your GPU clocks to base speeds. When measuring GPU performance via Tracy, only look at the MTPC column of Tracy's statistics panel, or the span distribution/median, and not at any individual frame data.
 {% end %}
 
-{% callout(type="note") %}
+{% callout(type="info") %}
 Unlike ECS systems, Bevy will not automatically add GPU profiling spans. You will need to add GPU timing spans yourself for any custom rendering work. See the [`RenderDiagnosticsPlugin`](https://docs.rs/bevy/latest/bevy/render/diagnostic/struct.RenderDiagnosticsPlugin.html) docs for more details.
 {% end %}
 
@@ -227,7 +229,7 @@ The binary that you would actually ship to your users will be found in your `tar
 For example, this might be `target/release/super_boids.exe`.
 You can see how big this is by simply examining it in your file browser.
 
-The size of the `target` directory is *not* the size of the final binary.
+The size of the `target` directory is _not_ the size of the final binary.
 This directory stores a huge amount of cached compilation results,
 speeding up recompilation at the cost of hard drive space.
 

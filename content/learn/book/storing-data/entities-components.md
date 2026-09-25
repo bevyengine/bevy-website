@@ -6,19 +6,20 @@ weight = 1
 status = 'hidden'
 +++
 
-**Entities** are the fundamental objects of your game world, whizzing around, storing cameras, being controlled by the player or tracking the state of a button.
+**Entities** are the fundamental objects of your game world: players, cameras, levels, user interfaces... everything is an entity!
+
 On its own, the [`Entity`] type is a simple identifier: it has neither behavior nor data.
 Components store this data, and define the overlapping categories that the entity belongs to.
 
 Informally, we use the term "entity" to refer to a single conceptual entry in our [world].
-An "entity" is made up of all component data with the correct identifier, although it's very rare to use all of the data for a single entity at once.
+An "entity" is made up of all component data with the correct identifier, although it's very rare to use all the data for a single entity at once.
 If you're an experienced programmer, you can reason about the [world] as something like a (very fast) [`HashMap`] that links an [`Entity`] identifier to a collection of components.
 
 Internally, [`Entity`] is roughly shaped like a `u64`, with arbitrary (unique) bits.
 While it is possible to work with the [`Entity`] type directly, it should be treated as an opaque, black box key.
 Bevy makes no guarantees that exact entity assignment or storage behavior will be stable across any version boundary.
 
-[world]: /learn/book/storing-data/world
+[world]: @/learn/book/storing-data/world.md
 [`Entity`]: https://docs.rs/bevy/latest/bevy/ecs/entity/struct.Entity.html
 [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
 
@@ -34,7 +35,7 @@ However, the advantage of this approach is the ability to perform massive bulk o
 ## Spawning and Despawning Entities
 
 Before you can do much of anything in Bevy, you'll need to **spawn** your first entity by adding it to the app's [`World`].
-Once entities exist, they can likewise be despawned, deleting all of the data stored in their components and removing it from the world.
+Once entities exist, they can likewise be despawned, deleting all data stored in their components and removing it from the world.
 
 Spawning and despawning entities can have far-reaching effects, and so cannot be done immediately (unless you are using an [exclusive system]).
 As a result, we must use [`Commands`], which queue up work to do later.
@@ -53,11 +54,11 @@ fn spawning_system(mut commands: Commands){
 }
 ```
 
-[exclusive system]: /learn/book/control-flow/systems/#exclusive-systems
+[exclusive system]: @/learn/book/control-flow/systems.md#exclusive-systems
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`Commands`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Commands.html
 
-## Working With Components
+## Working with Components
 
 As mentioned in the [introduction section on components], a **Component** is a small, modular, reusable piece of data that can be attached to an entity.
 Components are necessary to make individual entities useful.
@@ -71,7 +72,7 @@ To make a basic cube, you'd probably need to add:
 - A [`StandardMaterial`] to define how that mesh should be rendered (in practice, actually a [`Handle`] to a [`StandardMaterial`])
 - Etc.
 
-[introduction section on components]: /learn/book/intro/the-three-letters#the-c-components
+[introduction section on components]: @/learn/book/intro/the-three-letters.md#the-c-components
 [`Transform`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Transform.html
 [`Mesh`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Mesh.html
 [`Handle`]: https://docs.rs/bevy/latest/bevy/asset/enum.Handle.html
@@ -113,7 +114,7 @@ enum Allegiance {
 
 [`Component`]: https://docs.rs/bevy/latest/bevy/ecs/component/trait.Component.html
 
-### Spawning Entities With Components
+### Spawning Entities with Components
 
 Now that we have some components defined, let's try adding them to our entities using [`Commands`].
 
@@ -186,7 +187,7 @@ struct InCombat;
 // that have the `Combatant` component but do not yet have the `InCombat` component
 fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>)>, mut commands: Commands){
     for entity in query.iter() {
-        // The component will be inserted at the end of the current stage
+        // The component will be inserted once the command is run.
         commands.entity(entity).insert(InCombat);
     }
 }
@@ -194,7 +195,7 @@ fn start_combat_system(query: Query<Entity, (With<Combatant>, Without<InCombat>)
 // Now to undo our hard work
 fn end_combat_system(query: Query<Entity, (With<Combatant>, With<InCombat>)>, mut commands: Commands){
     for entity in query.iter() {
-        // The component will be removed at the end of the current stage
+        // The component will be removed once the command is run.
         // It is provided as a type parameter,
         // as we do not need to know a specific value in order to remove a component of the correct type
         commands.entity(entity).remove::<InCombat>();

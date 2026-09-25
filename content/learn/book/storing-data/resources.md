@@ -26,7 +26,7 @@ If you might need multiple instances, then consider using [entities and componen
 Bevy uses resources for many of the built-in features of the engine.
 For example, Bevy's [`AssetServer`] is a resource.
 
-[entities and components]: /learn/book/storing-data/entities-components
+[entities and components]: @/learn/book/storing-data/entities-components.md
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/struct.World.html
 [`AssetServer`]: https://docs.rs/bevy/latest/bevy/asset/struct.AssetServer.html
 
@@ -46,6 +46,7 @@ fn update_music_volume(mut settings: ResMut<AudioSettings>) {
     settings.music_volume = 0.8;
 }
 ```
+
 [`Res`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
 [`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html
 
@@ -116,11 +117,11 @@ fn setup_audio_settings(world: &mut World) {
 }
 ```
 
-{% callout(type="warn") %}
+{% callout(type="warning") %}
 **Caution**
 
 Use care when accessing resources which may not exist.
-Attempting to inject a non-existent resource using [`Res`] or [`ResMut`] will cause a panic.
+Attempting to inject a nonexistent resource using [`Res`] or [`ResMut`] will cause a panic.
 You can avoid this by wrapping the resource in `Option`:
 
 ```rs
@@ -133,16 +134,17 @@ fn audio_settings_system(settings_res: Option<Res<AudioSettings>>) {
 
 [`Res`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.Res.html
 [`ResMut`]: https://docs.rs/bevy/latest/bevy/ecs/system/struct.ResMut.html
+
 {% end %}
 
-## Resources vs Singleton Entities
+## Resources Vs Singleton Entities
 
 Not every singleton object has to be stored as a resource, and in some cases you may not want to.
 Any data that is storable in a resource could instead be stored as a component on a singleton entity.
 Which approach is better is a design question that depends on a number of tradeoffs.
 
 The advantages of resources is simplicity and ease of use: it requires very little code to read or write data stored in a resource.
-Accessing data within a component is more involved, and entails a multi-step process where you first have to get access to the entity, and then its components.
+Accessing data within a component is more involved, and entails a multistep process where you first have to get access to the entity, and then its components.
 Often this will involve writing a query.
 
 Resources make sense when the data is _truly_ singular and _always will be_ singular.
@@ -155,7 +157,7 @@ Your single-player game only supports one game controller _now_, but what if you
 Then you'll need more than one gamepad.
 
 An object also can't be a resource if it is going to be a part of a bigger collection at any point.
-For example, lets say a game has a `PlayerAvatar` struct representing the object that the player controls and moves.
+For example, let's say a game has a `PlayerAvatar` struct representing the object that the player controls and moves.
 If `PlayerAvatar` needs to be rendered and simulated using common ECS systems, it can't be a resource as it's a part of a larger collection and therefore isn't unique.
 
 Finally, a resource can only be a single `struct` or `enum`.

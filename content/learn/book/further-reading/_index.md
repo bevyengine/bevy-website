@@ -14,11 +14,11 @@ Bevy has a wide range of different learning materials, targeted at different use
 
 Everyone learns differently, so we offer a variety of complementary paths:
 
-- [Quickstart](/learn/quickstart): Build a simple game through a hands-on tutorial designed for absolute beginners.
-- [The Book](/learn/book): Learn the core concepts that make Bevy work, then explore advanced topics needed to ship a production game.
+- [Quickstart](@/learn/quick-start/introduction.md): Build a simple game through a hands-on tutorial designed for absolute beginners.
+- [The Book](@/learn/book/_index.md): Learn the core concepts that make Bevy work, then explore advanced topics needed to ship a production game.
 - [docs.rs](https://docs.rs/bevy/latest/bevy/): Versioned API documentation that explains every struct, method, and function. Module and crate docs also provide an overview of specific areas of the code.
-- [Feature Examples](https://bevyengine.org/examples): Explore Bevy's features by browsing runnable snippets.
-- [Game Examples](https://bevyengine.org/examples/#games): Explore larger project structure and genre-specific ideas through playable game stubs.
+- [Feature Examples](https://bevy.org/examples): Explore Bevy's features by browsing runnable snippets.
+- [Game Examples](https://bevy.org/examples/#games): Explore larger project structure and genre-specific ideas through playable game stubs.
 
 ## How to Use These Together
 

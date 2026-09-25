@@ -19,7 +19,7 @@ You have reached the end of The Quick Start Guide! If you're hungry for more lea
 
 [The Bevy Examples]: https://github.com/bevyengine/bevy/tree/latest/examples#examples
 [The Bevy Web Examples]: https://bevy.org/examples
-[Breakout]: https://github.com/bevyengine/bevy/blob/latest/examples/games/breakout.rs
+[Breakout]: https://github.com/bevyengine/bevy/blob/latest/examples/showcase/breakout.rs
 [Bevy API Docs]: https://docs.rs/bevy
 [Bevy Assets]: https://bevy.org/assets/
 [Learning Resources]: https://bevy.org/assets/#learning

@@ -70,7 +70,7 @@ struct EnemyAssets {
 
 fn load_enemy_assets_in_startup(
     asset_server: Res<AssetServer>,
-    mut commands: AssetCommands
+    mut commands: Commands
 ) {
     commands.insert_resource(EnemyAssets {
         sprite: asset_server.load("enemy.png"),
@@ -147,7 +147,7 @@ impl EnemyAssets {
 ```
 
 Now, all we need is to prevent our `enemy_spawner` system from running until `EnemyAssets` is loaded.
-A straight-forward approach is to use a [state](/learn/book/control-flow/states/) to control for if our gameplay systems should run.
+A straight-forward approach is to use a [state](@/learn/book/control-flow/states.md) to control for if our gameplay systems should run.
 
 ```rust
 fn main() {
@@ -168,6 +168,7 @@ fn main() {
 
 #[derive(States, Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 enum AssetsState {
+    #[default]
     Loading,
     Loaded,
 }

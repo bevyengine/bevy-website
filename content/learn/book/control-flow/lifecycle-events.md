@@ -10,7 +10,7 @@ In the previous chapter we learned about `Events` and how they allow us to run c
 We can extend this concept by using **Lifecycle Events** to run code in response to altering a `Component` within an `Entity`.
 Lifecycle events are still `Events`, but specifically they are `EntityEvents` meaning that they will have an `event_target` which determines the `Entity` being targeted.
 
-Within Bevy we currently have access to five distinct lifecycle events: `Add`, `Insert`, `Replace`, `Remove`, and `Despawn`.
+Within Bevy we currently have access to five distinct lifecycle events: `Add`, `Insert`, `Discard`, `Remove`, and `Despawn`.
 We can split these into two categories: lifecycle events that trigger when a `Component` is *added* to an `Entity`, and lifecycle events that trigger when a `Component` is *removed* from an `Entity`.
 
 On adding a `Component`:
@@ -20,24 +20,24 @@ On adding a `Component`:
 
 On removing/altering a `Component`:
 
-- [`Replace`] triggers when a component is removed from an `Entity`, *regardless of if it is replaced with a new value*.
+- [`Discard`] triggers when a component is removed from an `Entity`, *regardless of if it is replaced with a new value*.
 - [`Remove`] triggers when a component is removed from an `Entity` *and not replaced*. (This also happens before the component is actually removed.)
 - [`Despawn`] triggered on *each* component on an `Entity` when the `Entity` is *despawned*.
 
 It's also important to know that lifecycle events have an order in which they are evaluated.
 When both `Add` and `Insert` occur, `Add` hooks are evaluated before `Insert` hooks.
-`Replace` hooks are evaluated before `Remove` hooks, and `Despawn` hooks are evaluated last.
+`Discard` hooks are evaluated before `Remove` hooks, and `Despawn` hooks are evaluated last.
 
 [`Add`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Add.html
 [`Insert`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Insert.html
-[`Replace`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Replace.html
+[`Discard`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Discard.html
 [`Remove`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Remove.html
 [`Despawn`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Despawn.html
 
 ## Component Hooks
 
 The most common way of interacting with lifecycle events is by using [`ComponentHooks`].
-We have a couple ways to use `ComponentHooks`, the first of which is through the [`World::register_component_hook`] method.
+We have a couple of ways to use `ComponentHooks`, the first of which is through the [`World::register_component_hooks`] method.
 
 ```rust
 // Create a ComponentHook with the `World` method:
@@ -105,7 +105,7 @@ impl MyComponent {
 ```
 
 [`ComponentHooks`]: https://docs.rs/bevy/latest/bevy/ecs/lifecycle/struct.ComponentHooks.html
-[`World::register_component_hook`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.register_component_hooks
+[`World::register_component_hooks`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html#method.register_component_hooks
 
 ## Lifecycle Observers
 
@@ -120,7 +120,7 @@ When this happens, the `event_target` of the `EntityEvent` is filled by the `Ent
 pub struct MyComponent;
 
 // This observer will trigger whenever `MyComponent` is added to any Entity. 
-world.add_observer(|add: On<Add, MyComponent>| {
+world.add_observer(|add: On<Add<MyComponent>>| {
     println!("MyComponent added to {}", add.entity);
 });
 ```
@@ -140,14 +140,14 @@ Using `Observers`, we'd have to structure our code like such:
 struct PlayerName(pub String);
 
 // Then we add an Observer that will watch for `PlayerName` being added.
-commands.add_observer(|print_name: On<Add, PlayerName>, player_query: <&PlayerName>| {
+commands.add_observer(|print_name: On<Add<PlayerName>>, player_query: Query<&PlayerName>| {
     let new_name = player_query.get(print_name.entity).unwrap().0;
     println!("Spawned: {}", new_name);
 });
 
 commands.spawn((
     PlayerName("Player1".to_string()),
-    Transform::from_xyz(x: 0.0, y: 0.0, z: 0.0),
+    Transform::from_xyz(0.0, 0.0, 0.0),
     Visibility::Visible,
 ));
 ```
@@ -176,7 +176,7 @@ fn print_player_name(mut world: DeferredWorld, player_name: HookContext) {
 // Now we can spawn in our Entity with the `PlayerName` without needing an Observer.
 commands.spawn((
     PlayerName("Player1".to_string()),
-    Transform::from_xyz(x: 0.0, y: 0.0, z: 0.0),
+    Transform::from_xyz(0.0, 0.0, 0.0),
     Visibility::Visible,
 ));
 ```
@@ -200,7 +200,7 @@ world.register_component_hooks::<PlayerName>().on_add(|mut world, context| {
 
 In earlier chapters, we went over several lifecycle event interactions without specifically naming them as lifecycle events.
 This is because they aren't used in the same manner as we've been using them so far.
-However they are still lifecycle event interactions, so we will briefly return to them to show the differences between them and the tools introduced in this chapter.
+However, they are still lifecycle event interactions, so we will briefly return to them to show the differences between them and the tools introduced in this chapter.
 
 ### Removed Components Parameter
 
@@ -222,7 +222,7 @@ fn react_on_removal(mut removed: RemovedComponents<MyComponent>) {
 // runs *before* `MyComponent` is actually removed from the `Entity`. 
 world.register_component_hooks::<MyComponent>().on_remove(|mut world, remove| {
     // Access the value within `MyComponent` before it's removed.
-    let value = world.get::<MyComponent>(remove.entity).unwrap()
+    let value = world.get::<MyComponent>(remove.entity).unwrap();
     println!("MyComponent with value {} removed from {}", value, remove.entity);
 });
 ```
@@ -238,14 +238,14 @@ We can also manually clear `RemovedComponents` by using the [`World::clear_track
 
 The [`Added`] query filter can be used to see `Entities` that have had a new instance of a specific `Component` added to them for the first time.
 Much like `RemovedComponents` though, `Added` can only be accessed after the lifecycle event occurs.
-Additionally `Added` is less precise, returning `Entities` that had a target `Component` added for the first time and `Entities` that had a target `Component` reinserted, even if the component already existed.
+Additionally, `Added` is less precise, returning `Entities` that had a target `Component` added for the first time and `Entities` that had a target `Component` reinserted, even if the component already existed.
 In effect, this combines both the `Add` and `Insert` lifecycle events, which can be an important distinction depending on the functionality you want to run.
 
-To show the differences, lets imagine we are building a networked multiplayer game where we want to track the following:
+To show the differences, let's imagine we are building a networked multiplayer game where we want to track the following:
 
 - Create a new `Entity` for each player when a new match starts.
-- Have a way for players to reconnect to a match with an existing `Entity` if they happen to leave for some reason.
-- Keep a general log of everytime a Player connects or reconnects to the match.
+- Have a way for players to reconnect to a match with some existing `Entity` if they happen to leave for some reason.
+- Keep a general log of every time a Player connects or reconnects to the match.
 
 We can use both the `Added` query filter and `ComponentHooks` to achieve each use case.
 

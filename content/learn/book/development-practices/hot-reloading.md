@@ -11,7 +11,7 @@ Unfortunately, recompiling can be slow, and requires you to close the game, losi
 To make this easier, Bevy supports **hot reloading**, which allows you to modify your game's assets and automatically load these changes into a running instance of the game.
 
 While hot-reloading is useful during development time, it's usually not something you want to ship in a production game.
-Unless you're deliberately using this for modding support, you should turn these settings off when [releasing projects](/learn/book/releasing-projects/_index).
+Unless you're deliberately using this for modding support, you should turn these settings off when [releasing projects](@/learn/book/releasing-projects/_index.md).
 
 ## Hot Reloading Assets
 
@@ -27,7 +27,7 @@ When enabled, assets loaded in your game will automatically reload when their as
 
 To detect changes that occur due to hot-reloading, listen for [`AssetEvent::Modified`], or use the [`AssetChanged`] query filter.
 
-{% callout(type="note") %}
+{% callout(type="info") %}
 If you are also using embedded assets (through the [`load_embedded_asset!`] macro), it can be useful to also enable the `embedded_watcher` feature.
 {% end %}
 
@@ -37,7 +37,7 @@ If you are also using embedded assets (through the [`load_embedded_asset!`] macr
 [`AssetEvent::Modified`]: https://docs.rs/bevy/latest/bevy/asset/enum.AssetEvent.html
 [`AssetChanged`]: https://docs.rs/bevy/latest/bevy/asset/prelude/struct.AssetChanged.html
 
-## Asset-driven gameplay logic
+## Asset-Driven Gameplay Logic
 
 Asset hot-reloading is so useful and powerful that some projects choose to lean into it,
 and deliberately architect their games to drive important gameplay parameters via assets to ease development and modding.
@@ -96,7 +96,7 @@ use bevy::prelude::*;
 use serde::{Deserialize, Serialize};
 
 /// A strongly typed identifier for an object that can be stored in a manifest
-#[derive(Component, Reflect, Serialize, Deserialize)]
+#[derive(Component, Hash, PartialEq, Eq, Reflect, Serialize, Deserialize)]
 pub struct Id<T> {
     value: u64,
     #[reflect(ignore)]
@@ -118,13 +118,13 @@ Because our manifests are asset files, you can take advantage of hot-reloading t
 As your data becomes more complex, your approach should become more sophisticated: break the process into multiple steps to resolve cross-object references, add error handling, and so on.
 
 While this workflow can be powerful and convenient, this pattern is not right for every project.
-There's non-trivial setup work, significant indirection, and you cannot capture arbitrarily complex gameplay logic in data.
+There's nontrivial setup work, significant indirection, and you cannot capture arbitrarily complex gameplay logic in data.
 This pattern is best suited to games that have a large amount of structured gameplay data that needs tuning:
 it would work well for something like an ARPG, but poorly for a walking simulator.
 
-{% callout(type="note") %}
+{% callout(type="info") %}
 
-Within the games industry, games that use this pattern are sometimes called "data-driven". 
+Within the games industry, games that use this pattern are sometimes called "data-driven".
 This is not to be confused with data-driven in the sense of using data to make decisions, or data-oriented, where your game maps well to the underlying hardware of the machine to run faster.
 As a result, Bevy uses the less confusing term "asset-driven" when discussing this pattern.
 

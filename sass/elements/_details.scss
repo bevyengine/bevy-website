@@ -31,7 +31,7 @@ details {
   // these styles are noncritical so the 2.4% without `:is` will be fine
   // https://caniuse.com/css-matches-pseudo
   // also, to avoid these styles, put the block in a <div>
-  $big-blocks: ":is(pre.z-code, .callout)";
+  $big-blocks: ":is(pre.giallo, .callout)";
 
   > #{$big-blocks} {
     // push big blocks to the edge and remove their corners

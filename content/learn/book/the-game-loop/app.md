@@ -16,7 +16,7 @@ You can think of an `App` as containing three things:
 + A run-loop function, to execute [schedules].
 + A set of [plugins], which are important enough to deserve their own section.
 
-Most app configuration -- registering systems, etc. -- boils down to modifying the world.
+Most app configuration (registering systems, etc.) boils down to modifying the world.
 To simplify this, [`App`] proxies most of the [`World`] API.
 The world can also be accessed directly via [`App::world_mut`].
 
@@ -31,11 +31,11 @@ We will take a closer look at the runner function in the [custom loops] chapter.
 [`App::world_mut`]:  https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.world_mut
 [`App::set_runner`]:  https://docs.rs/bevy/latest/bevy/app/struct.App.html#method.set_runner
 [`World`]: https://docs.rs/bevy/latest/bevy/ecs/world/index.html
-[systems]: /learn/book/control-flow/systems
-[resources]: /learn/book/storing-data/resources
-[events]: /learn/book/control-flow/events
-[schedules]: /learn/book/the-game-loop/schedules
-[custom loops]: /learn/book/the-game-loop/schedules
-[plugins]: /learn/book/modular-architecture/plugins
+[systems]: @/learn/book/control-flow/systems.md
+[resources]: @/learn/book/storing-data/resources.md
+[events]: @/learn/book/control-flow/events.md
+[schedules]: @/learn/book/the-game-loop/schedules.md
+[custom loops]: @/learn/book/the-game-loop/schedules.md
+[plugins]: @/learn/book/modular-architecture/plugins.md
 [`DefaultPlugins`]: https://docs.rs/bevy/latest/bevy/struct.DefaultPlugins.html
 [`MinimalPlugins`]: https://docs.rs/bevy/latest/bevy/struct.MinimalPlugins.html

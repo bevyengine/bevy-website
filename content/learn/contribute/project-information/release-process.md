@@ -82,7 +82,7 @@ When making a release, the Maintainers follow these checklists:
 2. Close the milestone, open the next one if anything remains and transfer them.
 3. Create a new branch `release-0.X.Y` from the `latest` tag, and cherry pick all PRs from the milestone to the new branch by running the following `bash` shell script.
 
-To do so, create a `cherrypick_release.sh` file in your `bevy` project, and ensure that it can be executed using `chmod +x release_cherrypick.sh`. Copy-paste the snippet below, then update the `version` variable to the correct tag. Run the script using `./cherrypick_releases.sh`. You may need to resolve merge conflicts; think carefully about whether or not a PR actually needs to be backported before doing so.
+To do so, create a `cherrypick_release.sh` file in your `bevy` project, and ensure that it can be executed using `chmod +x cherrypick_release.sh`. Copy-paste the snippet below, then update the `version` variable to the correct tag. Run the script using `./cherrypick_release.sh`. You may need to resolve merge conflicts; think carefully about whether or not a PR actually needs to be backported before doing so.
 
 ```sh
 version="0.X.Y"
@@ -106,7 +106,7 @@ done 3< <(echo $prs | jq --raw-output '. |= sort_by(.mergedAt) | .[] | "\(.merge
 Once all merge conflicts are resolved, double check that everything works. Go back and fix the commit responsible for a merge to correct any issues. Then:
 
 1. Bump version number for all crates, using [the Update Command] locally, with `patch` for the new version.
-    - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.Y`
+    - Change the commit message to be nicer: `git commit --amend -m "Release 0.X.Y"`
 2. Create tag on GitHub.
 3. Edit [GitHub Release]. Add link to the comparison between this patch and the previous version.
 4. Bump `latest` tag to most recent release.

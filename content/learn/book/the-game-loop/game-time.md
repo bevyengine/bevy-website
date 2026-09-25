@@ -5,7 +5,7 @@ insert_anchor_links = "right"
 weight = 5
 +++
 
-Responding to the passage of time is essential for gameplay, animations and audio.
+Responding to the passage of time is essential for gameplay, animations, and audio.
 But doing so correctly is surprisingly subtle.
 
 The [`Time`] resource in Bevy is the source of truth
@@ -17,17 +17,19 @@ set at the start of the frame based on the time supplied by the renderer
 during the [`TimeSystem`] system set in the [`First`] schedule.
 
 This is helpful for performance reasons, but more critically,
-it ensures consistency of behavior across all of the various bits of game logic.
+it ensures consistency of behavior across all the various bits of game logic.
 
 {% callout(type="info") %}
+
 ## Time Versus Time Controls
+
 This page explains how Bevy sets up and interacts with time across the engine.
 However, it doesn't cover the tools that are provided to help you use time in your games.
 These include timers, stopwatches, system conditions, and even some command options that all rely on time.
 
 If you'd like to read about these tools, please see the [Time Controls page] located in the Control Flow chapter.
 
-[Time Controls page]: /learn/book/control-flow/time-controls
+[Time Controls page]: @/learn/book/control-flow/time-controls.md
 
 {% end %}
 
@@ -36,7 +38,7 @@ If you'd like to read about these tools, please see the [Time Controls page] loc
 [`TimeSystem`]: https://docs.rs/bevy/latest/bevy/time/struct.TimeSystem.html
 [`First`]: https://docs.rs/bevy/latest/bevy/app/struct.First.html
 
-## Frame-rate independence and delta time
+## Frame-Rate Independence and Delta Time
 
 Suppose we want to move our player to the right:
 
@@ -47,11 +49,11 @@ use bevy::prelude::*;
 struct Player;
 
 fn move_player(mut player_transform: Single<&mut Transform, With<Player>>){
-    // With Bevy's default camera setup and a 60 fps framerate, 
+    // With Bevy's default camera setup and a 60 fps framerate,
     // this will move the player 60 pixels per second in 2D (reasonable),
     // or 60 meters per second in 3D (wheee!)
     const PLAYER_MOVEMENT: f32 = 1.;
-    
+
     player_transform.translation.x += PLAYER_MOVEMENT;
 }
 ```
@@ -59,21 +61,21 @@ fn move_player(mut player_transform: Single<&mut Transform, With<Player>>){
 Every frame, our player will move 1 unit to the right. Great!
 But what happens when our game stutters, and the frame rate drops?
 Suddenly, rather than moving 60 units per second at our target 60 frames per second,
-our player is moving at an unsteady 20-30 units per second. Oh no!
+our player is moving at an unsteady 20–30 units per second. Oh no!
 
-Instead, we can compensate for this effect by fixing our *speed* (or other rates of change per second),
+Instead, we can compensate for this effect by fixing our _speed_ (or other rates of change per second),
 and then multiplying by the elapsed time.
 
-```rust, hide_lines=1-4,hide_lines=1-5
+```rust,hide_lines=1-5
 # use bevy::prelude::*;
-# 
+#
 # #[derive(Component)]
 # struct Player;
 #
 fn move_player(mut player_transform: Single<&mut Transform, With<Player>>, time: Res<Time>){
     // At 60 FPS, this will be the same as before
     const PLAYER_SPEED: f32 = 60.;
-    
+
     player_transform.translation.x += PLAYER_SPEED * time.delta_secs();
 }
 ```
@@ -82,7 +84,7 @@ This technique is commonly known as ["delta time"] among game devs, because phys
 
 ["delta time"]: https://en.wikipedia.org/wiki/Delta_timing
 
-## Pausing and time control
+## Pausing and Time Control
 
 With all of our time-dependent logic driven by the delta time,
 we can start playing tricks with the value of [`Time`] to implement features like pausing and slowing down the game.
@@ -108,13 +110,13 @@ fn set_game_speed(new_speed: On<SetGameSpeed>, mut time: ResMut<Time<Virtual>>) 
 ```
 
 If your systems uniformly rely on [`Time`], this will affect your entire game:
-halting, slowing or speeding up animations, movement, projectiles, physics and so on.
+halting, slowing, or speeding up animations, movement, projectiles, physics, and so on.
 Alternatively, [states] and [run conditions] can be used to skip systems while the game is paused.
 
-[states]: /learn/book/control-flow/states
-[run conditions]: /learn/book/control-flow/run-conditions
+[states]: @/learn/book/control-flow/states.md
+[run conditions]: @/learn/book/control-flow/run-conditions.md
 
-## Fixing your timestep
+## Fixing Your Timestep
 
 Compensating for fluctuating frame times using delta time is a great start.
 But as the timeless [*Fix Your Timestep!*] article by Glenn Fiedler explains, for projects that require a higher level of stability and reproducibility,
@@ -122,15 +124,15 @@ it's better to simply always advance time by a fixed amount.
 This is particularly important for physics and networking.
 
 To understand how to work with fixed time in Bevy, we need to first learn a little bit about how [`Time`] actually works under the hood.
-As the docs on [`Time`] explain, there's actually *three* distinct types of time being measured:
+As the docs on [`Time`] explain, there's actually _three_ distinct types of time being measured:
 
-- real time: the actual wall clock time
-  - use this for things like UI animations that you don't want to be affected by pausing
-- virtual time: the "in-game time"
-  - if you're using fixed time, this is useful for graphical effects
-  - otherwise, this is used for all of your gameplay logic as well
-- fixed time
-  - all of your gameplay logic should go here if you're using a fixed timestep approach
+- Real time: the actual wall clock time.
+  - Use this for things like UI animations that you don't want to be affected by pausing.
+- Virtual time: the "in-game time".
+  - If you're using fixed time, this is useful for graphical effects.
+  - Otherwise, this is used for all of your gameplay logic as well.
+- Fixed time
+  - All of your gameplay logic should go here if you're using a fixed timestep approach.
 
 When thinking about fixed time, it's important to clearly distinguish **frames** and **ticks**.
 A "frame" is one pass of the [`Main`] schedule, and corresponds to a single rendered frames.
@@ -150,15 +152,16 @@ to [`Real`], [`Virtual`] or [`Fixed`].
 [`Real`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Real.html
 [`Virtual`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Virtual.html
 [`Fixed`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Fixed.html
+
 {% end %}
 
 Now that we have the required vocabulary, let's go over exactly how the fixed timestep logic works in Bevy:
 
-- each frame, during the [`RunFixedMainLoop`] schedule, we determine how many times we should run the [`FixedMain`] schedule
-  - we add the the elapsed virtual time for the frame to a running time buffer
-  - if that time buffer is greater than or equal to [`Time<Fixed>::timestep`], we run the [`FixedMain`] schedule once, and subtract that timestep from our buffer
-- when the [`FixedMain`] schedule is evaluated, the various subschedules are iterated through, running [`FixedPreUpdate`], [`FixedUpdate`] and so on in order
-- within your fixed time systems, use the exact same delta time techniques to properly account for changes in your desired timestep during development
+- Each frame, during the [`RunFixedMainLoop`] schedule, we determine how many times we should run the [`FixedMain`] schedule.
+  - We add the elapsed virtual time for the frame to a running time buffer.
+  - If that time buffer is greater than or equal to [`Time<Fixed>::timestep`], we run the [`FixedMain`] schedule once, and subtract that timestep from our buffer.
+- When the [`FixedMain`] schedule is evaluated, the various sub-schedules are iterated through, running [`FixedPreUpdate`], [`FixedUpdate`] and so on in order.
+- Within your fixed time systems, use the exact same delta time techniques to properly account for changes in your desired timestep during development.
 
 This means that we may have 0, 1, 2 or more ticks per frame,
 with our fixed timestep logic running repeatedly until it's caught back up.
@@ -168,8 +171,11 @@ Note that Bevy's "fixed timesteps" are not the right mechanism to use for gamepl
 In most cases, [`Timer`] components and the [`on_timer`] run condition are more appropriate.
 
 Bevy only supports a single fixed timestep across your entire project, and its use is completely optional.
-Please see our [timers and cooldowns] section below for the tools available to model this type of behavior.
+Please see the [Time Controls page] for the tools available to model this type of behavior.
 
+[`Timer`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Timer.html
+[`on_timer`]: https://docs.rs/bevy/latest/bevy/time/common_conditions/fn.on_timer.html
+[Time Controls page]: @/learn/book/control-flow/time-controls.md
 [`Time<Fixed>::timestep`]: https://docs.rs/bevy/latest/bevy/prelude/struct.Time.html#method.timestep
 [`Main`]: https://docs.rs/bevy/latest/bevy/app/struct.Main.html
 [`FixedMain`]: https://docs.rs/bevy/latest/bevy/app/struct.FixedMain.html
@@ -181,11 +187,11 @@ Please see our [timers and cooldowns] section below for the tools available to m
 [*Fix Your Timestep!*]: https://gafferongames.com/post/fix_your_timestep/
 [`RunFixedMainLoop`]: https://docs.rs/bevy/latest/bevy/app/struct.RunFixedMainLoop.html
 
-### Interpolation between ticks
+### Interpolation Between Ticks
 
 One key problem with using a fixed timestep is that your game logic (including physics!) will have an uneven
 number of updates between each frame.
-This will lead to visible jittering, lagginess and tiny speedups.
+This will lead to visible jittering, lag, and tiny speedups.
 
 To account for this, we need to distinguish between the logical and rendered position (and rotation, and sometimes scale) of
 game objects.

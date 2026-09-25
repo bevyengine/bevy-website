@@ -6,7 +6,7 @@ weight = 3
 +++
 
 The [`World`] is a catch-all container for *stuff*.
-Entities, components, resources, assets -- all of these exist within a world.
+Entities, components, resources, assets – all of these exist within a world.
 It's where your data lives.
 
 ## The World as a Database
@@ -23,5 +23,5 @@ However, it also means that entities must be moved between tables when component
 With a `&World` reference, you can read anything out of the ECS.
 With a `&mut World`, you can write to it as well.
 
-[entity]: /learn/book/storing-data/entities-components
+[entity]: @/learn/book/storing-data/entities-components.md
 [`World`]: https://docs.rs/bevy/latest/bevy/prelude/struct.World.html
