@@ -55,6 +55,10 @@ Please only use names, logos, and links that you have the right and permission t
 
 Please wait a little. It might take up to eight hours for the automatic update to add you to the credits.
 
+## Where in the Project's Readme will my name / logo / link be added?
+
+They will be in the [Thanks section](https://github.com/bevyengine/bevy#thanks). The readme is also replicated on [crates.io Bevy page](https://crates.io/crates/bevy#thanks).
+
 ## How are the metrics on the donation page calculated?
 
 The monthly dollar amount is the "raw pledged amount for active monthly donations". This means two things:
