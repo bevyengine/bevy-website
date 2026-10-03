@@ -1,0 +1,775 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content=Mirror property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/3d-rendering/mirror/ property=og:url><meta content="https://bevy.org/examples/3d-rendering/mirror/../static/screenshots/3D Rendering/mirror.png" property=og:image><meta content="Demonstrates how to create a mirror with a second camera" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Mirror</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>3D Rendering / Mirror</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/3d/mirror.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/3d-rendering/mirror/>here</a>.</aside></div><div class="example__explanation media-content"><p>Demonstrates how to create a mirror with a second camera.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>mirror.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>FRAC_PI_2</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c678dd> crate</span><span>::</span><span style=color:#c0c5ce>widgets</span><span>::{</span><span style=color:#dfc479>RadioButton</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> WidgetClickEvent</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> WidgetClickSender</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>camera</span><span>::</span><span style=color:#dfc479>RenderTarget</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset</span><span>::</span><span style=color:#dfc479>RenderAssetUsages</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>css</span><span>::</span><span style=color:#dfc479>GREEN</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input</span><span>::</span><span style=color:#c0c5ce>mouse</span><span>::</span><span style=color:#dfc479>AccumulatedMouseMotion</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    math</span><span>::{reflection_matrix</span><span style=color:#c0c5ce>,</span><span> uvec2</span><span style=color:#c0c5ce>,</span><span> vec3}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pbr</span><span>::{</span><span style=color:#dfc479>ExtendedMaterial</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MaterialExtension</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::</span><span style=color:#c0c5ce>render_resource</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>        AsBindGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Extent3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureDimension</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureFormat</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureUsages</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    shader</span><span>::</span><span style=color:#dfc479>ShaderRef</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    window</span><span>::{</span><span style=color:#dfc479>PrimaryWindow</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> WindowResized</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[path </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "../helpers/widgets.rs"</span><span style=color:#d19a66>]</span></span>
+<span class=giallo-l><span style=color:#c594c5>mod</span><span> widgets</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A resource that stores a handle to the image that contains the rendered</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> mirror world.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> MirrorImage</span><span>(</span><span style=color:#dfc479>Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A marker component for the camera that renders the mirror world.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> MirrorCamera</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A marker component for the mirror mesh itself.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Mirror</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The dummy material extension that we use for the mirror surface.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This shader samples its emissive texture at the screen space position of</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> each fragment rather than at the UVs. Effectively, this uses a PBR shader as</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> a mask that copies a portion of the emissive texture to the screen, all in</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> screen space.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> We use [`ExtendedMaterial`], as that's the easiest way to implement custom</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> shaders that modify the built-in [`StandardMaterial`]. We don't require any</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> extra data to be passed to the shader beyond the [`StandardMaterial`] PBR</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> fields, but currently Bevy requires at least one field to be present in the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> extended material, so we simply have an unused field.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AsBindGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Asset</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Reflect</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ScreenSpaceTextureExtension</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> An unused value that we have just to satisfy [`ExtendedMaterial`]</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> requirements.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[uniform(100)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    dummy:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> MaterialExtension</span><span style=color:#c594c5> for</span><span style=color:#dfc479> ScreenSpaceTextureExtension</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> fragment_shader</span><span>() -></span><span style=color:#dfc479> ShaderRef</span><span> {</span></span>
+<span class=giallo-l><span style=color:#9fc37f>        "shaders/screen_space_texture_material.wgsl"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The action that will be performed when the user drags the mouse: either</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> moving the camera or moving the rigged model.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> DragAction</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Dragging will move the camera.</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[default]</span></span>
+<span class=giallo-l><span style=color:#dfc479>    MoveCamera</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Dragging will move the animated fox.</span></span>
+<span class=giallo-l><span style=color:#dfc479>    MoveFox</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The settings that the user has currently chosen.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Currently, this just consists of the [`DragAction`].</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> AppStatus</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The action that will be performed when the user drags the mouse: either</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> moving the camera or moving the rigged model.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    drag_action:</span><span style=color:#dfc479> DragAction</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A marker component for the help text at the top of the screen.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> HelpText</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The coordinates that the camera looks at.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> CAMERA_TARGET</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Vec3</span><span style=color:#c594c5> =</span><span style=color:#69c> vec3</span><span>(-</span><span style=color:#e79e6d>25.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 20.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The camera stays this distance in meters from the camera target.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> CAMERA_ORBIT_DISTANCE</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 500.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The speed at which the user can move the camera vertically, in radians per</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> mouse input unit.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> CAMERA_PITCH_SPEED</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.003</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The speed at which the user can move the camera horizontally, in radians per</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> mouse input unit.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> CAMERA_YAW_SPEED</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.004</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Limiting pitch stops some unexpected rotation past 90° up or down.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> CAMERA_PITCH_LIMIT</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#d19a66> FRAC_PI_2</span><span> -</span><span style=color:#e79e6d> 0.01</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The angle that the mirror faces.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The mirror is rotated across the X axis in this many radians.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> MIRROR_ROTATION_ANGLE</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span> -</span><span style=color:#d19a66>FRAC_PI_2</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> MIRROR_POSITION</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Vec3</span><span style=color:#c594c5> =</span><span style=color:#69c> vec3</span><span>(-</span><span style=color:#e79e6d>25.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 75.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The path to the animated fox model.</span></span>
+<span class=giallo-l><span style=color:#c678dd>static</span><span style=color:#d19a66> FOX_ASSET_PATH</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "models/animated/Fox.glb"</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The app entry point.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#dfc479>WindowPlugin</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            primary_window:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#dfc479>Window</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                title:</span><span style=color:#9fc37f> "Bevy Mirror Example"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#c0c5ce>MaterialPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ExtendedMaterial</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ScreenSpaceTextureExtension</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        ></span><span>::</span><span style=color:#69c>default</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppStatus</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_message</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>WidgetClickEvent</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DragAction</span><span style=color:#c0c5ce>>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, handle_window_resize_messages</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>move_camera_on_mouse_down, move_fox_on_mouse_down</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, widgets</span><span>::</span><span style=color:#c0c5ce>handle_ui_interactions</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DragAction</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Update</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span><span style=color:#c0c5ce>handle_mouse_action_change, update_radio_buttons</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>after</span><span>(</span><span style=color:#c0c5ce>widgets</span><span>::</span><span style=color:#c0c5ce>handle_ui_interactions</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DragAction</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Update</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            update_mirror_camera_on_main_camera_transform_change</span><span style=color:#c594c5>.</span><span style=color:#69c>after</span><span>(</span><span style=color:#c0c5ce>move_camera_on_mouse_down</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, play_fox_animation</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, update_help_text</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A startup system that spawns the scene and sets up the mirror render target.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    windows_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Window</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> standard_materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> screen_space_texture_materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ExtendedMaterial</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ScreenSpaceTextureExtension</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> images:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app_status:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppStatus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the main camera.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> camera_projection</span><span style=color:#c594c5> =</span><span style=color:#dfc479> PerspectiveProjection</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> camera_transform</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_main_camera</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>camera_projection</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the light.</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_light</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the objects reflected in the mirror.</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_ground_plane</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands,</span><span style=color:#c594c5> &mut</span><span style=color:#c0c5ce> meshes,</span><span style=color:#c594c5> &mut</span><span style=color:#c0c5ce> standard_materials</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_fox</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>asset_server</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the mirror and associated camera.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mirror_render_target_image</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#69c>        create_mirror_texture_resource</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>windows_query,</span><span style=color:#c594c5> &mut</span><span style=color:#c0c5ce> images</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mirror_transform</span><span style=color:#c594c5> =</span><span style=color:#69c> spawn_mirror</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#c0c5ce> commands,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#c0c5ce> meshes,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#c0c5ce> screen_space_texture_materials,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mirror_render_target_image</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_mirror_camera</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &mut</span><span style=color:#c0c5ce> commands,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#c0c5ce>camera_transform,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#c0c5ce>camera_projection,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#c0c5ce>mirror_transform,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mirror_render_target_image,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the UI.</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_buttons</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#69c>    spawn_help_text</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>app_status</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the main camera (not the mirror camera).</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_main_camera</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_projection:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>PerspectiveProjection</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) -></span><span style=color:#dfc479> Transform</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> camera_transform</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Transform</span><span>::</span><span style=color:#69c>from_translation</span><span>(</span></span>
+<span class=giallo-l><span style=color:#69c>        vec3</span><span>(-</span><span style=color:#e79e6d>2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>2.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>normalize_or_zero</span><span>() *</span><span style=color:#d19a66> CAMERA_ORBIT_DISTANCE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span></span>
+<span class=giallo-l><span style=color:#c594c5>    .</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#d19a66>CAMERA_TARGET</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        camera_transform,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Projection</span><span>::</span><span style=color:#69c>Perspective</span><span>(</span><span style=color:#c0c5ce>camera_projection</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_transform</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns a directional light to illuminate the scene.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_light</span><span>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DirectionalLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            illuminance:</span><span style=color:#e79e6d> 5000.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(-</span><span style=color:#e79e6d>85.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 16.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>200.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#69c>vec3</span><span>(-</span><span style=color:#e79e6d>50.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 100.0</span><span>)</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the circular ground plane object.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_ground_plane</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    meshes:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    standard_materials:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Circle</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>200.0</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>standard_materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#d19a66>GREEN</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_rotation</span><span>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_rotation_x</span><span>(-</span><span style=color:#d19a66>FRAC_PI_2</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>with_translation</span><span>(</span><span style=color:#69c>vec3</span><span>(-</span><span style=color:#e79e6d>25.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the initial image that the mirror camera will render the mirror</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> world to.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> create_mirror_texture_resource</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    windows_query:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Window</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    images:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) -></span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> window</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> windows_query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>next</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>expect</span><span>(</span><span style=color:#9fc37f>"No window found"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> window_size</span><span style=color:#c594c5> =</span><span style=color:#69c> uvec2</span><span>(</span><span style=color:#c0c5ce>window</span><span style=color:#c594c5>.</span><span style=color:#69c>physical_width</span><span>()</span><span style=color:#c0c5ce>, window</span><span style=color:#c594c5>.</span><span style=color:#69c>physical_height</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> image</span><span style=color:#c594c5> =</span><span style=color:#69c> create_mirror_texture_image</span><span>(</span><span style=color:#c0c5ce>images, window_size</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#69c>MirrorImage</span><span>(</span><span style=color:#c0c5ce>image</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    image</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the camera that renders the mirror world.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_mirror_camera</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_transform:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_projection:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>PerspectiveProjection</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mirror_transform:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mirror_render_target:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c0c5ce>mirror_camera_transform, mirror_camera_projection</span><span>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#69c>        calculate_mirror_camera_transform_and_projection</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            camera_transform,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            camera_projection,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            mirror_transform,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Camera</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            order:</span><span> -</span><span style=color:#e79e6d>1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Reflecting the model across the mirror will flip the winding of</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // all the polygons. Therefore, in order to properly backface cull,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // we need to turn on `invert_culling`.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            invert_culling:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        RenderTarget</span><span>::</span><span style=color:#69c>Image</span><span>(</span><span style=color:#c0c5ce>mirror_render_target</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mirror_camera_transform,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Projection</span><span>::</span><span style=color:#69c>Perspective</span><span>(</span><span style=color:#c0c5ce>mirror_camera_projection</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        MirrorCamera</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the animated fox.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Note that this doesn't play the animation; that's handled in</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> [`play_fox_animation`].</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_fox</span><span>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AssetServer</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        WorldAssetRoot</span><span>(</span><span style=color:#c0c5ce>asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#c0c5ce>GltfAssetLabel</span><span>::</span><span style=color:#69c>Scene</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>from_asset</span><span>(</span><span style=color:#d19a66>FOX_ASSET_PATH</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(-</span><span style=color:#e79e6d>50.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>100.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the mirror plane mesh and returns its transform.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_mirror</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    meshes:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    screen_space_texture_materials:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ExtendedMaterial</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ScreenSpaceTextureExtension</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mirror_render_target:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) -></span><span style=color:#dfc479> Transform</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mirror_transform</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Transform</span><span>::</span><span style=color:#69c>from_scale</span><span>(</span><span style=color:#69c>vec3</span><span>(</span><span style=color:#e79e6d>300.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 150.0</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_rotation</span><span>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_rotation_x</span><span>(</span><span style=color:#d19a66>MIRROR_ROTATION_ANGLE</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_translation</span><span>(</span><span style=color:#d19a66>MIRROR_POSITION</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Plane3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>size</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>screen_space_texture_materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>ExtendedMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            base:</span><span style=color:#dfc479> StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                base_color: Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                emissive: Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                emissive_texture:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>mirror_render_target</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                perceptual_roughness:</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                metallic:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            extension:</span><span style=color:#dfc479> ScreenSpaceTextureExtension</span><span> {</span><span style=color:#c0c5ce> dummy:</span><span style=color:#e79e6d> 0.0</span><span> }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mirror_transform,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Mirror</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mirror_transform</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the buttons at the bottom of the screen.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_buttons</span><span>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the radio buttons that allow the user to select an object to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // control.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        widgets</span><span>::</span><span style=color:#69c>main_ui_node</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        children!</span><span>[</span><span style=color:#c0c5ce>widgets</span><span>::</span><span style=color:#69c>option_buttons</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Drag Action"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &</span><span>[</span></span>
+<span class=giallo-l><span>                (</span><span style=color:#c0c5ce>DragAction</span><span>::</span><span style=color:#dfc479>MoveCamera</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "Move Camera"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                (</span><span style=color:#c0c5ce>DragAction</span><span>::</span><span style=color:#dfc479>MoveFox</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "Move Fox"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Given the transform and projection of the main camera, returns an</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> appropriate transform and projection for the mirror camera.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> calculate_mirror_camera_transform_and_projection</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    main_camera_transform:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    main_camera_projection:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>PerspectiveProjection</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mirror_transform:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) -> (</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PerspectiveProjection</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Calculate the reflection matrix (a.k.a. Householder matrix) that will</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // reflect the scene across the mirror plane.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    //</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Note that you must calculate this in *matrix* form and only *afterward*</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // convert to a `Transform` instead of composing `Transform`s. This is</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // because the reflection matrix has non-uniform scale, and composing</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // transforms can't always handle composition of matrices with non-uniform</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // scales.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mirror_camera_transform</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Transform</span><span>::</span><span style=color:#69c>from_matrix</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Mat4</span><span>::</span><span style=color:#69c>from_mat3a</span><span>(</span><span style=color:#69c>reflection_matrix</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>NEG_Z</span><span>)) *</span><span style=color:#c0c5ce> main_camera_transform</span><span style=color:#c594c5>.</span><span style=color:#69c>to_matrix</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Compute the distance from the camera to the mirror plane. This will be</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // used to calculate the distance to the near clip plane for the mirror</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // world.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> distance_from_camera_to_mirror</span><span style=color:#c594c5> =</span><span style=color:#dfc479> InfinitePlane3d</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>mirror_transform</span><span style=color:#c594c5>.</span><span>rotation *</span><span style=color:#c0c5ce> Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>signed_distance</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Isometry3d</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            mirror_transform</span><span style=color:#c594c5>.</span><span>translation -</span><span style=color:#c0c5ce> main_camera_transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Compute the normal of the mirror plane in view space.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> view_from_world</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> main_camera_transform</span><span style=color:#c594c5>.</span><span style=color:#69c>compute_affine</span><span>()</span><span style=color:#c594c5>.</span><span>matrix3</span><span style=color:#c594c5>.</span><span style=color:#69c>inverse</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mirror_projection_plane_normal</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#c0c5ce>view_from_world</span><span> * (</span><span style=color:#c0c5ce>mirror_transform</span><span style=color:#c594c5>.</span><span>rotation *</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#d19a66>NEG_Y</span><span>))</span><span style=color:#c594c5>.</span><span style=color:#69c>normalize</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Compute the final projection. It should match the main camera projection,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // except that `near` and `near_normal` should be set to the updated near</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // plane and near normal plane as above.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mirror_camera_projection</span><span style=color:#c594c5> =</span><span style=color:#dfc479> PerspectiveProjection</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        near_clip_plane: mirror_projection_plane_normal</span><span style=color:#c594c5>.</span><span style=color:#69c>extend</span><span>(</span><span style=color:#c0c5ce>distance_from_camera_to_mirror</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..*</span><span style=color:#c0c5ce>main_camera_projection</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>    (</span><span style=color:#c0c5ce>mirror_camera_transform, mirror_camera_projection</span><span>)</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A system that resizes the render target image when the user resizes the window.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Since the image that stores the rendered mirror world has the same physical</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> size as the window, we need to reallocate it and reattach it to the mirror</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> material whenever the window size changes.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> handle_window_resize_messages</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    windows_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Window</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> mirror_cameras_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> RenderTarget</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MirrorCamera</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> images:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> mirror_image:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MirrorImage</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> screen_space_texture_materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ExtendedMaterial</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ScreenSpaceTextureExtension</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> resize_messages:</span><span style=color:#dfc479> MessageReader</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>WindowResized</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We run at most once, regardless of the number of window resize messages</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // there were this frame.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>resize_message</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> resize_messages</span><span style=color:#c594c5>.</span><span style=color:#69c>read</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>next</span><span>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c0c5ce>window</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> windows_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>resize_message</span><span style=color:#c594c5>.</span><span>window)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> window_size</span><span style=color:#c594c5> =</span><span style=color:#69c> uvec2</span><span>(</span><span style=color:#c0c5ce>window</span><span style=color:#c594c5>.</span><span style=color:#69c>physical_width</span><span>()</span><span style=color:#c0c5ce>, window</span><span style=color:#c594c5>.</span><span style=color:#69c>physical_height</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> image</span><span style=color:#c594c5> =</span><span style=color:#69c> create_mirror_texture_image</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> images, window_size</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    images</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>(</span><span style=color:#c0c5ce>mirror_image</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>id</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mirror_image</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> image</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> target</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> mirror_cameras_query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>target</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> image</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>_, material</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> screen_space_texture_materials</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        material</span><span style=color:#c594c5>.</span><span>base</span><span style=color:#c594c5>.</span><span>emissive_texture </span><span style=color:#c594c5>=</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>image</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the image that will be used to store the reflected scene.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> create_mirror_texture_image</span><span>(</span><span style=color:#c0c5ce>images:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>, window_size:</span><span style=color:#dfc479> UVec2</span><span>) -></span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mirror_image_extent</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Extent3d</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        width: window_size</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        height: window_size</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        depth_or_array_layers:</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> image</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Image</span><span>::</span><span style=color:#69c>new_uninit</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mirror_image_extent,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        TextureDimension</span><span>::</span><span style=color:#dfc479>D2</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        TextureFormat</span><span>::</span><span style=color:#dfc479>Bgra8UnormSrgb</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        RenderAssetUsages</span><span>::</span><span style=color:#d19a66>MAIN_WORLD</span><span style=color:#c594c5> |</span><span style=color:#c0c5ce> RenderAssetUsages</span><span>::</span><span style=color:#d19a66>RENDER_WORLD</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    image</span><span style=color:#c594c5>.</span><span>texture_descriptor</span><span style=color:#c594c5>.</span><span>usage </span><span style=color:#c594c5>|=</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TextureUsages</span><span>::</span><span style=color:#d19a66>TEXTURE_BINDING</span><span style=color:#c594c5> |</span><span style=color:#dfc479> TextureUsages</span><span>::</span><span style=color:#d19a66>COPY_DST</span><span style=color:#c594c5> |</span><span style=color:#dfc479> TextureUsages</span><span>::</span><span style=color:#d19a66>RENDER_ATTACHMENT</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    images</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>image</span><span>)</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Moves the fox when the user moves the mouse with the left button down.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> move_fox_on_mouse_down</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> scene_roots_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>WorldAssetRoot</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    windows_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Window</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PrimaryWindow</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    cameras_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>GlobalTransform</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    interactions_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Interaction</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RadioButton</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    buttons:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MouseButton</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app_status:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppStatus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Only process the mouse motion if the left mouse button is pressed, the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // mouse action is set to move the fox, and the pointer isn't over a UI</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // widget.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> app_status</span><span style=color:#c594c5>.</span><span>drag_action </span><span style=color:#c594c5>!=</span><span style=color:#dfc479> DragAction</span><span>::</span><span style=color:#dfc479>MoveFox</span></span>
+<span class=giallo-l><span style=color:#c594c5>        || !</span><span style=color:#c0c5ce>buttons</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>MouseButton</span><span>::</span><span style=color:#dfc479>Left</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        ||</span><span style=color:#c0c5ce> interactions_query</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>any</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>interaction</span><span style=color:#c594c5>|</span><span> *</span><span style=color:#c0c5ce>interaction</span><span style=color:#c594c5> !=</span><span style=color:#c0c5ce> Interaction</span><span>::</span><span style=color:#e5c07b>None</span><span>)</span></span>
+<span class=giallo-l><span>    {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Find out where the user clicked the mouse.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>mouse_position</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> windows_query</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>next</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>and_then</span><span>(</span><span style=color:#c0c5ce>Window</span><span>::</span><span style=color:#c0c5ce>cursor_position</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>    else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Grab the camera.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span>((</span><span style=color:#c0c5ce>camera, camera_transform</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> cameras_query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>next</span><span>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Figure out where the user clicked on the plane.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c0c5ce>ray</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> camera</span><span style=color:#c594c5>.</span><span style=color:#69c>viewport_to_world</span><span>(</span><span style=color:#c0c5ce>camera_transform, mouse_position</span><span>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>ray_distance</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ray</span><span style=color:#c594c5>.</span><span style=color:#69c>intersect_plane</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, InfinitePlane3d</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>))</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> plane_intersection</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ray</span><span style=color:#c594c5>.</span><span>origin +</span><span style=color:#c0c5ce> ray</span><span style=color:#c594c5>.</span><span>direction</span><span style=color:#c594c5>.</span><span style=color:#69c>normalize</span><span>() *</span><span style=color:#c0c5ce> ray_distance;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Move the fox.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> scene_roots_query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        transform</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c594c5>.</span><span style=color:#69c>with_xz</span><span>(</span><span style=color:#c0c5ce>plane_intersection</span><span style=color:#c594c5>.</span><span style=color:#69c>xz</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A system that changes the drag action when the user clicks on one of the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> radio buttons.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> handle_mouse_action_change</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> app_status:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppStatus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> messages:</span><span style=color:#dfc479> MessageReader</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>WidgetClickEvent</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DragAction</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> message</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> messages</span><span style=color:#c594c5>.</span><span style=color:#69c>read</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_status</span><span style=color:#c594c5>.</span><span>drag_action </span><span style=color:#c594c5>=</span><span> **</span><span style=color:#c0c5ce>message;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A system that updates the radio buttons at the bottom of the screen to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> reflect the current drag action.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_radio_buttons</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> widgets_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Entity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Text</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &</span><span style=color:#dfc479>WidgetClickSender</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DragAction</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app_status:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppStatus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> text_ui_writer:</span><span style=color:#dfc479> TextUiWriter</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>entity, maybe_bg_color, has_text, sender</span><span>)</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> widgets_query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> selected</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> app_status</span><span style=color:#c594c5>.</span><span>drag_action </span><span style=color:#c594c5>==</span><span> **</span><span style=color:#c0c5ce>sender;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> bg_color</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> maybe_bg_color</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            widgets</span><span>::</span><span style=color:#69c>update_ui_radio_button</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> bg_color, selected</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> has_text</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            widgets</span><span>::</span><span style=color:#69c>update_ui_radio_button_text</span><span>(</span><span style=color:#c0c5ce>entity,</span><span style=color:#c594c5> &mut</span><span style=color:#c0c5ce> text_ui_writer, selected</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A system that processes user mouse actions that move the camera.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This is mostly copied from `examples/camera/camera_orbit.rs`.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> move_camera_on_mouse_down</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> main_cameras_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#dfc479>With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MirrorCamera</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    interactions_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Interaction</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RadioButton</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mouse_buttons:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MouseButton</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mouse_motion:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AccumulatedMouseMotion</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app_status:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppStatus</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Only process the mouse motion if the left mouse button is pressed, the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // mouse action is set to move the fox, and the pointer isn't over a UI</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // widget.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> app_status</span><span style=color:#c594c5>.</span><span>drag_action </span><span style=color:#c594c5>!=</span><span style=color:#dfc479> DragAction</span><span>::</span><span style=color:#dfc479>MoveCamera</span></span>
+<span class=giallo-l><span style=color:#c594c5>        || !</span><span style=color:#c0c5ce>mouse_buttons</span><span style=color:#c594c5>.</span><span style=color:#69c>pressed</span><span>(</span><span style=color:#c0c5ce>MouseButton</span><span>::</span><span style=color:#dfc479>Left</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        ||</span><span style=color:#c0c5ce> interactions_query</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>any</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>interaction</span><span style=color:#c594c5>|</span><span> *</span><span style=color:#c0c5ce>interaction</span><span style=color:#c594c5> !=</span><span style=color:#c0c5ce> Interaction</span><span>::</span><span style=color:#e5c07b>None</span><span>)</span></span>
+<span class=giallo-l><span>    {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> mouse_motion</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Mouse motion is one of the few inputs that should not be multiplied by delta time,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // as we are already receiving the full movement since the last frame was rendered. Multiplying</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // by delta time here would make the movement slower that it should be.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> delta_pitch</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5>.</span><span>y *</span><span style=color:#d19a66> CAMERA_PITCH_SPEED</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> delta_yaw</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5>.</span><span>x *</span><span style=color:#d19a66> CAMERA_YAW_SPEED</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> main_camera_transform</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> main_cameras_query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Obtain the existing pitch and yaw values from the transform.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span> (</span><span style=color:#c0c5ce>yaw, pitch, _</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> main_camera_transform</span><span style=color:#c594c5>.</span><span>rotation</span><span style=color:#c594c5>.</span><span style=color:#69c>to_euler</span><span>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>YXZ</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Establish the new yaw and pitch, preventing the pitch value from exceeding our limits.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> pitch</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>pitch</span><span> +</span><span style=color:#c0c5ce> delta_pitch</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span>(-</span><span style=color:#d19a66>CAMERA_PITCH_LIMIT</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> CAMERA_PITCH_LIMIT</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> yaw</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> yaw</span><span> +</span><span style=color:#c0c5ce> delta_yaw;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        main_camera_transform</span><span style=color:#c594c5>.</span><span>rotation </span><span style=color:#c594c5>=</span><span style=color:#dfc479> Quat</span><span>::</span><span style=color:#69c>from_euler</span><span>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>YXZ</span><span style=color:#c0c5ce>, yaw, pitch,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Adjust the translation to maintain the correct orientation toward the orbit target.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // In our example it's a static target, but this could easily be customized.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> target</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        main_camera_transform</span><span style=color:#c594c5>.</span><span>translation </span><span style=color:#c594c5>=</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            target</span><span> -</span><span style=color:#c0c5ce> main_camera_transform</span><span style=color:#c594c5>.</span><span style=color:#69c>forward</span><span>() *</span><span style=color:#d19a66> CAMERA_ORBIT_DISTANCE</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Updates the position, rotation, and projection of the mirror camera when the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> main camera is moved.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> When the main camera is moved, the mirror camera must be moved to match it.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The *projection* on the mirror camera must also be altered, because the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> projection takes the view-space rotation of and distance to the mirror into</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> account.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_mirror_camera_on_main_camera_transform_change</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    main_cameras_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Projection</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#dfc479>Changed</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MirrorCamera</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> mirror_cameras_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Projection</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#dfc479>With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MirrorCamera</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mirror</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mirrors_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#dfc479>Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MirrorCamera</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mirror</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span>((</span><span style=color:#c0c5ce>main_camera_transform,</span><span style=color:#dfc479> Projection</span><span>::</span><span style=color:#69c>Perspective</span><span>(</span><span style=color:#c0c5ce>main_camera_projection</span><span>)))</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        main_cameras_query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>next</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>    else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>mirror_transform</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> mirrors_query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>next</span><span>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Here we need the transforms of both the camera and the mirror in order to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // properly calculate the new projection.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c0c5ce>new_mirror_camera_transform, new_mirror_camera_projection</span><span>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#69c>        calculate_mirror_camera_transform_and_projection</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            main_camera_transform,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            main_camera_projection,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            mirror_transform,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> mirror_camera_transform,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> mirror_camera_projection</span><span>)</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> mirror_cameras_query</span><span> {</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>mirror_camera_transform</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> new_mirror_camera_transform;</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>mirror_camera_projection</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Projection</span><span>::</span><span style=color:#69c>Perspective</span><span>(</span><span style=color:#c0c5ce>new_mirror_camera_projection</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Plays the initial animation on the fox model.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> play_fox_animation</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> animation_players_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> AnimationPlayer</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AnimationGraphHandle</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> animation_graphs:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AnimationGraph</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Only pick up animation players that don't already have an animation graph</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // handle.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This ensures that we only start playing the animation once.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> animation_players_query</span><span style=color:#c594c5>.</span><span style=color:#69c>is_empty</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> fox_animation</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#c0c5ce>GltfAssetLabel</span><span>::</span><span style=color:#69c>Animation</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>from_asset</span><span>(</span><span style=color:#d19a66>FOX_ASSET_PATH</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c0c5ce>fox_animation_graph, fox_animation_node</span><span>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#dfc479>        AnimationGraph</span><span>::</span><span style=color:#69c>from_clip</span><span>(</span><span style=color:#c0c5ce>fox_animation</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> fox_animation_graph</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> animation_graphs</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>fox_animation_graph</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>entity,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> animation_player</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> animation_players_query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>entity</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#69c>AnimationGraphHandle</span><span>(</span><span style=color:#c0c5ce>fox_animation_graph</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        animation_player</span><span style=color:#c594c5>.</span><span style=color:#69c>play</span><span>(</span><span style=color:#c0c5ce>fox_animation_node</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>repeat</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the help text at the top of the screen.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_help_text</span><span>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, app_status:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AppStatus</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#69c>create_help_string</span><span>(</span><span style=color:#c0c5ce>app_status</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        HelpText</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the help string at the top left of the screen.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> create_help_string</span><span>(</span><span style=color:#c0c5ce>app_status:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AppStatus</span><span>) -></span><span style=color:#dfc479> String</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>    format!</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>        "Click and drag to move the </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span style=color:#c0c5ce> app_status</span><span style=color:#c594c5>.</span><span>drag_action {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DragAction</span><span>::</span><span style=color:#dfc479>MoveCamera</span><span> =></span><span style=color:#9fc37f> "camera"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DragAction</span><span>::</span><span style=color:#dfc479>MoveFox</span><span> =></span><span style=color:#9fc37f> "fox"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    )</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Updates the help text in the top left of the screen to reflect the current</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> drag mode.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_help_text</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> help_text:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>HelpText</span><span style=color:#c0c5ce>>>, app_status:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppStatus</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> text</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> help_text</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        text</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#69c> create_help_string</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>app_status</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div><input class=tabs__radio id=tab1 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab1><code>shaders/screen_space_texture_material.wgsl</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=wgsl><span class=giallo-l><span style=color:#7f848e>// A shader that samples its emissive texture at screen space positions rather</span></span>
+<span class=giallo-l><span style=color:#7f848e>// than UVs.</span></span>
+<span class=giallo-l><span style=color:#7f848e>//</span></span>
+<span class=giallo-l><span style=color:#7f848e>// This is used for the mirror example: `examples/3d/mirror.rs`.</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>import bevy_pbr</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#e06c75>    forward_io</span><span>::{</span><span style=color:#e5c07b>VertexOutput</span><span>,</span><span style=color:#e5c07b> FragmentOutput</span><span>},</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_bindings</span><span>::</span><span style=color:#e06c75>emissive_texture</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_fragment</span><span>::</span><span style=color:#e06c75>pbr_input_from_standard_material</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_functions</span><span>::{</span><span style=color:#e06c75>alpha_discard</span><span>,</span><span style=color:#e06c75> apply_pbr_lighting</span><span>,</span><span style=color:#e06c75> main_pass_post_lighting_processing</span><span>}</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>// This is unused, but it's here to satisfy `ExtendedMaterial` requirements.</span></span>
+<span class=giallo-l><span style=color:#7f848e>// See the comment in `ScreenSpaceTextureExtension` in `examples/3d/mirror.rs`</span></span>
+<span class=giallo-l><span style=color:#7f848e>// for more information.</span></span>
+<span class=giallo-l><span style=color:#c678dd>struct</span><span style=color:#e5c07b> ScreenSpaceTextureMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // An unused value.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    dummy</span><span>: </span><span style=color:#c678dd>f32</span><span>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@group(#{MATERIAL_BIND_GROUP}) @binding(</span><span style=color:#d19a66>100</span><span>)</span><span style=color:#c678dd> var</span><span>&lt;</span><span style=color:#c678dd>uniform</span><span>></span><span style=color:#e06c75> material</span><span>: </span><span style=color:#e5c07b>ScreenSpaceTextureMaterial</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@fragment</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> fragment</span><span>(</span><span style=color:#e06c75>in</span><span>: </span><span style=color:#e5c07b>VertexOutput</span><span>, @builtin(</span><span style=color:#e06c75>front_facing</span><span>)</span><span style=color:#e06c75> is_front</span><span>: </span><span style=color:#c678dd>bool</span><span>) -></span><span style=color:#e5c07b> FragmentOutput</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c678dd>    var</span><span style=color:#e06c75> pbr_input</span><span style=color:#56b6c2> =</span><span style=color:#61afef> pbr_input_from_standard_material</span><span>(</span><span style=color:#e06c75>in</span><span>,</span><span style=color:#e06c75> is_front</span><span>);</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // Use zero alpha to avoid multiplying the emissive by the view exposure.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_input</span><span>.material.emissive </span><span style=color:#56b6c2>=</span><span style=color:#61afef> vec4</span><span>(</span></span>
+<span class=giallo-l><span style=color:#61afef>        textureLoad</span><span>(</span><span style=color:#e06c75>emissive_texture</span><span>,</span><span style=color:#c678dd> vec2</span><span>&lt;</span><span style=color:#c678dd>i32</span><span>>(</span><span style=color:#61afef>floor</span><span>(</span><span style=color:#e06c75>in</span><span>.position.xy)),</span><span style=color:#d19a66> 0</span><span>).rgb,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        0.0</span></span>
+<span class=giallo-l><span>    );</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    var</span><span style=color:#e06c75> out</span><span>: </span><span style=color:#e5c07b>FragmentOutput</span><span>;</span></span>
+<span class=giallo-l><span style=color:#e06c75>    out</span><span>.color </span><span style=color:#56b6c2>=</span><span style=color:#61afef> apply_pbr_lighting</span><span>(</span><span style=color:#e06c75>pbr_input</span><span>);</span></span>
+<span class=giallo-l><span style=color:#e06c75>    out</span><span>.color </span><span style=color:#56b6c2>=</span><span style=color:#61afef> main_pass_post_lighting_processing</span><span>(</span><span style=color:#e06c75>pbr_input</span><span>,</span><span style=color:#e06c75> out</span><span>.color);</span></span>
+<span class=giallo-l><span style=color:#c678dd>    return</span><span style=color:#e06c75> out</span><span>;</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/3D Rendering/mirror/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

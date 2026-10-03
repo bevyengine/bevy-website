@@ -1,0 +1,536 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Standard Widgets (w/Observers)" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/ui-user-interface/standard-widgets-observers/ property=og:url><meta content="https://bevy.org/examples-webgpu/ui-user-interface/standard-widgets-observers/../static/screenshots/UI (User Interface)/standard_widgets_observers.png" property=og:image><meta content="Demonstrates use of core (headless) widgets in Bevy UI, with Observers" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Standard Widgets (w/Observers)</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>UI (User Interface) / Standard Widgets (w/Observers)</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/ui/widgets/standard_widgets_observers.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/ui-user-interface/standard-widgets-observers/>here</a>.</aside></div><div class="example__explanation media-content"><p>This experimental example illustrates how to create widgets using the <code>bevy_ui_widgets</code> widget set.<p>The patterns shown here are likely to change substantially as the <code>bevy_ui_widgets</code> crate matures, so please exercise caution if you are using this as a reference for your own code, and note that there are still "user experience" issues with this API.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>standard_widgets_observers.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus</span><span>::</span><span style=color:#c0c5ce>tab_navigation</span><span>::{</span><span style=color:#dfc479>TabGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TabIndex</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TabNavigationPlugin</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    picking</span><span>::</span><span style=color:#c0c5ce>hover</span><span>::</span><span style=color:#dfc479>Hovered</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    reflect</span><span>::</span><span style=color:#dfc479>Is</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ui</span><span>::{</span><span style=color:#dfc479>Checked</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InteractionDisabled</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Pressed</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ui_widgets</span><span>::{</span></span>
+<span class=giallo-l><span>        checkbox_self_update</span><span style=color:#c0c5ce>,</span><span> observe</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Activate</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Button</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Checkbox</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Slider</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SliderRange</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SliderThumb</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SliderValue</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ValueChange</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>((</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TabNavigationPlugin</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#dfc479>DemoWidgetStates</span><span> {</span><span style=color:#c0c5ce> slider_value:</span><span style=color:#e79e6d> 50.0</span><span> })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>button_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Add</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Pressed</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>button_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Remove</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Pressed</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>button_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Add</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InteractionDisabled</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>button_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Remove</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InteractionDisabled</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>button_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Insert</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Hovered</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>slider_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Add</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InteractionDisabled</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>slider_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Remove</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InteractionDisabled</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>slider_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Insert</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Hovered</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>slider_on_change_value</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderValue</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>slider_on_change_value</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderRange</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>checkbox_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Add</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InteractionDisabled</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>checkbox_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Remove</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InteractionDisabled</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>checkbox_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Insert</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Hovered</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>checkbox_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Add</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Checked</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>checkbox_on_interaction</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Remove</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Checked</span><span style=color:#c0c5ce>></span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>update_widget_values, toggle_disabled</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> NORMAL_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.15</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.15</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.15</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> HOVERED_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.25</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.25</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.25</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> PRESSED_BUTTON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.35</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.75</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.35</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SLIDER_TRACK</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.05</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.05</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.05</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SLIDER_THUMB</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.35</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.75</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.35</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> CHECKBOX_OUTLINE</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.45</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.45</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.45</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> CHECKBOX_CHECK</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.35</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.75</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.35</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Marker which identifies buttons with a particular style, in this case the "Demo style".</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> DemoButton</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Marker which identifies sliders with a particular style.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> DemoSlider</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Marker which identifies the slider's thumb element.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> DemoSliderThumb</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Marker which identifies checkboxes with a particular style.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> DemoCheckbox</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A struct to hold the state of various widgets shown in the demo.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> While it is possible to use the widget's own state components as the source of truth,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> in many cases widgets will be used to display dynamic data coming from deeper within the app,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> using some kind of data-binding. This example shows how to maintain an external source of</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> truth for widget states.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> DemoWidgetStates</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    slider_value:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, assets:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // ui camera</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Camera2d</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#69c>demo_root</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>assets</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> demo_root</span><span>(</span><span style=color:#c0c5ce>asset_server:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AssetServer</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Bundle</span><span> {</span></span>
+<span class=giallo-l><span>    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            display:</span><span style=color:#dfc479> Display</span><span>::</span><span style=color:#dfc479>Flex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction:</span><span style=color:#dfc479> FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            row_gap:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>10</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TabGroup</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        children!</span><span>[</span></span>
+<span class=giallo-l><span>            (</span></span>
+<span class=giallo-l><span style=color:#69c>                button</span><span>(</span><span style=color:#c0c5ce>asset_server</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                observe</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>_activate:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Activate</span><span style=color:#c0c5ce>></span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>                    info!</span><span>(</span><span style=color:#9fc37f>"Button clicked!"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span></span>
+<span class=giallo-l><span style=color:#69c>                slider</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 100.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 50.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                observe</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    |</span><span style=color:#c0c5ce>value_change:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ValueChange</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>f32</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                     mut</span><span style=color:#c0c5ce> widget_states:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoWidgetStates</span><span style=color:#c0c5ce>></span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        widget_states</span><span style=color:#c594c5>.</span><span>slider_value </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value_change</span><span style=color:#c594c5>.</span><span>value</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span></span>
+<span class=giallo-l><span style=color:#69c>                checkbox</span><span>(</span><span style=color:#c0c5ce>asset_server,</span><span style=color:#9fc37f> "Checkbox"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                observe</span><span>(</span><span style=color:#c0c5ce>checkbox_self_update</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Press 'D' to toggle widget disabled states"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> button</span><span>(</span><span style=color:#c0c5ce>asset_server:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AssetServer</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Bundle</span><span> {</span></span>
+<span class=giallo-l><span>    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>150</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>65</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            border:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>5</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            border_radius:</span><span style=color:#dfc479> BorderRadius</span><span>::</span><span style=color:#d19a66>MAX</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DemoButton</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Button</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Hovered</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        TabIndex</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        BorderColor</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        BackgroundColor</span><span>(</span><span style=color:#d19a66>NORMAL_BUTTON</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>        children!</span><span>[(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Button"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"fonts/FiraSans-Bold.ttf"</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font_size:</span><span style=color:#dfc479> FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>33.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            TextColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.9</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.9</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.9</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextShadow</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> button_on_interaction</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>E</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> EntityEvent</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> C</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>></span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>E</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> C</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> buttons:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span>        (</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &</span><span style=color:#dfc479>Hovered</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InteractionDisabled</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pressed</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &mut</span><span style=color:#dfc479> BorderColor</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &</span><span style=color:#dfc479>Children</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoButton</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> text_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c0c5ce>hovered, disabled, pressed,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> color,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> border_color, children</span><span>))</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        buttons</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span style=color:#69c>event_target</span><span>())</span></span>
+<span class=giallo-l><span>    {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> children</span><span style=color:#c594c5>.</span><span style=color:#69c>is_empty</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> text</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> text_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>children</span><span>[</span><span style=color:#e79e6d>0</span><span>])</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> hovered</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> hovered</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // These "removal event checks" exist because the `Remove` event is triggered _before_ the component is actually</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // removed, meaning it still shows up in the query. We're investigating the best way to improve this scenario.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> pressed</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> pressed</span><span style=color:#c594c5> && !</span><span>(</span><span style=color:#dfc479>E</span><span>::</span><span style=color:#69c>is</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Remove</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c594c5> &&</span><span style=color:#dfc479> C</span><span>::</span><span style=color:#69c>is</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Pressed</span><span style=color:#c0c5ce>></span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> disabled</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> disabled</span><span style=color:#c594c5> && !</span><span>(</span><span style=color:#dfc479>E</span><span>::</span><span style=color:#69c>is</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Remove</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c594c5> &&</span><span style=color:#dfc479> C</span><span>::</span><span style=color:#69c>is</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InteractionDisabled</span><span style=color:#c0c5ce>></span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span> (</span><span style=color:#c0c5ce>disabled, hovered, pressed</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Disabled button</span></span>
+<span class=giallo-l><span>            (</span><span style=color:#d19a66>true</span><span style=color:#c0c5ce>, _, _</span><span>) => {</span></span>
+<span class=giallo-l><span>                **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "Disabled"</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                *</span><span style=color:#c0c5ce>color</span><span style=color:#c594c5> =</span><span style=color:#d19a66> NORMAL_BUTTON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border_color</span><span style=color:#c594c5>.</span><span style=color:#69c>set_all</span><span>(</span><span style=color:#d19a66>GRAY</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Pressed and hovered button</span></span>
+<span class=giallo-l><span>            (</span><span style=color:#d19a66>false</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> true</span><span>) => {</span></span>
+<span class=giallo-l><span>                **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "Press"</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                *</span><span style=color:#c0c5ce>color</span><span style=color:#c594c5> =</span><span style=color:#d19a66> PRESSED_BUTTON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border_color</span><span style=color:#c594c5>.</span><span style=color:#69c>set_all</span><span>(</span><span style=color:#d19a66>RED</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Hovered, unpressed button</span></span>
+<span class=giallo-l><span>            (</span><span style=color:#d19a66>false</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> false</span><span>) => {</span></span>
+<span class=giallo-l><span>                **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "Hover"</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                *</span><span style=color:#c0c5ce>color</span><span style=color:#c594c5> =</span><span style=color:#d19a66> HOVERED_BUTTON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border_color</span><span style=color:#c594c5>.</span><span style=color:#69c>set_all</span><span>(</span><span style=color:#d19a66>WHITE</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Unhovered button (either pressed or not).</span></span>
+<span class=giallo-l><span>            (</span><span style=color:#d19a66>false</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>, _</span><span>) => {</span></span>
+<span class=giallo-l><span>                **</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "Button"</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                *</span><span style=color:#c0c5ce>color</span><span style=color:#c594c5> =</span><span style=color:#d19a66> NORMAL_BUTTON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border_color</span><span style=color:#c594c5>.</span><span style=color:#69c>set_all</span><span>(</span><span style=color:#d19a66>BLACK</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Create a demo slider</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> slider</span><span>(</span><span style=color:#c0c5ce>min:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>, max:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>, value:</span><span style=color:#b48ead> f32</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Bundle</span><span> {</span></span>
+<span class=giallo-l><span>    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            display:</span><span style=color:#dfc479> Display</span><span>::</span><span style=color:#dfc479>Flex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction:</span><span style=color:#dfc479> FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Stretch</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_items:</span><span style=color:#dfc479> JustifyItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            column_gap:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>4</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>30</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Name</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Slider"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Hovered</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DemoSlider</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Slider</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        SliderValue</span><span>(</span><span style=color:#c0c5ce>value</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SliderRange</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>min, max</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        TabIndex</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span>::</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Slider background rail</span></span>
+<span class=giallo-l><span style=color:#69c>            Spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>6</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>3</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                BackgroundColor</span><span>(</span><span style=color:#d19a66>SLIDER_TRACK</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#8e9aa4> // Border color for the checkbox</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Invisible track to allow absolute placement of thumb entity. This is narrower than</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // the actual slider, which allows us to position the thumb entity using simple</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // percentages, without having to measure the actual width of the slider thumb.</span></span>
+<span class=giallo-l><span style=color:#69c>            Spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    display: Display</span><span>::</span><span style=color:#dfc479>Flex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Track is short by 12px to accommodate the thumb.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    right:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    bottom:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#61afef>                children!</span><span>[(</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Thumb</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    DemoSliderThumb</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    SliderThumb</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        display: Display</span><span>::</span><span style=color:#dfc479>Flex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        left:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#8e9aa4> // This will be updated by the slider's value</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        border_radius: BorderRadius</span><span>::</span><span style=color:#d19a66>MAX</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    BackgroundColor</span><span>(</span><span style=color:#d19a66>SLIDER_THUMB</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> slider_on_interaction</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>E</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> EntityEvent</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> C</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>></span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>E</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> C</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    sliders:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Hovered</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InteractionDisabled</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoSlider</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    children:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Children</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> thumbs:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoSliderThumb</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoSlider</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c0c5ce>slider_ent, hovered, disabled</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> sliders</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span style=color:#69c>event_target</span><span>()) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // These "removal event checks" exist because the `Remove` event is triggered _before_ the component is actually</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // removed, meaning it still shows up in the query. We're investigating the best way to improve this scenario.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> disabled</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> disabled</span><span style=color:#c594c5> && !</span><span>(</span><span style=color:#dfc479>E</span><span>::</span><span style=color:#69c>is</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Remove</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c594c5> &&</span><span style=color:#dfc479> C</span><span>::</span><span style=color:#69c>is</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InteractionDisabled</span><span style=color:#c0c5ce>></span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> child</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> children</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_descendants</span><span>(</span><span style=color:#c0c5ce>slider_ent</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> thumb_bg, is_thumb</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> thumbs</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>child</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &&</span><span style=color:#c0c5ce> is_thumb</span></span>
+<span class=giallo-l><span>            {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                thumb_bg</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#69c> thumb_color</span><span>(</span><span style=color:#c0c5ce>disabled, hovered</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> slider_on_change_value</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>C</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>></span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    insert:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Insert</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> C</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    sliders:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>SliderValue</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>SliderRange</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoSlider</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    children:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Children</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> thumbs:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Node</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoSliderThumb</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoSlider</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c0c5ce>slider_ent, value, range</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> sliders</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>insert</span><span style=color:#c594c5>.</span><span>entity) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> child</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> children</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_descendants</span><span>(</span><span style=color:#c0c5ce>slider_ent</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> thumb_node, is_thumb</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> thumbs</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>child</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                &&</span><span style=color:#c0c5ce> is_thumb</span></span>
+<span class=giallo-l><span>            {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                thumb_node</span><span style=color:#c594c5>.</span><span>left </span><span style=color:#c594c5>=</span><span style=color:#69c> percent</span><span>(</span><span style=color:#c0c5ce>range</span><span style=color:#c594c5>.</span><span style=color:#69c>thumb_position</span><span>(</span><span style=color:#c0c5ce>value</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>) *</span><span style=color:#e79e6d> 100.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> thumb_color</span><span>(</span><span style=color:#c0c5ce>disabled:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>, hovered:</span><span style=color:#e5c07b> bool</span><span>) -></span><span style=color:#dfc479> Color</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    match</span><span> (</span><span style=color:#c0c5ce>disabled, hovered</span><span>) {</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#d19a66>true</span><span style=color:#c0c5ce>, _</span><span>) =></span><span style=color:#d19a66> GRAY</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>        (</span><span style=color:#d19a66>false</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> true</span><span>) =></span><span style=color:#d19a66> SLIDER_THUMB</span><span style=color:#c594c5>.</span><span style=color:#69c>lighter</span><span>(</span><span style=color:#e79e6d>0.3</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _</span><span> =></span><span style=color:#d19a66> SLIDER_THUMB</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Create a demo checkbox</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> checkbox</span><span>(</span><span style=color:#c0c5ce>asset_server:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>, caption:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Bundle</span><span> {</span></span>
+<span class=giallo-l><span>    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            display:</span><span style=color:#dfc479> Display</span><span>::</span><span style=color:#dfc479>Flex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction:</span><span style=color:#dfc479> FlexDirection</span><span>::</span><span style=color:#dfc479>Row</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>FlexStart</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_content:</span><span style=color:#dfc479> AlignContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            column_gap:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>4</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Name</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Checkbox"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Hovered</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DemoCheckbox</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Checkbox</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        TabIndex</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span>::</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>            Spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Checkbox outer</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    display: Display</span><span>::</span><span style=color:#dfc479>Flex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>16</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>16</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    border: UiRect</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>2</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>3</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                BorderColor</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#d19a66>CHECKBOX_OUTLINE</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#8e9aa4> // Border color for the checkbox</span></span>
+<span class=giallo-l><span style=color:#61afef>                children!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Checkbox inner</span></span>
+<span class=giallo-l><span>                    (</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            display: Display</span><span>::</span><span style=color:#dfc479>Flex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>8</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>8</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>2</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>2</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        BackgroundColor</span><span>(</span><span style=color:#c0c5ce>Srgba</span><span>::</span><span style=color:#d19a66>NONE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            Spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>caption</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    font: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"fonts/FiraSans-Bold.ttf"</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>20.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> checkbox_on_interaction</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>E</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> EntityEvent</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> C</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>></span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>E</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> C</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    checkboxes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Hovered</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InteractionDisabled</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Checked</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Children</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoCheckbox</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> borders:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BorderColor</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Children</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoCheckbox</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> marks:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#dfc479>Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoCheckbox</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> Without</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Children</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c0c5ce>hovered, disabled, checked, children</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> checkboxes</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span style=color:#69c>event_target</span><span>()) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> hovered</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> hovered</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // These "removal event checks" exist because the `Remove` event is triggered _before_ the component is actually</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // removed, meaning it still shows up in the query. We're investigating the best way to improve this scenario.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> checked</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> checked</span><span style=color:#c594c5> && !</span><span>(</span><span style=color:#dfc479>E</span><span>::</span><span style=color:#69c>is</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Remove</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c594c5> &&</span><span style=color:#dfc479> C</span><span>::</span><span style=color:#69c>is</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Checked</span><span style=color:#c0c5ce>></span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> disabled</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> disabled</span><span style=color:#c594c5> && !</span><span>(</span><span style=color:#dfc479>E</span><span>::</span><span style=color:#69c>is</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Remove</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c594c5> &&</span><span style=color:#dfc479> C</span><span>::</span><span style=color:#69c>is</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InteractionDisabled</span><span style=color:#c0c5ce>></span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>border_id</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> children</span><span style=color:#c594c5>.</span><span style=color:#69c>first</span><span>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> border_color, border_children</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> borders</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(*</span><span style=color:#c0c5ce>border_id</span><span>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>mark_id</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> border_children</span><span style=color:#c594c5>.</span><span style=color:#69c>first</span><span>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>            warn!</span><span>(</span><span style=color:#9fc37f>"Checkbox does not have a mark entity."</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> mark_bg</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> marks</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(*</span><span style=color:#c0c5ce>mark_id</span><span>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>            warn!</span><span>(</span><span style=color:#9fc37f>"Checkbox mark entity lacking a background color."</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> color:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> = if</span><span style=color:#c0c5ce> disabled</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // If the checkbox is disabled, use a lighter color</span></span>
+<span class=giallo-l><span style=color:#d19a66>            CHECKBOX_OUTLINE</span><span style=color:#c594c5>.</span><span style=color:#69c>with_alpha</span><span>(</span><span style=color:#e79e6d>0.2</span><span>)</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> hovered</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // If hovering, use a lighter color</span></span>
+<span class=giallo-l><span style=color:#d19a66>            CHECKBOX_OUTLINE</span><span style=color:#c594c5>.</span><span style=color:#69c>lighter</span><span>(</span><span style=color:#e79e6d>0.2</span><span>)</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Default color for the checkbox</span></span>
+<span class=giallo-l><span style=color:#d19a66>            CHECKBOX_OUTLINE</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Update the background color of the check mark</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        border_color</span><span style=color:#c594c5>.</span><span style=color:#69c>set_all</span><span>(</span><span style=color:#c0c5ce>color</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> mark_color:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> = match</span><span> (</span><span style=color:#c0c5ce>disabled, checked</span><span>) {</span></span>
+<span class=giallo-l><span>            (</span><span style=color:#d19a66>true</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> true</span><span>) =></span><span style=color:#d19a66> CHECKBOX_CHECK</span><span style=color:#c594c5>.</span><span style=color:#69c>with_alpha</span><span>(</span><span style=color:#e79e6d>0.5</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span><span style=color:#d19a66>false</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> true</span><span>) =></span><span style=color:#d19a66> CHECKBOX_CHECK</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span><span style=color:#c0c5ce>_,</span><span style=color:#d19a66> false</span><span>) =></span><span style=color:#dfc479> Srgba</span><span>::</span><span style=color:#d19a66>NONE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> mark_bg</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> !=</span><span style=color:#c0c5ce> mark_color</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Update the color of the check mark</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            mark_bg</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> mark_color;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Update the widget states based on the changing resource.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_widget_values</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    res:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoWidgetStates</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> sliders:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DemoSlider</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> res</span><span style=color:#c594c5>.</span><span style=color:#69c>is_changed</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> slider_ent</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> sliders</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>slider_ent</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#69c>SliderValue</span><span>(</span><span style=color:#c0c5ce>res</span><span style=color:#c594c5>.</span><span>slider_value))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> toggle_disabled</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> interaction_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InteractionDisabled</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Or</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Button</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Slider</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Checkbox</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    >,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyD</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span> (</span><span style=color:#c0c5ce>entity, disabled</span><span>)</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> interaction_query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            if</span><span style=color:#c0c5ce> disabled</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>                info!</span><span>(</span><span style=color:#9fc37f>"Widget enabled"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>entity</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>InteractionDisabled</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>                info!</span><span>(</span><span style=color:#9fc37f>"Widget disabled"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>entity</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#dfc479>InteractionDisabled</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/UI (User Interface)/standard-widgets-observers/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

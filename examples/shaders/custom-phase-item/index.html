@@ -1,0 +1,510 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Custom phase item" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/shaders/custom-phase-item/ property=og:url><meta content=https://bevy.org/examples/shaders/custom-phase-item/../static/screenshots/Shaders/custom_phase_item.png property=og:image><meta content="Demonstrates how to enqueue custom draw commands in a render phase" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Custom phase item</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Shaders / Custom phase item</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/shader_advanced/custom_phase_item.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/shaders/custom-phase-item/>here</a>.</aside></div><div class="example__explanation media-content"><p>Demonstrates how to enqueue custom draw commands in a render phase.<p>This example shows how to use the built-in [<code>bevy_render::render_phase::BinnedRenderPhase</code>] functionality with a custom [<code>RenderCommand</code>] to allow inserting arbitrary GPU drawing logic into Bevy's pipeline. This is not the only way to add custom rendering code into Bevy—render nodes are another, lower-level method—but it does allow for better reuse of parts of Bevy's built-in mesh rendering logic.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>custom_phase_item.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        primitives</span><span>::</span><span style=color:#dfc479>Aabb</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        visibility</span><span>::{</span><span style=color:#c594c5>self</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> VisibilityClass</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    core_pipeline</span><span>::</span><span style=color:#c0c5ce>core_3d</span><span>::{</span><span style=color:#dfc479>Opaque3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Opaque3dBatchSetKey</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Opaque3dBinKey</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> CORE_3D_DEPTH_FORMAT</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ecs</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        query</span><span>::</span><span style=color:#dfc479>ROQueryItem</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        system</span><span>::{</span><span style=color:#c0c5ce>lifetimeless</span><span>::</span><span style=color:#dfc479>SRes</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SystemParamItem</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mesh</span><span>::</span><span style=color:#dfc479>VertexBufferLayout</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        camera</span><span>::{</span><span style=color:#dfc479>DirtySpecializations</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PendingQueues</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        extract_component</span><span>::{</span><span style=color:#dfc479>ExtractComponent</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ExtractComponentPlugin</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mesh</span><span>::</span><span style=color:#c0c5ce>allocator</span><span>::</span><span style=color:#dfc479>MeshSlabs</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_phase</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AddRenderCommand</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> BinnedRenderPhaseType</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DrawFunctions</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> InputUniformIndex</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PhaseItem</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            RenderCommand</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderCommandResult</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SetItemPipeline</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TrackedRenderPass</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ViewBinnedRenderPhases</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_resource</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>            BufferUsages</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Canonical</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ColorTargetState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ColorWrites</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> CompareFunction</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DepthStencilState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> FragmentState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> IndexFormat</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PipelineCache</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RawBufferVec</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            RenderPipeline</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderPipelineDescriptor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Specializer</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SpecializerKey</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextureFormat</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Variants</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> VertexAttribute</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> VertexFormat</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> VertexState</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> VertexStepMode</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        renderer</span><span>::{</span><span style=color:#dfc479>RenderDevice</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderQueue</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        view</span><span>::{</span><span style=color:#dfc479>ExtractedView</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderVisibleEntities</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Render</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderApp</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderSystems</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bytemuck</span><span>::{</span><span style=color:#dfc479>Pod</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Zeroable</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A marker component that represents an entity that is to be rendered using</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> our custom phase item.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Note the [`ExtractComponent`] trait implementation: this is necessary to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> tell Bevy that this object should be pulled into the render world. Also note</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> the `on_add` hook, which is needed to tell Bevy's `check_visibility` system</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> that entities with this component need to be examined for visibility.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ExtractComponent</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[require(</span><span style=color:#dfc479>VisibilityClass</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[component(on_add </span><span style=color:#c594c5>=</span><span style=color:#d19a66> visibility</span><span>::</span><span style=color:#d19a66>add_visibility_class</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomRenderedEntity</span><span style=color:#c0c5ce>></span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CustomRenderedEntity</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A [`RenderCommand`] that binds the vertex and index buffers and issues the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> draw command for our custom phase item.</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> DrawCustomPhaseItem</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>P</span><span style=color:#c0c5ce>></span><span style=color:#dfc479> RenderCommand</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>P</span><span style=color:#c0c5ce>></span><span style=color:#c594c5> for</span><span style=color:#dfc479> DrawCustomPhaseItem</span></span>
+<span class=giallo-l><span style=color:#c594c5>where</span></span>
+<span class=giallo-l><span style=color:#dfc479>    P</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> PhaseItem</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>{</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Param</span><span style=color:#c594c5> =</span><span style=color:#dfc479> SRes</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomPhaseItemBuffers</span><span style=color:#c0c5ce>>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> ViewQuery</span><span style=color:#c594c5> =</span><span> ()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> ItemQuery</span><span style=color:#c594c5> =</span><span> ()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> render</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'w</span><span style=color:#c0c5ce>></span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>P</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _:</span><span style=color:#dfc479> ROQueryItem</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'w</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> '_</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> Self</span><span>::</span><span style=color:#dfc479>ViewQuery</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _:</span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ROQueryItem</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'w</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> '_</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> Self</span><span>::</span><span style=color:#dfc479>ItemQuery</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        custom_phase_item_buffers:</span><span style=color:#dfc479> SystemParamItem</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'w</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> '_</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> Self</span><span>::</span><span style=color:#dfc479>Param</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pass:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> TrackedRenderPass</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'w</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>    ) -></span><span style=color:#dfc479> RenderCommandResult</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Borrow check workaround.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> custom_phase_item_buffers</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> custom_phase_item_buffers</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Tell the GPU where the vertices are.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pass</span><span style=color:#c594c5>.</span><span style=color:#69c>set_vertex_buffer</span><span>(</span></span>
+<span class=giallo-l><span style=color:#e79e6d>            0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            custom_phase_item_buffers</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span>vertices</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>buffer</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>unwrap</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>slice</span><span>(..)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Tell the GPU where the indices are.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pass</span><span style=color:#c594c5>.</span><span style=color:#69c>set_index_buffer</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            custom_phase_item_buffers</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span>indices</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>buffer</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>unwrap</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>slice</span><span>(..)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            IndexFormat</span><span>::</span><span style=color:#dfc479>Uint32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Draw one triangle (3 vertices).</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        pass</span><span style=color:#c594c5>.</span><span style=color:#69c>draw_indexed</span><span>(</span><span style=color:#e79e6d>0</span><span>..</span><span style=color:#e79e6d>3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#e79e6d>1</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#dfc479>        RenderCommandResult</span><span>::</span><span style=color:#dfc479>Success</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The GPU vertex and index buffers for our custom phase item.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> As the custom phase item is a single triangle, these are uploaded once and</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> then left alone.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CustomPhaseItemBuffers</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The vertices for the single triangle.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> This is a [`RawBufferVec`] because that's the simplest and fastest type</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> of GPU buffer, and [`Vertex`] objects are simple.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    vertices:</span><span style=color:#dfc479> RawBufferVec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Vertex</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The indices of the single triangle.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> As above, this is a [`RawBufferVec`] because `u32` values have trivial</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> size and alignment.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    indices:</span><span style=color:#dfc479> RawBufferVec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>u32</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The CPU-side structure that describes a single vertex of the triangle.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Pod</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Zeroable</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[repr(</span><span style=color:#dfc479>C</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Vertex</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The 3D position of the triangle vertex.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    position:</span><span style=color:#dfc479> Vec3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Padding.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pad0:</span><span style=color:#b48ead> u32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The color of the triangle vertex.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color:</span><span style=color:#dfc479> Vec3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Padding.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pad1:</span><span style=color:#b48ead> u32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Vertex</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Creates a new vertex structure.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    const</span><span style=color:#c594c5> fn</span><span style=color:#69c> new</span><span>(</span><span style=color:#c0c5ce>position:</span><span style=color:#dfc479> Vec3</span><span style=color:#c0c5ce>, color:</span><span style=color:#dfc479> Vec3</span><span>) -></span><span style=color:#dfc479> Vertex</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Vertex</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            pad0:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            pad1:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The custom draw commands that Bevy executes for each entity we enqueue into</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> the render phase.</span></span>
+<span class=giallo-l><span style=color:#c594c5>type</span><span style=color:#dfc479> DrawCustomPhaseItemCommands</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#dfc479>SetItemPipeline</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DrawCustomPhaseItem</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A single triangle's worth of vertices, for demonstration purposes.</span></span>
+<span class=giallo-l><span style=color:#c678dd>static</span><span style=color:#d19a66> VERTICES</span><span style=color:#c0c5ce>:</span><span> [</span><span style=color:#dfc479>Vertex</span><span style=color:#c0c5ce>;</span><span style=color:#e79e6d> 3</span><span>]</span><span style=color:#c594c5> =</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Vertex</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#69c>vec3</span><span>(-</span><span style=color:#e79e6d>0.866</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#69c> vec3</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Vertex</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#69c>vec3</span><span>(</span><span style=color:#e79e6d>0.866</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#69c> vec3</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Vertex</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#69c>vec3</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#69c> vec3</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The entry point.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> app</span><span style=color:#c594c5> =</span><span style=color:#dfc479> App</span><span>::</span><span style=color:#69c>new</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#c0c5ce>ExtractComponentPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomRenderedEntity</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>default</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We make sure to add these to the render app, not the main app.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app</span><span style=color:#c594c5>.</span><span style=color:#69c>sub_app_mut</span><span>(</span><span style=color:#dfc479>RenderApp</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomPhasePipeline</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PendingCustomPhaseItemQueues</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_render_command</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Opaque3d</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DrawCustomPhaseItemCommands</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Render</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            prepare_custom_phase_item_buffers</span><span style=color:#c594c5>.</span><span style=color:#69c>in_set</span><span>(</span><span style=color:#c0c5ce>RenderSystems</span><span>::</span><span style=color:#dfc479>Prepare</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Render</span><span style=color:#c0c5ce>, queue_custom_phase_item</span><span style=color:#c594c5>.</span><span style=color:#69c>in_set</span><span>(</span><span style=color:#c0c5ce>RenderSystems</span><span>::</span><span style=color:#dfc479>Queue</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app</span><span style=color:#c594c5>.</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the objects in the scene.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn a single entity that has custom rendering. It'll be extracted into</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // the render world via [`ExtractComponent`].</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Visibility</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This `Aabb` is necessary for the visibility checks to work.</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Aabb</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            center: Vec3A</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            half_extents: Vec3A</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>0.5</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        CustomRenderedEntity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the camera.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the [`CustomPhaseItemBuffers`] resource.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This must be done in a startup system because it needs the [`RenderDevice`]</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> and [`RenderQueue`] to exist, and they don't until [`App::run`] is called.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> prepare_custom_phase_item_buffers</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomPhaseItemBuffers</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A resource that holds entities that couldn't be specialized and/or queued</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> yet because their dependent assets haven't loaded yet.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> In this particular example, entities with custom rendering can always be</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> specialized, so this resource goes unused in practice. However, we still</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> need it, because [`DirtySpecializations`] requires such a resource.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> See the documentation of [`PendingQueues`] for more information.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Deref</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DerefMut</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>pub struct</span><span style=color:#dfc479> PendingCustomPhaseItemQueues</span><span>(</span><span style=color:#c594c5>pub</span><span style=color:#dfc479> PendingQueues</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A render-world system that enqueues the entity with custom rendering into</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> the opaque render phases of each view.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> queue_custom_phase_item</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pipeline_cache:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PipelineCache</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> pipeline:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomPhasePipeline</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> opaque_render_phases:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ViewBinnedRenderPhases</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Opaque3d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    opaque_draw_functions:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DrawFunctions</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Opaque3d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    views:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#dfc479>ExtractedView</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>RenderVisibleEntities</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Msaa</span><span>)</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    dirty_specializations:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DirtySpecializations</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> pending_custom_phase_item_queues:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PendingCustomPhaseItemQueues</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> draw_custom_phase_item</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> opaque_draw_functions</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>read</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DrawCustomPhaseItemCommands</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Render phases are per-view, so we need to iterate over all views so that</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // the entity appears in them. (In this example, we have only one view, but</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // it's good practice to loop over all views anyway.)</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>view, view_visible_entities, msaa</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> views</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>opaque_phase</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> opaque_render_phases</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>view</span><span style=color:#c594c5>.</span><span>retained_view_entity)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Fetch the list of visible entities in the `CustomRenderedEntity`</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // class. If there are no such entities, then we have no entities to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // render, and we're done.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>render_visible_mesh_entities</span><span>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            view_visible_entities</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomRenderedEntity</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> view_pending_custom_phase_item_queues</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            pending_custom_phase_item_queues</span><span style=color:#c594c5>.</span><span style=color:#69c>prepare_for_new_frame</span><span>(</span><span style=color:#c0c5ce>view</span><span style=color:#c594c5>.</span><span>retained_view_entity)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // First, remove meshes that need to be respecialized, and those that</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // were removed, from the bins.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for &</span><span style=color:#c0c5ce>main_entity</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> dirty_specializations</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>iter_to_dequeue</span><span>(</span><span style=color:#c0c5ce>view</span><span style=color:#c594c5>.</span><span>retained_view_entity</span><span style=color:#c0c5ce>, render_visible_mesh_entities</span><span>)</span></span>
+<span class=giallo-l><span>        {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            opaque_phase</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>(</span><span style=color:#c0c5ce>main_entity</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Find all the custom rendered entities that are visible from this</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // view.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span> (</span><span style=color:#c0c5ce>render_entity, main_entity</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> dirty_specializations</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_to_queue</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            view</span><span style=color:#c594c5>.</span><span>retained_view_entity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            render_visible_mesh_entities,</span></span>
+<span class=giallo-l><span style=color:#c594c5>            &</span><span style=color:#c0c5ce>view_pending_custom_phase_item_queues</span><span style=color:#c594c5>.</span><span>prev_frame</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Ordinarily, the [`SpecializedRenderPipeline::Key`] would contain</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // some per-view settings, such as whether the view is HDR, but for</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // simplicity's sake we simply hard-code the view's characteristics,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // with the exception of number of MSAA samples.</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c0c5ce>pipeline_id</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> pipeline</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span>variants</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>specialize</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>pipeline_cache,</span><span style=color:#69c> CustomPhaseKey</span><span>(*</span><span style=color:#c0c5ce>msaa</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Add the custom render item. We use the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // [`BinnedRenderPhaseType::NonMesh`] type to skip the special</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // handling that Bevy has for meshes (preprocessing, indirect</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // draws, etc.)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            //</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The asset ID is arbitrary; we simply use [`AssetId::invalid`],</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // but you can use anything you like. Note that the asset ID need</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // not be the ID of a [`Mesh`].</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            opaque_phase</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Opaque3dBatchSetKey</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    draw_function: draw_custom_phase_item,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    pipeline: pipeline_id,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    material_bind_group_index:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    lightmap_slab:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    slabs: MeshSlabs</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Opaque3dBinKey</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    asset_id: AssetId</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>invalid</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>untyped</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                (*</span><span style=color:#c0c5ce>render_entity,</span><span> *</span><span style=color:#c0c5ce>main_entity</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                InputUniformIndex</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                BinnedRenderPhaseType</span><span>::</span><span style=color:#dfc479>NonMesh</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CustomPhaseSpecializer</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CustomPhasePipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> the `variants` collection holds onto the shader handle through the base descriptor</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    variants:</span><span style=color:#dfc479> Variants</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderPipeline</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> CustomPhaseSpecializer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> FromWorld</span><span style=color:#c594c5> for</span><span style=color:#dfc479> CustomPhasePipeline</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> from_world</span><span>(</span><span style=color:#c0c5ce>world:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> World</span><span>) -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> world</span><span style=color:#c594c5>.</span><span style=color:#69c>resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> shader</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"shaders/custom_phase_item.wgsl"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> base_descriptor</span><span style=color:#c594c5> =</span><span style=color:#dfc479> RenderPipelineDescriptor</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            label:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#9fc37f>"custom render pipeline"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vertex:</span><span style=color:#dfc479> VertexState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                shader: shader</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                buffers:</span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#dfc479>VertexBufferLayout</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    array_stride:</span><span style=color:#69c> size_of</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Vertex</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c594c5> as</span><span style=color:#b48ead> u64</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    step_mode:</span><span style=color:#dfc479> VertexStepMode</span><span>::</span><span style=color:#dfc479>Vertex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // This needs to match the layout of [`Vertex`].</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    attributes:</span><span style=color:#61afef> vec!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        VertexAttribute</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            format:</span><span style=color:#dfc479> VertexFormat</span><span>::</span><span style=color:#dfc479>Float32x3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            offset:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            shader_location:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        VertexAttribute</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            format:</span><span style=color:#dfc479> VertexFormat</span><span>::</span><span style=color:#dfc479>Float32x3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            offset:</span><span style=color:#e79e6d> 16</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            shader_location:</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            fragment:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#dfc479>FragmentState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                shader: shader</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                targets:</span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#e5c07b>Some</span><span>(</span><span style=color:#dfc479>ColorTargetState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Ordinarily, you'd want to check whether the view has the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // HDR format and substitute the appropriate texture format</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // here, but we omit that for simplicity.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    format:</span><span style=color:#dfc479> TextureFormat</span><span>::</span><span style=color:#dfc479>Rgba8UnormSrgb</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    blend:</span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    write_mask:</span><span style=color:#dfc479> ColorWrites</span><span>::</span><span style=color:#d19a66>ALL</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                })]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Note that if your view has no depth buffer this will need to be</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // changed.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            depth_stencil:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#dfc479>DepthStencilState</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                format:</span><span style=color:#d19a66> CORE_3D_DEPTH_FORMAT</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                depth_write_enabled:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#d19a66>false</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                depth_compare:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#dfc479>CompareFunction</span><span>::</span><span style=color:#dfc479>Always</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                stencil:</span><span style=color:#69c> default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                bias:</span><span style=color:#69c> default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> variants</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Variants</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#dfc479>CustomPhaseSpecializer</span><span style=color:#c0c5ce>, base_descriptor</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        Self</span><span> {</span><span style=color:#c0c5ce> variants</span><span> }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Eq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Hash</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SpecializerKey</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CustomPhaseKey</span><span>(</span><span style=color:#dfc479>Msaa</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Specializer</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderPipeline</span><span style=color:#c0c5ce>></span><span style=color:#c594c5> for</span><span style=color:#dfc479> CustomPhaseSpecializer</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Key</span><span style=color:#c594c5> =</span><span style=color:#dfc479> CustomPhaseKey</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> specialize</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &self</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        key:</span><span style=color:#c594c5> Self</span><span>::</span><span style=color:#dfc479>Key</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        descriptor:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> RenderPipelineDescriptor</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ) -></span><span style=color:#dfc479> Result</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Canonical</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>Self</span><span>::</span><span style=color:#dfc479>Key</span><span style=color:#c0c5ce>>,</span><span style=color:#dfc479> BevyError</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        descriptor</span><span style=color:#c594c5>.</span><span>multisample</span><span style=color:#c594c5>.</span><span>count </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> key</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>samples</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Ok</span><span>(</span><span style=color:#c0c5ce>key</span><span>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> FromWorld</span><span style=color:#c594c5> for</span><span style=color:#dfc479> CustomPhaseItemBuffers</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> from_world</span><span>(</span><span style=color:#c0c5ce>world:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> World</span><span>) -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> render_device</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> world</span><span style=color:#c594c5>.</span><span style=color:#69c>resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderDevice</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> render_queue</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> world</span><span style=color:#c594c5>.</span><span style=color:#69c>resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RenderQueue</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Create the vertex and index buffers.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> vbo</span><span style=color:#c594c5> =</span><span style=color:#dfc479> RawBufferVec</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>BufferUsages</span><span>::</span><span style=color:#d19a66>VERTEX</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> ibo</span><span style=color:#c594c5> =</span><span style=color:#dfc479> RawBufferVec</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>BufferUsages</span><span>::</span><span style=color:#d19a66>INDEX</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> vertex</span><span style=color:#c594c5> in &</span><span style=color:#d19a66>VERTICES</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vbo</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span>(*</span><span style=color:#c0c5ce>vertex</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for</span><span style=color:#c0c5ce> index</span><span style=color:#c594c5> in</span><span style=color:#e79e6d> 0</span><span>..</span><span style=color:#e79e6d>3</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ibo</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span>(</span><span style=color:#c0c5ce>index</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // These two lines are required in order to trigger the upload to GPU.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        vbo</span><span style=color:#c594c5>.</span><span style=color:#69c>write_buffer</span><span>(</span><span style=color:#c0c5ce>render_device, render_queue</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        ibo</span><span style=color:#c594c5>.</span><span style=color:#69c>write_buffer</span><span>(</span><span style=color:#c0c5ce>render_device, render_queue</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#dfc479>        CustomPhaseItemBuffers</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            vertices: vbo,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            indices: ibo,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div><input class=tabs__radio id=tab1 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab1><code>shaders/custom_phase_item.wgsl</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=wgsl><span class=giallo-l><span style=color:#7f848e>// `custom_phase_item.wgsl`</span></span>
+<span class=giallo-l><span style=color:#7f848e>//</span></span>
+<span class=giallo-l><span style=color:#7f848e>// This shader goes with the `custom_phase_item` example. It demonstrates how to</span></span>
+<span class=giallo-l><span style=color:#7f848e>// enqueue custom rendering logic in a `RenderPhase`.</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>// The GPU-side vertex structure.</span></span>
+<span class=giallo-l><span style=color:#c678dd>struct</span><span style=color:#e5c07b> Vertex</span><span> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // The world-space position of the vertex.</span></span>
+<span class=giallo-l><span>    @location(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#e06c75> position</span><span>: </span><span style=color:#c678dd>vec3</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // The color of the vertex.</span></span>
+<span class=giallo-l><span>    @location(</span><span style=color:#d19a66>1</span><span>)</span><span style=color:#e06c75> color</span><span>: </span><span style=color:#c678dd>vec3</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span></span>
+<span class=giallo-l><span>};</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>// Information passed from the vertex shader to the fragment shader.</span></span>
+<span class=giallo-l><span style=color:#c678dd>struct</span><span style=color:#e5c07b> VertexOutput</span><span> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // The clip-space position of the vertex.</span></span>
+<span class=giallo-l><span>    @builtin(</span><span style=color:#e06c75>position</span><span>)</span><span style=color:#e06c75> clip_position</span><span>: </span><span style=color:#c678dd>vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // The color of the vertex.</span></span>
+<span class=giallo-l><span>    @location(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#e06c75> color</span><span>: </span><span style=color:#c678dd>vec3</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span></span>
+<span class=giallo-l><span>};</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>// The vertex shader entry point.</span></span>
+<span class=giallo-l><span>@vertex</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> vertex</span><span>(</span><span style=color:#e06c75>vertex</span><span>: </span><span style=color:#e5c07b>Vertex</span><span>) -></span><span style=color:#e5c07b> VertexOutput</span><span> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // Use an orthographic projection.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    var</span><span style=color:#e06c75> vertex_output</span><span>: </span><span style=color:#e5c07b>VertexOutput</span><span>;</span></span>
+<span class=giallo-l><span style=color:#e06c75>    vertex_output</span><span>.clip_position </span><span style=color:#56b6c2>=</span><span style=color:#61afef> vec4</span><span>(</span><span style=color:#e06c75>vertex</span><span>.position.xyz,</span><span style=color:#d19a66> 1.0</span><span>);</span></span>
+<span class=giallo-l><span style=color:#e06c75>    vertex_output</span><span>.color </span><span style=color:#56b6c2>=</span><span style=color:#e06c75> vertex</span><span>.color;</span></span>
+<span class=giallo-l><span style=color:#c678dd>    return</span><span style=color:#e06c75> vertex_output</span><span>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>// The fragment shader entry point.</span></span>
+<span class=giallo-l><span>@fragment</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> fragment</span><span>(</span><span style=color:#e06c75>vertex_output</span><span>: </span><span style=color:#e5c07b>VertexOutput</span><span>) -> @location(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#c678dd>    return</span><span style=color:#61afef> vec4</span><span>(</span><span style=color:#e06c75>vertex_output</span><span>.color,</span><span style=color:#d19a66> 1.0</span><span>);</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/Shaders/custom-phase-item/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

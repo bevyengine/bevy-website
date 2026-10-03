@@ -1,0 +1,221 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Array Texture" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/shaders/array-texture/ property=og:url><meta content=https://bevy.org/examples/shaders/array-texture/../static/screenshots/Shaders/array_texture.png property=og:image><meta content="A shader that shows how to reuse the core bevy PBR shading functionality in a custom material that obtains the base color from an array texture." property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Array Texture</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Shaders / Array Texture</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/shader/array_texture.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/shaders/array-texture/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example illustrates how to create a texture for use with a <code>texture_2d_array&lt;f32></code> shader uniform variable and then how to sample from that texture in the shader by using a <code>MeshTag</code> component on the mesh entity.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>array_texture.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    image</span><span>::{</span><span style=color:#dfc479>ImageArrayLayout</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ImageLoaderSettings</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mesh</span><span>::</span><span style=color:#dfc479>MeshTag</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    reflect</span><span>::</span><span style=color:#dfc479>TypePath</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::</span><span style=color:#c0c5ce>render_resource</span><span>::</span><span style=color:#dfc479>AsBindGroup</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    shader</span><span>::</span><span style=color:#dfc479>ShaderRef</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This example uses a shader source file from the assets subdirectory.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SHADER_ASSET_PATH</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "shaders/array_texture.wgsl"</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Corresponds to the number of layers in the array texture.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> TEXTURE_COUNT</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> u32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 4</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DefaultPlugins</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            MaterialPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ArrayTextureMaterial</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, update_mesh_tags</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ArrayTextureMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Load the texture.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> array_texture</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> asset_server</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>load_builder</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_settings</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>settings:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> ImageLoaderSettings</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            settings</span><span style=color:#c594c5>.</span><span>array_layout </span><span style=color:#c594c5>=</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>ImageArrayLayout</span><span>::</span><span style=color:#dfc479>RowCount</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                rows:</span><span style=color:#d19a66> TEXTURE_COUNT</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"textures/array_texture.png"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // light</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        DirectionalLight</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>3.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // camera</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>5.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 5.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>1.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn some cubes using the array texture.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mesh_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>default</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> material_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>ArrayTextureMaterial</span><span> {</span><span style=color:#c0c5ce> array_texture</span><span> })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> x</span><span style=color:#c594c5> in</span><span> -</span><span style=color:#e79e6d>5</span><span>..=</span><span style=color:#e79e6d>5</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>            Mesh3d</span><span>(</span><span style=color:#c0c5ce>mesh_handle</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>material_handle</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Pass a different mesh tag to allow selecting different layers of</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // the array texture in the shader.</span></span>
+<span class=giallo-l><span style=color:#69c>            MeshTag</span><span>(</span><span style=color:#c0c5ce>x</span><span style=color:#c594c5> as</span><span style=color:#b48ead> u32</span><span> %</span><span style=color:#d19a66> TEXTURE_COUNT</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#c0c5ce>x</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span> +</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> update_mesh_tags</span><span>(</span><span style=color:#c0c5ce>time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> MeshTag</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> timer:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Timer</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Initialize the timer on the first run.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> timer</span><span style=color:#c594c5>.</span><span style=color:#69c>duration</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>is_zero</span><span>() {</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>timer</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Timer</span><span>::</span><span style=color:#69c>from_seconds</span><span>(</span><span style=color:#e79e6d>1.5</span><span style=color:#c0c5ce>, TimerMode</span><span>::</span><span style=color:#dfc479>Repeating</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    timer</span><span style=color:#c594c5>.</span><span style=color:#69c>tick</span><span>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> timer</span><span style=color:#c594c5>.</span><span style=color:#69c>just_finished</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for mut</span><span style=color:#c0c5ce> tag</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> query</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Cycle through the texture layers to demonstrate that we can</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // select different layers of the array texture at runtime.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            tag</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>tag</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> +</span><span style=color:#e79e6d> 1</span><span>) %</span><span style=color:#d19a66> TEXTURE_COUNT</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Asset</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TypePath</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AsBindGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ArrayTextureMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[texture(0</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> dimension </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "2d_array"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[sampler(1)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    array_texture:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Material</span><span style=color:#c594c5> for</span><span style=color:#dfc479> ArrayTextureMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> fragment_shader</span><span>() -></span><span style=color:#dfc479> ShaderRef</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>        SHADER_ASSET_PATH</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div><input class=tabs__radio id=tab1 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab1><code>shaders/array_texture.wgsl</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=wgsl><span class=giallo-l><span>#</span><span style=color:#e06c75>import bevy_pbr</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#e06c75>    forward_io</span><span>::</span><span style=color:#e5c07b>VertexOutput</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>    mesh_functions</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>    mesh_view_bindings</span><span>::</span><span style=color:#e06c75>view</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_types</span><span>::{STANDARD_MATERIAL_FLAGS_DOUBLE_SIDED_BIT,</span><span style=color:#e5c07b> PbrInput</span><span>,</span><span style=color:#e06c75> pbr_input_new</span><span>},</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_functions as fns</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_bindings</span><span>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>import bevy_core_pipeline</span><span>::</span><span style=color:#e06c75>tonemapping</span><span>::</span><span style=color:#e06c75>tone_mapping</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@group(#{MATERIAL_BIND_GROUP}) @binding(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> my_array_texture</span><span>: </span><span style=color:#e06c75>texture_2d_array</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>;</span></span>
+<span class=giallo-l><span>@group(#{MATERIAL_BIND_GROUP}) @binding(</span><span style=color:#d19a66>1</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> my_array_texture_sampler</span><span>: </span><span style=color:#e06c75>sampler</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@fragment</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> fragment</span><span>(</span></span>
+<span class=giallo-l><span>    @builtin(</span><span style=color:#e06c75>front_facing</span><span>)</span><span style=color:#e06c75> is_front</span><span>: </span><span style=color:#c678dd>bool</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>    mesh</span><span>: </span><span style=color:#e5c07b>VertexOutput</span><span>,</span></span>
+<span class=giallo-l><span>) -> @location(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // Determine which layer of the array texture to sample from based on the</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // mesh tag which originates from the MeshTag component on the entity.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> layer</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> mesh_functions</span><span>::</span><span style=color:#61afef>get_tag</span><span>(</span><span style=color:#e06c75>mesh</span><span>.instance_index);</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // Prepare a 'processed' StandardMaterial by sampling all textures to resolve</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // the material members</span></span>
+<span class=giallo-l><span style=color:#c678dd>    var</span><span style=color:#e06c75> pbr_input</span><span>: </span><span style=color:#e5c07b>PbrInput</span><span style=color:#56b6c2> =</span><span style=color:#61afef> pbr_input_new</span><span>();</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_input</span><span>.material.base_color </span><span style=color:#56b6c2>=</span><span style=color:#61afef> textureSample</span><span>(</span><span style=color:#e06c75>my_array_texture</span><span>,</span><span style=color:#e06c75> my_array_texture_sampler</span><span>,</span><span style=color:#e06c75> mesh</span><span>.uv,</span><span style=color:#e06c75> layer</span><span>);</span></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>ifdef</span><span> VERTEX_COLORS</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_input</span><span>.material.base_color </span><span style=color:#56b6c2>=</span><span style=color:#e06c75> pbr_input</span><span>.material.base_color *</span><span style=color:#e06c75> mesh</span><span>.color;</span></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>endif</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> double_sided</span><span style=color:#56b6c2> =</span><span> (</span><span style=color:#e06c75>pbr_input</span><span>.material.flags & STANDARD_MATERIAL_FLAGS_DOUBLE_SIDED_BIT)</span><span style=color:#56b6c2> !=</span><span style=color:#d19a66> 0u</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_input</span><span>.frag_coord </span><span style=color:#56b6c2>=</span><span style=color:#e06c75> mesh</span><span>.position;</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_input</span><span>.world_position </span><span style=color:#56b6c2>=</span><span style=color:#e06c75> mesh</span><span>.world_position;</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_input</span><span>.world_normal </span><span style=color:#56b6c2>=</span><span style=color:#e06c75> fns</span><span>::</span><span style=color:#61afef>prepare_world_normal</span><span>(</span></span>
+<span class=giallo-l><span style=color:#e06c75>        mesh</span><span>.world_normal,</span></span>
+<span class=giallo-l><span style=color:#e06c75>        double_sided</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>        is_front</span><span>,</span></span>
+<span class=giallo-l><span>    );</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_input</span><span>.is_orthographic </span><span style=color:#56b6c2>=</span><span style=color:#e06c75> view</span><span>.clip_from_view[</span><span style=color:#d19a66>3</span><span>].w </span><span style=color:#56b6c2>==</span><span style=color:#d19a66> 1.0</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_input</span><span>.</span><span style=color:#e5c07b>N</span><span style=color:#56b6c2> =</span><span style=color:#61afef> normalize</span><span>(</span><span style=color:#e06c75>pbr_input</span><span>.world_normal);</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>ifdef</span><span> VERTEX_TANGENTS</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e5c07b> Nt</span><span style=color:#56b6c2> =</span><span style=color:#61afef> textureSampleBias</span><span>(</span><span style=color:#e06c75>pbr_bindings</span><span>::</span><span style=color:#e06c75>normal_map_texture</span><span>,</span><span style=color:#e06c75> pbr_bindings</span><span>::</span><span style=color:#e06c75>normal_map_sampler</span><span>,</span><span style=color:#e06c75> mesh</span><span>.uv,</span><span style=color:#e06c75> view</span><span>.mip_bias).rgb;</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e5c07b> TBN</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> fns</span><span>::</span><span style=color:#61afef>calculate_tbn_mikktspace</span><span>(</span><span style=color:#e06c75>mesh</span><span>.world_normal,</span><span style=color:#e06c75> mesh</span><span>.world_tangent);</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_input</span><span>.</span><span style=color:#e5c07b>N</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> fns</span><span>::</span><span style=color:#61afef>apply_normal_mapping</span><span>(</span></span>
+<span class=giallo-l><span style=color:#e06c75>        pbr_input</span><span>.material.flags,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>        TBN</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>        double_sided</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>        is_front</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>        Nt</span><span>,</span></span>
+<span class=giallo-l><span>    );</span></span>
+<span class=giallo-l><span>#</span><span style=color:#e06c75>endif</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>    pbr_input</span><span>.</span><span style=color:#e5c07b>V</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> fns</span><span>::</span><span style=color:#61afef>calculate_view</span><span>(</span><span style=color:#e06c75>mesh</span><span>.world_position,</span><span style=color:#e06c75> pbr_input</span><span>.is_orthographic);</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    return</span><span style=color:#61afef> tone_mapping</span><span>(</span><span style=color:#e06c75>fns</span><span>::</span><span style=color:#61afef>apply_pbr_lighting</span><span>(</span><span style=color:#e06c75>pbr_input</span><span>),</span><span style=color:#e06c75> view</span><span>.color_grading);</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/Shaders/array-texture/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>
