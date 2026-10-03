@@ -139,7 +139,7 @@ and avoid re-adding it if another dependency has already pulled it in.
 
 ## The `Plugin` Life Cycle
 
-When a plugin is added though [`App::add_plugins`], the app calls `Plugin::build`, and the plugin typically accesses and configures the world.  
+When a plugin is added through [`App::add_plugins`], the app calls `Plugin::build`, and the plugin typically accesses and configures the world.  
 Then, when the app is run, a few other plugin life-cycle functions are called, and finally we enter the run loop:
 
 - The app polls `Plugin::ready` until all the added plugins return `true`.
