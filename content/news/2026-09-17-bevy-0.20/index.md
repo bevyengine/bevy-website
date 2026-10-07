@@ -73,7 +73,7 @@ If you were using DLSS in Bevy 0.19, make sure to [download and setup](https://g
 
 ## BSN Syntax Improvements
 
-{{ heading_metadata(authors=[] prs=[25318, 25626]) }}
+{{ heading_metadata(authors=["@cart"] prs=[25318, 25626]) }}
 
 BSN landed with a few idiosyncrasies that caused friction in practice. We made some changes to BSN's syntax this cycle in the interest of improving its ergonomics and clarity. After this, the syntax _should_ largely be nailed down.
 
@@ -369,16 +369,25 @@ See the `headless_tabs` example for controlled and self-updating tab lists in bo
 
 ## WESL Shaders
 
-{{ heading_metadata(authors=["@tychedelia"] prs=[25088]) }}
+{{ heading_metadata(authors=["@tychedelia", "@BenjaminBrienen"] prs=[25088]) }}
 
 Bevy's shaders are now written in [WESL](https://wesl-lang.dev) and the old "Custom Bevy Extended WGSL" language support has been removed.
 
 WESL is a language standard that extends WGSL to add important usability features like modules, imports, conditional compilation, and more.
+You can see what that looks like (and render pretty shader toys!) live in your browser in the [WESL Playground](https://play.wesl-lang.dev/).
+
 Bevy has historically handled these things in our own custom WGSL dialect, but we believe it is better for the wider shader ecosystem (and for us) to adopt a common standard where we can pool resources on language improvements, module ecosystems, and IDE tooling. We've been working closely with the WESL team to evolve the standard in a way that fits well into the Bevy picture.
+
+A critical part of that tooling is language server protocol support, in the form of [wgsl-analyzer].
+That means syntax highlighting, go-to-defintion, proper renames and more, once installed for your IDE of choice.
+
+![A Bevy fog shader with WESL syntax highlighting](wesl_analyzer.png)
 
 Custom shaders in the old Bevy WGSL dialect need to
 be translated to WESL and renamed from `.wgsl` to `.wesl`. Plain WGSL files
 with no preprocessor directives will keep working.
+
+[wgsl-analyzer]: https://wgsl-analyzer.github.io/
 
 ### Before: Custom Bevy Extended WGSL
 
