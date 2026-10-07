@@ -735,6 +735,15 @@ The result is that even if the shuffle results in the order `(A, B, C)`, `C` cou
 `A` and `B` conflict. **This can be desirable to test**, but consider using the single-threaded
 executor to avoid this case.
 
+This tool is complementary to the existing [system order ambiguity detection], which analyzes the graph of systems statically.
+That cheaply generates a (sometimes large!) list of potential problems, not all of which may correspond to meaningful bugs in your project.
+Real test failures in some permitted orderings give you more actionable information about which of these problems are real, *and* the correct ordering.
+Furthermore, ambiguity detection can have false negatives, typically when ambiguities are incorrectly ignored,
+or in the presence of [interior mutability] mechanisms that do not require write-access (from the scheduler's perspective).
+
+[system order ambiguity detection]: https://github.com/bevyengine/bevy/blob/latest/examples/ecs/nondeterministic_system_order.rs
+[interior mutability]: https://doc.rust-lang.org/reference/interior-mutability.html
+
 ## Catching Panics
 
 {{ heading_metadata(authors=["@SpecificProtagonist"] prs=[24240]) }}
