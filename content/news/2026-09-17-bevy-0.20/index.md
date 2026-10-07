@@ -379,7 +379,7 @@ You can see what that looks like (and render pretty shader toys!) live in your b
 Bevy has historically handled these things in our own custom WGSL dialect, but we believe it is better for the wider shader ecosystem (and for us) to adopt a common standard where we can pool resources on language improvements, module ecosystems, and IDE tooling. We've been working closely with the WESL team to evolve the standard in a way that fits well into the Bevy picture.
 
 A critical part of that tooling is language server protocol support, in the form of [wgsl-analyzer].
-That means syntax highlighting, go-to-definition, proper renames and more, once installed for your IDE of choice.
+That means syntax highlighting, go-to-definition, inlay hints, code folding, formatting and more, once installed for your IDE of choice.
 
 ![A Bevy fog shader with WESL syntax highlighting](wesl_analyzer.png)
 
