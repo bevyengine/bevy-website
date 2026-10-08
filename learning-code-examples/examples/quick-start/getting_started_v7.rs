@@ -47,8 +47,8 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugins(HelloPlugin)
-        .add_systems(Startup, add_people)
-        .add_systems(Update, (hello_world, (update_people, greet_people).chain()))
+        .add_systems(Startup, (hello_world, add_people))
+        .add_systems(Update, (update_people, greet_people).chain())
         .run();
 }
 // ANCHOR_END: app_main
