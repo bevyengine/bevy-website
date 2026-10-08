@@ -747,7 +747,7 @@ This makes mutations more expensive, as they need to write both the column chang
 
 ## `FixedNode`
 
-{{ heading_metadata(authors=["@Ickshonpe"] prs=[24323]) }}
+{{ heading_metadata(authors=["@ickshonpe"] prs=[24323]) }}
 
 [`FixedNode`] is a new marker component for Bevy UI.
 
@@ -959,7 +959,7 @@ Caused by:
 
 ## `InlineBox` and `InlineImage`
 
-{{ heading_metadata(authors=["@Ickshonpe"] prs=[25710]) }}
+{{ heading_metadata(authors=["@ickshonpe"] prs=[25710]) }}
 
 ![inline image](inline_image.jpg)
 
