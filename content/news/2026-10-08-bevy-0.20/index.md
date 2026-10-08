@@ -561,7 +561,7 @@ Full functionality is shown in the `camera/pan_orbit_camera_cad` example.
 
 Ordering large groups of systems with `.chain()` is convenient, but it can be
 overly strict. If system set `X` is chained before system set `Y`, every system
-in `X` must finish before *any* system in `Y` can start, even when the systems
+in `X` must finish before _any_ system in `Y` can start, even when the systems
 involved never touch the same data. This often leaves worker threads idle while they
 wait for a handful of stragglers at the end of a system set, a pattern that shows up
 frequently in the render world.
@@ -745,7 +745,7 @@ executor to avoid this case.
 
 This tool is complementary to the existing [system order ambiguity detection], which analyzes the graph of systems statically.
 Ambiguity detection cheaply generates a (sometimes large!) list of potential problems, not all of which may correspond to meaningful bugs in your project.
-Real test failures in some permitted orderings give you more actionable information about which of these problems are real, *and* the correct ordering.
+Real test failures in some permitted orderings give you more actionable information about which of these problems are real, _and_ the correct ordering.
 Furthermore, ambiguity detection can have false negatives, typically when ambiguities are incorrectly ignored,
 or in the presence of [interior mutability] mechanisms that do not require write-access (from the scheduler's perspective).
 
@@ -766,7 +766,7 @@ In Bevy 0.20, these panics now get turned into errors and passed to the fallback
 
 {{ heading_metadata(authors=["@loreball"] prs=[25743, 25851]) }}
 
-Sometimes, you just want to despawn a *ton* of things at once.
+Sometimes, you just want to despawn a _ton_ of things at once.
 This is reasonably common: Bevy's own [`DespawnOnEnter`] and [`DespawnOnExit`] allow you to quickly clean up entities as you swap the state of your game, tidying up menus or resetting the game after a loss.
 While this isn't that much work in total, it's concentrated all at once: if that process is slow, you could see hitches, or longer loading screens.
 
@@ -873,8 +873,8 @@ To intersperse images with text, spawn an entity with the `InlineImage` componen
 
 ## What's Next?
 
-No matter how many features we add, the flock will always demand *more*.
-Game engines, unfortunately, are never *done*.
+No matter how many features we add, the flock will always demand _more_.
+Game engines, unfortunately, are never _done_.
 
 Let us peer deep into the mists of time,
 and see what other features Bevy has in flight!
@@ -886,7 +886,7 @@ and polish them while we put it all together.
 - **Assets as Entities:** Our asset handling has been steadily improving, it is still a separate data model. We're working on representing assets as entities, giving them access to the full expressive power of the ECS (including event observers and relationships), providing direct support for defining assets in BSN, and easing the learning curve (as assets are accessed like any other ECS data).
 - **Remote inspector:** Browse, modify and mutate entities from external tools, on your machine or on a different device!
 - **More powerful required components:** Wish you could pull in assets, vary values based on other entities / components, or reference resources in required components? Us too: we're hoping to integrate required components with the `Template` trait that powers BSN, bells and whistles included.
-- **Mutually exclusive components:** A long requested feature: *statically* ensure that your `Player` is never a `Camera`, creating invariants that can be counted on.
+- **Mutually exclusive components:** A long requested feature: _statically_ ensure that your `Player` is never a `Camera`, creating invariants that can be counted on.
 - **HDR (High Dynamic Range) display support:** Bevy: now in even more colors!
 
 {{ support_bevy() }}
