@@ -5,6 +5,8 @@ date = 2026-10-08
 show_image = true
 image = "zorah.jpg"
 image_subtitle = "The Zorah scene rendered in Bevy Solari"
+public_draft = 2582
+status = 'hidden'
 +++
 
 Thanks to **227** contributors, **817** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.20** release on [crates.io]!
