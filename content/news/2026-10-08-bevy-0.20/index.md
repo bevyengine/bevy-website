@@ -270,7 +270,7 @@ bsn_list! {
 }
 ```
 
-## Ready Event
+## `Ready` Event
 
 {{ heading_metadata(authors=["@cart"] prs=[25296]) }}
 
@@ -628,7 +628,7 @@ themes! Instead of having to tediously choose colors for a hundred different the
 the set of semantic tokens is much smaller, and the relationship between token and color is much
 more intuitive.
 
-## Val::Em and Val::Rem
+## `Val::Em` and `Val::Rem`
 
 {{ heading_metadata(authors=["@gagnus"] prs=[25231]) }}
 
@@ -669,7 +669,7 @@ When enabled, this will store a "column change tick" in addition to a "per-entit
 
 This makes mutations more expensive, as they need to write both the column change tick and the entity change tick, but for entities whose changes are queried often, but change infrequently, this tradeoff can easily be worth it! We've seen change ticks result in a 132x speedup in our GPU mesh extraction code! 
 
-## FixedNode
+## `FixedNode`
 
 {{ heading_metadata(authors=["@Ickshonpe"] prs=[24323]) }}
 
