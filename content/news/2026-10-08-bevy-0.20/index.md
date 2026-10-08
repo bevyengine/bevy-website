@@ -761,7 +761,7 @@ Bevy's systems, commands and observers are able to return errors. You can either
 
 In Bevy 0.20, these panics now get turned into errors and passed to the fallback error handler. By default this re-panics, but now you can choose whether to log an error and continue, or whatever else you want.
 
-## Faster bulk despawning
+## Faster Bulk Despawning
 
 {{ heading_metadata(authors=["@loreball"] prs=[25743, 25851]) }}
 
