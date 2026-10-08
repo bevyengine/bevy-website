@@ -61,7 +61,7 @@ World cache size, per-pixel light sample count, temporal accumulation, and path 
 
 ### Improved Compatibility
 
-Solari now supports lighting from Atmosphere and EnvironmentMapLights on cameras, in addition to the existing support for DirectionalLight and emissive meshes. We're hoping to add support for the remaining PointLight, SpotLight, and RectLight types [in the near future](https://github.com/bevyengine/bevy/pull/25913).
+Solari now supports lighting from `Atmosphere` and `EnvironmentMapLight`s on cameras, in addition to the existing support for `DirectionalLight` and emissive meshes. We're hoping to add support for the remaining `PointLight`, `SpotLight`, and `RectLight` types [in the near future](https://github.com/bevyengine/bevy/pull/25913).
 
 Solari now also runs on macOS, but note that there is currently no built-in denoiser included in `bevy_solari` for macOS. MetalFX Ray Reconstruction might be a possible solution in the future (contributions welcome!)
 
@@ -684,7 +684,7 @@ A UI node entity with the `FixedNode` component is positioned relative to the ta
 
 ![elliptical border radius](elliptical_border_radius.jpg)
 
-Bevy UI can now draw Nodes with elliptical border geometry.
+Bevy UI can now draw nodes with elliptical border geometry.
 
 The fields of `BorderRadius` are now `CornerRadius`s to enable different radius to be set for each axis.
 
