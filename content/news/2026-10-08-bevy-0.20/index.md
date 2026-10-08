@@ -496,7 +496,7 @@ Check out the new `mesh_shader_intro` example for more usage examples.
 [meshoptimizer]: https://meshoptimizer.org/
 [as seen here]: https://gpuopen.com/learn/mesh_shaders/mesh_shaders-procedural_grass_rendering/
 [nvidium]: https://github.com/MCRcortex/nvidium
-[`MeshPipeline`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/pbr/struct.MeshPipeline.html
+[`MeshPipeline`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/render/render_resource/enum.Pipeline.html#variant.MeshPipeline
 [`MeshPipelineDescriptor`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/material/descriptor/struct.MeshPipelineDescriptor.html
 [`RenderPipeline`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/render/render_resource/struct.RenderPipeline.html
 [`RenderContext::begin_tracked_render_pass`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/render/renderer/struct.RenderContext.html#method.begin_tracked_render_pass
