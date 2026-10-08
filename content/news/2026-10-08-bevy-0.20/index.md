@@ -409,7 +409,7 @@ var<private> tint: vec4<f32>;
 
 ## Mesh Shaders
 
-{{ heading_metadata(authors=[] prs=[25627]) }}
+{{ heading_metadata(authors=["@ChristopherBiscardi"] prs=[25627]) }}
 
 Mesh shaders are now integrated with Bevy's pipeline cache and are available for advanced users to take advantage of.
 Mesh shaders can be used to render:
