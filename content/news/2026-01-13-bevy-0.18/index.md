@@ -6,6 +6,7 @@ show_image = true
 image = "toroban.jpg"
 image_subtitle = "Toroban: an infinitely wrapping puzzle game built in Bevy. Out now!"
 image_subtitle_link = "https://store.steampowered.com/app/1961850/Toroban/"
+short_excerpt = "Improved rendering, richer UI tools, customizable atmospheres, and smoother developer workflows headline this release."
 +++
 
 Thanks to **174** contributors, **659** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.18** release on [crates.io](https://crates.io/crates/bevy)!
