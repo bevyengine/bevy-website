@@ -44,9 +44,11 @@ Read [JMS55's blog] for the technical details, or continue reading below for the
 
 ### Improved Image Quality
 
-Thanks to improvements in our ReSTIR implementation, rendering is now mostly unbiased, leading to much more accurate lighting.
+Thanks to improvements in our [ReSTIR] implementation, rendering is now mostly unbiased, leading to much more accurate lighting.
 
 Additionally, thanks to some other changes, moving objects no longer have shadows that lag behind, and reflections now look significantly less shimmery in motion, especially for non-metallic materials.
+
+[ReSTIR]: https://en.wikipedia.org/wiki/Spatiotemporal_reservoir_resampling
 
 ### Improved Performance
 
