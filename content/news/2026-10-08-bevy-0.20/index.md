@@ -121,7 +121,7 @@ In addition to making it easier to spot scene inclusions (and unifying the synta
 
 ### No more `template_value` wrappers!
 
-You can now remove all of those pesky `template_value` wrappers from your component values:
+You can now remove all of those pesky [`template_value`] wrappers from your component values:
 
 ```rust
 // Before
@@ -288,6 +288,7 @@ bsn_list! {
 }
 ```
 
+[`template_value`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/fn.template_value.html
 [the stats]: https://github.com/bevyengine/bevy/pull/25678#issuecomment-5547835904
 [`FromTemplate`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/trait.FromTemplate.html
 [`bsn!`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/macro.bsn.html
