@@ -301,7 +301,7 @@ impl Widget {
     }
 }
 
-world.spawn(bsn!{ @Widget })
+world.spawn(bsn! { @Widget })
 ```
 
 ## More Feathers Widgets
