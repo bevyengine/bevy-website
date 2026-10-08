@@ -29,7 +29,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 
 ## Solari and DLSS
 
-{{ heading_metadata(authors=["@JMS55", "@mate-h", "@stuartparmenter"] prs=[24667, 24767, 25082, 25123, 25244, 25423, 25513, 25518, 25703, 25704, 25787, 25814, 25913]) }}
+{{ heading_metadata(authors=["@JMS55", "@mate-h", "@stuartparmenter"] prs=[24667, 24767, 25082, 25123, 25244, 25423, 25513, 25518, 25703, 25704, 25787, 25814]) }}
 
 ![zero day](zero_day.jpg)
 
