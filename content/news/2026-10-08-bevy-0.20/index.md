@@ -840,7 +840,7 @@ fn fallible() -> Result<Package, BevyError> {
     let package = std::fs::read_to_string(path)
         .with_context(|| format!("Failed to read {path}"))?;
 
-    serde_json::parse(&package)?
+    serde_json::from_str(&package)?
 }
 
 fn uses_fallible() -> Result<(), BevyError> {
