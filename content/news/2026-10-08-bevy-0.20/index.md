@@ -55,6 +55,7 @@ Additionally, thanks to some other changes, moving objects no longer have shadow
 DLSS-RR has gotten very good in recent updates, and for many scenes, ReSTIR costs a decent chunk of performance, and does not significantly improve image quality.
 
 As a result, we've decided to make ReSTIR optional, and turn it **off by default**.
+
 If you were using Solari in Bevy 0.19, check if the loss of ReSTIR affects your scene, and if so re-enable [`SolariLighting::restir`].
 
 With ReSTIR off, expect reduced shadow quality and missing shadows in motion in scenes with many lights. We are exploring cheaper ways of improving light sampling, without ReSTIR, to improve this in the future.
