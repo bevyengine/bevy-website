@@ -334,7 +334,7 @@ Spawns a menu popup when the menu is opened and _despawns_ it when it is closed.
 
 ![lazy menu](lazy_menu.jpg)
 
-## Number Input Widget Scrubbing / Dragging
+### Number Input Widget Scrubbing / Dragging
 
 The `FeathersNumberInput` widget has been expanded to support both normal text input and scrubbing / dragging. There is a configurable "hard limit" (minimum and maximum value via any input method) and "soft limit" (minimum and maximum value via dragging), in addition to control over floating point precision and step sizes.
 
