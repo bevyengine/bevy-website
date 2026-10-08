@@ -521,7 +521,7 @@ commands.spawn((
 
 {{ heading_metadata(authors=["@IceSentry"] prs=[25432]) }}
 
-The sprite render backend was replaced by a new backend that reuses a lot of the infrastructure made for 3d.
+The sprite render backend was replaced by a new backend that reuses a lot of the infrastructure made for 3D.
 This resulted in improved performance in many cases and also makes future maintenance and improvements easier.
 
 ## Pan Orbit Camera
