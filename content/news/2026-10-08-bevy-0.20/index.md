@@ -399,6 +399,7 @@ var<private> tint: vec4<f32>;
 ```
 
 ### After: WESL
+
 ```wgsl
 import bevy_pbr::render::forward_io::VertexOutput;
 import super::util::hsv_to_rgb;
