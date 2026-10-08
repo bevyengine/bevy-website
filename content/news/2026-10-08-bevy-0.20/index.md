@@ -1,6 +1,6 @@
 +++
 title = "Bevy 0.20"
-date = 2026-09-17
+date = 2026-10-08
 [extra]
 show_image = true
 image = "zorah.jpg"
