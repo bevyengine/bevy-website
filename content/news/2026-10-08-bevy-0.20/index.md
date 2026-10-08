@@ -28,7 +28,7 @@ Since our last release a few months ago we've added a _ton_ of new features, bug
 [crates.io]: https://crates.io/crates/bevy
 [source code]: https://github.com/bevyengine/bevy
 [Bevy Assets]: https://bevy.org/assets
-[`Ready`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/scene/struct.Ready.html
+[`Ready`]: https://docs.rs/bevy/0.20.0/bevy/scene/struct.Ready.html
 
 ## Solari and DLSS
 
@@ -77,15 +77,15 @@ If you were using DLSS in Bevy 0.19, make sure to [download and setup] the newes
 [JMS55's blog]: https://jms55.github.io/posts/2026-09-18-solari-bevy-0-20
 [in the near future]: https://github.com/bevyengine/bevy/pull/25913
 [download and setup]: https://github.com/bevyengine/dlss_wgpu#downloading-the-dlss-sdk
-[`SolariLighting::restir`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/solari/realtime/struct.SolariLighting.html#structfield.restir
-[`SolariLighting`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/solari/realtime/struct.SolariLighting.html
-[`Atmosphere`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/light/struct.Atmosphere.html
-[`EnvironmentMapLight`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/light/struct.EnvironmentMapLight.html
-[`DirectionalLight`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.DirectionalLight.html
-[`PointLight`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.PointLight.html
-[`SpotLight`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.SpotLight.html
-[`RectLight`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.RectLight.html
-[`bevy_solari`]: https://docs.rs/bevy_solari/0.20.0-rc.2/bevy_solari/
+[`SolariLighting::restir`]: https://docs.rs/bevy/0.20.0/bevy/solari/realtime/struct.SolariLighting.html#structfield.restir
+[`SolariLighting`]: https://docs.rs/bevy/0.20.0/bevy/solari/realtime/struct.SolariLighting.html
+[`Atmosphere`]: https://docs.rs/bevy/0.20.0/bevy/light/struct.Atmosphere.html
+[`EnvironmentMapLight`]: https://docs.rs/bevy/0.20.0/bevy/light/struct.EnvironmentMapLight.html
+[`DirectionalLight`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.DirectionalLight.html
+[`PointLight`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.PointLight.html
+[`SpotLight`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.SpotLight.html
+[`RectLight`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.RectLight.html
+[`bevy_solari`]: https://docs.rs/bevy_solari/0.20.0/bevy_solari/
 [`dlss_wgpu`]: https://docs.rs/dlss_wgpu/
 
 ## BSN Syntax Improvements
@@ -287,11 +287,11 @@ bsn_list! {
 }
 ```
 
-[`template_value`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/fn.template_value.html
+[`template_value`]: https://docs.rs/bevy/0.20.0/bevy/prelude/fn.template_value.html
 [the stats]: https://github.com/bevyengine/bevy/pull/25678#issuecomment-5547835904
-[`FromTemplate`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/trait.FromTemplate.html
-[`bsn!`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/macro.bsn.html
-[`bsn_list!`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/macro.bsn_list.html
+[`FromTemplate`]: https://docs.rs/bevy/0.20.0/bevy/prelude/trait.FromTemplate.html
+[`bsn!`]: https://docs.rs/bevy/0.20.0/bevy/prelude/macro.bsn.html
+[`bsn_list!`]: https://docs.rs/bevy/0.20.0/bevy/prelude/macro.bsn_list.html
 
 ## `Ready` Event
 
@@ -328,7 +328,7 @@ impl Widget {
 world.spawn(bsn! { @Widget })
 ```
 
-[`Add`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.Add.html
+[`Add`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.Add.html
 
 ## More Feathers Widgets
 
@@ -366,7 +366,7 @@ The [`FeathersNumberInput`] widget has been expanded to support both normal text
 
 <video controls loop><source  src="number_input.mp4" type="video/mp4"/></video>
 
-[`FeathersNumberInput`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/controls/struct.FeathersNumberInput.html
+[`FeathersNumberInput`]: https://docs.rs/bevy/0.20.0/bevy/feathers/controls/struct.FeathersNumberInput.html
 
 ## Headless Tab Widgets
 
@@ -393,12 +393,12 @@ bsn! {
 
 See the `headless_tabs` example for controlled and self-updating tab lists in both orientations.
 
-[`TabList`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ui_widgets/struct.TabList.html
-[`Tab`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ui_widgets/struct.Tab.html
-[`bevy_ui_widgets`]: https://docs.rs/bevy_ui_widgets/0.20.0-rc.2/bevy_ui_widgets/
-[`SelectedTab`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ui_widgets/struct.SelectedTab.html
-[`ValueChange<Option<Entity>>`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ui_widgets/struct.ValueChange.html
-[`tablist_self_update`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ui_widgets/fn.tablist_self_update.html
+[`TabList`]: https://docs.rs/bevy/0.20.0/bevy/ui_widgets/struct.TabList.html
+[`Tab`]: https://docs.rs/bevy/0.20.0/bevy/ui_widgets/struct.Tab.html
+[`bevy_ui_widgets`]: https://docs.rs/bevy_ui_widgets/0.20.0/bevy_ui_widgets/
+[`SelectedTab`]: https://docs.rs/bevy/0.20.0/bevy/ui_widgets/struct.SelectedTab.html
+[`ValueChange<Option<Entity>>`]: https://docs.rs/bevy/0.20.0/bevy/ui_widgets/struct.ValueChange.html
+[`tablist_self_update`]: https://docs.rs/bevy/0.20.0/bevy/ui_widgets/fn.tablist_self_update.html
 
 ## WESL Shaders
 
@@ -496,12 +496,12 @@ Check out the new `mesh_shader_intro` example for more usage examples.
 [meshoptimizer]: https://meshoptimizer.org/
 [as seen here]: https://gpuopen.com/learn/mesh_shaders/mesh_shaders-procedural_grass_rendering/
 [nvidium]: https://github.com/MCRcortex/nvidium
-[`MeshPipeline`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/render/render_resource/enum.Pipeline.html#variant.MeshPipeline
-[`MeshPipelineDescriptor`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/material/descriptor/struct.MeshPipelineDescriptor.html
-[`RenderPipeline`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/render/render_resource/struct.RenderPipeline.html
-[`RenderContext::begin_tracked_render_pass`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/render/renderer/struct.RenderContext.html#method.begin_tracked_render_pass
-[`draw_mesh_tasks`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/render/render_phase/struct.TrackedRenderPass.html#method.draw_mesh_tasks
-[`StandardMaterial`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.StandardMaterial.html
+[`MeshPipeline`]: https://docs.rs/bevy/0.20.0/bevy/render/render_resource/enum.Pipeline.html#variant.MeshPipeline
+[`MeshPipelineDescriptor`]: https://docs.rs/bevy/0.20.0/bevy/material/descriptor/struct.MeshPipelineDescriptor.html
+[`RenderPipeline`]: https://docs.rs/bevy/0.20.0/bevy/render/render_resource/struct.RenderPipeline.html
+[`RenderContext::begin_tracked_render_pass`]: https://docs.rs/bevy/0.20.0/bevy/render/renderer/struct.RenderContext.html#method.begin_tracked_render_pass
+[`draw_mesh_tasks`]: https://docs.rs/bevy/0.20.0/bevy/render/render_phase/struct.TrackedRenderPass.html#method.draw_mesh_tasks
+[`StandardMaterial`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.StandardMaterial.html
 
 ## Sprite Materials
 
@@ -528,9 +528,9 @@ fn get_final_color(sprite_color: vec4<f32>, instance_index: u32) -> vec4<f32>;
 
 Check out the `sprite_material` example to see it in action!
 
-[`MaterialExtension2d`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/trait.MaterialExtension2d.html
-[`SpriteMaterial`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.SpriteMaterial.html
-[`SpriteMaterialPlugin`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.SpriteMaterialPlugin.html
+[`MaterialExtension2d`]: https://docs.rs/bevy/0.20.0/bevy/prelude/trait.MaterialExtension2d.html
+[`SpriteMaterial`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.SpriteMaterial.html
+[`SpriteMaterialPlugin`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.SpriteMaterialPlugin.html
 
 ## 2D Extended Materials
 
@@ -567,8 +567,8 @@ commands.spawn((
 ));
 ```
 
-[`ExtendedMaterial`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/pbr/struct.ExtendedMaterial.html
-[`ExtendedMaterial2d`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.ExtendedMaterial2d.html
+[`ExtendedMaterial`]: https://docs.rs/bevy/0.20.0/bevy/pbr/struct.ExtendedMaterial.html
+[`ExtendedMaterial2d`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.ExtendedMaterial2d.html
 
 ## Sprite Render Backend Unification
 
@@ -609,10 +609,10 @@ Full functionality is shown in the `camera/pan_orbit_camera_cad` example.
 
 [`bevy_editor_cam`]: https://github.com/aevyrie/bevy_editor_cam
 [@aevyrie]: https://github.com/aevyrie
-[`PanOrbitCamera`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/camera_controller/pan_orbit_camera/controller/component/struct.PanOrbitCamera.html
-[`bevy_camera_controller`]: https://docs.rs/bevy_camera_controller/0.20.0-rc.2/bevy_camera_controller/
-[`MeshPickingPlugin`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.MeshPickingPlugin.html
-[`DefaultPanOrbitCameraPlugins`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/camera_controller/pan_orbit_camera/struct.DefaultPanOrbitCameraPlugins.html
+[`PanOrbitCamera`]: https://docs.rs/bevy/0.20.0/bevy/camera_controller/pan_orbit_camera/controller/component/struct.PanOrbitCamera.html
+[`bevy_camera_controller`]: https://docs.rs/bevy_camera_controller/0.20.0/bevy_camera_controller/
+[`MeshPickingPlugin`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.MeshPickingPlugin.html
+[`DefaultPanOrbitCameraPlugins`]: https://docs.rs/bevy/0.20.0/bevy/camera_controller/pan_orbit_camera/struct.DefaultPanOrbitCameraPlugins.html
 
 ## Weak System Ordering with `chain_weak`
 
@@ -665,12 +665,12 @@ through interior mutability on read-only accesses, global state, or other untrac
 methods are **not** respected. Use `chain_weak` only when your systems don't rely
 on such hidden ordering, otherwise stick with `chain`.
 
-[`.chain()`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.chain
-[`chain_weak()`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.chain_weak
-[`before_weak()`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.before_weak
-[`after_weak()`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.after_weak
-[`Commands`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.Commands.html
-[`ApplyDeferred`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.ApplyDeferred.html
+[`.chain()`]: https://docs.rs/bevy/0.20.0/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.chain
+[`chain_weak()`]: https://docs.rs/bevy/0.20.0/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.chain_weak
+[`before_weak()`]: https://docs.rs/bevy/0.20.0/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.before_weak
+[`after_weak()`]: https://docs.rs/bevy/0.20.0/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.after_weak
+[`Commands`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.Commands.html
+[`ApplyDeferred`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.ApplyDeferred.html
 
 ## Contextual Theming
 
@@ -695,13 +695,13 @@ themes! Instead of having to tediously choose colors for a hundred different the
 the set of semantic tokens is much smaller, and the relationship between token and color is much
 more intuitive.
 
-[`ThemeContext`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/struct.ThemeContext.html
-[`SemanticToken`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/struct.SemanticToken.html
-[`ThemeToken`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/struct.ThemeToken.html
-[`Base`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Base
-[`Higher`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Higher
-[`Highest`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Highest
-[`Floating`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Floating
+[`ThemeContext`]: https://docs.rs/bevy/0.20.0/bevy/feathers/theme/struct.ThemeContext.html
+[`SemanticToken`]: https://docs.rs/bevy/0.20.0/bevy/feathers/theme/struct.SemanticToken.html
+[`ThemeToken`]: https://docs.rs/bevy/0.20.0/bevy/feathers/theme/struct.ThemeToken.html
+[`Base`]: https://docs.rs/bevy/0.20.0/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Base
+[`Higher`]: https://docs.rs/bevy/0.20.0/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Higher
+[`Highest`]: https://docs.rs/bevy/0.20.0/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Highest
+[`Floating`]: https://docs.rs/bevy/0.20.0/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Floating
 
 ## `Val::Em` and `Val::Rem`
 
@@ -726,11 +726,11 @@ bsn! {
 The default font-size is now `rem(1)` rather than `px(20)`. This is a no-op if you're not changing [`RemSize`] but it means your
 text will scale by default when you do.
 
-[`em`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ui/fn.em.html
-[`rem`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ui/fn.rem.html
-[`EmSize`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.EmSize.html
-[`RemSize`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.RemSize.html
-[`TextFont`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.TextFont.html
+[`em`]: https://docs.rs/bevy/0.20.0/bevy/ui/fn.em.html
+[`rem`]: https://docs.rs/bevy/0.20.0/bevy/ui/fn.rem.html
+[`EmSize`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.EmSize.html
+[`RemSize`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.RemSize.html
+[`TextFont`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.TextFont.html
 
 ## Per-Column Change Ticks
 
@@ -758,7 +758,7 @@ This makes mutations more expensive, as they need to write both the column chang
 
 A UI node entity with the [`FixedNode`] component is positioned relative to the target camera's viewport rather than its parent element. `FixedNode`s don't inherit their parent's layout, clipping or transform context. They behave like a "root node".
 
-[`FixedNode`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.FixedNode.html
+[`FixedNode`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.FixedNode.html
 
 ## Elliptical Border Radius
 
@@ -776,8 +776,8 @@ let b = BorderRadius::all(vh(10.)); // a == b
 let c = BorderRadius::top_right(CornerRadius::new(px(10.), px(20.)));
 ```
 
-[`BorderRadius`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.BorderRadius.html
-[`CornerRadius`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.CornerRadius.html
+[`BorderRadius`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.BorderRadius.html
+[`CornerRadius`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.CornerRadius.html
 
 ## Schedule Randomization
 
@@ -836,11 +836,11 @@ or in the presence of [interior mutability] mechanisms that do not require write
 
 [system order ambiguity detection]: https://github.com/bevyengine/bevy/blob/latest/examples/ecs/nondeterministic_system_order.rs
 [interior mutability]: https://doc.rust-lang.org/reference/interior-mutability.html
-[`.before()`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.before
-[`.after()`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.after
-[`ScheduleBuildSettings`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/schedule/struct.ScheduleBuildSettings.html
-[`shuffle_seed`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/schedule/struct.ScheduleBuildSettings.html#structfield.shuffle_seed
-[`auto_insert_apply_deferred`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/schedule/struct.ScheduleBuildSettings.html#structfield.auto_insert_apply_deferred
+[`.before()`]: https://docs.rs/bevy/0.20.0/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.before
+[`.after()`]: https://docs.rs/bevy/0.20.0/bevy/ecs/schedule/trait.IntoScheduleConfigs.html#method.after
+[`ScheduleBuildSettings`]: https://docs.rs/bevy/0.20.0/bevy/ecs/schedule/struct.ScheduleBuildSettings.html
+[`shuffle_seed`]: https://docs.rs/bevy/0.20.0/bevy/ecs/schedule/struct.ScheduleBuildSettings.html#structfield.shuffle_seed
+[`auto_insert_apply_deferred`]: https://docs.rs/bevy/0.20.0/bevy/ecs/schedule/struct.ScheduleBuildSettings.html#structfield.auto_insert_apply_deferred
 
 ## Catching Panics
 
@@ -852,7 +852,7 @@ Bevy's systems, commands and observers are able to return errors. You can either
 
 In Bevy 0.20, these panics now get turned into errors and passed to the fallback error handler. By default this re-panics, but now you can choose whether to log an error and continue, or whatever else you want.
 
-[`FallbackErrorHandler`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/error/struct.FallbackErrorHandler.html
+[`FallbackErrorHandler`]: https://docs.rs/bevy/0.20.0/bevy/ecs/error/struct.FallbackErrorHandler.html
 
 ## Faster Bulk Despawning
 
@@ -876,10 +876,10 @@ _Median of five benchmark runs, AMD Ryzen 9 9950X3D._
 
 If you're using [`DespawnOnEnter`] or [`DespawnOnExit`] you'll see this performance gain for free; no changes to your code needed.
 
-[`DespawnOnExit`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.DespawnOnExit.html
-[`DespawnOnEnter`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.DespawnOnEnter.html
-[`despawn_all<F: QueryFilter>`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/system/command/fn.despawn_all.html
-[`despawn`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/system/struct.EntityCommands.html#method.despawn
+[`DespawnOnExit`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.DespawnOnExit.html
+[`DespawnOnEnter`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.DespawnOnEnter.html
+[`despawn_all<F: QueryFilter>`]: https://docs.rs/bevy/0.20.0/bevy/ecs/system/command/fn.despawn_all.html
+[`despawn`]: https://docs.rs/bevy/0.20.0/bevy/ecs/system/struct.EntityCommands.html#method.despawn
 
 ## Better Texture Compression
 
@@ -905,7 +905,7 @@ To target mobile GPUs, set the `BEVY_COMPRESSED_IMAGE_SAVER_ASTC` environment va
 The previous Basis Universal compression behavior has been moved to the `compressed_image_saver_universal` feature. This remains the best choice for cross-platform distribution (including WebGPU), since UASTC can be transcoded at load time to whatever format the target GPU supports.
 
 [`ctt`]: https://github.com/cwfitzgerald/ctt
-[`CompressedImageSaver`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/image/struct.CompressedImageSaver.html
+[`CompressedImageSaver`]: https://docs.rs/bevy/0.20.0/bevy/image/struct.CompressedImageSaver.html
 
 ## Bevy Error Context Messages
 
@@ -958,9 +958,9 @@ Caused by:
 ```
 
 [`anyhow`]: https://docs.rs/anyhow/latest/anyhow/
-[`BevyError`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.BevyError.html
-[`context`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/error/trait.ContextExt.html#method.context
-[`with_context`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/ecs/error/trait.ContextExt.html#method.with_context
+[`BevyError`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.BevyError.html
+[`context`]: https://docs.rs/bevy/0.20.0/bevy/ecs/error/trait.ContextExt.html#method.context
+[`with_context`]: https://docs.rs/bevy/0.20.0/bevy/ecs/error/trait.ContextExt.html#method.with_context
 
 ## `InlineBox` and `InlineImage`
 
@@ -972,8 +972,8 @@ Flowing text around elements allows for the creation of more complex UI elements
 The newly introduced [`InlineBox`] component allows space to be reserved within text layouts for custom content.
 To intersperse images with text, spawn an entity with the [`InlineImage`] component.
 
-[`InlineBox`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/text/struct.InlineBox.html
-[`InlineImage`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/struct.InlineImage.html
+[`InlineBox`]: https://docs.rs/bevy/0.20.0/bevy/text/struct.InlineBox.html
+[`InlineImage`]: https://docs.rs/bevy/0.20.0/bevy/prelude/struct.InlineImage.html
 
 ## What's Next?
 
@@ -1000,4 +1000,4 @@ and polish them while we put it all together.
 For those interested in a complete changelog, you can see the entire log (and linked pull requests) via the [relevant commit history].
 
 [relevant commit history]: https://github.com/bevyengine/bevy/compare/v0.19.0...v0.20.0
-[`Template`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/prelude/trait.Template.html
+[`Template`]: https://docs.rs/bevy/0.20.0/bevy/prelude/trait.Template.html
