@@ -769,7 +769,7 @@ Sometimes, you just want to despawn a *ton* of things at once.
 This is reasonably common: Bevy's own [`DespawnOnEnter`] and [`DespawnOnExit`] allow you to quickly clean up entities as you swap the state of your game, tidying up menus or resetting the game after a loss.
 While this isn't that much work in total, it's concentrated all at once: if that process is slow, you could see hitches, or longer loading screens.
 
-If you use the new `despawn_all<F: QueryFilter>` command (or one of its siblings) to batch this work,
+If you use the new [`despawn_all<F: QueryFilter>`] command (or one of its siblings) to batch this work,
 the ECS can speed things up through reduced overhead: sharing steps across related operations.
 
 | Entities | `despawn` | `despawn_all` | Speedup |
@@ -785,7 +785,7 @@ If you're using [`DespawnOnEnter`] or [`DespawnOnExit`] you'll see this performa
 
 [`DespawnOnExit`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnExit.html
 [`DespawnOnEnter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnEnter.html
-[`despawn_all<F: QueryFilter>`]: https://docs.rs/bevy/0.20/bevy/ecs/system/command/fn.despawn_all.html
+[`despawn_all<F: QueryFilter>`]: https://docs.rs/bevy/latest/bevy/ecs/system/command/fn.despawn_all.html
 
 ## Better Texture Compression
 
