@@ -830,12 +830,13 @@ fn fallible() -> Result<(), BevyError> {
 }
 ```
 
-`with_context` may be used to produce the error string with a closure instead.
+`with_context` may be used to produce the context message with a closure instead.
 
-If multiple `context`s were used on the same `BevyError`, they're enumerated below:
+If multiple `context`s are stacked on top of each other, you see all of them when an error is logged.
+If we set up our error contexts like so:
 
 ```rs
-fn fallible() -> Result<Package, BevyError> {
+fn parse_package() -> Result<Package, BevyError> {
     let path = "package.json";
     let package = std::fs::read_to_string(path)
         .with_context(|| format!("Failed to read {path}"))?;
@@ -843,13 +844,13 @@ fn fallible() -> Result<Package, BevyError> {
     serde_json::from_str(&package)?
 }
 
-fn uses_fallible() -> Result<(), BevyError> {
-    let package = fallible().context("Failed to parse package.json")?;
+fn load_package() -> Result<(), BevyError> {
+    let package = parse_package().context("Failed to parse package.json")?;
     // Use `package`...
 }
 ```
 
-Will produce the following error if `package.json` is missing:
+The following error will be produced if `package.json` is missing:
 
 ```rs
 Failed to parse package.json
