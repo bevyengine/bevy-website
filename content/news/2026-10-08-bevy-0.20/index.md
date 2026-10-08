@@ -52,17 +52,14 @@ Additionally, thanks to some other changes, moving objects no longer have shadow
 
 DLSS-RR has gotten very good in recent updates, and for many scenes, ReSTIR costs a decent chunk of performance, and does not significantly improve image quality.
 
-Due to this, we've decided to make ReSTIR optional, and turn it **off by default**.
-
+As a result, we've decided to make ReSTIR optional, and turn it **off by default**.
 If you were using Solari in Bevy 0.19, check if the loss of ReSTIR affects your scene, and if so re-enable [`SolariLighting::restir`].
 
 With ReSTIR off, expect reduced shadow quality and missing shadows in motion in scenes with many lights. We are exploring cheaper ways of improving light sampling, without ReSTIR, to improve this in the future.
 
-Besides ReSTIR, Solari's scene management code is now retained (similar to retained render world optimizations in previous versions of Bevy), and overall much more optimized, leading to _significantly_ reduced CPU costs.
+In addition, Solari's scene management code is now retained (similar to retained render world optimizations in previous versions of Bevy), and overall much more optimized, leading to _significantly_ reduced CPU costs.
 
-Additionally, take a look at the new fields in [`SolariLighting`]. While we aim to set reasonable defaults that will work well across a wide variety of games, there are now many knobs you can tweak to improve performance or quality.
-
-World cache size, per-pixel light sample count, temporal accumulation, and path tracing bounce count can now all be tweaked to improve Solari for your specific game.
+You may also want to take a look at the new fields in [`SolariLighting`]. While we aim to set reasonable defaults that will work well across a wide variety of games, there are now many knobs (world cache size, per-pixel light sample count, temporal accumulation, and path tracing bounce count) that can be tweaked to improve performance or quality for your specific scene, project and hardware.
 
 ### Improved Compatibility
 
