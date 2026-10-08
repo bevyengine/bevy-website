@@ -526,7 +526,7 @@ This resulted in improved performance in many cases and also makes future mainte
 
 ## Pan Orbit Camera
 
-{{ heading_metadata(authors=["@aevyrie, @taishi-sama"] prs=[25434]) }}
+{{ heading_metadata(authors=["@aevyrie", "@taishi-sama"] prs=[25434]) }}
 
 <video controls loop><source  src="pan_orbit_cam.mp4" type="video/mp4"/></video>
 
