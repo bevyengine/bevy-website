@@ -272,7 +272,7 @@ bsn_list! {
 
 ## Ready Event
 
-{{ heading_metadata(authors=["@cart"] prs=[]) }}
+{{ heading_metadata(authors=["@cart"] prs=[25296]) }}
 
 We landed BSN, Bevy's next generation scene system, [in our last release](/news/bevy-0-19). It was missing a key piece though: the ability to easily run logic when a scene is fully "ready" and spawned (ex: all dependencies have loaded, the full hierarchy is present, and all of the initial components are inserted in the scene). This is a critical piece for building cohesive, standalone, composable scenes. It is also necessary to properly layer Bevy logic on top of _other_ scene representations (like glTF).
 
