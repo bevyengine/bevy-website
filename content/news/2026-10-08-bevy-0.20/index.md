@@ -176,7 +176,7 @@ bsn! {
 }
 ```
 
-We believe this tradeoff is worth it, as it increases BSN's compatibility with arbitrary Rust enums. Rust doesn't support "enum variant defaults" anyway! 
+We believe this tradeoff is worth it, as it increases BSN's compatibility with arbitrary Rust enums. Rust doesn't support "enum variant defaults" anyway!
 
 ### Chained method support
 
@@ -667,7 +667,7 @@ struct MyComponent {
 
 When enabled, this will store a "column change tick" in addition to a "per-entity change tick", which allows cheaply skipping the whole column of entities when querying for changes, rather than needing to check every entity's component to see if it has changed.
 
-This makes mutations more expensive, as they need to write both the column change tick and the entity change tick, but for entities whose changes are queried often, but change infrequently, this tradeoff can easily be worth it! We've seen change ticks result in a 132x speedup in our GPU mesh extraction code! 
+This makes mutations more expensive, as they need to write both the column change tick and the entity change tick, but for entities whose changes are queried often, but change infrequently, this tradeoff can easily be worth it! We've seen change ticks result in a 132x speedup in our GPU mesh extraction code!
 
 ## `FixedNode`
 
@@ -881,7 +881,7 @@ Like usual, many of these features are "essential components of a Bevy scene edi
 That allows us to ship useful bits and pieces incrementally,
 and polish them while we put it all together.
 
-- **.bsn asset format:** With the syntax stabilized, it's time to bring BSN to the file system, creating a human-readable, hot-reloadable file format designed for tool-driven (read: editor) authoring. 
+- **.bsn asset format:** With the syntax stabilized, it's time to bring BSN to the file system, creating a human-readable, hot-reloadable file format designed for tool-driven (read: editor) authoring.
 - **Assets as Entities:** Our asset handling has been steadily improving, it is still a separate data model. We're working on representing assets as entities, giving them access to the full expressive power of the ECS (including event observers and relationships), providing direct support for defining assets in BSN, and easing the learning curve (as assets are accessed like any other ECS data).
 - **Remote inspector:** Browse, modify and mutate entities from external tools, on your machine or on a different device!
 - **More powerful required components:** Wish you could pull in assets, vary values based on other entities / components, or reference resources in required components? Us too: we're hoping to integrate required components with the `Template` trait that powers BSN, bells and whistles included.
