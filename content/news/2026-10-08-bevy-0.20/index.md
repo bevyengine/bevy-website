@@ -17,7 +17,7 @@ To update an existing Bevy App or Plugin to **Bevy 0.20**, check out our [0.19 t
 
 Since our last release a few months ago we've added a _ton_ of new features, bug fixes, and quality of life tweaks, but here are some of the highlights:
 
-- **Solari and DLSS**: Solari, Bevy's realtime pathtraced renderer, is now faster, more accurate, supports more Bevy rendering features, and runs on MacOS via Metal!
+- **Solari and DLSS**: Solari, Bevy's realtime pathtraced renderer, is now faster, more accurate, supports more Bevy rendering features, and runs on macOS via Metal!
 - **BSN Syntax Improvements**: BSN, Bevy's new scene system, had some syntax changes that made it _much_ easier to read and compose
 - **Ready Event**: BSN scene entities now trigger an observable [`Ready`] event when all of their children have been spawned.
 - **More UI Widgets**: Bevy Feathers, Bevy's opinionated editor-centric UI toolkit, now has Color Input, Scrollable List View, Dropdown Selection, and Lazy Menu widgets. The Number Input widget is now scrubbable / draggable, and we've added Headless Tab Widgets.
