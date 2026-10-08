@@ -789,25 +789,26 @@ If you're using [`DespawnOnEnter`] or [`DespawnOnExit`] you'll see this performa
 [`DespawnOnEnter`]: https://docs.rs/bevy/latest/bevy/prelude/struct.DespawnOnEnter.html
 [`despawn_all<F: QueryFilter>`]: https://docs.rs/bevy/0.20/bevy/ecs/system/command/fn.despawn_all.html
 
-## CompressedImageSaver Improvements
+## Better Texture Compression
 
 {{ heading_metadata(authors=["@JMS55", "@cwfitzgerald"] prs=[24223]) }}
 
-Bevy's `CompressedImageSaver` asset processor has been significantly upgraded with a new compression backend powered by the [`ctt`](https://github.com/cwfitzgerald/ctt) library.
+Textures are a huge part of the memory footprint for most 3D games.
+Smaller textures means smaller downloads, faster loads and bigger scenes.
+Bevy 0.20 tackles this on two fronts, with an improved compression approach and automatic mipmap generation during asset processing.
 
-The new `compressed_image_saver` feature compresses textures into BCn formats (for desktop GPUs) or ASTC formats (for mobile GPUs), producing higher-quality output than the previous Basis Universal approach. The compressor automatically selects the best output format based on the input texture's channel count and type — for example, single-channel textures get BC4, HDR textures get BC6H, and standard RGBA textures get BC7.
+Bevy's `CompressedImageSaver` asset processor has been significantly upgraded with a new compression backend powered by the [`ctt`](https://github.com/cwfitzgerald/ctt) library.
+The new `compressed_image_saver` feature compresses textures into BCn formats (for desktop GPUs) or ASTC formats (for mobile GPUs), producing higher-quality output than the previous Basis Universal approach: more bang for the byte. The compressor automatically selects the best output format based on the input texture's channel count and type — for example, single-channel textures get BC4, HDR textures get BC6H, and standard RGBA textures get BC7.
 
 Try out the new `compressed_image_saver` example to see it in action.
 
 ### Automatic Mipmap Generation
 
-No more manually generating mipmaps! The new backend automatically produces a full mip chain during compression. This means less aliasing when textures are viewed at a distance and better GPU cache utilization — all for free, just by running your textures through the asset processor.
+No more manually generating mipmaps (scaled down versions of each texture for viewing at a distance)! The new backend automatically produces a full mip chain during compression. This means less aliasing when textures are viewed at a distance and better GPU cache utilization — all for free, just by running your textures through the asset processor.
 
-### ASTC for Mobile
+### Image compression on other platforms
 
 To target mobile GPUs, set the `BEVY_COMPRESSED_IMAGE_SAVER_ASTC` environment variable with your desired block size (e.g. `4x4`, `6x6`, `8x8`). Larger blocks give smaller files at the cost of quality. All 14 ASTC block sizes are supported.
-
-### Basis Universal is Still Available
 
 The previous Basis Universal compression behavior has been moved to the `compressed_image_saver_universal` feature. This remains the best choice for cross-platform distribution (including WebGPU), since UASTC can be transcoded at load time to whatever format the target GPU supports.
 
