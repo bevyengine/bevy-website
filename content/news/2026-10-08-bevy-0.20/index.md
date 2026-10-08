@@ -428,7 +428,7 @@ with no preprocessor directives will keep working.
 #ifdef VERTEX_COLORS
 var<private> tint: vec4<f32>;
 #endif
-@group(2) @binding(#{MATERIAL_BINDING}) var<uniform> color: vec4<f32>;
+@group(2) @binding(#{MATERIAL_BIND_GROUP}) var<uniform> color: vec4<f32>;
 ```
 
 ### After: WESL
@@ -438,7 +438,7 @@ import bevy_pbr::render::forward_io::VertexOutput;
 import super::util::hsv_to_rgb;
 @if(VERTEX_COLORS)
 var<private> tint: vec4<f32>;
-@group(2) @binding(constants::MATERIAL_BINDING) var<uniform> color: vec4<f32>;
+@group(2) @binding(constants::MATERIAL_BIND_GROUP) var<uniform> color: vec4<f32>;
 ```
 
 [wgsl-analyzer]: https://wgsl-analyzer.github.io/
