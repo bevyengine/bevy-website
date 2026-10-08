@@ -61,7 +61,7 @@ World cache size, per-pixel light sample count, temporal accumulation, and path 
 
 ### Improved Compatibility
 
-Solari now supports lighting from Atmosphere and EnvironmentMapLights on cameras, in addition to the existing support for DirectionalLight and emissive meshes. We're hoping to add support for the remaining PointLight, SpotLight, and RectLight types in the near future.
+Solari now supports lighting from Atmosphere and EnvironmentMapLights on cameras, in addition to the existing support for DirectionalLight and emissive meshes. We're hoping to add support for the remaining PointLight, SpotLight, and RectLight types [in the near future](https://github.com/bevyengine/bevy/pull/25913).
 
 Solari now also runs on macOS, but note that there is currently no built-in denoiser included in `bevy_solari` for macOS. MetalFX Ray Reconstruction might be a possible solution in the future (contributions welcome!)
 
