@@ -682,7 +682,7 @@ colors than widgets that are on a regular panel or window background.
 
 The design follows that of popular web toolkits like MUI, Radix, or Chakra. There's a new component,
 [`ThemeContext`], which lets you select which color scheme the widget's descendants should use;
-currently the available schemes are `Base`, `Higher`, `Highest`, and `Floating`, which correspond
+currently the available schemes are [`Base`], [`Higher`], [`Highest`], and [`Floating`], which correspond
 to the design plans for the Bevy scene editor.
 
 The theme context is used in conjunction with a new kind of design token, named [`SemanticToken`].
@@ -698,6 +698,10 @@ more intuitive.
 [`ThemeContext`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/struct.ThemeContext.html
 [`SemanticToken`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/struct.SemanticToken.html
 [`ThemeToken`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/struct.ThemeToken.html
+[`Base`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Base
+[`Higher`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Higher
+[`Highest`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Highest
+[`Floating`]: https://docs.rs/bevy/0.20.0-rc.2/bevy/feathers/theme/enum.SurfaceLevel.html#variant.Floating
 
 ## `Val::Em` and `Val::Rem`
 
