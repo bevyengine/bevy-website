@@ -5,8 +5,6 @@ date = 2026-10-08
 show_image = true
 image = "zorah.jpg"
 image_subtitle = "The Zorah scene rendered in Bevy Solari"
-public_draft = 2582
-status = 'hidden'
 +++
 
 Thanks to **227** contributors, **817** pull requests, community reviewers, and our [**generous donors**](/donate), we're happy to announce the **Bevy 0.20** release on [crates.io]!
@@ -989,7 +987,7 @@ That allows us to ship useful bits and pieces incrementally,
 and polish them while we put it all together.
 
 - **.bsn asset format:** With the syntax stabilized, it's time to bring BSN to the file system, creating a human-readable, hot-reloadable file format designed for tool-driven (read: editor) authoring.
-- **Assets as Entities:** Our asset handling has been steadily improving, it is still a separate data model. We're working on representing assets as entities, giving them access to the full expressive power of the ECS (including event observers and relationships), providing direct support for defining assets in BSN, and easing the learning curve (as assets are accessed like any other ECS data).
+- **Assets as Entities:** While our asset handling has been steadily improving, it is still a separate data model. We're working on representing assets as entities, giving them access to the full expressive power of the ECS (including event observers and relationships), providing direct support for defining assets in BSN, and easing the learning curve (as assets are accessed like any other ECS data).
 - **Remote inspector:** Browse, modify and mutate entities from external tools, on your machine or on a different device!
 - **More powerful required components:** Wish you could pull in assets, vary values based on other entities / components, or reference resources in required components? Us too: we're hoping to integrate required components with the [`Template`] trait that powers BSN, bells and whistles included.
 - **Mutually exclusive components:** A long requested feature: _statically_ ensure that your `Player` is never a `Camera`, creating invariants that can be counted on.
