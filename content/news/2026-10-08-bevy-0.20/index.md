@@ -319,7 +319,8 @@ impl Widget {
                 info!("The full scene, including 'widget.bsn' contents, is available here")
             })
             Children [
-                Text("hello"),
+                Text("hello")
+                --
                 :"widget.bsn"
             ]
         }
