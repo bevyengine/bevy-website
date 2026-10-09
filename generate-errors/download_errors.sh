@@ -4,9 +4,8 @@
 cd $(dirname $0)
 
 # Only download the `errors` folder from the main Bevy repository.
-git init bevy
-cd bevy
-git remote add origin https://github.com/bevyengine/bevy
-git sparse-checkout set "errors"
-git pull --depth=1 origin latest
+git clone --no-checkout --depth=1 --filter=tree:0 https://github.com/bevyengine/bevy && cd bevy
+git sparse-checkout set --no-cone /errors
+git checkout
+
 cd ..
