@@ -1,0 +1,289 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content=Alignment property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/transforms/align/ property=og:url><meta content=https://bevy.org/examples-webgpu/transforms/align/../static/screenshots/Transforms/align.png property=og:image><meta content="A demonstration of Transform's axis-alignment feature" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Alignment</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Transforms / Alignment</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/transforms/align.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/transforms/align/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example shows how to align the orientations of objects in 3D space along two axes using the <code>Transform::align</code> API.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>align.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::{</span><span style=color:#dfc479>GRAY</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RED</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> WHITE</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input</span><span>::</span><span style=color:#c0c5ce>mouse</span><span>::{</span><span style=color:#dfc479>AccumulatedMouseMotion</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> MouseButtonInput</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    math</span><span>::</span><span style=color:#dfc479>StableInterpolate</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> chacha20</span><span>::</span><span style=color:#dfc479>ChaCha8Rng</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> rand</span><span>::{</span><span style=color:#dfc479>RngExt</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SeedableRng</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>draw_ship_axes, draw_random_axes</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>handle_keypress, handle_mouse, rotate_ship</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>chain</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This struct stores metadata for a single rotational move of the ship</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Ship</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The target transform of the ship move, the endpoint of interpolation</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    target_transform:</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Whether the ship is currently in motion; allows motion to be paused</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    in_motion:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> RandomAxes</span><span>(</span><span style=color:#dfc479>Dir3</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Dir3</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Instructions</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> MousePressed</span><span>(</span><span style=color:#e5c07b>bool</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> SeededRng</span><span>(</span><span style=color:#dfc479>ChaCha8Rng</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Setup</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We're seeding the PRNG here to make this example deterministic for testing purposes.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This isn't strictly required in practical use unless you need your app to be deterministic.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> seeded_rng</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ChaCha8Rng</span><span>::</span><span style=color:#69c>seed_from_u64</span><span>(</span><span style=color:#e79e6d>19878367467712</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // A camera looking at the origin</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>3</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 4</span><span style=color:#c594c5>.</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // A plane that we can sit on top of</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Plane3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>size</span><span>(</span><span style=color:#e79e6d>100.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 100.0</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>2</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#c594c5>.</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // A light source</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        PointLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            shadow_maps_enabled:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>4.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 7.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>4.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Initialize random axes</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> first</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> seeded_rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> second</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> seeded_rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#69c>RandomAxes</span><span>(</span><span style=color:#c0c5ce>first, second</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Finally, our ship that is going to rotate</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        WorldAssetRoot</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            asset_server</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>load</span><span>(</span><span style=color:#c0c5ce>GltfAssetLabel</span><span>::</span><span style=color:#69c>Scene</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>from_asset</span><span>(</span><span style=color:#9fc37f>"models/ship/craft_speederD.gltf"</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Ship</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            target_transform:</span><span style=color:#69c> random_axes_target_alignment</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#69c>RandomAxes</span><span>(</span><span style=color:#c0c5ce>first, second</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Instructions for the example</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "The bright red axis is the primary alignment axis, and it will always be</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            made to coincide with the primary target direction (white) exactly.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            The fainter red axis is the secondary alignment axis, and it is made to</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            line up with the secondary target direction (gray) as closely as possible.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            Press 'R' to generate random target directions.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            Press 'T' to align the ship to those directions.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            Click and drag the mouse to rotate the camera.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            Press 'H' to hide/show these instructions."</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Instructions</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#69c>MousePressed</span><span>(</span><span style=color:#d19a66>false</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#69c>SeededRng</span><span>(</span><span style=color:#c0c5ce>seeded_rng</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Update systems</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Draw the main and secondary axes on the rotating ship</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> draw_ship_axes</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> gizmos:</span><span style=color:#dfc479> Gizmos</span><span style=color:#c0c5ce>, ship_transform:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Ship</span><span style=color:#c0c5ce>>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Local Z-axis arrow, negative direction</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> z_ends</span><span style=color:#c594c5> =</span><span style=color:#69c> arrow_ends</span><span>(*</span><span style=color:#c0c5ce>ship_transform, Vec3</span><span>::</span><span style=color:#d19a66>NEG_Z</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.5</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    gizmos</span><span style=color:#c594c5>.</span><span style=color:#69c>arrow</span><span>(</span><span style=color:#c0c5ce>z_ends</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>, z_ends</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>1</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> RED</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // local X-axis arrow</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> x_ends</span><span style=color:#c594c5> =</span><span style=color:#69c> arrow_ends</span><span>(*</span><span style=color:#c0c5ce>ship_transform, Vec3</span><span>::</span><span style=color:#dfc479>X</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.5</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    gizmos</span><span style=color:#c594c5>.</span><span style=color:#69c>arrow</span><span>(</span><span style=color:#c0c5ce>x_ends</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>, x_ends</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>1</span><span style=color:#c0c5ce>, Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.65</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#c594c5>.</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Draw the randomly generated axes</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> draw_random_axes</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> gizmos:</span><span style=color:#dfc479> Gizmos</span><span style=color:#c0c5ce>, random_axes:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>RandomAxes</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#69c> RandomAxes</span><span>(</span><span style=color:#c0c5ce>v1, v2</span><span>)</span><span style=color:#c594c5> =</span><span> *</span><span style=color:#c0c5ce>random_axes;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    gizmos</span><span style=color:#c594c5>.</span><span style=color:#69c>arrow</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.5</span><span> * *</span><span style=color:#c0c5ce>v1,</span><span style=color:#d19a66> WHITE</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    gizmos</span><span style=color:#c594c5>.</span><span style=color:#69c>arrow</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.5</span><span> * *</span><span style=color:#c0c5ce>v2,</span><span style=color:#d19a66> GRAY</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Actually update the ship's transform according to its initial source and target</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> rotate_ship</span><span>(</span><span style=color:#c0c5ce>ship:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Ship</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Transform</span><span>)</span><span style=color:#c0c5ce>>, time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> ship,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> ship_transform</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ship</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if !</span><span style=color:#c0c5ce>ship</span><span style=color:#c594c5>.</span><span>in_motion {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> target_rotation</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> ship</span><span style=color:#c594c5>.</span><span>target_transform</span><span style=color:#c594c5>.</span><span>rotation</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ship_transform</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span>rotation</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>smooth_nudge</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>target_rotation,</span><span style=color:#e79e6d> 3.0</span><span style=color:#c0c5ce>, time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> ship_transform</span><span style=color:#c594c5>.</span><span>rotation</span><span style=color:#c594c5>.</span><span style=color:#69c>angle_between</span><span>(</span><span style=color:#c0c5ce>target_rotation</span><span>)</span><span style=color:#c594c5> &lt;=</span><span style=color:#b48ead> f32</span><span>::</span><span style=color:#d19a66>EPSILON</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        ship</span><span style=color:#c594c5>.</span><span>in_motion </span><span style=color:#c594c5>=</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Handle user inputs from the keyboard for dynamically altering the scenario</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> handle_keypress</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> ship:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Ship</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> random_axes:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> RandomAxes</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> instructions_viz:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Visibility</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Instructions</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    keyboard:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> seeded_rng:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SeededRng</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyR</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Randomize the target axes</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> first</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> seeded_rng</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>random</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> second</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> seeded_rng</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>random</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        **</span><span style=color:#c0c5ce>random_axes</span><span style=color:#c594c5> =</span><span style=color:#69c> RandomAxes</span><span>(</span><span style=color:#c0c5ce>first, second</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Stop the ship and set it up to transform from its present orientation to the new one</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        ship</span><span style=color:#c594c5>.</span><span>in_motion </span><span style=color:#c594c5>=</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        ship</span><span style=color:#c594c5>.</span><span>target_transform </span><span style=color:#c594c5>=</span><span style=color:#69c> random_axes_target_alignment</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>random_axes</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyT</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        ship</span><span style=color:#c594c5>.</span><span>in_motion </span><span style=color:#c594c5>^=</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> keyboard</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyH</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span> *</span><span style=color:#c0c5ce>instructions_viz</span><span style=color:#c594c5>.</span><span style=color:#69c>as_ref</span><span>()</span><span style=color:#c594c5> ==</span><span style=color:#dfc479> Visibility</span><span>::</span><span style=color:#dfc479>Hidden</span><span> {</span></span>
+<span class=giallo-l><span>            **</span><span style=color:#c0c5ce>instructions_viz</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Visibility</span><span>::</span><span style=color:#dfc479>Visible</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span>            **</span><span style=color:#c0c5ce>instructions_viz</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Visibility</span><span>::</span><span style=color:#dfc479>Hidden</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Handle user mouse input for panning the camera around</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> handle_mouse</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    accumulated_mouse_motion:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AccumulatedMouseMotion</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> mouse_button_inputs:</span><span style=color:#dfc479> MessageReader</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MouseButtonInput</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> camera_transform:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> mouse_pressed:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MousePressed</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Store left-pressed state in the MousePressed resource</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> mouse_button_input</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> mouse_button_inputs</span><span style=color:#c594c5>.</span><span style=color:#69c>read</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> mouse_button_input</span><span style=color:#c594c5>.</span><span>button </span><span style=color:#c594c5>!=</span><span style=color:#dfc479> MouseButton</span><span>::</span><span style=color:#dfc479>Left</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            continue</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>mouse_pressed</span><span style=color:#c594c5> =</span><span style=color:#69c> MousePressed</span><span>(</span><span style=color:#c0c5ce>mouse_button_input</span><span style=color:#c594c5>.</span><span>state</span><span style=color:#c594c5>.</span><span style=color:#69c>is_pressed</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // If the mouse is not pressed, just ignore motion events</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if !</span><span style=color:#c0c5ce>mouse_pressed</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> accumulated_mouse_motion</span><span style=color:#c594c5>.</span><span>delta </span><span style=color:#c594c5>!=</span><span style=color:#dfc479> Vec2</span><span>::</span><span style=color:#d19a66>ZERO</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> displacement</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> accumulated_mouse_motion</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        camera_transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_around</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Quat</span><span>::</span><span style=color:#69c>from_rotation_y</span><span>(-</span><span style=color:#c0c5ce>displacement</span><span> /</span><span style=color:#e79e6d> 75</span><span style=color:#c594c5>.</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Helper functions (i.e. non-system functions)</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> arrow_ends</span><span>(</span><span style=color:#c0c5ce>transform:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Transform</span><span style=color:#c0c5ce>, axis:</span><span style=color:#dfc479> Vec3</span><span style=color:#c0c5ce>, length:</span><span style=color:#b48ead> f32</span><span>) -> (</span><span style=color:#dfc479>Vec3</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Vec3</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> local_vector</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> length</span><span> * (</span><span style=color:#c0c5ce>transform</span><span style=color:#c594c5>.</span><span>rotation *</span><span style=color:#c0c5ce> axis</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    (</span><span style=color:#c0c5ce>transform</span><span style=color:#c594c5>.</span><span>translation</span><span style=color:#c0c5ce>, transform</span><span style=color:#c594c5>.</span><span>translation +</span><span style=color:#c0c5ce> local_vector</span><span>)</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// This is where `Transform::align` is actually used!</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Note that the choice of `Vec3::X` and `Vec3::Y` here matches the use of those in `draw_ship_axes`.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> random_axes_target_alignment</span><span>(</span><span style=color:#c0c5ce>random_axes:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>RandomAxes</span><span>) -></span><span style=color:#dfc479> Transform</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#69c> RandomAxes</span><span>(</span><span style=color:#c0c5ce>first, second</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> random_axes;</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Transform</span><span>::</span><span style=color:#d19a66>IDENTITY</span><span style=color:#c594c5>.</span><span style=color:#69c>aligned_by</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>NEG_Z</span><span style=color:#c0c5ce>,</span><span> *</span><span style=color:#c0c5ce>first, Vec3</span><span>::</span><span style=color:#dfc479>X</span><span style=color:#c0c5ce>,</span><span> *</span><span style=color:#c0c5ce>second</span><span>)</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/Transforms/align/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

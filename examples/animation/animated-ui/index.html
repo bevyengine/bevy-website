@@ -1,0 +1,271 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Animated UI" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/animation/animated-ui/ property=og:url><meta content=https://bevy.org/examples/animation/animated-ui/../static/screenshots/Animation/animated_ui.png property=og:image><meta content="Shows how to use animation clips to animate UI properties" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Animated UI</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Animation / Animated UI</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/animation/animated_ui.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/animation/animated-ui/>here</a>.</aside></div><div class="example__explanation media-content"><p>Shows how to use animation clips to animate UI properties.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>animated_ui.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    animation</span><span>::{</span></span>
+<span class=giallo-l><span>        animated_field</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AnimatedBy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AnimationEntityMut</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AnimationEvaluationError</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AnimationTargetId</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> core</span><span>::</span><span style=color:#c0c5ce>any</span><span>::</span><span style=color:#dfc479>TypeId</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> core</span><span>::</span><span style=color:#c0c5ce>f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>TAU</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Holds information about the animation we programmatically create.</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> AnimationInfo</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The name of the animation target (in this case, the text).</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    target_name:</span><span style=color:#dfc479> Name</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The ID of the animation target, derived from the name.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    target_id:</span><span style=color:#dfc479> AnimationTargetId</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The animation graph asset.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    graph:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AnimationGraph</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The index of the node within that graph.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    node_index:</span><span style=color:#dfc479> AnimationNodeIndex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// The entry point.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Note that we don't need any systems other than the setup system,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // because Bevy automatically updates animations every frame.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> AnimationInfo</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Programmatically creates the UI animation.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> create</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        animation_graphs:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AnimationGraph</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        animation_clips:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AnimationClip</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>    ) -></span><span style=color:#dfc479> AnimationInfo</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Create an ID that identifies the text node we're going to animate.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> animation_target_name</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Name</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Text"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> animation_target_id</span><span style=color:#c594c5> =</span><span style=color:#dfc479> AnimationTargetId</span><span>::</span><span style=color:#69c>from_name</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>animation_target_name</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Allocate an animation clip.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> animation_clip</span><span style=color:#c594c5> =</span><span style=color:#dfc479> AnimationClip</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Create a curve that animates `UiTransform::scale`.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        animation_clip</span><span style=color:#c594c5>.</span><span style=color:#69c>add_curve_to_target</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            animation_target_id,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            AnimatableCurve</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#61afef>                animated_field!</span><span>(</span><span style=color:#c0c5ce>UiTransform</span><span>::</span><span style=color:#c0c5ce>scale</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                AnimatableKeyframeCurve</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span>                    [</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 3.0</span><span>]</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>into_iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>zip</span><span>([</span><span style=color:#e79e6d>0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span>]</span><span style=color:#c594c5>.</span><span style=color:#69c>map</span><span>(</span><span style=color:#c0c5ce>Vec2</span><span>::</span><span style=color:#c0c5ce>splat</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>expect</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                    "should be able to build translation curve because we pass in valid samples"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Create a curve that animates font color. Note that this should have</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // the same time duration as the previous curve.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        //</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This time we use a "custom property", which in this case animates TextColor under the assumption</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // that it is in the "srgba" format.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        animation_clip</span><span style=color:#c594c5>.</span><span style=color:#69c>add_curve_to_target</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            animation_target_id,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            AnimatableCurve</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>                TextColorProperty</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                AnimatableKeyframeCurve</span><span>::</span><span style=color:#69c>new</span><span>([</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 3.0</span><span>]</span><span style=color:#c594c5>.</span><span style=color:#69c>into_iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>zip</span><span>([</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    Srgba</span><span>::</span><span style=color:#d19a66>RED</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    Srgba</span><span>::</span><span style=color:#d19a66>GREEN</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    Srgba</span><span>::</span><span style=color:#d19a66>BLUE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    Srgba</span><span>::</span><span style=color:#d19a66>RED</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ]))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>expect</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                    "should be able to build translation curve because we pass in valid samples"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Create a curve that animates `UiTransform::rotation`.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        //</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This animates the 2D rotation of the UI element using `Rot2`.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Like other `Animatable` types, it uses shortest-path interpolation (slerp)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // to ensure smooth movement between keyframes.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        animation_clip</span><span style=color:#c594c5>.</span><span style=color:#69c>add_curve_to_target</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            animation_target_id,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            AnimatableCurve</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#61afef>                animated_field!</span><span>(</span><span style=color:#c0c5ce>UiTransform</span><span>::</span><span style=color:#c0c5ce>rotation</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                AnimatableKeyframeCurve</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span>                    [</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 3.0</span><span>]</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>into_iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>zip</span><span>([</span><span style=color:#e79e6d>0</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> TAU</span><span> /</span><span style=color:#e79e6d> 3</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> TAU</span><span> /</span><span style=color:#e79e6d> 1.5</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> TAU</span><span>]</span><span style=color:#c594c5>.</span><span style=color:#69c>map</span><span>(</span><span style=color:#c0c5ce>Rot2</span><span>::</span><span style=color:#c0c5ce>radians</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>expect</span><span>(</span><span style=color:#9fc37f>"should be able to build rotation curve because we pass in valid samples"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Save our animation clip as an asset.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> animation_clip_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> animation_clips</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>animation_clip</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Create an animation graph with that clip.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span> (</span><span style=color:#c0c5ce>animation_graph, animation_node_index</span><span>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AnimationGraph</span><span>::</span><span style=color:#69c>from_clip</span><span>(</span><span style=color:#c0c5ce>animation_clip_handle</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> animation_graph_handle</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> animation_graphs</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>animation_graph</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#dfc479>        AnimationInfo</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            target_name: animation_target_name,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            target_id: animation_target_id,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            graph: animation_graph_handle,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            node_index: animation_node_index,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// Creates all the entities in the scene.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> animation_graphs:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AnimationGraph</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> animation_clips:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AnimationClip</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Create the animation.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> AnimationInfo</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        target_name: animation_target_name,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        target_id: animation_target_id,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        graph: animation_graph,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        node_index: animation_node_index,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> =</span><span style=color:#dfc479> AnimationInfo</span><span>::</span><span style=color:#69c>create</span><span>(</span><span style=color:#c0c5ce>animation_graphs</span><span style=color:#c594c5>.</span><span style=color:#69c>as_mut</span><span>()</span><span style=color:#c0c5ce>, animation_clips</span><span style=color:#c594c5>.</span><span style=color:#69c>as_mut</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Build an animation player that automatically plays the UI animation.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> animation_player</span><span style=color:#c594c5> =</span><span style=color:#dfc479> AnimationPlayer</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    animation_player</span><span style=color:#c594c5>.</span><span style=color:#69c>play</span><span>(</span><span style=color:#c0c5ce>animation_node_index</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>repeat</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Add a camera.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Camera2d</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Build the UI. We have a parent node that covers the whole screen and</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // contains the `AnimationPlayer`, as well as a child node that contains the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // text to be animated.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> entity</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Cover the whole screen, and center contents.</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            right:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            bottom:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        animation_player,</span></span>
+<span class=giallo-l><span style=color:#69c>        AnimationGraphHandle</span><span>(</span><span style=color:#c0c5ce>animation_graph</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> player</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> entity</span><span style=color:#c594c5>.</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    entity</span><span style=color:#c594c5>.</span><span style=color:#69c>with_child</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Bevy"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            font: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"fonts/FiraSans-Bold.ttf"</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>80</span><span style=color:#c594c5>.</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        TextColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>Srgba</span><span>(</span><span style=color:#c0c5ce>Srgba</span><span>::</span><span style=color:#d19a66>RED</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        TextLayout</span><span>::</span><span style=color:#69c>justify</span><span>(</span><span style=color:#c0c5ce>Justify</span><span>::</span><span style=color:#dfc479>Center</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        animation_target_id,</span></span>
+<span class=giallo-l><span style=color:#69c>        AnimatedBy</span><span>(</span><span style=color:#c0c5ce>player</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        animation_target_name,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// A type that represents the color of the first text section.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>//</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// We implement `AnimatableProperty` on this to define custom property accessor logic</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> TextColorProperty</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> AnimatableProperty</span><span style=color:#c594c5> for</span><span style=color:#dfc479> TextColorProperty</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Property</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Srgba</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> evaluator_id</span><span>(</span><span style=color:#c594c5>&self</span><span>) -></span><span style=color:#dfc479> EvaluatorId</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'_</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        EvaluatorId</span><span>::</span><span style=color:#69c>Type</span><span>(</span><span style=color:#c0c5ce>TypeId</span><span>::</span><span style=color:#69c>of</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>Self</span><span style=color:#c0c5ce>></span><span>())</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> get_mut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'a</span><span style=color:#c0c5ce>></span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>        &self</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        entity:</span><span style=color:#c594c5> &'a mut</span><span style=color:#dfc479> AnimationEntityMut</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ) -></span><span style=color:#dfc479> Result</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&'a mut Self</span><span>::</span><span style=color:#dfc479>Property</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AnimationEvaluationError</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> text_color</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> entity</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>get_mut</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>TextColor</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>ok_or</span><span>(</span><span style=color:#c0c5ce>AnimationEvaluationError</span><span>::</span><span style=color:#69c>ComponentNotPresent</span><span>(</span><span style=color:#c0c5ce>TypeId</span><span>::</span><span style=color:#c0c5ce>of</span><span>::</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#dfc479>                TextColor</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ></span><span>(</span></span>
+<span class=giallo-l><span>            )))</span><span style=color:#c594c5>?</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span style=color:#c0c5ce> text_color</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Color</span><span>::</span><span style=color:#69c>Srgba</span><span>(</span><span style=color:#c594c5>ref mut</span><span style=color:#c0c5ce> color</span><span>) =></span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c0c5ce>color</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            _</span><span> =></span><span style=color:#dfc479> Err</span><span>(</span><span style=color:#dfc479>AnimationEvaluationError</span><span>::</span><span style=color:#69c>PropertyNotPresent</span><span>(</span><span style=color:#c0c5ce>TypeId</span><span>::</span><span style=color:#c0c5ce>of</span><span>::</span><span style=color:#c0c5ce>&lt;</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Srgba</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ></span><span>(</span></span>
+<span class=giallo-l><span>            )))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/Animation/animated-ui/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>
