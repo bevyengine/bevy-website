@@ -64,6 +64,20 @@ jobs:
         run: |
           cargo install oxipng --version ^10.1.1
 
+      - name: Cargo wrapper with timeout
+        run: |
+          real_cargo=$(command -v cargo)
+          mkdir -p $HOME/cargo-timeout
+          cat > $HOME/cargo-timeout/cargo <<EOF
+          #!/bin/bash
+          if [ "\$1" = "run" ] && [[ " \$* " == *" --example "* ]]; then
+            exec timeout --kill-after=30 20m $real_cargo "\$@"
+          fi
+          exec $real_cargo "\$@"
+          EOF
+          chmod +x $HOME/cargo-timeout/cargo
+          echo "$HOME/cargo-timeout" >> $GITHUB_PATH
+
       - name: Take Screenshots
         continue-on-error: true
         run: |
