@@ -99,9 +99,8 @@ jobs:
             done
 
         - name: Publish to Cloudflare Pages
-          uses: cloudflare/pages-action@v1
+          uses: cloudflare/wrangler-action@v4
           with:
             apiToken: ${{ secrets.CLOUDFLARE_PAGES }}
             accountId: 0e862a54d5c283c78d8d56adb6159df8
-            projectName: bevy-${{ matrix.api }}-examples
-            directory: ${{ matrix.api }}
+            command: pages deploy ${{ matrix.api }} --project-name=bevy-${{ matrix.api }}-examples --branch=main --commit-dirty=true
