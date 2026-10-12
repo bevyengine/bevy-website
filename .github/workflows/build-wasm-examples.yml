@@ -98,6 +98,25 @@ jobs:
               rsync -a $file/* ${{ matrix.api }}/
             done
 
+        - name: Compress wasm files
+          run: |
+            find ${{ matrix.api }} -name '*.wasm' -exec gzip -9 {} +
+            find ${{ matrix.api }} -name 'wasm_example.js' -exec sed -i \
+              -e "s|module_or_path = new URL('wasm_example_bg.wasm', import.meta.url);|module_or_path = new URL('wasm_example_bg.wasm.gz', import.meta.url);|" \
+              -e "s|module_or_path = fetch(module_or_path);|module_or_path = fetch(module_or_path).then((response) => new Response(response.body.pipeThrough(new DecompressionStream('gzip')), { headers: { 'Content-Type': 'application/wasm' } }));|" \
+              {} +
+            # Fail if wasm-bindgen output changed and the patch didn't apply
+            unpatched=$(grep -L -F "wasm_example_bg.wasm.gz" -r --include=wasm_example.js ${{ matrix.api }})
+            if [ -n "$unpatched" ]; then
+              echo "Failed to patch:"; echo "$unpatched"; exit 1
+            fi
+            unpatched=$(grep -L -F "DecompressionStream" -r --include=wasm_example.js ${{ matrix.api }})
+            if [ -n "$unpatched" ]; then
+              echo "Failed to patch:"; echo "$unpatched"; exit 1
+            fi
+            printf '/*/wasm_example_bg.wasm.gz\n  Content-Type: application/gzip\n' >> ${{ matrix.api }}/_headers
+            find ${{ matrix.api }} -type f -size +25M -exec ls -lh {} \;
+
         - name: Publish to Cloudflare Pages
           uses: cloudflare/wrangler-action@v4
           with:
