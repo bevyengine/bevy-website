@@ -1,0 +1,429 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Draggable Slider" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/picking/draggable-slider/ property=og:url><meta content=https://bevy.org/examples/picking/draggable-slider/../static/screenshots/Picking/draggable_slider.png property=og:image><meta content="Demonstrates pointer capture using a draggable slider" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Draggable Slider</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Picking / Draggable Slider</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/picking/draggable_slider.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/picking/draggable-slider/>here</a>.</aside></div><div class="example__explanation media-content"><p>Demonstrates why pointer capture matters during drag operations.<p>A slider sits above a row of buttons. Without [<code>PointerCaptureMap</code>], dragging the slider thumb over the buttons causes them to show a hover highlight — misleading the user into thinking the button is about to be activated. With capture enabled the slider owns the pointer for the duration of the drag, so no other widget receives hover state.<p>Toggle capture on/off with the button at the bottom to see the difference.<p>Additional UI elements showcased:<ul><li>A <strong>fill bar</strong> that grows with the slider value.<li><strong>Min / max labels</strong> flanking the track.<li>A <strong>Reset button</strong> that snaps the value back to the default.</ul></div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>draggable_slider.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>prelude</span><span>::*</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> TRACK_WIDTH</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 500.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> TRACK_HEIGHT</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 14.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> THUMB_SIZE</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 28.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> THUMB_HALF</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#d19a66> THUMB_SIZE</span><span> /</span><span style=color:#e79e6d> 2.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> FILL_HEIGHT</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 8.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SLIDER_DEFAULT_VALUE</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLOR_TRACK</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLOR_FILL</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.35</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.65</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.35</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLOR_FILL_DRAGGING</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.45</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.85</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.45</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLOR_THUMB_IDLE</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.85</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.55</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.1</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLOR_THUMB_HOVER</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.75</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLOR_DECOY_IDLE</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.45</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.8</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLOR_DECOY_HOVER</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.9</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLOR_TOGGLE_ON</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.15</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.65</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLOR_TOGGLE_OFF</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.55</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.15</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.15</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLOR_RESET_IDLE</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.55</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> COLOR_RESET_HOVER</span><span style=color:#c0c5ce>:</span><span style=color:#dfc479> Color</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.75</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The normalized (0 – 1) position of the slider thumb.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> SliderValue</span><span>(</span><span style=color:#b48ead>f32</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> SliderValue</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span>() -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        Self</span><span>(</span><span style=color:#d19a66>SLIDER_DEFAULT_VALUE</span><span>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Whether [`PointerCaptureMap`] is used while dragging the thumb.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CaptureEnabled</span><span>(</span><span style=color:#e5c07b>bool</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> CaptureEnabled</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span>() -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        Self</span><span>(</span><span style=color:#d19a66>true</span><span>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> SliderThumb</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> SliderFill</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> SliderLabel</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ToggleLabel</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ToggleButton</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ResetButton</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> DecoyButton</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> X offset of the left edge of the thumb node.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> thumb_left</span><span>(</span><span style=color:#c0c5ce>v:</span><span style=color:#b48ead> f32</span><span>) -></span><span style=color:#b48ead> f32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    v</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span>) * (</span><span style=color:#d19a66>TRACK_WIDTH</span><span> -</span><span style=color:#d19a66> THUMB_SIZE</span><span>)</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Width of the fill bar (reaches to the center of the thumb).</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> fill_width</span><span>(</span><span style=color:#c0c5ce>v:</span><span style=color:#b48ead> f32</span><span>) -></span><span style=color:#b48ead> f32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    v</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span>) * (</span><span style=color:#d19a66>TRACK_WIDTH</span><span> -</span><span style=color:#d19a66> THUMB_SIZE</span><span>) +</span><span style=color:#d19a66> THUMB_HALF</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderValue</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CaptureEnabled</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>sync_thumb_and_label, sync_fill</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Camera2d</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Root column – centered, full-screen, non-pickable container.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width: Val</span><span>::</span><span style=color:#69c>Percent</span><span>(</span><span style=color:#e79e6d>100.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height: Val</span><span>::</span><span style=color:#69c>Percent</span><span>(</span><span style=color:#e79e6d>100.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                row_gap: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>28.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Pickable</span><span>::</span><span style=color:#d19a66>IGNORE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_children</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>root</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            root</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Text</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                    "Drag the slider over the blue buttons.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                     With capture ON they stay blue. With capture OFF they incorrectly turn red."</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                TextFont</span><span>::</span><span style=color:#69c>from_font_size</span><span>(</span><span style=color:#e79e6d>15.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                TextColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.75</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.75</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.75</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>            root</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Row</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    column_gap: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>10.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Pickable</span><span>::</span><span style=color:#d19a66>IGNORE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>with_children</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>row</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                row</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"0.0"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    TextFont</span><span>::</span><span style=color:#69c>from_font_size</span><span>(</span><span style=color:#e79e6d>13.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    TextColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.55</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.55</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.55</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>                row</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        width: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#d19a66>TRACK_WIDTH</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        height: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#d19a66>TRACK_HEIGHT</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        position_type: PositionType</span><span>::</span><span style=color:#dfc479>Relative</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    BackgroundColor</span><span>(</span><span style=color:#d19a66>COLOR_TRACK</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    Pickable</span><span>::</span><span style=color:#d19a66>IGNORE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>with_children</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>track</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    track</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        SliderFill</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            width: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#69c>fill_width</span><span>(</span><span style=color:#d19a66>SLIDER_DEFAULT_VALUE</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            height: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#d19a66>FILL_HEIGHT</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            left: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        BackgroundColor</span><span>(</span><span style=color:#d19a66>COLOR_FILL</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Pickable</span><span>::</span><span style=color:#d19a66>IGNORE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    track</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                            SliderThumb</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                width: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#d19a66>THUMB_SIZE</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                height: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#d19a66>THUMB_SIZE</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                left: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#69c>thumb_left</span><span>(</span><span style=color:#d19a66>SLIDER_DEFAULT_VALUE</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#c0c5ce>Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>4.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                            BackgroundColor</span><span>(</span><span style=color:#d19a66>COLOR_THUMB_IDLE</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>observe</span><span>(</span><span style=color:#c0c5ce>on_drag_start</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>observe</span><span>(</span><span style=color:#c0c5ce>on_drag</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>observe</span><span>(</span><span style=color:#c0c5ce>on_drag_end</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>observe</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>                            |</span><span style=color:#c0c5ce>_:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerOver</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                             mut</span><span style=color:#c0c5ce> q:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderThumb</span><span style=color:#c0c5ce>>></span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                q</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> COLOR_THUMB_HOVER</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                        .</span><span style=color:#69c>observe</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>                            |</span><span style=color:#c0c5ce>_:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerOut</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                             mut</span><span style=color:#c0c5ce> q:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderThumb</span><span style=color:#c0c5ce>>></span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                                q</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> COLOR_THUMB_IDLE</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>                row</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"1.0"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    TextFont</span><span>::</span><span style=color:#69c>from_font_size</span><span>(</span><span style=color:#e79e6d>13.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    TextColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.55</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.55</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.55</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>            root</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                SliderLabel</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>format!</span><span>(</span><span style=color:#9fc37f>"Value: </span><span style=color:#d19a66>{:.2}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> SLIDER_DEFAULT_VALUE</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                TextFont</span><span>::</span><span style=color:#69c>from_font_size</span><span>(</span><span style=color:#e79e6d>18.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>            root</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Row</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    column_gap: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>16.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Pickable</span><span>::</span><span style=color:#d19a66>IGNORE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>with_children</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>row</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                for</span><span style=color:#c0c5ce> label</span><span style=color:#c594c5> in</span><span> [</span><span style=color:#9fc37f>"Button A"</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "Button B"</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "Button C"</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "Button D"</span><span style=color:#c0c5ce>,</span><span style=color:#9fc37f> "Button E"</span><span>] {</span></span>
+<span class=giallo-l><span style=color:#69c>                    spawn_decoy_button</span><span>(</span><span style=color:#c0c5ce>row, label</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>            root</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Row</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    column_gap: Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>20.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Pickable</span><span>::</span><span style=color:#d19a66>IGNORE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>with_children</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>row</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                row</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    ToggleButton</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        padding: UiRect</span><span>::</span><span style=color:#69c>axes</span><span>(</span><span style=color:#c0c5ce>Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>20.0</span><span>)</span><span style=color:#c0c5ce>, Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>10.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#c0c5ce>Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>6.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    BackgroundColor</span><span>(</span><span style=color:#d19a66>COLOR_TOGGLE_ON</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>with_children</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>btn</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    btn</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        ToggleLabel</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Capture: ON  (click to toggle)"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        TextFont</span><span>::</span><span style=color:#69c>from_font_size</span><span>(</span><span style=color:#e79e6d>16.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        TextColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Pickable</span><span>::</span><span style=color:#d19a66>IGNORE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                })</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>observe</span><span>(</span><span style=color:#c0c5ce>on_toggle_click</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>                row</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    ResetButton</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        padding: UiRect</span><span>::</span><span style=color:#69c>axes</span><span>(</span><span style=color:#c0c5ce>Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>20.0</span><span>)</span><span style=color:#c0c5ce>, Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>10.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#c0c5ce>Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>6.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    BackgroundColor</span><span>(</span><span style=color:#d19a66>COLOR_RESET_IDLE</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>with_children</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>btn</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    btn</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Reset"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        TextFont</span><span>::</span><span style=color:#69c>from_font_size</span><span>(</span><span style=color:#e79e6d>16.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        TextColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        Pickable</span><span>::</span><span style=color:#d19a66>IGNORE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                })</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>observe</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    |</span><span style=color:#c0c5ce>_:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerOver</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> q:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ResetButton</span><span style=color:#c0c5ce>>></span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        q</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> COLOR_RESET_HOVER</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>observe</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    |</span><span style=color:#c0c5ce>_:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerOut</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> q:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ResetButton</span><span style=color:#c0c5ce>>></span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        q</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> COLOR_RESET_IDLE</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>observe</span><span>(</span><span style=color:#c0c5ce>on_reset_click</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spawn_decoy_button</span><span>(</span><span style=color:#c0c5ce>parent:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> ChildSpawnerCommands</span><span style=color:#c0c5ce>, label:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    parent</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DecoyButton</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                padding: UiRect</span><span>::</span><span style=color:#69c>axes</span><span>(</span><span style=color:#c0c5ce>Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>24.0</span><span>)</span><span style=color:#c0c5ce>, Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>14.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border_radius: BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#c0c5ce>Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>6.0</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span>(</span><span style=color:#d19a66>COLOR_DECOY_IDLE</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_child</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>label</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            TextFont</span><span>::</span><span style=color:#69c>from_font_size</span><span>(</span><span style=color:#e79e6d>15.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            TextColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Pickable</span><span>::</span><span style=color:#d19a66>IGNORE</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>observe</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>            |</span><span style=color:#c0c5ce>event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerOver</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> colors:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DecoyButton</span><span style=color:#c0c5ce>>></span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                if let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> color</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> colors</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>entity) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    color</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> COLOR_DECOY_HOVER</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>observe</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>            |</span><span style=color:#c0c5ce>event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerOut</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> colors:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DecoyButton</span><span style=color:#c0c5ce>>></span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                if let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> color</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> colors</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>entity) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    color</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> COLOR_DECOY_IDLE</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_drag_start</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerDragStart</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    capture_enabled:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CaptureEnabled</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> capture_map:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerCaptureMap</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> fill_color:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderFill</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> capture_enabled</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        capture_map</span><span style=color:#c594c5>.</span><span style=color:#69c>capture</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>pointer</span><span style=color:#c594c5>.</span><span>id</span><span style=color:#c0c5ce>, event</span><span style=color:#c594c5>.</span><span>entity</span><span style=color:#c0c5ce>, event</span><span style=color:#c594c5>.</span><span>hit</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Signal active drag with a brighter fill color.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    fill_color</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> COLOR_FILL_DRAGGING</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_drag</span><span>(</span><span style=color:#c0c5ce>event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerDrag</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> value:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderValue</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    value</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>value</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> +</span><span style=color:#c0c5ce> event</span><span style=color:#c594c5>.</span><span>delta</span><span style=color:#c594c5>.</span><span>x / (</span><span style=color:#d19a66>TRACK_WIDTH</span><span> -</span><span style=color:#d19a66> THUMB_SIZE</span><span>))</span><span style=color:#c594c5>.</span><span style=color:#69c>clamp</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_drag_end</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerDragEnd</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> capture_map:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerCaptureMap</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> fill_color:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderFill</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    capture_map</span><span style=color:#c594c5>.</span><span style=color:#69c>release</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>pointer</span><span style=color:#c594c5>.</span><span>id)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    fill_color</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> COLOR_FILL</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_toggle_click</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    _:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerClick</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> capture_enabled:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CaptureEnabled</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> label:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ToggleLabel</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> toggle_bg:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BackgroundColor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ToggleButton</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    capture_enabled</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> = !</span><span style=color:#c0c5ce>capture_enabled</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> capture_enabled</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        label</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "Capture: ON  (click to toggle)"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        toggle_bg</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> COLOR_TOGGLE_ON</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        label</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "Capture: OFF  (click to toggle)"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        toggle_bg</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> COLOR_TOGGLE_OFF</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_reset_click</span><span>(</span><span style=color:#c0c5ce>_:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerClick</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> value:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderValue</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    value</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#d19a66> SLIDER_DEFAULT_VALUE</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Moves the thumb and updates the numeric readout.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> sync_thumb_and_label</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    value:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderValue</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> thumb:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Node</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderThumb</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> value_label:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderLabel</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    thumb</span><span style=color:#c594c5>.</span><span>left </span><span style=color:#c594c5>=</span><span style=color:#dfc479> Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#69c>thumb_left</span><span>(</span><span style=color:#c0c5ce>value</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    value_label</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span>(</span><span style=color:#9fc37f>"Value: </span><span style=color:#d19a66>{:.2}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, value</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Resizes the fill bar to match the current slider value.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> sync_fill</span><span>(</span><span style=color:#c0c5ce>value:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderValue</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> fill:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Node</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SliderFill</span><span style=color:#c0c5ce>>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    fill</span><span style=color:#c594c5>.</span><span>width </span><span style=color:#c594c5>=</span><span style=color:#dfc479> Val</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#69c>fill_width</span><span>(</span><span style=color:#c0c5ce>value</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/Picking/draggable-slider/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>
