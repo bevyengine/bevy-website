@@ -1,3 +1,12 @@
+function debounce(callback, wait) {
+    let timeoutId;
+
+    return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => callback(...args), wait);
+    };
+}
+
 function getFilename(resource) {
     const pathname = (typeof resource === 'string')
         ? resource
@@ -56,4 +65,4 @@ async function progressiveFetch(resource, callbacks={}) {
     return new Response(response.body.pipeThrough(transform), response);
 }
 
-export { progressiveFetch };
+export { debounce, progressiveFetch };
