@@ -15,6 +15,12 @@ struct GitlabContentResponse {
     content: String,
 }
 
+#[derive(Deserialize)]
+struct GitlabStarsResponse {
+    #[serde(rename = "star_count")]
+    stars: u32,
+}
+
 pub struct GitlabClient {
     agent: ureq::Agent,
     // This is not currently used because we have so few assets using gitlab that we don't need it.
@@ -75,5 +81,21 @@ impl GitlabClient {
         } else {
             bail!("Content is not in base64");
         }
+    }
+
+    /// Gets the star count of a gitlab project from the url
+    ///
+    /// Note that this requests the whole project info
+    /// So if any more fields from it are needed, this method may be modified as to not make unnecessary requests
+    pub fn get_stars_from_url(&self, url: &str) -> anyhow::Result<u32> {
+        let response: GitlabStarsResponse = self
+            .agent
+            .get(&format!("{BASE_URL}/{url}"))
+            .set("Accept", "application/json")
+            // .set("Authorization", &format!("Bearer {}", self.token))
+            .call()?
+            .into_json()?;
+
+        Ok(response.stars)
     }
 }
