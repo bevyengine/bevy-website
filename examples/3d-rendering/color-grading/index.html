@@ -1,0 +1,533 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Color grading" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/3d-rendering/color-grading/ property=og:url><meta content="https://bevy.org/examples/3d-rendering/color-grading/../static/screenshots/3D Rendering/color_grading.png" property=og:image><meta content="Demonstrates color grading" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Color grading</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>3D Rendering / Color grading</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/3d/color_grading.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/3d-rendering/color-grading/>here</a>.</aside><aside class="callout callout--warning"><h3 class=warning>Feature flag required</h3><p>The code in this example requires this feature flag to be enabled in order to function: <code>"bevy_feathers"</code>.</aside></div><div class="example__explanation media-content"><p>Demonstrates color grading with an interactive adjustment UI.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>color_grading.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    f32</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>PI</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    fmt</span><span>::{</span><span style=color:#c594c5>self</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Formatter</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#dfc479>Hdr</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    feathers</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        containers</span><span>::{pane</span><span style=color:#c0c5ce>,</span><span> pane_body</span><span style=color:#c0c5ce>,</span><span> pane_header}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        controls</span><span>::{</span><span style=color:#dfc479>FeathersNumberInput</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> HardLimit</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> NumberInputPrecision</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> NumberInputValue</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        dark_theme</span><span>::create_dark_theme</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        display</span><span>::label</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        theme</span><span>::{</span><span style=color:#dfc479>ThemeProps</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> UiTheme</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        tokens</span><span>::</span><span style=color:#c0c5ce>semantic</span><span>::{</span><span style=color:#dfc479>SURFACE_PANE_BODY</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SURFACE_PANE_HEADER</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        FeathersPlugins</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    light</span><span>::</span><span style=color:#dfc479>CascadeShadowConfigBuilder</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::</span><span style=color:#c0c5ce>view</span><span>::{</span><span style=color:#dfc479>ColorGrading</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ColorGradingGlobal</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ColorGradingSection</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ui_widgets</span><span>::</span><span style=color:#dfc479>ValueChange</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>fmt</span><span>::</span><span style=color:#dfc479>Display</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The global color grading settings that the user can modify.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> See the documentation of [`ColorGradingGlobal`] for more information about</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> each field here.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> GlobalColorGradingSetting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[default]</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Exposure</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Temperature</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Tint</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Hue</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A color grading section that the user can modify the settings of:</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> highlights, midtones, or shadows.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> SectionColorGradingName</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[default]</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Highlights</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Midtones</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Shadows</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The section-specific color grading setting that the user can modify.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> See the documentation of [`ColorGradingSection`] for more information about</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> each field here.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> SectionColorGradingSetting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[default]</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Saturation</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Contrast</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Gamma</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Gain</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Lift</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A color grading settings that the user can modify.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> ColorGradingSetting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The global color grading settings. They apply to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> the whole image as opposed to specifically to highlights, midtones, or</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> shadows.</span></span>
+<span class=giallo-l><span style=color:#69c>    Global</span><span>(</span><span style=color:#dfc479>GlobalColorGradingSetting</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> A color grading setting that applies only to highlights, midtones, or shadows.</span></span>
+<span class=giallo-l><span style=color:#69c>    Section</span><span>(</span><span style=color:#dfc479>SectionColorGradingName</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SectionColorGradingSetting</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> ColorGradingSetting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span>() -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        Self</span><span>::</span><span style=color:#69c>Global</span><span>(</span><span style=color:#69c>default</span><span>())</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>((</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> FeathersPlugins</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#69c>UiTheme</span><span>(</span><span style=color:#69c>get_example_theme</span><span>()))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>handle_value_change_number_input</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Create the scene.</span></span>
+<span class=giallo-l><span style=color:#69c>    add_basic_scene</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>asset_server</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Create the root UI element.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> color_grading</span><span style=color:#c594c5> =</span><span style=color:#dfc479> ColorGrading</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#69c>    add_buttons</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>color_grading</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#69c>    add_help_text</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the camera.</span></span>
+<span class=giallo-l><span style=color:#69c>    add_camera</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> commands,</span><span style=color:#c594c5> &</span><span style=color:#c0c5ce>asset_server, color_grading</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Adds all the buttons on the bottom of the scene.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> add_buttons</span><span>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, color_grading:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ColorGrading</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn_scene</span><span>(</span><span style=color:#61afef>bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Spawn the parent node that contains all the buttons.</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Row</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            column_gap:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>6</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            bottom:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Create the first pane, which contains the global controls.</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>pane_for_global_controls</span><span>(</span><span style=color:#c0c5ce>color_grading</span><span>)</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Create the following panes for individual controls.</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>pane_for_section</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Highlights</span><span style=color:#c0c5ce>, color_grading</span><span>)</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>pane_for_section</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Midtones</span><span style=color:#c0c5ce>, color_grading</span><span>)</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>pane_for_section</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Shadows</span><span style=color:#c0c5ce>, color_grading</span><span>)</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Adds the buttons for the global controls (those that control the scene as a</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> whole as opposed to shadows, midtones, or highlights).</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> pane_for_global_controls</span><span>(</span><span style=color:#c0c5ce>color_grading:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ColorGrading</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> make_button</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c594c5>        |</span><span style=color:#c0c5ce>option</span><span style=color:#c594c5>|</span><span style=color:#69c> number_input_for_value</span><span>(</span><span style=color:#c0c5ce>ColorGradingSetting</span><span>::</span><span style=color:#69c>Global</span><span>(</span><span style=color:#c0c5ce>option</span><span>)</span><span style=color:#c0c5ce>, color_grading</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span>        @</span><span style=color:#69c>pane</span><span>()</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Spawn the label ("Highlights", etc.)</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>pane_header</span><span>()</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span>[</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>120</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    align_self:</span><span style=color:#dfc479> AlignSelf</span><span>::</span><span style=color:#dfc479>Start</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Children</span><span> [</span></span>
+<span class=giallo-l><span>                    @</span><span style=color:#69c>label</span><span>(</span><span style=color:#9fc37f>"Global Settings"</span><span>)</span></span>
+<span class=giallo-l><span>                ]</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Spawn the buttons</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>pane_body</span><span>()</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>make_button</span><span>(</span><span style=color:#c0c5ce>GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Exposure</span><span>)</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>make_button</span><span>(</span><span style=color:#c0c5ce>GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Temperature</span><span>)</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>make_button</span><span>(</span><span style=color:#c0c5ce>GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Tint</span><span>)</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>make_button</span><span>(</span><span style=color:#c0c5ce>GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Hue</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Adds the buttons that control color grading for individual sections</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> (highlights, midtones, shadows).</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> pane_for_section</span><span>(</span><span style=color:#c0c5ce>section:</span><span style=color:#dfc479> SectionColorGradingName</span><span style=color:#c0c5ce>, color_grading:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ColorGrading</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> make_button</span><span style=color:#c594c5> = |</span><span style=color:#c0c5ce>setting</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#69c>        number_input_for_value</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            ColorGradingSetting</span><span>::</span><span style=color:#69c>Section</span><span>(</span><span style=color:#c0c5ce>section, setting</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color_grading,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span>        @</span><span style=color:#69c>pane</span><span>()</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Spawn the label ("Highlights", etc.)</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>pane_header</span><span>()</span><span style=color:#dfc479> Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>120</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    align_self:</span><span style=color:#dfc479> AlignSelf</span><span>::</span><span style=color:#dfc479>Start</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Children</span><span> [</span></span>
+<span class=giallo-l><span>                    @</span><span style=color:#69c>label</span><span>(</span><span style=color:#c0c5ce>section</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>())</span></span>
+<span class=giallo-l><span>                ]</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Spawn the buttons.</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>pane_body</span><span>()</span><span style=color:#dfc479> Children</span><span>[</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>make_button</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Saturation</span><span>)</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>make_button</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Contrast</span><span>)</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>make_button</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Gamma</span><span>)</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>make_button</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Gain</span><span>)</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>make_button</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Lift</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Adds a feathers number input that controls one of the color grading values.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> number_input_for_value</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    setting:</span><span style=color:#dfc479> ColorGradingSetting</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color_grading:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ColorGrading</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> setting_label</span><span style=color:#c594c5> = match</span><span style=color:#c0c5ce> setting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ColorGradingSetting</span><span>::</span><span style=color:#69c>Global</span><span>(</span><span style=color:#c0c5ce>setting</span><span>) =></span><span style=color:#c0c5ce> setting</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        ColorGradingSetting</span><span>::</span><span style=color:#69c>Section</span><span>(</span><span style=color:#c0c5ce>_, setting</span><span>) =></span><span style=color:#c0c5ce> setting</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>120</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span>[</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>label</span><span>(</span><span style=color:#c0c5ce>setting_label</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>50</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#dfc479>FeathersNumberInput</span></span>
+<span class=giallo-l><span style=color:#dfc479>            NumberInputValue</span><span>::</span><span style=color:#69c>F32</span><span>({</span><span style=color:#c0c5ce>setting</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>color_grading</span><span>)})</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            setting</span></span>
+<span class=giallo-l><span style=color:#69c>            NumberInputPrecision</span><span>(</span><span style=color:#e79e6d>2</span><span>)</span></span>
+<span class=giallo-l><span style=color:#dfc479>            HardLimit</span><span>::</span><span style=color:#69c>f32</span><span>(</span><span style=color:#e79e6d>0</span><span style=color:#c594c5>.</span><span> ..=</span><span style=color:#e79e6d>10</span><span style=color:#c594c5>.</span><span>)</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> add_camera</span><span>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>, color_grading:</span><span style=color:#dfc479> ColorGrading</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Hdr</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.7</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.3</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        color_grading,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DistanceFog</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color: Color</span><span>::</span><span style=color:#69c>srgb_u8</span><span>(</span><span style=color:#e79e6d>43</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 44</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 47</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            falloff: FogFalloff</span><span>::</span><span style=color:#dfc479>Linear</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                start:</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                end:</span><span style=color:#e79e6d> 8.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        EnvironmentMapLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diffuse_map: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"environment_maps/pisa_diffuse_rgb9e5_zstd.ktx2"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            specular_map: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"environment_maps/pisa_specular_rgb9e5_zstd.ktx2"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            intensity:</span><span style=color:#e79e6d> 2000.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> add_basic_scene</span><span>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AssetServer</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the main scene.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#69c>WorldAssetRoot</span><span>(</span><span style=color:#c0c5ce>asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        GltfAssetLabel</span><span>::</span><span style=color:#69c>Scene</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>from_asset</span><span>(</span><span style=color:#9fc37f>"models/TonemappingTest/TonemappingTest.gltf"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the flight helmet.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        WorldAssetRoot</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            asset_server</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>load</span><span>(</span><span style=color:#c0c5ce>GltfAssetLabel</span><span>::</span><span style=color:#69c>Scene</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>from_asset</span><span>(</span><span style=color:#9fc37f>"models/FlightHelmet/FlightHelmet.gltf"</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0.5</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>0.5</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_rotation</span><span>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_rotation_y</span><span>(-</span><span style=color:#e79e6d>0.15</span><span> *</span><span style=color:#d19a66> PI</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the light.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>        DirectionalLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            illuminance:</span><span style=color:#e79e6d> 15000.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            shadow_maps_enabled:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_rotation</span><span>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_euler</span><span>(</span><span style=color:#c0c5ce>EulerRot</span><span>::</span><span style=color:#d19a66>ZYX</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> PI</span><span> * -</span><span style=color:#e79e6d>0.15</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> PI</span><span> * -</span><span style=color:#e79e6d>0.15</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        CascadeShadowConfigBuilder</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            maximum_distance:</span><span style=color:#e79e6d> 3.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            first_cascade_far_bound:</span><span style=color:#e79e6d> 0.9</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>build</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Observer that handles changes to number inputs.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> handle_value_change_number_input</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    value_change:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ValueChange</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>f32</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    setting_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>ColorGradingSetting</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>FeathersNumberInput</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> color_grading:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> ColorGrading</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c0c5ce>setting</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> setting_q</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>value_change</span><span style=color:#c594c5>.</span><span>source) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        setting</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> color_grading, value_change</span><span style=color:#c594c5>.</span><span>value)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>value_change</span><span style=color:#c594c5>.</span><span>source)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>NumberInputValue</span><span>::</span><span style=color:#69c>F32</span><span>(</span><span style=color:#c0c5ce>value_change</span><span style=color:#c594c5>.</span><span>value))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Display</span><span style=color:#c594c5> for</span><span style=color:#dfc479> GlobalColorGradingSetting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> fmt</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, f:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Formatter</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'_</span><span style=color:#c0c5ce>></span><span>) -></span><span style=color:#c0c5ce> fmt</span><span>::</span><span style=color:#dfc479>Result</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> name</span><span style=color:#c594c5> = match</span><span> *</span><span style=color:#c594c5>self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Exposure</span><span> =></span><span style=color:#9fc37f> "Exposure"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Temperature</span><span> =></span><span style=color:#9fc37f> "Temperature"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Tint</span><span> =></span><span style=color:#9fc37f> "Tint"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Hue</span><span> =></span><span style=color:#9fc37f> "Hue"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        f</span><span style=color:#c594c5>.</span><span style=color:#69c>write_str</span><span>(</span><span style=color:#c0c5ce>name</span><span>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Display</span><span style=color:#c594c5> for</span><span style=color:#dfc479> SectionColorGradingName</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> fmt</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, f:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Formatter</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'_</span><span style=color:#c0c5ce>></span><span>) -></span><span style=color:#c0c5ce> fmt</span><span>::</span><span style=color:#dfc479>Result</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> name</span><span style=color:#c594c5> = match</span><span> *</span><span style=color:#c594c5>self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Highlights</span><span> =></span><span style=color:#9fc37f> "Highlights"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Midtones</span><span> =></span><span style=color:#9fc37f> "Midtones"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Shadows</span><span> =></span><span style=color:#9fc37f> "Shadows"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        f</span><span style=color:#c594c5>.</span><span style=color:#69c>write_str</span><span>(</span><span style=color:#c0c5ce>name</span><span>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Display</span><span style=color:#c594c5> for</span><span style=color:#dfc479> SectionColorGradingSetting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> fmt</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, f:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Formatter</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'_</span><span style=color:#c0c5ce>></span><span>) -></span><span style=color:#c0c5ce> fmt</span><span>::</span><span style=color:#dfc479>Result</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> name</span><span style=color:#c594c5> = match</span><span> *</span><span style=color:#c594c5>self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Saturation</span><span> =></span><span style=color:#9fc37f> "Saturation"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Contrast</span><span> =></span><span style=color:#9fc37f> "Contrast"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Gamma</span><span> =></span><span style=color:#9fc37f> "Gamma"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Gain</span><span> =></span><span style=color:#9fc37f> "Gain"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Lift</span><span> =></span><span style=color:#9fc37f> "Lift"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        f</span><span style=color:#c594c5>.</span><span style=color:#69c>write_str</span><span>(</span><span style=color:#c0c5ce>name</span><span>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Display</span><span style=color:#c594c5> for</span><span style=color:#dfc479> ColorGradingSetting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> fmt</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, f:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Formatter</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'_</span><span style=color:#c0c5ce>></span><span>) -></span><span style=color:#c0c5ce> fmt</span><span>::</span><span style=color:#dfc479>Result</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ColorGradingSetting</span><span>::</span><span style=color:#69c>Global</span><span>(</span><span style=color:#c0c5ce>option</span><span>) =></span><span style=color:#61afef> write!</span><span>(</span><span style=color:#c0c5ce>f,</span><span style=color:#9fc37f> "</span><span style=color:#56b6c2>\"</span><span style=color:#d19a66>{option}</span><span style=color:#56b6c2>\"</span><span style=color:#9fc37f>"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ColorGradingSetting</span><span>::</span><span style=color:#69c>Section</span><span>(</span><span style=color:#c0c5ce>section, option</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#61afef>                write!</span><span>(</span><span style=color:#c0c5ce>f,</span><span style=color:#9fc37f> "</span><span style=color:#56b6c2>\"</span><span style=color:#d19a66>{option}</span><span style=color:#56b6c2>\"</span><span style=color:#9fc37f> for </span><span style=color:#56b6c2>\"</span><span style=color:#d19a66>{section}</span><span style=color:#56b6c2>\"</span><span style=color:#9fc37f>"</span><span>)</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> SectionColorGradingSetting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Returns the appropriate value in the given color grading section.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> get</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, section:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ColorGradingSection</span><span>) -></span><span style=color:#b48ead> f32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span> *</span><span style=color:#c594c5>self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Saturation</span><span> =></span><span style=color:#c0c5ce> section</span><span style=color:#c594c5>.</span><span>saturation</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Contrast</span><span> =></span><span style=color:#c0c5ce> section</span><span style=color:#c594c5>.</span><span>contrast</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Gamma</span><span> =></span><span style=color:#c0c5ce> section</span><span style=color:#c594c5>.</span><span>gamma</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Gain</span><span> =></span><span style=color:#c0c5ce> section</span><span style=color:#c594c5>.</span><span>gain</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Lift</span><span> =></span><span style=color:#c0c5ce> section</span><span style=color:#c594c5>.</span><span>lift</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Sets the appropriate value in the given set of color grading values.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> set</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, section:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> ColorGradingSection</span><span style=color:#c0c5ce>, value:</span><span style=color:#b48ead> f32</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span> *</span><span style=color:#c594c5>self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Saturation</span><span> =></span><span style=color:#c0c5ce> section</span><span style=color:#c594c5>.</span><span>saturation </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Contrast</span><span> =></span><span style=color:#c0c5ce> section</span><span style=color:#c594c5>.</span><span>contrast </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Gamma</span><span> =></span><span style=color:#c0c5ce> section</span><span style=color:#c594c5>.</span><span>gamma </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Gain</span><span> =></span><span style=color:#c0c5ce> section</span><span style=color:#c594c5>.</span><span>gain </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            SectionColorGradingSetting</span><span>::</span><span style=color:#dfc479>Lift</span><span> =></span><span style=color:#c0c5ce> section</span><span style=color:#c594c5>.</span><span>lift </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> GlobalColorGradingSetting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Returns the appropriate value in the given set of global color grading</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> values.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> get</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, global:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ColorGradingGlobal</span><span>) -></span><span style=color:#b48ead> f32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span> *</span><span style=color:#c594c5>self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Exposure</span><span> =></span><span style=color:#c0c5ce> global</span><span style=color:#c594c5>.</span><span>exposure</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Temperature</span><span> =></span><span style=color:#c0c5ce> global</span><span style=color:#c594c5>.</span><span>temperature</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Tint</span><span> =></span><span style=color:#c0c5ce> global</span><span style=color:#c594c5>.</span><span>tint</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Hue</span><span> =></span><span style=color:#c0c5ce> global</span><span style=color:#c594c5>.</span><span>hue</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Sets the appropriate value in the given set of global color grading</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> values.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> set</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, global:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> ColorGradingGlobal</span><span style=color:#c0c5ce>, value:</span><span style=color:#b48ead> f32</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span> *</span><span style=color:#c594c5>self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Exposure</span><span> =></span><span style=color:#c0c5ce> global</span><span style=color:#c594c5>.</span><span>exposure </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Temperature</span><span> =></span><span style=color:#c0c5ce> global</span><span style=color:#c594c5>.</span><span>temperature </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Tint</span><span> =></span><span style=color:#c0c5ce> global</span><span style=color:#c594c5>.</span><span>tint </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GlobalColorGradingSetting</span><span>::</span><span style=color:#dfc479>Hue</span><span> =></span><span style=color:#c0c5ce> global</span><span style=color:#c594c5>.</span><span>hue </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> ColorGradingSetting</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Returns the appropriate value in the given set of color grading values.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> get</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, color_grading:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>ColorGrading</span><span>) -></span><span style=color:#b48ead> f32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ColorGradingSetting</span><span>::</span><span style=color:#69c>Global</span><span>(</span><span style=color:#c0c5ce>option</span><span>) =></span><span style=color:#c0c5ce> option</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>color_grading</span><span style=color:#c594c5>.</span><span>global)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ColorGradingSetting</span><span>::</span><span style=color:#69c>Section</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Highlights</span><span style=color:#c0c5ce>, option</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                option</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>color_grading</span><span style=color:#c594c5>.</span><span>highlights)</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ColorGradingSetting</span><span>::</span><span style=color:#69c>Section</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Midtones</span><span style=color:#c0c5ce>, option</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                option</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>color_grading</span><span style=color:#c594c5>.</span><span>midtones)</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ColorGradingSetting</span><span>::</span><span style=color:#69c>Section</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Shadows</span><span style=color:#c0c5ce>, option</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                option</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>color_grading</span><span style=color:#c594c5>.</span><span>shadows)</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Sets the appropriate value in the given set of color grading values.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> set</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, color_grading:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> ColorGrading</span><span style=color:#c0c5ce>, value:</span><span style=color:#b48ead> f32</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ColorGradingSetting</span><span>::</span><span style=color:#69c>Global</span><span>(</span><span style=color:#c0c5ce>option</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                option</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> color_grading</span><span style=color:#c594c5>.</span><span>global</span><span style=color:#c0c5ce>, value</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ColorGradingSetting</span><span>::</span><span style=color:#69c>Section</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Highlights</span><span style=color:#c0c5ce>, option</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                option</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> color_grading</span><span style=color:#c594c5>.</span><span>highlights</span><span style=color:#c0c5ce>, value</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ColorGradingSetting</span><span>::</span><span style=color:#69c>Section</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Midtones</span><span style=color:#c0c5ce>, option</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                option</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> color_grading</span><span style=color:#c594c5>.</span><span>midtones</span><span style=color:#c0c5ce>, value</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ColorGradingSetting</span><span>::</span><span style=color:#69c>Section</span><span>(</span><span style=color:#c0c5ce>SectionColorGradingName</span><span>::</span><span style=color:#dfc479>Shadows</span><span style=color:#c0c5ce>, option</span><span>) => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                option</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> color_grading</span><span style=color:#c594c5>.</span><span>shadows</span><span style=color:#c0c5ce>, value</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Get the Feathers Theme for the example. It is a slightly modified dark theme.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> get_example_theme</span><span>() -></span><span style=color:#dfc479> ThemeProps</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> props</span><span style=color:#c594c5> =</span><span style=color:#69c> create_dark_theme</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Pane background colors are made a little transparent to see the objects behind the setting controls.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> token</span><span style=color:#c594c5> in</span><span> [</span><span style=color:#d19a66>SURFACE_PANE_BODY</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> SURFACE_PANE_HEADER</span><span>] {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>color</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> props</span><span style=color:#c594c5>.</span><span>semantic_base</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>token</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color</span><span style=color:#c594c5>.</span><span style=color:#69c>set_alpha</span><span>(</span><span style=color:#e79e6d>0.9</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    props</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the help text at the top of the screen.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> add_help_text</span><span>(</span><span style=color:#c0c5ce>commands:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Commands</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn_scene</span><span>(</span><span style=color:#61afef>bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            position_type: PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>12</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#69c>            Text</span><span>(</span><span style=color:#9fc37f>"Drag a setting's input value to change the scene.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                Click into an input field to change values via keyboard.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>\</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                Values must be between 0 and 10."</span><span>)</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/3D Rendering/color-grading/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>
