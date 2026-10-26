@@ -38,7 +38,7 @@ Alternatively, you can manually add it to your project's Cargo.toml like this:
 
 ```toml
 [dependencies]
-bevy = "0.19"
+bevy = "0.20"
 ```
 
 Make sure to use the latest `bevy` crate version ([![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)).
