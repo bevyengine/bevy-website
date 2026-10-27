@@ -42,7 +42,7 @@ To help you understand where Bevy draws the line, the following AI-related behav
 - inflammatory comments about AI or patterns of behavior that seek to get a rise out of others
 - comments that imply that AI use is or will be mandatory (inside of Bevy or outside of it), or which otherwise disparage those who do not want to use it / think it should be used
 - insistently advocating for the use of AI, in general or with respect to specific practices / tools, in either Bevy's development or others' personal workflows
-  - note that discussion of personal AI-related tools and practices should be contained to the `#machine-learning` channel on Discord to ensure others can easily avoid these discussions.
+  - note that discussion of personal AI-related tools and practices should be contained to the `#ai-tools` channel on Discord to ensure others can easily avoid these discussions.
   - engine-related conversation on adoption or abandonment of AI workflows should similarly be threaded.
 - refusal to disengage from an argument with a specific individual after being asked to stop
 - broad negative generalizations about groups of people based on their views on or usage of or abstinence from AI
