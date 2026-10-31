@@ -165,6 +165,10 @@ $color-white: #fff;
   --button-pink-bg-hover-color: #954c72;
   --button-pink-border-color: #ba789b;
   --button-pink-text-color: var(--color-neutral-93);
+  --button-neutral-bg-color: var(--color-neutral-27);
+  --button-neutral-bg-hover-color: var(--color-neutral-33);
+  --button-neutral-border-color: var(--color-neutral-33b);
+  --button-neutral-text-color: var(--color-neutral-93);
   --button-square-bg-color: #{rgba($color-neutral-93, 0.05)};
 
   --callout-caution-accent-color: #d95e7a;
