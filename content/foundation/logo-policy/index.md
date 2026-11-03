@@ -23,5 +23,5 @@ Tasteful modifications to the logo (ex: color changes, style changes, effects, a
 
 ## Restrictions
 
-- Do not use the Bevy logo to state (or imply) that you (or your work) are somehow official works of, affiliated with, or endorsed by the Bevy project or the Bevy Foundation, unless you have expressed permission from the Bevy Foundation.
+- Do not use the Bevy logo to state (or imply) that you (or your work) are somehow official works of, affiliated with, or endorsed by the Bevy project or the Bevy Foundation, unless you have express permission from the Bevy Foundation.
 - Do not sell merchandise with the Bevy logo without explicit, written permission from the Bevy Foundation. Feel free to reach out to us with proposals!
