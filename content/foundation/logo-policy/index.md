@@ -19,6 +19,7 @@ Tasteful modifications to the logo (ex: color changes, style changes, effects, a
 - Using the Bevy name and logo for small non-profit events like meetups, tutorials, etc are allowed, provided they do not imply they are official Bevy project or Bevy Foundation events, and admission is free.
 - Using "Bevy" or "Bevy Engine" in tutorials, books, blogs, videos, publications, etc (ex: "Learning Bevy", "The Bevy Cheatbook", "Learn Bevy in Ten Days") is allowed, including for profit, provided they do not state or imply that they are official Bevy project or Bevy Foundation works.
 - Using "Bevy", "Bevy Engine", and the Bevy logo on merchandise (ex: hats, shirts, artwork) is allowed for personal use and small groups, provided they are not sold.
+- Additional usage may be allowed on a case-by-case basis: email us at `support@bevy.org` if you have any doubts or want to do something different!
 
 ## Restrictions
 
