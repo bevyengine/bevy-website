@@ -20,7 +20,7 @@ Tasteful modifications to the logo (ex: color changes, style changes, effects, a
 - Using "Bevy" or "Bevy Engine" in tutorials, books, blogs, videos, publications, etc (ex: "Learning Bevy", "The Bevy Cheatbook", "Learn Bevy in Ten Days") is allowed, including for profit, provided they do not state or imply that they are official Bevy project or Bevy Foundation works.
 - Using "Bevy", "Bevy Engine", and the Bevy logo on merchandise (ex: hats, shirts, artwork) is allowed for personal use and small groups, provided they are not sold.
 
-## Rules
+## Restrictions
 
 - Do not use the Bevy logo to state (or imply) that you (or your work) are somehow official works of, affiliated with, or endorsed by the Bevy project or the Bevy Foundation, unless you have expressed permission from the Bevy Foundation.
 - Do not sell merchandise with the Bevy logo without explicit, written permission from the Bevy Foundation. Feel free to reach out to us with proposals!
