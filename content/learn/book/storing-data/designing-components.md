@@ -6,9 +6,9 @@ weight = 2
 status = 'hidden'
 +++
 
-In previous chapters, you've been introduced to the basic mechanics of how to work with components.
+In previous chapters, you were introduced to the basic mechanics of how to work with components.
 But if you want to build complex projects, you should think carefully about how you model your domain as data.
-In Bevy, this usually means deciding what data goes on which components.  
+In Bevy, this usually means deciding what data goes on what components.
 
 This chapter offers some high-level considerations to think about when designing your components, along with some additional tools that are helpful when planning this organization.
 
@@ -48,10 +48,10 @@ Over time, the Bevy community has converged on a few standard pieces of advice f
 ## Required Components
 
 In the previous chapter, we saw how multiple simple components can be composed to form a complex entity.
-Often times, a given component will need certain other components in order to do anything useful.
+Oftentimes, a given component will need other components to do anything useful.
 As an example, it probably doesn't make much sense to mark an entity as a `Combatant` if it doesn't also have `Life`.
 
-To help prevent errors of omission (and to simplify the task of spawning) Bevy lets you declare that a given component depends on the presence of another component:
+To help prevent errors of omission (and to simplify the task of spawning), Bevy lets you declare that a given component depends on the presence of another component:
 
 ```rust,hide_lines=1
 # use bevy::ecs::prelude::*;
@@ -139,7 +139,7 @@ impl Sub<u32> for Life {
 ```
 
 Keeping fields private can be very useful to ensure that key invariants are upheld.
-In the above example, we use this to ensure that the _current_ life value cannot exceed the _max_ life value.  
+In the above example, we use this to ensure that the _current_ life value cannot exceed the _max_ life value.
 
 ### Storing Functions Inside of Components
 
@@ -191,7 +191,7 @@ For example, you might find that you need to repeatedly:
 - Check if an ability can be used by examining available mana, cooldowns, and range to the target.
 
 Duplicating these complex pieces of logic can be both error-prone and tedious!
-Your first thought should be to ask "Can we combine this data into a single component", but that's not always feasible (sometimes for reasons outside of your control).
+Your first thought should be to ask "Can we combine this data into a single component?", but that's not always feasible (sometimes for reasons outside of your control).
 
 One solution is to abstract complex ECS lookups like this by creating our own custom [`QueryData`], [`QueryFilter`] and [`SystemParam`] types, using the provided derive macros.
 [`QueryData`] and [`QueryFilter`] are useful when the data is in separate components on the same entity and is quite composable (you can always add more terms to your [`Query`]!).

@@ -9,13 +9,13 @@ status = 'hidden'
 **Entities** are the fundamental objects of your game world: players, cameras, levels, user interfaces... everything is an entity!
 
 On its own, the [`Entity`] type is a simple identifier: it has neither behavior nor data.
-Components store this data, and define the overlapping categories that the entity belongs to.
+Components store this data and define the overlapping categories that the entity belongs to.
 
 Informally, we use the term "entity" to refer to a single conceptual entry in our [world].
 An "entity" is made up of all component data with the correct identifier, although it's very rare to use all the data for a single entity at once.
 If you're an experienced programmer, you can reason about the [world] as something like a (very fast) [`HashMap`] that links an [`Entity`] identifier to a collection of components.
 
-Internally, [`Entity`] is roughly shaped like a `u64`, with arbitrary (unique) bits.
+Internally, [`Entity`] is roughly shaped like a `u64` with arbitrary (unique) bits.
 While it is possible to work with the [`Entity`] type directly, it should be treated as an opaque, black box key.
 Bevy makes no guarantees that exact entity assignment or storage behavior will be stable across any version boundary.
 
@@ -37,7 +37,7 @@ However, the advantage of this approach is the ability to perform massive bulk o
 Before you can do much of anything in Bevy, you'll need to **spawn** your first entity by adding it to the app's [`World`].
 Once entities exist, they can likewise be despawned, deleting all data stored in their components and removing it from the world.
 
-Spawning and despawning entities can have far-reaching effects, and so cannot be done immediately (unless you are using an [exclusive system]).
+Spawning and despawning entities can have far-reaching effects, and so they cannot be done immediately (unless you are using an [exclusive system]).
 As a result, we must use [`Commands`], which queue up work to do later.
 
 ```rust,hide_lines=1
@@ -81,7 +81,7 @@ To make a basic cube, you'd probably need to add:
 ### Defining Components
 
 To define a component type, we simply implement the [`Component`] [trait](https://doc.rust-lang.org/book/ch10-02-traits.html) for a Rust type of our choice.
-You will almost always want to use the `#[derive(Component)]` [macro](https://doc.rust-lang.org/reference/attributes/derive.html) to do this for you; which quickly and reliably generates the correct trait implementation.
+You will almost always want to use the [`#[derive(Component)]`](https://doc.rust-lang.org/reference/attributes/derive.html) macro to do this for you, which quickly and reliably generates the correct trait implementation.
 
 Components come in several different forms:
 

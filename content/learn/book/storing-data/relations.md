@@ -7,7 +7,7 @@ status = 'hidden'
 +++
 
 By themselves, entities exist in a flat data structure.
-**Relations** makes it possible to organize entities into groups or hierarchies.
+**Relations** make it possible to organize entities into groups or hierarchies.
 This has numerous potential uses:
 
 - A 3D scene may be made up of hierarchies of game objects.
@@ -34,7 +34,7 @@ It represents a "one-to-many" relationship, with the parent being the one, and t
 fn spawn_entity_with_children(mut commands: Commands) {
     // Spawn a car
     let vehicle = commands.spawn((Camaro, Color::Red)).id();
-    
+
     // Spawn 4 wheels and attach to the car
     let wheels: Vec<Entity> = [
         commands.spawn((Wheel, Color::Black)).id(),

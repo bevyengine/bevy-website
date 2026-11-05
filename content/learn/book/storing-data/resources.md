@@ -143,7 +143,7 @@ Not every singleton object has to be stored as a resource, and in some cases you
 Any data that is storable in a resource could instead be stored as a component on a singleton entity.
 Which approach is better is a design question that depends on a number of tradeoffs.
 
-The advantages of resources is simplicity and ease of use: it requires very little code to read or write data stored in a resource.
+The advantages of resources are simplicity and ease of use: it requires very little code to read or write data stored in a resource.
 Accessing data within a component is more involved, and entails a multistep process where you first have to get access to the entity, and then its components.
 Often this will involve writing a query.
 
