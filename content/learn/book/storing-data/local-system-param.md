@@ -9,7 +9,7 @@ status = 'hidden'
 There's one more place where the ECS can store data: on the systems themselves.
 With the help of the [`Local<T>`] system parameter, you can cache data from one run of a system to the next.
 
-In most cases a [resource] is going to be more flexible, as you can read and mutate it from other systems.
+In most cases a [resource] is going to be more flexible since you can read and mutate it from other systems.
 However, from time to time, you might want to:
 
 - Store some system-specific state about the last value.
@@ -38,7 +38,7 @@ fn increment_local_system_data(mut local: Local<Option<NoGoodDefaultValue>>){
     if local.is_none() {
         *local = Some(NoGoodDefaultValue(0));
     }
-    
+
     local.as_mut().unwrap().0 += 1;
 }
 ```

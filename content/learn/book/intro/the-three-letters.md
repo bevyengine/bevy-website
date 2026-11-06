@@ -7,13 +7,13 @@ status = 'hidden'
 +++
 
 Bevy's architecture centers around its [ECS](https://en.wikipedia.org/wiki/Entity_component_system): E for **Entity**, C for **Component** and S for **System**. ECS is a high-performance way of organizing the data of a program, and controlling how that data is accessed and updated.
-ECS has been utilized in a number of commercial game engines, and has been increasing in popularity over the last couple of decades.
-Bevy however is relatively unique in how widely it uses these patterns: ECS in Bevy is used _everywhere_, not just for performance-critical code.
+ECS has been utilized in a number of commercial game engines and has been increasing in popularity over the last couple of decades.
+Bevy, however, is relatively unique in how widely it uses these patterns: ECS in Bevy is used _everywhere_, not just for performance-critical code.
 
 ## The E: Entities
 
 **Entities are objects** in our game world.
-This includes things like players, enemies, inventories, buffs, trees, buildings, cameras, skyboxes, particle effects, etc.
+These include things like players, enemies, inventories, buffs, trees, buildings, cameras, skyboxes, particle effects, etc.
 
 An entity, by itself, is just an identifier; it does not store any data within it. In order to be useful, it needs to be associated with one or more [components](#the-c-components). [`Entity`] is the "entity identifier" type.
 
@@ -50,7 +50,7 @@ enum Color {
     Blue,
 }
 
-/// A "marker" component for entities which represents a player. This contains no data. 
+/// A "marker" component for entities that represents a player. This contains no data.
 /// It behaves like a "tag" in the ECS / stores no data on the entity.
 #[derive(Component)]
 struct Player;
@@ -76,7 +76,7 @@ Entities are usually spawned using [Commands](@/learn/book/control-flow/commands
 Systems interact with and update the data in the ECS.
 Each system is run every frame by default, and repeats in a loop (specifically, in a [Schedule](@/learn/book/the-game-loop/schedules.md)).
 In Bevy, systems are normal Rust functions.
-These can fetch data from the ECS, make updates, call external APIs, and anything else that a function can do.
+These can fetch data from the ECS, make updates, call external APIs, and do anything else that a function can do.
 
 ```rs
 fn my_system(mut entities: Query<&mut Location>) {
@@ -94,11 +94,11 @@ Systems usually access entities and their components via [Queries](@/learn/book/
 
 Bevy systems are generally run in parallel automatically. By inspecting the function parameter types, Bevy can automatically determine if it's safe to run two systems concurrently. This is particularly important for optimal utilization of multiple CPU cores.
 
-For example, if you have a system which regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are _disjoint_ and can be updated at the same time. 
+For example, if you have a system that regenerates character health by modifying a `Health` component, and a different system that manages the characters' mana pool (say, via a `Mana` component), then Bevy knows that these two data sets are _disjoint_ and can be updated at the same time.
 
 ## The Database Analogy
 
-ECS is very similar to an "in-memory database", both from an implementation perspective and a logical model perspective. Entities are like the "rows" of a database. The [`Entity`] id is like a "primary key". Components are like "columns". We can run queries on the data in these "tables". If you have experience with databases, you may find this analogy helpful. But you definitely don't need database experience to get the most out of Bevy!
+ECS is very similar to an "[in-memory database](https://en.wikipedia.org/wiki/In-memory_database)", both from an implementation perspective and a logical model perspective. Entities are like the "rows" of a database. The [`Entity`] id is like a "primary key". Components are like "columns". We can run queries on the data in these "tables". If you have experience with databases, you may find this analogy helpful. But you definitely don't need database experience to get the most out of Bevy!
 
 ## Why ECS?
 
@@ -111,7 +111,7 @@ But by focusing on ECS as the heart of an engine (rather than a tacked on featur
 
 - **Write fast, scalable code by default**:
   - Most operations in games take the shape of "look at each of these objects and do the same thing to them". Because of better [data locality], ECS architectures are much faster at iterating during these operations.
-  - Non-ECS-by-default engines either don't receive these benefits at all, or require refactoring your data to use special-cased "fast path" APIs. In Bevy, everything is fast by default using a single, unified API.
+  - Non-ECS-by-default engines either don't receive these benefits at all, or they require refactoring your data to use special-cased "fast path" APIs. In Bevy, everything is fast by default using a single, unified API.
 - **Engine code, game code, and library code all look the same**:
   - Because Bevy uses the same ECS API pretty much everywhere (including the engine itself), there is no line between "engine developer" and "app developer". Want to know how something in the engine works? Check the source! It will use the same patterns you're used to in your app code.
   - This makes [contributing](@/learn/contribute/_index.md) fixes and features to Bevy much easier.

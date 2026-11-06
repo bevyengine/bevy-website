@@ -11,7 +11,7 @@ Queries create a filtered "view" into the metaphorical database that makes up ou
 With that view you can iterate over the requested components, ask what the "row number" (`Entity`) is for each element, or fetch the matching components for a particular `Entity` value.
 
 We briefly covered queries in our [introduction](@/learn/book/intro/_index.md) to Bevy, so make sure to review that section if you haven't read it yet.
-If you're entirely brand new to Bevy or ECS, we would recommend you to start there before continuing on this page.
+If you're brand new to Bevy or ECS, we recommend you to start there before continuing on this page.
 
 ## Anatomy of a Query
 
@@ -76,7 +76,7 @@ fn life_and_mana_system(query: Query<(&Life, &Mana)>){
     // Here, `life` has type `&Life` and `mana` has type `&Mana`.
     for (life, mana) in query.iter() {
         todo!();
-    } 
+    }
 }
 ```
 
@@ -99,7 +99,7 @@ Combining multiple terms in your queries like this should be the first tool you 
 Sometimes, you want to swap from the default "and" logic, where all the components must be present, to "or" logic, where any of the components can be present. To do so, you can use [`Option`] and a few special types:
 
 - `Query<Option<&Life>>`, for an `Option` that contains the component value if present and nothing if it is absent.
-- `Query<AnyOf<(&Life, &Mana)>>` which acts as a wrapper for multiple `Option` `QueryData` types.
+- `Query<AnyOf<(&Life, &Mana)>>`, which acts as a wrapper for multiple `Option` `QueryData` types.
 - `Query<Has<Life>>`, which contains `true` if the component is present, and `false` if the component is absent.
 - `Query<(), Or<(With<Life>, With<Mana>)>>`, which combines query filters via an [`Or`] relationship.
   - Using `()` in the `QueryData` field means that no data will be fetched: the only information retrieved is whether or not the query contains a given entity.
@@ -113,8 +113,7 @@ Typically you'll only be requesting a few pieces of data with a simple filter.
 
 ## Mutable and Immutable Query Data
 
-Simply reading the values of our components isn't very useful.
-In order to actually implement gameplay, we need to change those values!
+Simply reading the values of our components isn't very useful; to actually implement gameplay, we need to change those values!
 
 We can change whether we're requesting the data "immutably" (read-only) or "mutably" (read-write) by changing `Query<&Life>` to `Query<&mut Life>` (pronounced "ref Life" and "ref mute Life", respectively).
 A lone ampersand (`&`) is Rust's read-only [reference] indicator while `&mut` is for mutable references, making it easy to remember the syntax once you're familiar with Rust.
@@ -204,7 +203,7 @@ fn print_selected_entity_name(query: Query<&Name>, selected_entity: Res<Selected
         info!("{name} is selected.");
     } else {
         warn!(
-            "Selected entity {} has been despawned, or does not have a Name component", 
+            "Selected entity {} has been despawned, or does not have a Name component",
             selected_entity.0
         );
     }
@@ -264,7 +263,7 @@ fn kill_player_when_dead_query_iter(player_query: Query<(Entity, &Life), With<Pl
 fn kill_player_when_dead_query_single(player_query: Query<(Entity, &Life), With<Player>>, mut commands: Commands) {
     let Ok((player_entity, player_life)) = player_query.single() else {
         // We could instead use the ? operator and return an error;
-        // see the error handling chapter        
+        // see the error handling chapter
         return;
     };
 
