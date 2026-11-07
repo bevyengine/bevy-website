@@ -1,0 +1,372 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="GPU Component Array Buffer" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/shaders/gpu-component-array-buffer/ property=og:url><meta content=https://bevy.org/examples-webgpu/shaders/gpu-component-array-buffer/../static/screenshots/Shaders/gpu_component_array_buffer.png property=og:image><meta content="Shows how to expose per-mesh-instance data to the GPU" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>GPU Component Array Buffer</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Shaders / GPU Component Array Buffer</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/shader/gpu_component_array_buffer.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/shaders/gpu-component-array-buffer/>here</a>.</aside></div><div class="example__explanation media-content"><p>Demonstrates use of <code>GpuComponentArrayBuffer</code> to store custom per-mesh-instance data.<p>This example repeatedly spawns and despawns randomly colored and textured cubes, in order to demonstrate (and test) that Bevy automatically manages indices of elements within <code>GpuComponentArrayBuffer</code>. Bindless is used when supported; if bindless is supported on the platform, you can verify with a debugger that all cubes are drawn in a single drawcall.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>gpu_component_array_buffer.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>time</span><span>::</span><span style=color:#dfc479>Duration</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ecs</span><span>::{</span><span style=color:#c0c5ce>query</span><span>::</span><span style=color:#dfc479>QueryItem</span><span style=color:#c0c5ce>, system</span><span>::</span><span style=color:#c0c5ce>lifetimeless</span><span>::</span><span style=color:#dfc479>Read</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    reflect</span><span>::</span><span style=color:#dfc479>TypePath</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        gpu_component_array_buffer</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>            GpuComponentArray</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> GpuComponentArrayBuffer</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> GpuComponentArrayBufferPlugin</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_resource</span><span>::</span><span style=color:#dfc479>AsBindGroup</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        storage</span><span>::</span><span style=color:#dfc479>ShaderBuffer</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    shader</span><span>::</span><span style=color:#dfc479>ShaderRef</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time</span><span>::</span><span style=color:#c0c5ce>common_conditions</span><span>::on_timer</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bytemuck</span><span>::{</span><span style=color:#dfc479>Pod</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Zeroable</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> chacha20</span><span>::</span><span style=color:#dfc479>ChaCha8Rng</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> rand</span><span>::{</span><span style=color:#c0c5ce>seq</span><span>::</span><span style=color:#dfc479>IndexedRandom</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RngExt</span><span style=color:#c594c5> as</span><span> _</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SeedableRng</span><span style=color:#c594c5> as</span><span> _}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This example uses a shader source file from the assets subdirectory.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SHADER_ASSET_PATH</span><span style=color:#c0c5ce>:</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "shaders/gpu_component_array_buffer.wesl"</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Data that the example uses.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> AppData</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The cube mesh.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    mesh:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> One of the randomly chosen materials.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    material_light:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomMaterial</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The other one of the randomly chosen materials.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    material_dark:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomMaterial</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The random number generator.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> This is explicitly seeded to maintain consistency between runs of the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> example.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    rng:</span><span style=color:#dfc479> ChaCha8Rng</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The material that uses the data in the [`GpuComponentArrayBuffer`].</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Bindless textures will be used if supported on the target platform.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Asset</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TypePath</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> AsBindGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[bindless(index_table(range(0</span><span>..</span><span style=color:#d19a66>4)))]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CustomMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The data that the [`GpuComponentArrayBuffer`] manages.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> This is a single [`ShaderBuffer`] that contains all the data used by</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> each mesh instance, indexed by the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> [`MeshTag`](bevy_mesh::components::MeshTag).</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[storage(1</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> read_only</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> binding_array(4))]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    data:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ShaderBuffer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> A texture that will be tinted by the [`CustomMaterialData::color`].</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[texture(2)]</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[sampler(3)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color_texture:</span><span style=color:#dfc479> Handle</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Image</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The per-mesh-instance data that will be extracted from the ECS and supplied</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> to the GPU.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CustomMaterialData</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> A tint color to modulate the texture by.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color:</span><span style=color:#dfc479> Vec3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The GPU version of the per-mesh-instance data.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This is copied byte-by-byte to the GPU, not processed through</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> [`ShaderType`]. Consequently, we must insert all padding ourselves.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Pod</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Zeroable</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[repr(</span><span style=color:#dfc479>C</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> GpuCustomMaterialData</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The tint color to modulate the texture by.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color:</span><span style=color:#dfc479> Vec3</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Padding to pad this data out to a multiple of 16 bytes.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pad:</span><span style=color:#b48ead> u32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DefaultPlugins</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            MaterialPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomMaterial</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Make sure to include the `GpuComponentArrayBufferPlugin`</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // corresponding to our GPU data.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            GpuComponentArrayBufferPlugin</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomMaterialData</span><span style=color:#c0c5ce>></span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Update</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Spawn a new cube every 0.3 s.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                add_cube</span><span style=color:#c594c5>.</span><span style=color:#69c>run_if</span><span>(</span><span style=color:#69c>on_timer</span><span>(</span><span style=color:#c0c5ce>Duration</span><span>::</span><span style=color:#69c>from_millis</span><span>(</span><span style=color:#e79e6d>300</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Despawn a cube every second.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                remove_cube</span><span style=color:#c594c5>.</span><span style=color:#69c>run_if</span><span>(</span><span style=color:#69c>on_timer</span><span>(</span><span style=color:#c0c5ce>Duration</span><span>::</span><span style=color:#69c>from_millis</span><span>(</span><span style=color:#e79e6d>1000</span><span>)))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Loads our assets and spawns the camera.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> bindless_materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    component_array:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>GpuComponentArray</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomMaterialData</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Create a cube mesh.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mesh</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>default</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Load the image for each material below.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c0c5ce>texture_dark, texture_light</span><span>)</span><span style=color:#c594c5> =</span><span> (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"branding/bevy_bird_dark.png"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"branding/icon.png"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Load the two materials. We'll randomly pick between the two when spawning</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // each cube.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> buffer</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> component_array</span><span style=color:#c594c5>.</span><span>buffer</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> material_light</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bindless_materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>CustomMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        data: buffer</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        color_texture: texture_light,</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> material_dark</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> bindless_materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>CustomMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        data: buffer</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        color_texture: texture_dark,</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Save the assets we just loaded for use later.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#dfc479>AppData</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        mesh,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        material_light,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        material_dark,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        rng: ChaCha8Rng</span><span>::</span><span style=color:#69c>seed_from_u64</span><span>(</span><span style=color:#e79e6d>12345</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn a camera.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(-</span><span style=color:#e79e6d>2.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.25</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 2.5</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>looking_at</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>, Vec3</span><span>::</span><span style=color:#dfc479>Y</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A system that spawns a new cube with a random position, color, and material.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> add_cube</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> app_data:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppData</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Choose a random position.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> xz_offset</span><span style=color:#c594c5> =</span><span style=color:#69c> vec2</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_data</span><span style=color:#c594c5>.</span><span>rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_range</span><span>((-</span><span style=color:#e79e6d>1.0</span><span>)..</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_data</span><span style=color:#c594c5>.</span><span>rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_range</span><span>((-</span><span style=color:#e79e6d>1.0</span><span>)..</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Choose a random color.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> color</span><span style=color:#c594c5> =</span><span style=color:#69c> vec3</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_data</span><span style=color:#c594c5>.</span><span>rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_range</span><span>((</span><span style=color:#e79e6d>0.0</span><span>)..</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_data</span><span style=color:#c594c5>.</span><span>rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_range</span><span>((</span><span style=color:#e79e6d>0.0</span><span>)..</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_data</span><span style=color:#c594c5>.</span><span>rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_range</span><span>((</span><span style=color:#e79e6d>0.0</span><span>)..</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Choose a random material.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> material</span><span style=color:#c594c5> = if</span><span style=color:#c0c5ce> app_data</span><span style=color:#c594c5>.</span><span>rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_bool</span><span>(</span><span style=color:#e79e6d>0.5</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_data</span><span style=color:#c594c5>.</span><span>material_light</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_data</span><span style=color:#c594c5>.</span><span>material_dark</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn the cube.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>app_data</span><span style=color:#c594c5>.</span><span>mesh</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>material</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#c0c5ce>xz_offset</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span style=color:#c0c5ce>, xz_offset</span><span style=color:#c594c5>.</span><span>y)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>0.1</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        CustomMaterialData</span><span> {</span><span style=color:#c0c5ce> color</span><span> }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A system that despawns a random cube.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> remove_cube</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> app_data:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppData</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    cubes:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomMaterialData</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Find all cubes in the scene.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> all_cubes:</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>></span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> cubes</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>collect</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Pick one randomly, and despawn it.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>cube_to_despawn</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> all_cubes</span><span style=color:#c594c5>.</span><span style=color:#69c>choose</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> app_data</span><span style=color:#c594c5>.</span><span>rng) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>cube_to_despawn</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>despawn</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> GpuComponentArrayBuffer</span><span style=color:#c594c5> for</span><span style=color:#dfc479> CustomMaterialData</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The query we perform every frame to extract our component to the GPU.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> QueryData</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Read</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomMaterialData</span><span style=color:#c0c5ce>>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The filter we apply to this query. Note that we only extract components</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // that have changed, for efficiency. Typically, you will want to use a</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // `Changed` filter here.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> QueryFilter</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Changed</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CustomMaterialData</span><span style=color:#c0c5ce>>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The GPU representation of the data.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    type</span><span style=color:#dfc479> Out</span><span style=color:#c594c5> =</span><span style=color:#dfc479> GpuCustomMaterialData</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Extracts the data from the ECS and packages it up into a form suitable</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // for the GPU.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> extract_component</span><span>(</span><span style=color:#c0c5ce>data:</span><span style=color:#dfc479> QueryItem</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>'_</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> '_</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> Self</span><span>::</span><span style=color:#dfc479>QueryData</span><span style=color:#c0c5ce>></span><span>) -></span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>Self</span><span>::</span><span style=color:#dfc479>Out</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#e5c07b>        Some</span><span>(</span><span style=color:#dfc479>GpuCustomMaterialData</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            color: data</span><span style=color:#c594c5>.</span><span>color</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            pad:</span><span style=color:#e79e6d> 0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Material</span><span style=color:#c594c5> for</span><span style=color:#dfc479> CustomMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> fragment_shader</span><span>() -></span><span style=color:#dfc479> ShaderRef</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>        SHADER_ASSET_PATH</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div><input class=tabs__radio id=tab1 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab1><code>shaders/gpu_component_array_buffer.wesl</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=wgsl><span class=giallo-l><span style=color:#e06c75>import bevy_pbr</span><span>::</span><span style=color:#e06c75>render</span><span>::{</span><span style=color:#e06c75>forward_io</span><span>::</span><span style=color:#e5c07b>VertexOutput</span><span>,</span><span style=color:#e06c75> mesh_bindings</span><span>::</span><span style=color:#e06c75>mesh</span><span>};</span></span>
+<span class=giallo-l><span style=color:#e06c75>import bevy_render</span><span>::</span><span style=color:#e06c75>bindless</span><span>::{</span><span style=color:#e06c75>bindless_samplers_filtering</span><span>,</span><span style=color:#e06c75> bindless_textures_2d</span><span>};</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>/// The custom data that we extract from the ECS and expose to this shader.</span></span>
+<span class=giallo-l><span style=color:#c678dd>struct</span><span style=color:#e5c07b> CustomMaterialData</span><span> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    /// The tint color for the mesh.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    color</span><span>: </span><span style=color:#c678dd>vec3</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>,</span></span>
+<span class=giallo-l><span style=color:#7f848e>    /// Padding to pad this out to a multiple of 16 bytes.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    pad</span><span>: </span><span style=color:#c678dd>u32</span><span>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>/// The array of material data that Bevy supplies.</span></span>
+<span class=giallo-l><span style=color:#7f848e>///</span></span>
+<span class=giallo-l><span style=color:#7f848e>/// We need to declare this type because</span></span>
+<span class=giallo-l><span style=color:#7f848e>/// `binding_array&lt;array&lt;CustomMaterialData>>` isn't currently accepted by Naga.</span></span>
+<span class=giallo-l><span style=color:#7f848e>/// We have to factor the `array&lt;CustomMaterialData>` out into a separate type.</span></span>
+<span class=giallo-l><span style=color:#c678dd>struct</span><span style=color:#e5c07b> CustomMaterialDataArray</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e06c75>    data_array</span><span>: </span><span style=color:#c678dd>array</span><span>&lt;</span><span style=color:#e5c07b>CustomMaterialData</span><span>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@if(</span><span style=color:#e5c07b>BINDLESS</span><span>) {</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>/// The bindings table for bindless mode.</span></span>
+<span class=giallo-l><span style=color:#7f848e>///</span></span>
+<span class=giallo-l><span style=color:#7f848e>/// These are indexes into the various arrays.</span></span>
+<span class=giallo-l><span style=color:#c678dd>struct</span><span style=color:#e5c07b> CustomMaterialBindings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e06c75>    material</span><span>: </span><span style=color:#c678dd>u32</span><span>,</span><span style=color:#7f848e>              // 0</span></span>
+<span class=giallo-l><span style=color:#7f848e>    /// The index of the data for this instance in the `CustomMaterialDataArray`.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    data</span><span>: </span><span style=color:#c678dd>u32</span><span>,</span><span style=color:#7f848e>                  // 1</span></span>
+<span class=giallo-l><span style=color:#7f848e>    /// The index of the color texture for this instance in the</span></span>
+<span class=giallo-l><span style=color:#7f848e>    /// `bindless_textures_2d`.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    color_texture</span><span>: </span><span style=color:#c678dd>u32</span><span>,</span><span style=color:#7f848e>         // 2</span></span>
+<span class=giallo-l><span style=color:#7f848e>    /// The index of the sampler for this instance in the</span></span>
+<span class=giallo-l><span style=color:#7f848e>    /// `bindless_samplers_filtering`.</span></span>
+<span class=giallo-l><span style=color:#e06c75>    color_texture_sampler</span><span>: </span><span style=color:#c678dd>u32</span><span>,</span><span style=color:#7f848e> // 3</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@group(</span><span style=color:#e06c75>constants</span><span>::MATERIAL_BIND_GROUP) @binding(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> var</span><span>&lt;</span><span style=color:#c678dd>storage</span><span>></span><span style=color:#e06c75> material_indices</span><span>:</span></span>
+<span class=giallo-l><span style=color:#c678dd>    array</span><span>&lt;</span><span style=color:#e5c07b>CustomMaterialBindings</span><span>>;</span></span>
+<span class=giallo-l><span>@group(</span><span style=color:#e06c75>constants</span><span>::MATERIAL_BIND_GROUP) @binding(</span><span style=color:#d19a66>4</span><span>)</span><span style=color:#c678dd> var</span><span>&lt;</span><span style=color:#c678dd>storage</span><span>></span><span style=color:#e06c75> material_data</span><span>:</span></span>
+<span class=giallo-l><span style=color:#e06c75>    binding_array</span><span>&lt;</span><span style=color:#e5c07b>CustomMaterialDataArray</span><span>>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>} @else {</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@group(</span><span style=color:#e06c75>constants</span><span>::MATERIAL_BIND_GROUP) @binding(</span><span style=color:#d19a66>1</span><span>)</span><span style=color:#c678dd> var</span><span>&lt;</span><span style=color:#c678dd>storage</span><span>></span><span style=color:#e06c75> material_data</span><span>: </span><span style=color:#e5c07b>CustomMaterialDataArray</span><span>;</span></span>
+<span class=giallo-l><span>@group(</span><span style=color:#e06c75>constants</span><span>::MATERIAL_BIND_GROUP) @binding(</span><span style=color:#d19a66>2</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> color_texture</span><span>: </span><span style=color:#e06c75>texture_2d</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>;</span></span>
+<span class=giallo-l><span>@group(</span><span style=color:#e06c75>constants</span><span>::MATERIAL_BIND_GROUP) @binding(</span><span style=color:#d19a66>3</span><span>)</span><span style=color:#c678dd> var</span><span style=color:#e06c75> color_texture_sampler</span><span>: </span><span style=color:#e06c75>sampler</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@fragment</span></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> fragment</span><span>(</span><span style=color:#e06c75>in</span><span>: </span><span style=color:#e5c07b>VertexOutput</span><span>) -> @location(</span><span style=color:#d19a66>0</span><span>)</span><span style=color:#c678dd> vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // The tag stores the index of the data in the data array.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> tag</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> mesh</span><span>[</span><span style=color:#e06c75>in</span><span>.instance_index].tag;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>@if(</span><span style=color:#e5c07b>BINDLESS</span><span>) {</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // Look up the bindless slot for this mesh.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> slot</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> mesh</span><span>[</span><span style=color:#e06c75>in</span><span>.instance_index].material_and_lightmap_bind_group_slot &</span><span style=color:#d19a66> 0xffffu</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // Unpack the bindless indices.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> data_index</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> material_indices</span><span>[</span><span style=color:#e06c75>slot</span><span>].data;</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> color_texture_index</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> material_indices</span><span>[</span><span style=color:#e06c75>slot</span><span>].color_texture;</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> color_texture_sampler_index</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> material_indices</span><span>[</span><span style=color:#e06c75>slot</span><span>].color_texture_sampler;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // Grab the color from the material data array.</span></span>
+<span class=giallo-l><span style=color:#7f848e>    //</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // Note that there are two levels of arrays here: the binding array and the</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // data array. The binding array should only have one element in this case,</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // but Bevy still supplies a binding array because it's legal for different</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // materials to have different `ShaderBuffer` bindings, even though in our</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // case all materials are bound to the same buffer. The data array contains</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // all of the instance data and is indexed by the tag.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> color</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> material_data</span><span>[</span><span style=color:#e06c75>data_index</span><span>].data_array[</span><span style=color:#e06c75>tag</span><span>].color;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // Sample from the appropriate texture in the bindless textures array.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> texture_color</span><span style=color:#56b6c2> =</span><span style=color:#61afef> textureSample</span><span>(</span></span>
+<span class=giallo-l><span style=color:#e06c75>        bindless_textures_2d</span><span>[</span><span style=color:#e06c75>color_texture_index</span><span>],</span></span>
+<span class=giallo-l><span style=color:#e06c75>        bindless_samplers_filtering</span><span>[</span><span style=color:#e06c75>color_texture_sampler_index</span><span>],</span></span>
+<span class=giallo-l><span style=color:#e06c75>        in</span><span>.uv</span></span>
+<span class=giallo-l><span>    ).rgb;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>} @else {</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // In non-bindless mode, we only have one buffer, so we simply use the tag</span></span>
+<span class=giallo-l><span style=color:#7f848e>    // as an index into the array.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> color</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> material_data</span><span>.data_array[</span><span style=color:#e06c75>tag</span><span>].color;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> texture_color</span><span style=color:#56b6c2> =</span><span style=color:#61afef> textureSample</span><span>(</span><span style=color:#e06c75>color_texture</span><span>,</span><span style=color:#e06c75> color_texture_sampler</span><span>,</span><span style=color:#e06c75> in</span><span>.uv).rgb;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e>    // Modulate the texture by the appropriate tint color.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    return vec4</span><span>&lt;</span><span style=color:#c678dd>f32</span><span>>(</span><span style=color:#e06c75>color</span><span> *</span><span style=color:#e06c75> texture_color</span><span>,</span><span style=color:#d19a66> 1.0</span><span>);</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/Shaders/gpu-component-array-buffer/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>
