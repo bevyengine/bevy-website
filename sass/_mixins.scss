@@ -1,3 +1,19 @@
+@mixin backdrop($z-index) {
+  visibility: hidden;
+  position: fixed;
+  inset: 0px;
+  z-index: $z-index;
+  background-color: var(--backdrop-color);
+  cursor: pointer;
+  opacity: 0.0;
+  transition: opacity $duration * 2;
+}
+
+@mixin backdrop-visible() {
+  visibility: visible;
+  opacity: 1.0;
+}
+
 @mixin card() {
   display: block;
   overflow: hidden;
