@@ -26,8 +26,7 @@ fn hello_world() {
 // ANCHOR: app_main
 fn main() {
     App::new()
-        .add_systems(Startup, add_people)
-        .add_systems(Update, hello_world)
+        .add_systems(Startup, (hello_world, add_people))
         .run();
 }
 // ANCHOR_END: app_main
