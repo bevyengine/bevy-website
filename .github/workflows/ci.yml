@@ -85,6 +85,19 @@ jobs:
       - name: Run tests
         run: cargo test
 
+  harper-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Harper from GitHub Releases
+        uses: sigoden/install-binary@v1.2.0
+        with:
+          repo: Automattic/harper
+          name: harper-cli
+          tag: v2.2.1
+      - name: Run Harper
+        run: harper-cli lint content/learn/book/**/*.md -u .harper-dictionary.txt
+
   typos:
     runs-on: ubuntu-latest
     timeout-minutes: 30
