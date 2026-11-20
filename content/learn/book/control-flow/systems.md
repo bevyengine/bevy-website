@@ -49,7 +49,7 @@ struct PlayerListResource {
 }
 ```
 
-If we have several parameters we want to access together repeatedly, we can be more ergonomic: We can create a custom system parameter by deriving the [`SystemParam`] trait on a custom struct.
+If we have several parameters we want to access together repeatedly, a more ergonomic way is to create a custom system parameter by deriving the [`SystemParam`] trait on a custom struct.
 As long as every field on our custom struct is a system parameter, we can access the custom struct as a single system parameter.
 
 ```rust
@@ -66,7 +66,7 @@ pub struct PlayerSystemParameter{
 fn register_players_system(mut player_parameter: PlayerSystemParameter) {
     for player_entity in player_parameter.player_query.iter() {
         player_parameter.commands.entity(player_entity).insert(InGameMarker);
-        
+
         player_parameter.list_of_players.player_list.push(player_entity);
     }
 }
@@ -100,7 +100,7 @@ If two systems access non-overlapping parts of the world they can run at the sam
 In the example below, both systems would be able to run in parallel since they do not access the same data.
 
 ```rust
-// This System accesses two Queries, one for the Player Entity, 
+// This System accesses two Queries, one for the Player Entity,
 // and one for the Enemy Entity.
 fn player_and_enemy_access(
     player_query: Single<&Transform, With<Player>>,
@@ -121,7 +121,7 @@ Both systems in the example below access the same data, but neither changes the 
 These systems can run in parallel.
 
 ```rust
-// This System immutably accesses the Transform component. 
+// This System immutably accesses the Transform component.
 fn print_player_and_enemy_locations(
     player_query: Single<&Transform, With<Player>>,
     enemy_query: Single<&Transform, With<Enemy>>
@@ -149,11 +149,11 @@ fn damage_player(
 ```
 
 Even though we've been talking about multiple systems, single systems also have to abide by the borrow checker when accessing data.
-As an example, `Component` data cannot be accessed both mutably and immutably without using some workarounds (which you can read about in the [Queries book section]). 
+As an example, `Component` data cannot be accessed both mutably and immutably without using some workarounds (which you can read about in the [Queries book section]).
 The same concept applies to resource access as well.
 
 ```rust
-// This system would not compile because it accesses the 
+// This system would not compile because it accesses the
 // Transform component data both mutably and immutably.
 fn player_and_enemy_access(
     player_query: Single<&Transform, With<Player>>,
@@ -162,7 +162,7 @@ fn player_and_enemy_access(
     ...
 }
 
-// This system would not compile because it accesses the same resource 
+// This system would not compile because it accesses the same resource
 // data both mutably and immutably.
 fn access_resource(
     custom_resource: Res<CustomResource>,
@@ -173,7 +173,7 @@ fn access_resource(
 ```
 
 In addition to the data retrieved from the `World`, each system also has its own cached state.
-This system state is used for performance optimizations (e.g. for queries), but can also be used to keep track of private internal state or as scratch space.
+This system state is used for performance optimizations (e.g. for queries), but it can also be used to keep track of private internal state or as scratch space.
 See the section on [local system state] for more details.
 
 ["splits the borrow"]: https://doc.rust-lang.org/nomicon/borrow-splitting.html
@@ -235,8 +235,8 @@ fn register_one_shot_systems(world: &mut World) {
     // Register two One-shot Systems.
     let some_system_id = world.register_system(one_shot_system);
     let another_system_id = world.register_system(one_shot_system_with_input);
-    
-    // Run the first One-shot System. 
+
+    // Run the first One-shot System.
     world.run_system(some_system_id);
     // Run the second One-shot System.
     world.run_system_with(another_system_id, 5);
@@ -263,8 +263,8 @@ fn run_one_shot_systems(world: &mut World) {
     // This will print a `local_value: 1` since this is the first time
     // the system is run.
     world.run_system_cached(one_shot_system);
-    // This will print a `local_value: 2` since this is the second time 
-    // the system is run, and `local_value` is cached from the first run 
+    // This will print a `local_value: 2` since this is the second time
+    // the system is run, and `local_value` is cached from the first run
     // of the system.
     world.run_system_cached(one_shot_system);
 }
@@ -282,7 +282,7 @@ For example, if you attempt to run a system by id that hasn't been registered, y
 ```rust
 // Use a SystemId for a system that hasn't been registered.
 let result = world.run_system(999);
-// Attempting to use the Result of the above will result 
+// Attempting to use the Result of the above will result
 // in a RegisteredSystemError.
 assert_eq!(result.unwrap_err(), RegisteredSystemError::SystemIdNotRegistered(999))
 ```
@@ -291,11 +291,11 @@ For convenience, [`Commands`] has a set of equivalent methods, allowing you to q
 This can recurse; use this power wisely!
 
 ```rust
-// This is the same as World::register_system, but is queued to run 
+// This is the same as World::register_system, but is queued to run
 // instead of executing immediately.
 commands.register_system(some_system);
 
-// This is the same as World::run_system, but is queued to run 
+// This is the same as World::run_system, but is queued to run
 // instead of executing immediately.
 commands.run_system(SystemId);
 
@@ -309,7 +309,7 @@ which can be valuable when trying to evaluate complex blocks of logic in respons
 or at a rate other than "once per frame".
 
 ```rust
-// A custom Schedule that we would run Systems in. 
+// A custom Schedule that we would run Systems in.
 #[derive(ScheduleLabel, Hash, Debug, PartialEq, Eq, Clone, Copy)]
 struct FooSchedule;
 
@@ -382,7 +382,7 @@ fn call_system(world: &mut World) {
 
 fn one_shot_system_with_input(In(input): In<usize>) -> usize {
     // `input` is passed into the system as an `In` usize value.
-    // Because this function returns a usize value, our `Out` value 
+    // Because this function returns a usize value, our `Out` value
     // is inferred to be a usize.
     input + 2
 }
@@ -417,8 +417,8 @@ fn second_system(In(input): In<usize>) {
 }
 ```
 
-Using the `IntoSystem::pipe` method requires that the second system have an `In<T>` type as it's first parameter.
-Both of the systems are treated as a single system from the perspective of the scheduler.
+Using the `IntoSystem::pipe` method requires that the second system have an `In<T>` type as its first parameter.
+Both systems are treated as a single system from the perspective of the scheduler.
 This can be repeated indefinitely, but branching is not supported.
 
 System piping is mostly useful for composing fragments of logic in a modular, reusable way.

@@ -7,8 +7,8 @@ status = 'hidden'
 +++
 
 Instead of returning early from a system, you could choose to skip it entirely.
-This can reduce the complexity of using your systems by separating concerns of _"what a system does"_ from _"should it run"_.
-Skipping a system entirely can also reduce the overhead involved since it would be canceled before being dispatched.
+This can reduce the complexity of using your systems by separating concerns of _"what a system does"_ from _"should it run?"_.
+Skipping a system entirely can also reduce overhead since it would be canceled before being dispatched.
 Systems are run in parallel by default, so skipping a system means your application would do less work overall if a system is skipped.
 
 Bevy offers two complementary ways to skip systems: **run conditions** and **fallible system parameters**.
@@ -23,13 +23,15 @@ For your convenience, Bevy comes with a set of pre-made run conditions, which ca
 These run conditions are domain-specific, thus they are defined as needed by various Bevy sub-crates.
 They might allow you to [only run a system based on input being received], [run a system on a timer], or [run a system when in a certain game state].
 
-Most of these pre-made run conditions won't run on their own.
-Instead, you'll have to provide them with a value which will then return a function that can be then be used as a run condition.
+Most of these pre-made run conditions won't run on their own;
+instead, you must provide them with a value that returns a function which can then be used as a run condition.
 
-Run conditions can also be composed.
+Two operations worth highlighting:
+
+- Run conditions can be composed.
 You can chain multiple `.run_if()` calls using AND logic, but there are also various boolean operations provided by the [`SystemCondition`] trait.
 
-Run conditions can also be applied to multiple systems at once by using a [`SystemSet`].
+- Run conditions can be applied to multiple systems at once by using a [`SystemSet`].
 If a system set is given a run condition, it will be evaluated once per frame for that system set and the systems inside of it will be skipped if it returns false.
 
 As a result, run conditions can be useful when working with systems that you do not own.
@@ -50,20 +52,20 @@ Every system parameter requires that some specific data is available in the `Wor
 For example, `Res<T>` requires that `T` has been initialized as a resource.
 If that data is not found, [`SystemParam`] authors can choose how to proceed:
 
-- The system can fail and cause a panic,
-- Or the system can be gracefully skipped.
+- The system can fail and cause a panic, or
+- The system can be gracefully skipped.
 
-You aren't locked into either panicking or skipping though.
+You aren't locked into either panicking or skipping, though.
 When system parameters fail the resulting behavior can be configured (as detailed in the [handling errors] section), but by default failed system parameters will cause a panic.
 
 Alternatively, system parameters can cause the system that they are part of to be skipped when validation fails.
 This represents an unusual (but expected) application state, which should be handled silently without issue.
 
-For example, the [`Single`] system parameter works like [`Query`] except that it only succeeds if the query matches exactly one entity.
+For example, the [`Single`] system parameter works like [`Query`] except it only succeeds if the query matches exactly one entity.
 If only a single entity matches, the returned value is provided and conveniently unwrapped.
-If either zero or more than one entity matches, the system is not run.
+If zero or more than one entity matches, the system is not run.
 
-This logic can be useful when, for example, dealing with a player character who may have died.
+This logic can be useful when, for example, dealing with a player character who has died.
 We don't need to update their statistics while waiting for them to respawn, but we certainly don't want to panic!
 
 If you are writing your own [`SystemParam`], this behavior can be configured via the [`SystemParam::validate_param`] method.
