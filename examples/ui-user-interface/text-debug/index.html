@@ -1,0 +1,385 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Text Debug" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/ui-user-interface/text-debug/ property=og:url><meta content="https://bevy.org/examples/ui-user-interface/text-debug/../static/screenshots/UI (User Interface)/text_debug.png" property=og:image><meta content="An example for debugging text layout" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Text Debug</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>UI (User Interface) / Text Debug</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/ui/text/text_debug.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/ui-user-interface/text-debug/>here</a>.</aside></div><div class="example__explanation media-content"><p>Shows various text layout options.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>text_debug.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::{</span><span style=color:#c0c5ce>collections</span><span>::</span><span style=color:#dfc479>VecDeque</span><span style=color:#c0c5ce>, time</span><span>::</span><span style=color:#dfc479>Duration</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>css</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    diagnostic</span><span>::{</span><span style=color:#dfc479>DiagnosticsStore</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> FrameTimeDiagnosticsPlugin</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ui</span><span>::</span><span style=color:#c0c5ce>widget</span><span>::</span><span style=color:#dfc479>TextUiWriter</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    window</span><span>::</span><span style=color:#dfc479>PresentMode</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DefaultPlugins</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#dfc479>WindowPlugin</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                primary_window:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#dfc479>Window</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    present_mode: PresentMode</span><span>::</span><span style=color:#dfc479>AutoNoVsync</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            FrameTimeDiagnosticsPlugin</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, infotext_system</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>, change_text_system</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> TextChanges</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> infotext_system</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> font</span><span style=color:#c594c5> =</span><span style=color:#dfc479> FontSource</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#c0c5ce>asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"fonts/FiraSans-Bold.ttf"</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> background_color</span><span style=color:#c594c5> =</span><span style=color:#d19a66> MAROON</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Camera2d</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> root_uinode</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>SpaceBetween</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> left_column</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>SpaceBetween</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Start</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_grow:</span><span style=color:#e79e6d> 1</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            margin: UiRect</span><span>::</span><span style=color:#69c>axes</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>15</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>5</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        })</span><span style=color:#c594c5>.</span><span style=color:#69c>with_children</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>builder</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        builder</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"This is</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>text with</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>line breaks</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>in the top left."</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>25.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span>(</span><span style=color:#c0c5ce>background_color</span><span>)</span></span>
+<span class=giallo-l><span>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        builder</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Text</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "This text is right-justified. The `Justify` component controls the horizontal alignment of the lines of multi-line text relative to each other, and does not affect the text node's position in the UI layout."</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>25.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            TextColor</span><span>(</span><span style=color:#d19a66>YELLOW</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            TextLayout</span><span>::</span><span style=color:#69c>justify</span><span>(</span><span style=color:#c0c5ce>Justify</span><span>::</span><span style=color:#dfc479>Right</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                max_width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>300</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span>(</span><span style=color:#c0c5ce>background_color</span><span>)</span></span>
+<span class=giallo-l><span>        ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        builder</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Text</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                "This</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>text has</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>line breaks and also a set width in the bottom left."</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>25.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                max_width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>300</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span>(</span><span style=color:#c0c5ce>background_color</span><span>)</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c594c5>.</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> right_column</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#dfc479>Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction: FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>SpaceBetween</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items: AlignItems</span><span>::</span><span style=color:#dfc479>End</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_grow:</span><span style=color:#e79e6d> 1</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            margin: UiRect</span><span>::</span><span style=color:#69c>axes</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>15</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>5</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>with_children</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>builder</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            builder</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"This text is very long, has a limited width, is center-justified, is positioned in the top right and is also colored pink."</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>33.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                TextColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.8</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.2</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.7</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                TextLayout</span><span>::</span><span style=color:#69c>justify</span><span>(</span><span style=color:#c0c5ce>Justify</span><span>::</span><span style=color:#dfc479>Center</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    max_width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>400</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                BackgroundColor</span><span>(</span><span style=color:#c0c5ce>background_color</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>            builder</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"This text is left-justified and is vertically positioned to distribute the empty space equally above and below it."</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>29.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                TextColor</span><span>(</span><span style=color:#d19a66>YELLOW</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                TextLayout</span><span>::</span><span style=color:#69c>justify</span><span>(</span><span style=color:#c0c5ce>Justify</span><span>::</span><span style=color:#dfc479>Left</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    max_width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>300</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                BackgroundColor</span><span>(</span><span style=color:#c0c5ce>background_color</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>            builder</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"This text is fully justified and is positioned in the same way."</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>29.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                TextLayout</span><span>::</span><span style=color:#69c>justify</span><span>(</span><span style=color:#c0c5ce>Justify</span><span>::</span><span style=color:#dfc479>Justified</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                TextColor</span><span>(</span><span style=color:#d19a66>GREEN_YELLOW</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    max_width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>300</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                BackgroundColor</span><span>(</span><span style=color:#c0c5ce>background_color</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>            builder</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    Text</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>21.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                    TextChanges</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    BackgroundColor</span><span>(</span><span style=color:#c0c5ce>background_color</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>with_children</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>p</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    p</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        TextSpan</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>This text changes in the bottom right"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>21.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    p</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        TextSpan</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>" this text has zero font size"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        TextColor</span><span>(</span><span style=color:#d19a66>BLUE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    p</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        TextSpan</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>This text changes in the bottom right - "</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>21.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        TextColor</span><span>(</span><span style=color:#d19a66>RED</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    p</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        TextSpan</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>21.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        TextColor</span><span>(</span><span style=color:#d19a66>ORANGE_RED</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    p</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        TextSpan</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>" fps, "</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>10.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        TextColor</span><span>(</span><span style=color:#d19a66>YELLOW</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    p</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        TextSpan</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>21.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        TextColor</span><span>(</span><span style=color:#d19a66>LIME</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    p</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        TextSpan</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>" ms/frame"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(</span><span style=color:#e79e6d>42.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        TextColor</span><span>(</span><span style=color:#d19a66>BLUE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    p</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        TextSpan</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>" this text has negative font size"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>                        TextFont</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font: font</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                            font_size: FontSize</span><span>::</span><span style=color:#69c>Px</span><span>(-</span><span style=color:#e79e6d>42.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                        TextColor</span><span>(</span><span style=color:#d19a66>BLUE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>root_uinode</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_children</span><span>(</span><span style=color:#c594c5>&</span><span>[</span><span style=color:#c0c5ce>left_column, right_column</span><span>])</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> change_text_system</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> fps_history:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>VecDeque</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>f64</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> time_history:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>VecDeque</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Duration</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    diagnostics:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>DiagnosticsStore</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>TextChanges</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> writer:</span><span style=color:#dfc479> TextUiWriter</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time_history</span><span style=color:#c594c5>.</span><span style=color:#69c>push_front</span><span>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>elapsed</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time_history</span><span style=color:#c594c5>.</span><span style=color:#69c>truncate</span><span>(</span><span style=color:#e79e6d>120</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> avg_fps</span><span style=color:#c594c5> =</span><span> (</span><span style=color:#c0c5ce>time_history</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span>()</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f64</span><span>)</span></span>
+<span class=giallo-l><span>        / (</span><span style=color:#c0c5ce>time_history</span><span style=color:#c594c5>.</span><span style=color:#69c>front</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>copied</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap_or_default</span><span>()</span></span>
+<span class=giallo-l><span>            -</span><span style=color:#c0c5ce> time_history</span><span style=color:#c594c5>.</span><span style=color:#69c>back</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>copied</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap_or_default</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>as_secs_f64</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>max</span><span>(</span><span style=color:#e79e6d>0.0001</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    fps_history</span><span style=color:#c594c5>.</span><span style=color:#69c>push_front</span><span>(</span><span style=color:#c0c5ce>avg_fps</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    fps_history</span><span style=color:#c594c5>.</span><span style=color:#69c>truncate</span><span>(</span><span style=color:#e79e6d>120</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> fps_variance</span><span style=color:#c594c5> =</span><span style=color:#69c> std_deviation</span><span>(</span><span style=color:#c0c5ce>fps_history</span><span style=color:#c594c5>.</span><span style=color:#69c>make_contiguous</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap_or_default</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> entity</span><span style=color:#c594c5> in &</span><span style=color:#c0c5ce>query</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> fps</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>fps_diagnostic</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> diagnostics</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>FrameTimeDiagnosticsPlugin</span><span>::</span><span style=color:#d19a66>FPS</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            && let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>fps_smoothed</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> fps_diagnostic</span><span style=color:#c594c5>.</span><span style=color:#69c>smoothed</span><span>()</span></span>
+<span class=giallo-l><span>        {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            fps</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> fps_smoothed;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> frame_time</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs_f64</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>frame_time_diagnostic</span><span>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            diagnostics</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>FrameTimeDiagnosticsPlugin</span><span>::</span><span style=color:#d19a66>FRAME_TIME</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            && let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>frame_time_smoothed</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> frame_time_diagnostic</span><span style=color:#c594c5>.</span><span style=color:#69c>smoothed</span><span>()</span></span>
+<span class=giallo-l><span>        {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            frame_time</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> frame_time_smoothed;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>writer</span><span style=color:#c594c5>.</span><span style=color:#69c>text</span><span>(</span><span style=color:#c0c5ce>entity,</span><span style=color:#e79e6d> 0</span><span>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span style=color:#61afef>            format!</span><span>(</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>{avg_fps:.1}</span><span style=color:#9fc37f> avg fps, </span><span style=color:#d19a66>{fps_variance:.1}</span><span style=color:#9fc37f> frametime variance"</span><span style=color:#c0c5ce>,</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>writer</span><span style=color:#c594c5>.</span><span style=color:#69c>text</span><span>(</span><span style=color:#c0c5ce>entity,</span><span style=color:#e79e6d> 1</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>This text changes in the bottom right - </span><span style=color:#d19a66>{fps:.1}</span><span style=color:#9fc37f> fps, </span><span style=color:#d19a66>{frame_time:.3}</span><span style=color:#9fc37f> ms/frame"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>writer</span><span style=color:#c594c5>.</span><span style=color:#69c>text</span><span>(</span><span style=color:#c0c5ce>entity,</span><span style=color:#e79e6d> 4</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span>(</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>{fps:.1}</span><span style=color:#9fc37f>"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>writer</span><span style=color:#c594c5>.</span><span style=color:#69c>text</span><span>(</span><span style=color:#c0c5ce>entity,</span><span style=color:#e79e6d> 6</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#61afef> format!</span><span>(</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>{frame_time:.3}</span><span style=color:#9fc37f>"</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> mean</span><span>(</span><span style=color:#c0c5ce>data:</span><span style=color:#c594c5> &</span><span>[</span><span style=color:#b48ead>f64</span><span>]) -></span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>f64</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> sum</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> data</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>sum</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>f64</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> count</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> data</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    match</span><span style=color:#c0c5ce> count</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        positive</span><span style=color:#c594c5> if</span><span style=color:#c0c5ce> positive</span><span style=color:#c594c5> ></span><span style=color:#e79e6d> 0</span><span> =></span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>sum</span><span> /</span><span style=color:#c0c5ce> count</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f64</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _</span><span> =></span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> std_deviation</span><span>(</span><span style=color:#c0c5ce>data:</span><span style=color:#c594c5> &</span><span>[</span><span style=color:#b48ead>f64</span><span>]) -></span><span style=color:#dfc479> Option</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>f64</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    match</span><span> (</span><span style=color:#69c>mean</span><span>(</span><span style=color:#c0c5ce>data</span><span>)</span><span style=color:#c0c5ce>, data</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span>()) {</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#e5c07b>Some</span><span>(</span><span style=color:#c0c5ce>data_mean</span><span>)</span><span style=color:#c0c5ce>, count</span><span>)</span><span style=color:#c594c5> if</span><span style=color:#c0c5ce> count</span><span style=color:#c594c5> ></span><span style=color:#e79e6d> 0</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            let</span><span style=color:#c0c5ce> variance</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> data</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>map</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>value</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    let</span><span style=color:#c0c5ce> diff</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> data_mean</span><span> - *</span><span style=color:#c0c5ce>value;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    diff</span><span> *</span><span style=color:#c0c5ce> diff</span></span>
+<span class=giallo-l><span>                })</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>sum</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>f64</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span>                /</span><span style=color:#c0c5ce> count</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f64</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e5c07b>            Some</span><span>(</span><span style=color:#c0c5ce>variance</span><span style=color:#c594c5>.</span><span style=color:#69c>sqrt</span><span>())</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _</span><span> =></span><span style=color:#e5c07b> None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/UI (User Interface)/text-debug/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

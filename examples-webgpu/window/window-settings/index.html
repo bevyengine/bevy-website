@@ -1,0 +1,261 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Window Settings" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/window/window-settings/ property=og:url><meta content=https://bevy.org/examples-webgpu/window/window-settings/../static/screenshots/Window/window_settings.png property=og:image><meta content="Demonstrates customizing default window settings" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Window Settings</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Window / Window Settings</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/window/window_settings.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/window/window-settings/>here</a>.</aside></div><div class="example__explanation media-content"><p>Illustrates how to change window settings and shows how to affect the mouse pointer in various ways.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>window_settings.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#d19a66>#[cfg(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "custom_cursor"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>window</span><span>::{</span><span style=color:#dfc479>CustomCursor</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> CustomCursorImage</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    diagnostic</span><span>::{</span><span style=color:#dfc479>FrameCount</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> FrameTimeDiagnosticsPlugin</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> LogDiagnosticsPlugin</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    window</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>        CursorGrabMode</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> CursorIcon</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> CursorOptions</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PresentMode</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SystemCursorIcon</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> WindowLevel</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        WindowTheme</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DefaultPlugins</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#dfc479>WindowPlugin</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                primary_window:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#dfc479>Window</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    title:</span><span style=color:#9fc37f> "I am a window!"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    name:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#9fc37f>"bevy.app"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    resolution:</span><span> (</span><span style=color:#e79e6d>500</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 300</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    present_mode:</span><span style=color:#dfc479> PresentMode</span><span>::</span><span style=color:#dfc479>AutoVsync</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Tells Wasm to resize the window according to the available canvas</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    fit_canvas_to_parent:</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Tells Wasm not to override default event handling, like F5, Ctrl+R etc.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    prevent_default_event_handling:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    window_theme:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#dfc479>WindowTheme</span><span>::</span><span style=color:#dfc479>Dark</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    enabled_buttons: bevy</span><span>::</span><span style=color:#c0c5ce>window</span><span>::</span><span style=color:#dfc479>EnabledButtons</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        maximize:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                        ..</span><span style=color:#dfc479>Default</span><span>::</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // This will spawn an invisible window</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // The window will be made visible in the make_visible() system after 3 frames.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // This is useful when you want to avoid the white window that shows up before the GPU is ready to render the app.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    visible:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            LogDiagnosticsPlugin</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            FrameTimeDiagnosticsPlugin</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, init_cursor_icons</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Update</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                change_title,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                toggle_theme,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                toggle_cursor,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                toggle_vsync,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                toggle_window_controls,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                cycle_cursor_icon,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                switch_level,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                make_visible,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> make_visible</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> window:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Window</span><span style=color:#c0c5ce>>, frames:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>FrameCount</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // The delay may be different for your app or system.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> frames</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 3</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // At this point the gpu is ready to show the app so we can make the window visible.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Alternatively, you could toggle the visibility in Startup.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // It will work, but it will have one white frame before it starts rendering</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        window</span><span style=color:#c594c5>.</span><span>visible </span><span style=color:#c594c5>=</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This system toggles the vsync mode when pressing the button V.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> You'll see fps increase displayed in the console.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> toggle_vsync</span><span>(</span><span style=color:#c0c5ce>input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> window:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Window</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyV</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        window</span><span style=color:#c594c5>.</span><span>present_mode </span><span style=color:#c594c5>= if</span><span style=color:#61afef> matches!</span><span>(</span><span style=color:#c0c5ce>window</span><span style=color:#c594c5>.</span><span>present_mode</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PresentMode</span><span>::</span><span style=color:#dfc479>AutoVsync</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            PresentMode</span><span>::</span><span style=color:#dfc479>AutoNoVsync</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            PresentMode</span><span>::</span><span style=color:#dfc479>AutoVsync</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>        info!</span><span>(</span><span style=color:#9fc37f>"PRESENT_MODE: </span><span style=color:#d19a66>{:?}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, window</span><span style=color:#c594c5>.</span><span>present_mode)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This system switches the window level when pressing the T button</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> You'll notice it won't be covered by other windows, or will be covered by all the other</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> windows depending on the level.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This feature only works on some platforms. Please check the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> [documentation](https://docs.rs/bevy/latest/bevy/prelude/struct.Window.html#structfield.window_level)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> for more details.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> switch_level</span><span>(</span><span style=color:#c0c5ce>input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> window:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Window</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyT</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        window</span><span style=color:#c594c5>.</span><span>window_level </span><span style=color:#c594c5>= match</span><span style=color:#c0c5ce> window</span><span style=color:#c594c5>.</span><span>window_level {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            WindowLevel</span><span>::</span><span style=color:#dfc479>AlwaysOnBottom</span><span> =></span><span style=color:#dfc479> WindowLevel</span><span>::</span><span style=color:#dfc479>Normal</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            WindowLevel</span><span>::</span><span style=color:#dfc479>Normal</span><span> =></span><span style=color:#dfc479> WindowLevel</span><span>::</span><span style=color:#dfc479>AlwaysOnTop</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            WindowLevel</span><span>::</span><span style=color:#dfc479>AlwaysOnTop</span><span> =></span><span style=color:#dfc479> WindowLevel</span><span>::</span><span style=color:#dfc479>AlwaysOnBottom</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>        info!</span><span>(</span><span style=color:#9fc37f>"WINDOW_LEVEL: </span><span style=color:#d19a66>{:?}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, window</span><span style=color:#c594c5>.</span><span>window_level)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This system toggles the window controls when pressing buttons 1, 2 and 3</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This feature only works on some platforms. Please check the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> [documentation](https://docs.rs/bevy/latest/bevy/prelude/struct.Window.html#structfield.enabled_buttons)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> for more details.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> toggle_window_controls</span><span>(</span><span style=color:#c0c5ce>input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> window:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Window</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> toggle_minimize</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit1</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> toggle_maximize</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit2</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> toggle_close</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Digit3</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> toggle_minimize</span><span style=color:#c594c5> ||</span><span style=color:#c0c5ce> toggle_maximize</span><span style=color:#c594c5> ||</span><span style=color:#c0c5ce> toggle_close</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> toggle_minimize</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            window</span><span style=color:#c594c5>.</span><span>enabled_buttons</span><span style=color:#c594c5>.</span><span>minimize </span><span style=color:#c594c5>= !</span><span style=color:#c0c5ce>window</span><span style=color:#c594c5>.</span><span>enabled_buttons</span><span style=color:#c594c5>.</span><span>minimize</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> toggle_maximize</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            window</span><span style=color:#c594c5>.</span><span>enabled_buttons</span><span style=color:#c594c5>.</span><span>maximize </span><span style=color:#c594c5>= !</span><span style=color:#c0c5ce>window</span><span style=color:#c594c5>.</span><span>enabled_buttons</span><span style=color:#c594c5>.</span><span>maximize</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> toggle_close</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            window</span><span style=color:#c594c5>.</span><span>enabled_buttons</span><span style=color:#c594c5>.</span><span>close </span><span style=color:#c594c5>= !</span><span style=color:#c0c5ce>window</span><span style=color:#c594c5>.</span><span>enabled_buttons</span><span style=color:#c594c5>.</span><span>close</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This system will then change the title during execution</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> change_title</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> window:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Window</span><span style=color:#c0c5ce>>, time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    window</span><span style=color:#c594c5>.</span><span>title </span><span style=color:#c594c5>=</span><span style=color:#61afef> format!</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>        "Seconds since startup: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        time</span><span style=color:#c594c5>.</span><span style=color:#69c>elapsed</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>as_secs_f32</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>round</span><span>()</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> toggle_cursor</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> cursor_options:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> CursorOptions</span><span style=color:#c0c5ce>>, input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>Space</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        cursor_options</span><span style=color:#c594c5>.</span><span>visible </span><span style=color:#c594c5>= !</span><span style=color:#c0c5ce>cursor_options</span><span style=color:#c594c5>.</span><span>visible</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        cursor_options</span><span style=color:#c594c5>.</span><span>grab_mode </span><span style=color:#c594c5>= match</span><span style=color:#c0c5ce> cursor_options</span><span style=color:#c594c5>.</span><span>grab_mode {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            CursorGrabMode</span><span>::</span><span style=color:#e5c07b>None</span><span> =></span><span style=color:#dfc479> CursorGrabMode</span><span>::</span><span style=color:#dfc479>Locked</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            CursorGrabMode</span><span>::</span><span style=color:#dfc479>Locked</span><span style=color:#c594c5> |</span><span style=color:#dfc479> CursorGrabMode</span><span>::</span><span style=color:#dfc479>Confined</span><span> =></span><span style=color:#dfc479> CursorGrabMode</span><span>::</span><span style=color:#e5c07b>None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This system will toggle the color theme used by the window</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> toggle_theme</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> window:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Window</span><span style=color:#c0c5ce>>, input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>KeyCode</span><span style=color:#c0c5ce>>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>KeyCode</span><span>::</span><span style=color:#dfc479>KeyF</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        && let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>current_theme</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> window</span><span style=color:#c594c5>.</span><span>window_theme</span></span>
+<span class=giallo-l><span>    {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        window</span><span style=color:#c594c5>.</span><span>window_theme </span><span style=color:#c594c5>= match</span><span style=color:#c0c5ce> current_theme</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            WindowTheme</span><span>::</span><span style=color:#dfc479>Light</span><span> =></span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#dfc479>WindowTheme</span><span>::</span><span style=color:#dfc479>Dark</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            WindowTheme</span><span>::</span><span style=color:#dfc479>Dark</span><span> =></span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#dfc479>WindowTheme</span><span>::</span><span style=color:#dfc479>Light</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Resource with a set of cursor icons we want to cycle through</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CursorIcons</span><span>(</span><span style=color:#dfc479>Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CursorIcon</span><span style=color:#c0c5ce>></span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> init_cursor_icons</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    window:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Window</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>    #[</span><span style=color:#69c>cfg</span><span>(</span><span style=color:#c0c5ce>feature</span><span style=color:#c594c5> =</span><span style=color:#9fc37f> "custom_cursor"</span><span>)]</span><span style=color:#c0c5ce> asset_server:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AssetServer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> cursor_icons</span><span style=color:#c594c5> =</span><span style=color:#69c> CursorIcons</span><span>(</span><span style=color:#61afef>vec!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        SystemCursorIcon</span><span>::</span><span style=color:#dfc479>Default</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        SystemCursorIcon</span><span>::</span><span style=color:#dfc479>Pointer</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        SystemCursorIcon</span><span>::</span><span style=color:#dfc479>Wait</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        SystemCursorIcon</span><span>::</span><span style=color:#dfc479>Text</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#d19a66>        #[cfg(feature </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "custom_cursor"</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        CustomCursor</span><span>::</span><span style=color:#69c>Image</span><span>(</span><span style=color:#dfc479>CustomCursorImage</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            handle: asset_server</span><span style=color:#c594c5>.</span><span style=color:#69c>load</span><span>(</span><span style=color:#9fc37f>"branding/icon.png"</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            hotspot:</span><span> (</span><span style=color:#e79e6d>128</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 128</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#c0c5ce>Default</span><span>::</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ])</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // By default the Window entity does not have a CursorIcon component, so we add it here.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(*</span><span style=color:#c0c5ce>window</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>cursor_icons</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>[</span><span style=color:#e79e6d>0</span><span>]</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#c0c5ce>cursor_icons</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This system cycles the cursor's icon through a small set of icons when clicking</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> cycle_cursor_icon</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> cursor:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> CursorIcon</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ButtonInput</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>MouseButton</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> index:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>usize</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    cursor_icons:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CursorIcons</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>MouseButton</span><span>::</span><span style=color:#dfc479>Left</span><span>) {</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>index</span><span style=color:#c594c5> =</span><span> (*</span><span style=color:#c0c5ce>index</span><span> +</span><span style=color:#e79e6d> 1</span><span>) %</span><span style=color:#c0c5ce> cursor_icons</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>len</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        **</span><span style=color:#c0c5ce>cursor</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> cursor_icons</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>[*</span><span style=color:#c0c5ce>index</span><span>]</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> input</span><span style=color:#c594c5>.</span><span style=color:#69c>just_pressed</span><span>(</span><span style=color:#c0c5ce>MouseButton</span><span>::</span><span style=color:#dfc479>Right</span><span>) {</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>index</span><span style=color:#c594c5> = if</span><span> *</span><span style=color:#c0c5ce>index</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            cursor_icons</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>len</span><span>() -</span><span style=color:#e79e6d> 1</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>index</span><span> -</span><span style=color:#e79e6d> 1</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        **</span><span style=color:#c0c5ce>cursor</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> cursor_icons</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span>[*</span><span style=color:#c0c5ce>index</span><span>]</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/Window/window-settings/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>
