@@ -21,7 +21,7 @@ Many operations in the ECS can *only* be done via exclusive world access, such a
 commands.spawn(bundle);
 
 // Despawn the `entity` Entity.
-commands.entity(entity).despawn(); 
+commands.entity(entity).despawn();
 ```
 
 - Inserting and Removing Resources
@@ -31,14 +31,14 @@ commands.entity(entity).despawn();
 commands.init_resource::<resource>();
 
 // Remove `resource` from the World.
-commands.remove_resource::<resource>(); 
+commands.remove_resource::<resource>();
 ```
 
 - Running One-Shot Systems and Schedules
 
 ```rust
 // Run a System matching the ID in `system_id`.
-commands.run_system(system_id); 
+commands.run_system(system_id);
 
 // Run all Systems that are in the `schedule` Schedule.
 commands.run_schedule(schedule);
@@ -48,7 +48,7 @@ commands.run_schedule(schedule);
 
 ```rust
 // Trigger the `event` Event for all Observers watching for events of a matching type.
-commands.trigger(event); 
+commands.trigger(event);
 ```
 
 To use `Commands` in your systems, it is easiest to pass it in as a system parameter.
@@ -130,16 +130,16 @@ Since `ApplyDeferred` is run after all of systems in a given schedule, all the c
 In addition, if a system accessing `Commands` is ordered before another system also accessing `Commands` in the same `Schedule`, the second system will always see the effects of `Commands` run in the first system.
 Bevy ensures this occurs by dynamically inserting synchronization points, during which all `Commands` are applied.
 Each system can hold their own copy of `Commands` in their local system state.
-When `Commands` are applied, these queues are evaluated as in the same order that the systems were run.
+When `Commands` are applied, these queues are evaluated in the same order that the systems were run.
 Within each system, the `Commands` are applied in a first-in-first-out order.
 
 ```rust
 // Add our Systems in the same Schedule, but placed in a specific order.
 app.add_systems(
     Update, (
-        add_the_component, 
+        add_the_component,
         remove_the_component.after(add_the_component)
-        // `after` specifies that the `remove_the_component` system 
+        // `after` specifies that the `remove_the_component` system
         // will only run after `add_the_component` has completed.
     )
 );
@@ -196,10 +196,10 @@ All `EntityCommands` will check whether the `Entity` exists when the `EntityComm
 
 ## Parallel Commands
 
-We stated above that `World` can only be mutably accessed by one system at a time, and while that is still true, that doesn't mean that we can't access and make *multiple* changes at the same time.
+We stated above that `World` can only be mutably accessed by one system at a time, and while that is still true, it doesn't mean that we can't access and make *multiple* changes at the same time.
 As long as the changes we want to make are not reliant on each other, we can use [`ParallelCommands`] to achieve this.
 A great example of this can be seen when dealing with `Queries`.
-Specifically, we can use [`Query::par_iter_mut`] along with `ParallelCommands` and it's method [`command_scope`] to perform structural changes to each `Entity` in a given `Query`.
+Specifically, we can use [`Query::par_iter_mut`] along with `ParallelCommands` and its method [`command_scope`] to perform structural changes to each `Entity` in a given `Query`.
 
 ```rust
 // A marker Component that indicates an Entity is going very fast.
@@ -215,7 +215,7 @@ fn parallel_command_system(
         if velocity.magnitude() > 10.0 {
             par_commands.command_scope(|mut commands| {
                 // command_scope gives us access to a unique Commands instance
-                // for each parallel operation. 
+                // for each parallel operation.
                 commands.entity(entity).insert_if_new((SuperSpeed));
             });
         }
@@ -248,7 +248,7 @@ struct AddToCounter(u64);
 
 // Implement the Command trait onto AddToCounter.
 impl Command for AddToCounter {
-    // `apply()` is a required method when implementing the Command trait. 
+    // `apply()` is a required method when implementing the Command trait.
     fn apply(self, world: &mut World) {
         let mut counter = world.get_resource_or_insert_with(Counter::default);
         counter.0 += self.0;
