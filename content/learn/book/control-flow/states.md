@@ -16,7 +16,7 @@ Each of these modes entails a different set of graphics as well as a different c
 During the intro mode (for example) all you can do is start the game, or perhaps get help, or maybe even view the game's credits screen.
 You can't start controlling your ship or character until after you have left the "intro" mode and entered "play" mode.
 
-How should we organize all of these different modal states in code?
+How should we organize all these different modal states in code?
 We could have separate variables for each of the modes and write a bunch of logic for all the various entities involved, but there's an easier way: **game states**.
 
 Bevy's [`States`] trait lets you define one or more [finite-state machines](https://en.wikipedia.org/wiki/Finite-state_machine) (FSMs) that can be used to orchestrate changes to the Bevy world.
@@ -62,7 +62,7 @@ app.init_state::<GameState>();
 ```
 
 You can define more than one set of states and have multiple state sets running in your application at a given time.
-The different state sets will be independent of each other, however we can also indicate a set of states that exist within another set of states. These are sub-states, and we'll dive into them in next.
+The different state sets will be independent of each other. However, we can also indicate a set of states that exist within another set of states using __sub-states__, which we'll dive into next.
 
 ## Switching Between States
 
@@ -138,8 +138,8 @@ For more details on where `StateTransition` fits into the broader game loop, see
 
 ## Cleaning up Between States
 
-One of the most common patterns when working with states is to run some setup logic upon entering a state, and some tear-down or clean-up logic when exiting a state.
-The most common form of clean-up is despawning entities when the state they're associated with ends. 
+One of the most common patterns when working with states is to run some setup logic upon entering a state, and then run some tear-down or clean-up logic when exiting that state.
+The most common form of clean-up is despawning entities when the state they're associated with ends.
 
 To make this easier, the [`DespawnOnExit`] component can be added to an entity to indicate that the entity should only exist in a particular state.
 When we exit that state, the entity will automatically be despawned.
@@ -171,7 +171,7 @@ For our arcade game, the `GameState::Playing` state is actually more complex tha
 When a level starts, the action doesn't begin immediately - instead there is a brief interval where we display an animation of the ship arriving, or "warping in".
 Similarly, when the player's ship is destroyed, we show an animation of the ship exploding in all its glory.
 During these times, the player is unable to move their ship or fire, but other entities, such as enemies, terrain, or the HUD are able to function normally.
-We may also want to have a special "pause" state which freezes both the player and enemies, but which does not interrupt other aspects of the game like background music.
+We may also want to have a special "pause" state that freezes both the player and enemies, but which does not interrupt other aspects of the game like background music.
 
 We can model this as a **sub-state** of `GameState::Playing`, meaning that these states only exist while we are in the "playing" state.
 
@@ -224,7 +224,7 @@ To do so, we must implement the [`ComputedStates`] trait:
 # use bevy::prelude::*;
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default, States)]
-pub enum GameState { 
+pub enum GameState {
     #[default]
     Intro,
     Playing,
