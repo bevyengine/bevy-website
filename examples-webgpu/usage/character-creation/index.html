@@ -1,0 +1,923 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Character Creation with UI Widgets" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples-webgpu/usage/character-creation/ property=og:url><meta content=https://bevy.org/examples-webgpu/usage/character-creation/../static/screenshots/Usage/character_creation.png property=og:image><meta content="Demonstrates how to use headless widgets to power a Character Creation Menu" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Character Creation with UI Widgets</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGPU)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Usage / Character Creation with UI Widgets</h2><a class=example__back href=/examples-webgpu><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/usage/character_creation.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--warning"><strong>Support Warning.</strong> WebGPU is currently only supported on Chrome starting with version 113, and only on desktop. If the example doesn't work on your configuration, you can check the WebGL2 example <a href=/examples/usage/character-creation/>here</a>.</aside></div><div class="example__explanation media-content"><p>This example illustrates how to manage data input from select widgets in the <code>ui_widgets</code> crate.<p>When a UI widget is interacted with by an application user, various events may be triggered that that the user presumably wants to be recognized by the application. State may be directly changed on the widgets themselves depending on the widget. It is up to the application to handle and interpret these events and changes, which usually means updating its own internal state and refreshing its user interface so that the user sees the most recent data.<p>The example will implement a traditional Model View Controller (MVC) design using the various ui widgets to power a character creation screen.<p>To read more about state management, consult the [<code>bevy::ui_widgets</code>] crate level documentation.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>character_creation.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::palettes</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ecs</span><span>::</span><span style=color:#c0c5ce>schedule</span><span>::</span><span style=color:#dfc479>IntoScheduleConfigs</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    input_focus</span><span>::</span><span style=color:#c0c5ce>tab_navigation</span><span>::</span><span style=color:#dfc479>TabIndex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    text</span><span>::{</span><span style=color:#dfc479>EditableText</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextCursorStyle</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ui</span><span>::</span><span style=color:#dfc479>Checked</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ui_widgets</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Checkbox</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RadioButton</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RadioGroup</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Slider</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SliderOrientation</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SliderPrecision</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SliderRange</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SliderThumb</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SliderValue</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TextInput</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> TrackClick</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ValueChange</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    window</span><span>::{</span><span style=color:#dfc479>CursorIcon</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PrimaryWindow</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> SystemCursorIcon</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>(</span><span style=color:#dfc479>DefaultPlugins</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Character</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Update</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            (</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Updates the Model if the user changed the name via text input.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // This is a Controller system, and is not an Observer because of</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // the way the text input widget is designed.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                on_changed_editable_text,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Updates the View after any Model changes</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                refresh_character</span><span style=color:#c594c5>.</span><span style=color:#69c>run_if</span><span>(</span><span style=color:#69c>resource_exists_and</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Character</span><span style=color:#c0c5ce>></span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>character</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    !</span><span style=color:#c0c5ce>character</span><span style=color:#c594c5>.</span><span>changed_fields</span><span style=color:#c594c5>.</span><span style=color:#69c>is_empty</span><span>()</span></span>
+<span class=giallo-l><span>                }))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>chain</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, character:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Character</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn_scene_list</span><span>(</span><span style=color:#61afef>bsn_list!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Camera2d</span></span>
+<span class=giallo-l><span>        --</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This scene will serve as one half of our "View"</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // and most of the "Controller" in our MVC design.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The user interacts with UI widgets, which are processed by the "Controller"</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // via observers and systems. The observers and systems update the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // state and also update the look of the UI widgets</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // (i.e. changing text color of a selected option, inserting an X).</span></span>
+<span class=giallo-l><span>        @</span><span style=color:#69c>ui</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>        --</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This scene will serve as the other half of our "View" in our MVC design.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The user will see the character they are creating.</span></span>
+<span class=giallo-l><span>        @</span><span style=color:#69c>character_view</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This resource serves as the "Model" in our MVC Design.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> It serves as our source of truth for the character being created.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> Character</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    name:</span><span style=color:#dfc479> String</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    age:</span><span style=color:#b48ead> u32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    hat_type:</span><span style=color:#dfc479> HatType</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    tint_yellow:</span><span style=color:#e5c07b> bool</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This is used by the app to more efficiently queue refreshes</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // of the character view by only refreshing the necessary entities.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    changed_fields:</span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ChangedField</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> Character</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span>() -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Character</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            name:</span><span style=color:#9fc37f> "Bevy"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            age:</span><span style=color:#e79e6d> 5</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            hat_type:</span><span style=color:#dfc479> HatType</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            tint_yellow:</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            changed_fields:</span><span style=color:#61afef> vec!</span><span>[]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Hat options for the character to have.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This derives `Component` so each enum value can be placed on individual radio buttons</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> for ease of identifying which radio button was selected.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> HatType</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[default]</span></span>
+<span class=giallo-l><span style=color:#e5c07b>    None</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    TopHat</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    DunceCap</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> ChangedField</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Name</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Age</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    HatType</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    TintYellow</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> HAT_TYPES</span><span style=color:#c0c5ce>:</span><span> [</span><span style=color:#dfc479>HatType</span><span style=color:#c0c5ce>;</span><span style=color:#e79e6d> 3</span><span>]</span><span style=color:#c594c5> =</span><span> [</span><span style=color:#dfc479>HatType</span><span>::</span><span style=color:#e5c07b>None</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> HatType</span><span>::</span><span style=color:#dfc479>TopHat</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> HatType</span><span>::</span><span style=color:#dfc479>DunceCap</span><span>]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- START MARKER COMPONENTS --- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> NameInput</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> AgeSlider</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> AgeSliderThumb</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> AgeSliderText</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> HatTypeRadioGroup</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> TintYellowCheckbox</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CharacterView</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CharacterSprite</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CharacterHat</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> CharacterNameAndAge</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- END MARKER COMPONENTS --- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- WIDGET VIEW & CONTROLLER --- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Spawns the ui widgets that will serve as half of our "View",</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> with "Controller" logic as important observers in our MVC design.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> ui</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // UI will take up the left half of the screen.</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction:</span><span style=color:#dfc479> FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>50</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The character creation pane</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                flex_direction:</span><span style=color:#dfc479> FlexDirection</span><span>::</span><span style=color:#dfc479>Column</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>SpaceEvenly</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                margin:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>5</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>90</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                padding:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>vertical</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>10</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border_radius:</span><span style=color:#dfc479> BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>5</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                row_gap:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>10</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span>(</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::</span><span style=color:#d19a66>GRAY</span><span>)</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Pane header</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Children</span><span>[</span></span>
+<span class=giallo-l><span style=color:#69c>                    Text</span><span>(</span><span style=color:#9fc37f>"Character Creator"</span><span>)</span></span>
+<span class=giallo-l><span>                ]</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>name_text_input_row</span><span>(</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>age_slider_row</span><span>(</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>hat_type_radio_group_row</span><span>(</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>tint_yellow_checkbox_row</span><span>(</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- START TEXT INPUT -- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the text input row that allows the user to input a name for the character.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> name_text_input_row</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction:</span><span style=color:#dfc479> FlexDirection</span><span>::</span><span style=color:#dfc479>Row</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>SpaceBetween</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Name: "</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>name_text_input</span><span>(</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> name_text_input</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> name</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>name</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>200</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            border:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>5</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            border_radius:</span><span style=color:#dfc479> BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>10</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            padding:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>axes</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>5</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>2</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        NameInput</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TextInput</span></span>
+<span class=giallo-l><span style=color:#dfc479>        EditableText</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>name</span><span>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // TabIndex Component is necessary for the text input to receive focus for typing.</span></span>
+<span class=giallo-l><span style=color:#69c>        TabIndex</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This is necessary so that the text cursor pops up when the input has focus.</span></span>
+<span class=giallo-l><span style=color:#dfc479>        TextCursorStyle</span><span>::</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span style=color:#69c>        BackgroundColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>        on</span><span>(</span><span style=color:#c0c5ce>on_pointer_over_text_cursor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>        on</span><span>(</span><span style=color:#c0c5ce>on_pointer_out_default_cursor</span><span>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A system that implements Controller logic to update the Name Input.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This particular system updates the Model upon any change in value to the text input's `EditableText`.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The text input widget does not regularly emit any events on value change. Instead, the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> `EditableText`'s value can be polled under app-specific conditions to update the Model when appropriate.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_changed_editable_text</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    name_input_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>EditableText</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>NameInput</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> character:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Character</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c0c5ce>editable_text</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> name_input_q</span><span style=color:#c594c5>.</span><span style=color:#69c>single_inner</span><span>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> new_name</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> editable_text</span><span style=color:#c594c5>.</span><span style=color:#69c>value</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>to_string</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>name </span><span style=color:#c594c5>!=</span><span style=color:#c0c5ce> new_name</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        character</span><span style=color:#c594c5>.</span><span>name </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> new_name;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        character</span><span style=color:#c594c5>.</span><span>changed_fields</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span>(</span><span style=color:#c0c5ce>ChangedField</span><span>::</span><span style=color:#dfc479>Name</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // We do not need to update the ui widget view in our app because `EditableText`</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // manages its own state internally; it updates the text the user sees automatically.</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Because character has been modified, refresh_character will run and update the other half of the "View".</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- END TEXT INPUT -- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- START SLIDER -- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the age slider that allows the user to input the age of the character.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> age_slider_row</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> age</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>age</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction:</span><span style=color:#dfc479> FlexDirection</span><span>::</span><span style=color:#dfc479>Row</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>SpaceBetween</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            column_gap:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>10</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"Age:"</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>age_slider</span><span>(</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>30</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>                AgeSliderText</span></span>
+<span class=giallo-l><span style=color:#69c>                Text</span><span>(</span><span style=color:#61afef>format!</span><span>(</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, age</span><span>))</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> age_slider</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>220</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            border:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>5</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            padding:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>axes</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>5</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>2</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        AgeSlider</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Slider</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            track_click:</span><span style=color:#dfc479> TrackClick</span><span>::</span><span style=color:#dfc479>Snap</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            orientation:</span><span style=color:#dfc479> SliderOrientation</span><span>::</span><span style=color:#dfc479>Horizontal</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#69c>        SliderValue</span><span>({</span><span style=color:#c0c5ce>character</span><span style=color:#c594c5>.</span><span>age </span><span style=color:#c594c5>as</span><span style=color:#b48ead> f32</span><span>})</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Move every whole number.</span></span>
+<span class=giallo-l><span style=color:#69c>        SliderPrecision</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SliderRange</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>1</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 100</span><span style=color:#c594c5>.</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>        BackgroundColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This observer is part of the Controller -- it reacts to the user's input!</span></span>
+<span class=giallo-l><span style=color:#69c>        on</span><span>(</span><span style=color:#c0c5ce>on_value_change_age_slider</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>        on</span><span>(</span><span style=color:#c0c5ce>on_pointer_over_pointer_cursor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>        on</span><span>(</span><span style=color:#c0c5ce>on_pointer_drag_start_grabbing_cursor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>        on</span><span>(</span><span style=color:#c0c5ce>on_pointer_drag_end_grab_cursor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>        on</span><span>(</span><span style=color:#c0c5ce>on_pointer_out_default_cursor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Visible Slider Track</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // It is 220px in width via its parent.</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>5</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border_radius:</span><span style=color:#dfc479> BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>3</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span>)</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // Invisible shorter track (does not have background color) that the</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // SliderThumb glides on. This is so that the thumb</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // does not go past the left and right sides of the visible slider track.</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                display:</span><span style=color:#dfc479> Display</span><span>::</span><span style=color:#dfc479>Flex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                position_type:</span><span style=color:#dfc479> PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                left:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Shortened by the slider thumb's width on the right side.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // This means that it is 200px in width.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                right:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>20</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                top:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                bottom:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>                AgeSliderThumb</span></span>
+<span class=giallo-l><span style=color:#dfc479>                SliderThumb</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    display:</span><span style=color:#dfc479> Display</span><span>::</span><span style=color:#dfc479>Flex</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>20</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>10</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    position_type:</span><span style=color:#dfc479> PositionType</span><span>::</span><span style=color:#dfc479>Absolute</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                    // Where the thumb is along the track will be updated by `on_value_change_age_slider`</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    left:</span><span style=color:#69c> percent</span><span>((</span><span style=color:#c0c5ce>character</span><span style=color:#c594c5>.</span><span>age </span><span style=color:#c594c5>as</span><span style=color:#b48ead> f32</span><span> -</span><span style=color:#e79e6d> 1</span><span style=color:#c594c5>.</span><span>) / (</span><span style=color:#e79e6d>100</span><span style=color:#c594c5>.</span><span> -</span><span style=color:#e79e6d> 1</span><span style=color:#c594c5>.</span><span>) *</span><span style=color:#e79e6d> 100</span><span style=color:#c594c5>.</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span style=color:#69c>                BackgroundColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>                on</span><span>(</span><span style=color:#c0c5ce>on_pointer_over_grab_cursor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>                on</span><span>(</span><span style=color:#c0c5ce>on_pointer_out_default_cursor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>                on</span><span>(</span><span style=color:#c0c5ce>on_pointer_drag_start_grabbing_cursor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>                on</span><span>(</span><span style=color:#c0c5ce>on_pointer_drag_end_grab_cursor</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A system that implements Controller logic to update the Age.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This particular system updates the Model upon any change in value to the Age Slider.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Sliders emit a `ValueChange&lt;f32>` event when the user drags the slider.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The value of the event is the new value of the slider.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The source of the event is the `Slider` parent entity.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_value_change_age_slider</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ValueChange</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>f32</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    age_slider_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>SliderRange</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AgeSlider</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> age_slider_text_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Text</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AgeSliderText</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> age_slider_thumb_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Node</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AgeSliderThumb</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> character:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Character</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c0c5ce>entity, slider_range</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> age_slider_q</span><span style=color:#c594c5>.</span><span style=color:#69c>single_inner</span><span>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> event</span><span style=color:#c594c5>.</span><span>source </span><span style=color:#c594c5>!=</span><span style=color:#c0c5ce> entity</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Update the Model</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // `SliderPrecision` ensures that this value is a whole number.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    character</span><span style=color:#c594c5>.</span><span>age </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> event</span><span style=color:#c594c5>.</span><span>value </span><span style=color:#c594c5>as</span><span style=color:#b48ead> u32</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    character</span><span style=color:#c594c5>.</span><span>changed_fields</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span>(</span><span style=color:#c0c5ce>ChangedField</span><span>::</span><span style=color:#dfc479>Age</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Update the Widget portion of the View</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>source)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#69c>SliderValue</span><span>(</span><span style=color:#c0c5ce>character</span><span style=color:#c594c5>.</span><span>age </span><span style=color:#c594c5>as</span><span style=color:#b48ead> f32</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> node</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> age_slider_thumb_q</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        node</span><span style=color:#c594c5>.</span><span>left </span><span style=color:#c594c5>=</span><span style=color:#69c> percent</span><span>(</span><span style=color:#c0c5ce>slider_range</span><span style=color:#c594c5>.</span><span style=color:#69c>thumb_position</span><span>(</span><span style=color:#c0c5ce>character</span><span style=color:#c594c5>.</span><span>age </span><span style=color:#c594c5>as</span><span style=color:#b48ead> f32</span><span>) *</span><span style=color:#e79e6d> 100.0</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> text</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> age_slider_text_q</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>text</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>format!</span><span>(</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, character</span><span style=color:#c594c5>.</span><span>age))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Because character has been modified, refresh_character will run and update the other half of the "View".</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- END SLIDER -- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- START RADIO GROUP -- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the radio group row that allows the user to select a hat for the character.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> hat_type_radio_group_row</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction:</span><span style=color:#dfc479> FlexDirection</span><span>::</span><span style=color:#dfc479>Row</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>SpaceBetween</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        RadioGroup</span></span>
+<span class=giallo-l><span style=color:#dfc479>        HatTypeRadioGroup</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // This observer is part of the Controller -- it reacts to the user's input!</span></span>
+<span class=giallo-l><span style=color:#69c>        on</span><span>(</span><span style=color:#c0c5ce>on_value_change_hat_type</span><span>)</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#69c>                Text</span><span>(</span><span style=color:#9fc37f>"Hat: "</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span>            {</span></span>
+<span class=giallo-l><span style=color:#d19a66>                HAT_TYPES</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>map</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>hat_type</span><span style=color:#c594c5>|</span><span style=color:#69c> hat_type_radio_button</span><span>(*</span><span style=color:#c0c5ce>hat_type, character</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>collect</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Vec</span><span style=color:#c0c5ce>&lt;_>></span><span>()</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> hat_type_radio_button</span><span>(</span><span style=color:#c0c5ce>hat_type:</span><span style=color:#dfc479> HatType</span><span style=color:#c0c5ce>, character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#dfc479> Box</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>dyn</span><span style=color:#dfc479> Scene</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> base_radio_button</span><span style=color:#c594c5> = ||</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>        bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>5</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                border_radius:</span><span style=color:#dfc479> BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>10</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                padding:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>axes</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>5</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>2</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            RadioButton</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            hat_type</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>            on</span><span>(</span><span style=color:#c0c5ce>on_pointer_over_pointer_cursor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>            on</span><span>(</span><span style=color:#c0c5ce>on_pointer_out_default_cursor</span><span>)</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>hat_type </span><span style=color:#c594c5>==</span><span style=color:#c0c5ce> hat_type</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Box</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>bsn!</span><span> {</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>base_radio_button</span><span>()</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The selected hat_type must have the `Checked` component.</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Checked</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>format!</span><span>(</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>{hat_type:?}</span><span style=color:#9fc37f>"</span><span>))</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // The selected hat_type's text is green as opposed to white.</span></span>
+<span class=giallo-l><span style=color:#69c>                TextColor</span><span>(</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::</span><span style=color:#d19a66>GREEN</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Box</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>bsn!</span><span> {</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>base_radio_button</span><span>()</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#69c>                Text</span><span>(</span><span style=color:#61afef>format!</span><span>(</span><span style=color:#9fc37f>"</span><span style=color:#d19a66>{hat_type:?}</span><span style=color:#9fc37f>"</span><span>))</span></span>
+<span class=giallo-l><span style=color:#69c>                TextColor</span><span>(</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::</span><span style=color:#d19a66>WHITE</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This observer is part of the Controller logic.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This observer will update the `Character` Resource based on a change to the Hat Type Radio Group.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Radio groups emit a `ValueChange&lt;Entity>` event when the user clicks on a radio button.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The value of the event is of the clicked radio button.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The source of the event is the parent radio group.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_value_change_hat_type</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ValueChange</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    hat_type_value_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>HatType</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Checked</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Children</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>RadioButton</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    hat_type_radio_group_q:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>HatTypeRadioGroup</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> character:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Character</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Ensure this value change event is for the Hat Type Radio Group</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Although unnecessary in this example, apps with multiple radio groups need to distinguish</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // what the value change is for.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> event</span><span style=color:#c594c5>.</span><span>source </span><span style=color:#c594c5>!=</span><span style=color:#c0c5ce> hat_type_radio_group_q</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c0c5ce>_, new_hat_type, has_checked, _</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> hat_type_value_q</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>value)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> has_checked</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The hat type has actually not changed, so we do not need to do anything.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Update the Model</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    character</span><span style=color:#c594c5>.</span><span>hat_type </span><span style=color:#c594c5>=</span><span> *</span><span style=color:#c0c5ce>new_hat_type;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    character</span><span style=color:#c594c5>.</span><span>changed_fields</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span>(</span><span style=color:#c0c5ce>ChangedField</span><span>::</span><span style=color:#dfc479>HatType</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Update the Widget portion of the View</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span> (</span><span style=color:#c0c5ce>button_entity, hat_type, has_checked, children</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> hat_type_value_q</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        if</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>hat_type </span><span style=color:#c594c5>==</span><span> *</span><span style=color:#c0c5ce>hat_type</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>button_entity</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#dfc479>Checked</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // The radio button only has one child for the text and color of the button</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>children</span><span>[</span><span style=color:#e79e6d>0</span><span>])</span></span>
+<span class=giallo-l><span style=color:#c594c5>                .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#69c>TextColor</span><span>(</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::</span><span style=color:#d19a66>GREEN</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c594c5> else if</span><span style=color:#c0c5ce> has_checked</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>button_entity</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Checked</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>children</span><span>[</span><span style=color:#e79e6d>0</span><span>])</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#69c>TextColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Because character has been modified, refresh_character will run and update the other half of the "View".</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- END RADIO GROUP -- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- START CHECK BOX -- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Creates the checkbox row that allows the user to toggle a yellow tint of the character.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> tint_yellow_checkbox_row</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            flex_direction:</span><span style=color:#dfc479> FlexDirection</span><span>::</span><span style=color:#dfc479>Row</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>SpaceBetween</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#69c>                Text</span><span>(</span><span style=color:#9fc37f>"Tint Yellow: "</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>tint_yellow_checkbox</span><span>(</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> tint_yellow_checkbox</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#dfc479> Box</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>dyn</span><span style=color:#dfc479> Scene</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> base_checkbox</span><span style=color:#c594c5> = ||</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>        bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                padding:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>horizontal</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>5</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Checkbox</span></span>
+<span class=giallo-l><span style=color:#dfc479>            TintYellowCheckbox</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>            on</span><span>(</span><span style=color:#c0c5ce>on_pointer_over_pointer_cursor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>            on</span><span>(</span><span style=color:#c0c5ce>on_pointer_out_default_cursor</span><span>)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // This observer is part of the controller -- it reacts to the user's input!</span></span>
+<span class=giallo-l><span style=color:#69c>            on</span><span>(</span><span style=color:#c0c5ce>on_value_change_tint_yellow</span><span>)</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>tint_yellow {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Box</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>bsn!</span><span> {</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>base_checkbox</span><span>()</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Checked</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#69c>                Text</span><span>(</span><span style=color:#9fc37f>"X"</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>                TextColor</span><span>(</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::</span><span style=color:#d19a66>GREEN</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Box</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>bsn!</span><span> {</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>base_checkbox</span><span>()</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#69c>                Text</span><span>(</span><span style=color:#9fc37f>" "</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>                TextColor</span><span>(</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::</span><span style=color:#d19a66>GREEN</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This observer is part of the Controller logic.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This observer will update the `Character` Resource based on a change to the Tint Yellow Checkbox.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Checkboxes emit a `ValueChange&lt;bool>` event when the user clicks on a checkbox.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The value of the event is the value of the toggle.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The source of the event is the checkbox.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_value_change_tint_yellow</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ValueChange</span><span style=color:#c0c5ce>&lt;</span><span style=color:#e5c07b>bool</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    tint_yellow_checkbox_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Children</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>TintYellowCheckbox</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> character:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Character</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> Ok</span><span>((</span><span style=color:#c0c5ce>checkbox_entity, children</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> tint_yellow_checkbox_q</span><span style=color:#c594c5>.</span><span style=color:#69c>single_inner</span><span>()</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Ensure this value change event is for the checkbox.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Although unnecessary in this example, apps with multiple checkboxes need to distinguish</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // what the value change is for.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> event</span><span style=color:#c594c5>.</span><span>source </span><span style=color:#c594c5>!=</span><span style=color:#c0c5ce> checkbox_entity</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Update the Model</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    character</span><span style=color:#c594c5>.</span><span>tint_yellow </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> event</span><span style=color:#c594c5>.</span><span>value</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    character</span><span style=color:#c594c5>.</span><span>changed_fields</span><span style=color:#c594c5>.</span><span style=color:#69c>push</span><span>(</span><span style=color:#c0c5ce>ChangedField</span><span>::</span><span style=color:#dfc479>TintYellow</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Update the Widget portion of the View</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>tint_yellow {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>source)</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#dfc479>Checked</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // The checkbox only has one child for the X and its color</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>children</span><span>[</span><span style=color:#e79e6d>0</span><span>])</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>"X"</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>source)</span><span style=color:#c594c5>.</span><span style=color:#69c>remove</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Checked</span><span style=color:#c0c5ce>></span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>children</span><span>[</span><span style=color:#e79e6d>0</span><span>])</span><span style=color:#c594c5>.</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>Text</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#9fc37f>" "</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Because character has been modified, refresh_character will run and update the other half of the "View".</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- END CHECK BOX -- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- END WIDGET VIEW & CONTROLLER --- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- START CHARACTER VIEW --- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Returns the "View", powered by data from the `Character` Model.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> character_view</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        CharacterView</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>320</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#c594c5>.</span><span>)</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Visibility</span><span>::</span><span style=color:#dfc479>Inherited</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>character_sprite</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>character_hat</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>            --</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>character_name_and_age</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>character</span><span>)</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> A system that updates the "View" whenever the underlying `Character` "Model" has changed.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> refresh_character</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    character_view_q:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span>(</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Children</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CharacterView</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    view_type_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Entity</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CharacterSprite</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CharacterHat</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Has</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>CharacterNameAndAge</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>    )</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> character:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Character</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c0c5ce>character_view, children</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> character_view_q</span><span style=color:#c594c5>.</span><span style=color:#69c>into_inner</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> already_updated_name_age,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> already_updated_sprite,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> already_updated_hat</span><span>)</span><span style=color:#c594c5> =</span></span>
+<span class=giallo-l><span>        (</span><span style=color:#d19a66>false</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> false</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> false</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> changed_field</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>changed_fields</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>copied</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // First, find the correct child to despawn</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Then, add an updated child.</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span style=color:#c0c5ce> changed_field</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ChangedField</span><span>::</span><span style=color:#dfc479>Name</span><span style=color:#c594c5> |</span><span style=color:#dfc479> ChangedField</span><span>::</span><span style=color:#dfc479>Age</span><span style=color:#c594c5> if !</span><span style=color:#c0c5ce>already_updated_name_age</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                for</span><span> (</span><span style=color:#c0c5ce>child, _, _, is_name_and_age</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> children</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>filter_map</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>child</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> view_type_q</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>child</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>ok</span><span>())</span></span>
+<span class=giallo-l><span>                {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    if</span><span style=color:#c0c5ce> is_name_and_age</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>child</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>try_despawn</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> new_child</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>spawn_scene</span><span>(</span><span style=color:#69c>character_name_and_age</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>character</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>character_view</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>add_child</span><span>(</span><span style=color:#c0c5ce>new_child</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>                already_updated_name_age</span><span style=color:#c594c5> =</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ChangedField</span><span>::</span><span style=color:#dfc479>TintYellow</span><span style=color:#c594c5> if !</span><span style=color:#c0c5ce>already_updated_sprite</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                for</span><span> (</span><span style=color:#c0c5ce>child, is_sprite, _, _</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> children</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>filter_map</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>child</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> view_type_q</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>child</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>ok</span><span>())</span></span>
+<span class=giallo-l><span>                {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    if</span><span style=color:#c0c5ce> is_sprite</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>child</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>try_despawn</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> new_child</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn_scene</span><span>(</span><span style=color:#69c>character_sprite</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>character</span><span>))</span><span style=color:#c594c5>.</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>character_view</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>add_child</span><span>(</span><span style=color:#c0c5ce>new_child</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>                already_updated_sprite</span><span style=color:#c594c5> =</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ChangedField</span><span>::</span><span style=color:#dfc479>HatType</span><span style=color:#c594c5> if !</span><span style=color:#c0c5ce>already_updated_hat</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                for</span><span> (</span><span style=color:#c0c5ce>child, _, is_hat, _</span><span>)</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> children</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    .</span><span style=color:#69c>filter_map</span><span>(</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce>child</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> view_type_q</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>child</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>ok</span><span>())</span></span>
+<span class=giallo-l><span>                {</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    if</span><span style=color:#c0c5ce> is_hat</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                        commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>child</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>try_despawn</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                    }</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span style=color:#c594c5>                let</span><span style=color:#c0c5ce> new_child</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn_scene</span><span>(</span><span style=color:#69c>character_hat</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>character</span><span>))</span><span style=color:#c594c5>.</span><span style=color:#69c>id</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>character_view</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>add_child</span><span>(</span><span style=color:#c0c5ce>new_child</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>                already_updated_hat</span><span style=color:#c594c5> =</span><span style=color:#d19a66> true</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            _</span><span> => {}</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    character</span><span style=color:#c594c5>.</span><span>changed_fields</span><span style=color:#c594c5>.</span><span style=color:#69c>clear</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> character_sprite</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#dfc479> Box</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>dyn</span><span style=color:#dfc479> Scene</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>tint_yellow {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Box</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            CharacterSprite</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Sprite</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                image:</span><span style=color:#9fc37f> "branding/icon.png"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                color: palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::</span><span style=color:#d19a66>YELLOW</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Transform</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Box</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            CharacterSprite</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Sprite</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                image:</span><span style=color:#9fc37f> "branding/icon.png"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Transform</span></span>
+<span class=giallo-l><span>        })</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> character_hat</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#dfc479> Box</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>dyn</span><span style=color:#dfc479> Scene</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    match</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>hat_type {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        HatType</span><span>::</span><span style=color:#e5c07b>None</span><span> =></span><span style=color:#dfc479> Box</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            CharacterHat</span></span>
+<span class=giallo-l><span>        })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        HatType</span><span>::</span><span style=color:#dfc479>TopHat</span><span> =></span><span style=color:#dfc479> Box</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            CharacterHat</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>            // 0.78 radians ~ PI / 4</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Transform</span><span>::</span><span style=color:#69c>from_rotation</span><span>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_rotation_z</span><span>(</span><span style=color:#e79e6d>0.78</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Visibility</span><span>::</span><span style=color:#dfc479>Inherited</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // bottom wider portion of the top hat.</span></span>
+<span class=giallo-l><span style=color:#69c>                Mesh2d</span><span>(</span><span style=color:#69c>asset_value</span><span>(</span><span style=color:#c0c5ce>Rectangle</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#e79e6d>                    40</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 10</span><span style=color:#c594c5>.</span></span>
+<span class=giallo-l><span>                )))</span></span>
+<span class=giallo-l><span style=color:#dfc479>                MeshMaterial2d</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ColorMaterial</span><span style=color:#c0c5ce>></span><span>(</span><span style=color:#69c>asset_value</span><span>(</span><span style=color:#c0c5ce>ColorMaterial</span><span>::</span><span style=color:#69c>from_color</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span>)))</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>55</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 60</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1</span><span style=color:#c594c5>.</span><span>)</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // top longer portion of the top hat</span></span>
+<span class=giallo-l><span style=color:#69c>                Mesh2d</span><span>(</span><span style=color:#69c>asset_value</span><span>(</span><span style=color:#c0c5ce>Rectangle</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#e79e6d>                    20</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 50</span><span style=color:#c594c5>.</span></span>
+<span class=giallo-l><span>                )))</span></span>
+<span class=giallo-l><span style=color:#dfc479>                MeshMaterial2d</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ColorMaterial</span><span style=color:#c0c5ce>></span><span>(</span><span style=color:#69c>asset_value</span><span>(</span><span style=color:#c0c5ce>ColorMaterial</span><span>::</span><span style=color:#69c>from_color</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span>)))</span></span>
+<span class=giallo-l><span style=color:#dfc479>                Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>55</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 85</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1</span><span style=color:#c594c5>.</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>        })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        HatType</span><span>::</span><span style=color:#dfc479>DunceCap</span><span> =></span><span style=color:#dfc479> Box</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#61afef>bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            CharacterHat</span></span>
+<span class=giallo-l><span style=color:#69c>            Mesh2d</span><span>(</span><span style=color:#69c>asset_value</span><span>(</span><span style=color:#c0c5ce>Triangle2d</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Vec2</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 100</span><span style=color:#c594c5>.</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Vec2</span><span>::</span><span style=color:#69c>new</span><span>(-</span><span style=color:#e79e6d>20</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#c594c5>.</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                Vec2</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>20</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#c594c5>.</span><span>)</span></span>
+<span class=giallo-l><span>            )))</span></span>
+<span class=giallo-l><span style=color:#dfc479>            MeshMaterial2d</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ColorMaterial</span><span style=color:#c0c5ce>></span><span>(</span><span style=color:#69c>asset_value</span><span>(</span><span style=color:#c0c5ce>ColorMaterial</span><span>::</span><span style=color:#69c>from_color</span><span>(</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>basic</span><span>::</span><span style=color:#d19a66>TEAL</span><span>)))</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 80</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1</span><span style=color:#c594c5>.</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_rotation</span><span>(</span><span style=color:#c0c5ce>Quat</span><span>::</span><span style=color:#69c>from_rotation_z</span><span>(</span><span style=color:#e79e6d>0.78</span><span>))</span></span>
+<span class=giallo-l><span>        })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> character_name_and_age</span><span>(</span><span style=color:#c0c5ce>character:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>Character</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> name</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>name</span><span style=color:#c594c5>.</span><span style=color:#69c>clone</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> age</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> character</span><span style=color:#c594c5>.</span><span>age</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> years</span><span style=color:#c594c5> = if</span><span style=color:#c0c5ce> age</span><span style=color:#c594c5> ==</span><span style=color:#e79e6d> 1</span><span> {</span><span style=color:#9fc37f> "year"</span><span> }</span><span style=color:#c594c5> else</span><span> {</span><span style=color:#9fc37f> "years"</span><span> }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        CharacterNameAndAge</span></span>
+<span class=giallo-l><span style=color:#69c>        Text2d</span><span>(</span><span style=color:#61afef>format!</span><span>(</span><span style=color:#9fc37f>"Hi! My name is </span><span style=color:#d19a66>{name}</span><span style=color:#9fc37f>.</span><span style=color:#56b6c2>\n</span><span style=color:#9fc37f>I am </span><span style=color:#d19a66>{age} {years}</span><span style=color:#9fc37f> old."</span><span>))</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Transform</span><span>::</span><span style=color:#69c>from_xyz</span><span>(</span><span style=color:#e79e6d>0</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span> -</span><span style=color:#e79e6d>200</span><span style=color:#c594c5>.</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0</span><span style=color:#c594c5>.</span><span>)</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- END CHARACTER VIEW --- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- START MISC OBSERVERS (STYLING) --- //</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> An observer that styles the cursor, used primarily for text input.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This is not part of the Controller.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_pointer_over_text_cursor</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerOver</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> window_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PrimaryWindow</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> window</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> window_q</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>window</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>CursorIcon</span><span>::</span><span style=color:#69c>System</span><span>(</span><span style=color:#c0c5ce>SystemCursorIcon</span><span>::</span><span style=color:#dfc479>Text</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event</span><span style=color:#c594c5>.</span><span style=color:#69c>propagate</span><span>(</span><span style=color:#d19a66>false</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> An observer that styles the cursor, used primarily for sliders.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This is not part of the Controller.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_pointer_over_grab_cursor</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerOver</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> window_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PrimaryWindow</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> window</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> window_q</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>window</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>CursorIcon</span><span>::</span><span style=color:#69c>System</span><span>(</span><span style=color:#c0c5ce>SystemCursorIcon</span><span>::</span><span style=color:#dfc479>Grab</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event</span><span style=color:#c594c5>.</span><span style=color:#69c>propagate</span><span>(</span><span style=color:#d19a66>false</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> An observer that styles the cursor, used primarily for sliders.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This is not part of the Controller.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_pointer_drag_start_grabbing_cursor</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    _event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerDragStart</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> window_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PrimaryWindow</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> window</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> window_q</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>window</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>CursorIcon</span><span>::</span><span style=color:#69c>System</span><span>(</span><span style=color:#c0c5ce>SystemCursorIcon</span><span>::</span><span style=color:#dfc479>Grabbing</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Note that this event does not stop propagation!</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This is because the slider widget processes drag events in order to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // emit value change events.</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> An observer that styles the cursor, used primarily for sliders.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This is not part of the Controller.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_pointer_drag_end_grab_cursor</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    _event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerDragEnd</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> window_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PrimaryWindow</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> window</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> window_q</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>window</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>CursorIcon</span><span>::</span><span style=color:#69c>System</span><span>(</span><span style=color:#c0c5ce>SystemCursorIcon</span><span>::</span><span style=color:#dfc479>Grab</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Note that this event does not stop propagation!</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // This is because the slider widget processes drag events in order to</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // emit value change events.</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> An observer that styles the cursor, used primarily for buttons / checkboxes.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This is not part of the Controller.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_pointer_over_pointer_cursor</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerOver</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> window_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PrimaryWindow</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> window</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> window_q</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>window</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>CursorIcon</span><span>::</span><span style=color:#69c>System</span><span>(</span><span style=color:#c0c5ce>SystemCursorIcon</span><span>::</span><span style=color:#dfc479>Pointer</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event</span><span style=color:#c594c5>.</span><span style=color:#69c>propagate</span><span>(</span><span style=color:#d19a66>false</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> An observer that styles the cursor, used for all widgets.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This is not part of the Controller.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_pointer_out_default_cursor</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PointerOut</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> window_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PrimaryWindow</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for</span><span style=color:#c0c5ce> window</span><span style=color:#c594c5> in</span><span style=color:#c0c5ce> window_q</span><span style=color:#c594c5>.</span><span style=color:#69c>iter_mut</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>window</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>CursorIcon</span><span>::</span><span style=color:#69c>System</span><span>(</span><span style=color:#c0c5ce>SystemCursorIcon</span><span>::</span><span style=color:#dfc479>Default</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event</span><span style=color:#c594c5>.</span><span style=color:#69c>propagate</span><span>(</span><span style=color:#d19a66>false</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- END MISC OBSERVERS (STYLING) --- //</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgpu-examples.pages.dev/Usage/character-creation/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

@@ -1,0 +1,550 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Box Shadow" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/ui-user-interface/box-shadow/ property=og:url><meta content="https://bevy.org/examples/ui-user-interface/box-shadow/../static/screenshots/UI (User Interface)/box_shadow.png" property=og:image><meta content="Demonstrates how to create a node with a shadow" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Box Shadow</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>UI (User Interface) / Box Shadow</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/ui/styling/box_shadow.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/ui-user-interface/box-shadow/>here</a>.</aside><aside class="callout callout--warning"><h3 class=warning>Feature flag required</h3><p>The code in this example requires this feature flag to be enabled in order to function: <code>"bevy_feathers"</code>.</aside></div><div class="example__explanation media-content"><p>This example shows how to create a node with a shadow and adjust its settings interactively.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>box_shadow.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c678dd> crate</span><span>::</span><span style=color:#c0c5ce>number_input_f32</span><span>::number_input_</span><span style=color:#b48ead>f32</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c678dd> crate</span><span>::</span><span style=color:#c0c5ce>number_input_i32</span><span>::number_input_</span><span style=color:#b48ead>i32</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c678dd> crate</span><span>::</span><span style=color:#c0c5ce>radio</span><span>::{feathers_option_buttons</span><span style=color:#c0c5ce>,</span><span> main_ui_node_scene</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RadioButtonOptionValue</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::</span><span style=color:#c0c5ce>feathers</span><span>::</span><span style=color:#c0c5ce>tokens</span><span>::</span><span style=color:#c0c5ce>semantic</span><span>::</span><span style=color:#dfc479>SURFACE_PANE_BODY</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>css</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    feathers</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        containers</span><span>::{pane</span><span style=color:#c0c5ce>,</span><span> pane_body}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        controls</span><span>::{</span><span style=color:#dfc479>FeathersButton</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> FeathersNumberInput</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> NumberInputPrecision</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> NumberInputValue</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        dark_theme</span><span>::create_dark_theme</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        display</span><span>::caption</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        theme</span><span>::{</span><span style=color:#dfc479>ThemeProps</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> UiTheme</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        FeathersPlugins</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    ui_widgets</span><span>::{radio_self_update</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Activate</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> ValueChange</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[path </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "../../helpers/number_input_f32.rs"</span><span style=color:#d19a66>]</span></span>
+<span class=giallo-l><span style=color:#c594c5>mod</span><span> number_input_f32</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[path </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "../../helpers/number_input_i32.rs"</span><span style=color:#d19a66>]</span></span>
+<span class=giallo-l><span style=color:#c594c5>mod</span><span> number_input_i32</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[path </span><span style=color:#c594c5>=</span><span style=color:#9fc37f> "../../helpers/radio.rs"</span><span style=color:#d19a66>]</span></span>
+<span class=giallo-l><span style=color:#c594c5>mod</span><span> radio</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Shapes that the node displayed on the screen can be.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> Shape</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[default]</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Square</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    RoundedSquare</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Circle</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    LongRectangle</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    TallRectangle</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Shape</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Mutates the `node` to become the given shape.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> change_node</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, node:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> Node</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span> *</span><span style=color:#c594c5>self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            Self</span><span>::</span><span style=color:#dfc479>Square</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>width </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>164</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>height </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>164</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>border_radius </span><span style=color:#c594c5>=</span><span style=color:#dfc479> BorderRadius</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#c594c5>            Self</span><span>::</span><span style=color:#dfc479>RoundedSquare</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>width </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>164</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>height </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>164</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>border_radius </span><span style=color:#c594c5>=</span><span style=color:#dfc479> BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>41</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#c594c5>            Self</span><span>::</span><span style=color:#dfc479>Circle</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>width </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>164</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>height </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>164</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>border_radius </span><span style=color:#c594c5>=</span><span style=color:#dfc479> BorderRadius</span><span>::</span><span style=color:#d19a66>MAX</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#c594c5>            Self</span><span>::</span><span style=color:#dfc479>LongRectangle</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>width </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>240</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>height </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>80</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>border_radius </span><span style=color:#c594c5>=</span><span style=color:#dfc479> BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>32</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#c594c5>            Self</span><span>::</span><span style=color:#dfc479>TallRectangle</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>width </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>80</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>height </span><span style=color:#c594c5>=</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>240</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                node</span><span style=color:#c594c5>.</span><span>border_radius </span><span style=color:#c594c5>=</span><span style=color:#dfc479> BorderRadius</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>32</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> Returns the name of the shape as a string.</span></span>
+<span class=giallo-l><span style=color:#c678dd>    const</span><span style=color:#c594c5> fn</span><span style=color:#69c> label</span><span>(</span><span style=color:#c594c5>&self</span><span>) -></span><span style=color:#c594c5> &'static</span><span style=color:#e5c07b> str</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span> *</span><span style=color:#c594c5>self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Shape</span><span>::</span><span style=color:#dfc479>Square</span><span> =></span><span style=color:#9fc37f> "Square"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Shape</span><span>::</span><span style=color:#dfc479>RoundedSquare</span><span> =></span><span style=color:#9fc37f> "Rounded Square"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Shape</span><span>::</span><span style=color:#dfc479>Circle</span><span> =></span><span style=color:#9fc37f> "Circle"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Shape</span><span>::</span><span style=color:#dfc479>LongRectangle</span><span> =></span><span style=color:#9fc37f> "Long Rectangle"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Shape</span><span>::</span><span style=color:#dfc479>TallRectangle</span><span> =></span><span style=color:#9fc37f> "Tall Rectangle"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> SHAPE_OPTIONS</span><span style=color:#c0c5ce>:</span><span> [(</span><span style=color:#dfc479>Shape</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span>)</span><span style=color:#c0c5ce>;</span><span style=color:#e79e6d> 5</span><span>]</span><span style=color:#c594c5> =</span><span> [</span></span>
+<span class=giallo-l><span>    (</span><span style=color:#dfc479>Shape</span><span>::</span><span style=color:#dfc479>Square</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Shape</span><span>::</span><span style=color:#dfc479>Square</span><span style=color:#c594c5>.</span><span style=color:#69c>label</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    (</span><span style=color:#dfc479>Shape</span><span>::</span><span style=color:#dfc479>RoundedSquare</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Shape</span><span>::</span><span style=color:#dfc479>RoundedSquare</span><span style=color:#c594c5>.</span><span style=color:#69c>label</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    (</span><span style=color:#dfc479>Shape</span><span>::</span><span style=color:#dfc479>Circle</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Shape</span><span>::</span><span style=color:#dfc479>Circle</span><span style=color:#c594c5>.</span><span style=color:#69c>label</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    (</span><span style=color:#dfc479>Shape</span><span>::</span><span style=color:#dfc479>LongRectangle</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Shape</span><span>::</span><span style=color:#dfc479>LongRectangle</span><span style=color:#c594c5>.</span><span style=color:#69c>label</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    (</span><span style=color:#dfc479>Shape</span><span>::</span><span style=color:#dfc479>TallRectangle</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Shape</span><span>::</span><span style=color:#dfc479>TallRectangle</span><span style=color:#c594c5>.</span><span style=color:#69c>label</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>]</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Settings that the user can modify within the example.</span></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Resource</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> AppSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    shape:</span><span style=color:#dfc479> Shape</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Refer to `ShadowStyle` for information on x_offset, y_offset,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // blur (radius), and spread (radius)</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    x_offset:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    y_offset:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    blur:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    spread:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The number of `BoxShadow`s created</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    count:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    ///</span><span style=color:#7f848e> The number of samples used in `BoxShadowSamples`</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    samples:</span><span style=color:#b48ead> u32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> The example initializes with these default settings.</span></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> AppSettings</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span>() -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            shape:</span><span style=color:#dfc479> Shape</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            x_offset:</span><span style=color:#e79e6d> 20.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            y_offset:</span><span style=color:#e79e6d> 20.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            blur:</span><span style=color:#e79e6d> 10.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            spread:</span><span style=color:#e79e6d> 15.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            count:</span><span style=color:#e79e6d> 1</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            samples:</span><span style=color:#e79e6d> 6</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> ShadowNode</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> SettingsPanel</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Eq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> AppNumberInputF32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[default]</span></span>
+<span class=giallo-l><span style=color:#dfc479>    XOffset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    YOffset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Blur</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Spread</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#d19a66>#[derive(</span><span style=color:#dfc479>Component</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Clone</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Copy</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Default</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> PartialEq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Eq</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> Debug</span><span style=color:#d19a66>)]</span></span>
+<span class=giallo-l><span style=color:#c594c5>enum</span><span style=color:#e5c07b> AppNumberInputI32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#d19a66>    #[default]</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Count</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>    Samples</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> AppNumberInputF32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> label</span><span>(</span><span style=color:#c594c5>&self</span><span>) -></span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputF32</span><span>::</span><span style=color:#dfc479>XOffset</span><span> =></span><span style=color:#9fc37f> "X Offset"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputF32</span><span>::</span><span style=color:#dfc479>YOffset</span><span> =></span><span style=color:#9fc37f> "Y Offset"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputF32</span><span>::</span><span style=color:#dfc479>Blur</span><span> =></span><span style=color:#9fc37f> "Blur"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputF32</span><span>::</span><span style=color:#dfc479>Spread</span><span> =></span><span style=color:#9fc37f> "Spread"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> AppNumberInputI32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> label</span><span>(</span><span style=color:#c594c5>&self</span><span>) -></span><span style=color:#c594c5> &</span><span style=color:#e5c07b>str</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputI32</span><span>::</span><span style=color:#dfc479>Count</span><span> =></span><span style=color:#9fc37f> "Count (1 - 3)"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputI32</span><span>::</span><span style=color:#dfc479>Samples</span><span> =></span><span style=color:#9fc37f> "Samples (0 - 15)"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>((</span><span style=color:#dfc479>DefaultPlugins</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> FeathersPlugins</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#69c>UiTheme</span><span>(</span><span style=color:#69c>get_example_theme</span><span>()))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>init_resource</span><span>::</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppSettings</span><span style=color:#c0c5ce>></span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>on_value_change_i32_update_shadow</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>on_value_change_f32_update_shadow</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>on_value_change_update_shape</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_observer</span><span>(</span><span style=color:#c0c5ce>radio_self_update</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- UI Setup ---</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span><span style=color:#c594c5>mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>, app_settings:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppSettings</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // create shape node</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> node</span><span style=color:#c594c5> =</span><span style=color:#dfc479> Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        width:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>164</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        height:</span><span style=color:#69c> px</span><span>(</span><span style=color:#e79e6d>164</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        border:</span><span style=color:#dfc479> UiRect</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#69c>px</span><span>(</span><span style=color:#e79e6d>1</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        align_items:</span><span style=color:#dfc479> AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        justify_content:</span><span style=color:#dfc479> JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        border_radius:</span><span style=color:#dfc479> BorderRadius</span><span>::</span><span style=color:#d19a66>ZERO</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app_settings</span><span style=color:#c594c5>.</span><span>shape</span><span style=color:#c594c5>.</span><span style=color:#69c>change_node</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> node</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn_scene_list</span><span>(</span><span style=color:#61afef>bsn_list!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Camera</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Camera2d</span></span>
+<span class=giallo-l><span style=color:#69c>        BoxShadowSamples</span><span>({</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>samples})</span></span>
+<span class=giallo-l><span>        --</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Centered shape with shadow</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Node</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            width:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            height:</span><span style=color:#69c> percent</span><span>(</span><span style=color:#e79e6d>100</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            align_items: AlignItems</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            justify_content: JustifyContent</span><span>::</span><span style=color:#dfc479>Center</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#69c>        BackgroundColor</span><span>(</span><span style=color:#d19a66>GRAY</span><span>)</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            node</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            BorderColor</span><span>::</span><span style=color:#69c>all</span><span>(</span><span style=color:#d19a66>WHITE</span><span>)</span></span>
+<span class=giallo-l><span style=color:#69c>            BackgroundColor</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#69c>srgb</span><span>(</span><span style=color:#e79e6d>0.21</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.21</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.21</span><span>))</span></span>
+<span class=giallo-l><span style=color:#69c>            BoxShadow</span><span>(</span><span style=color:#61afef>vec!</span><span>[</span><span style=color:#dfc479>ShadowStyle</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                color: Color</span><span>::</span><span style=color:#d19a66>BLACK</span><span style=color:#c594c5>.</span><span style=color:#69c>with_alpha</span><span>(</span><span style=color:#e79e6d>0.8</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                x_offset:</span><span style=color:#69c> px</span><span>(</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>x_offset)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                y_offset:</span><span style=color:#69c> px</span><span>(</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>y_offset)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                spread_radius:</span><span style=color:#69c> px</span><span>(</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>spread)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                blur_radius:</span><span style=color:#69c> px</span><span>(</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>blur)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            }])</span></span>
+<span class=giallo-l><span style=color:#dfc479>            ShadowNode</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>        --</span></span>
+<span class=giallo-l><span>        @</span><span style=color:#69c>settings_panel_scene</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>app_settings</span><span>)</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> settings_panel_scene</span><span>(</span><span style=color:#c0c5ce>app_settings:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AppSettings</span><span>) -></span><span style=color:#c594c5> impl</span><span style=color:#dfc479> Scene</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> selected_shape_index</span><span style=color:#c594c5> =</span><span style=color:#d19a66> SHAPE_OPTIONS</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>iter</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>enumerate</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>find</span><span>(</span><span style=color:#c594c5>|</span><span>(</span><span style=color:#c0c5ce>_,</span><span> (</span><span style=color:#c0c5ce>shape, _</span><span>))</span><span style=color:#c594c5>|</span><span> *</span><span style=color:#c0c5ce>shape</span><span style=color:#c594c5> ==</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>shape)</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // default is set to the length of the array, which will be interpreted as "no option is set"</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>map_or</span><span>(</span><span style=color:#d19a66>SHAPE_OPTIONS</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span>()</span><span style=color:#c0c5ce>,</span><span style=color:#c594c5> |</span><span>(</span><span style=color:#c0c5ce>index, _</span><span>)</span><span style=color:#c594c5>|</span><span style=color:#c0c5ce> index</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#61afef>    bsn!</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>        SettingsPanel</span></span>
+<span class=giallo-l><span style=color:#69c>        ZIndex</span><span>(</span><span style=color:#e79e6d>10</span><span>)</span></span>
+<span class=giallo-l><span>        @</span><span style=color:#69c>pane</span><span>()</span></span>
+<span class=giallo-l><span>        @</span><span style=color:#69c>main_ui_node_scene</span><span>()</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Children</span><span> [</span></span>
+<span class=giallo-l><span>            @</span><span style=color:#69c>pane_body</span><span>()</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Children</span><span> [</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>feathers_option_buttons</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>                    "Shape"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>                    &</span><span style=color:#d19a66>SHAPE_OPTIONS</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    selected_shape_index,</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>number_input_f32</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    AppNumberInputF32</span><span>::</span><span style=color:#dfc479>XOffset</span><span style=color:#c594c5>.</span><span style=color:#69c>label</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                    Some</span><span>(</span><span style=color:#c0c5ce>AppNumberInputF32</span><span>::</span><span style=color:#dfc479>XOffset</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    app_settings</span><span style=color:#c594c5>.</span><span>x_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    NumberInputPrecision</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    -</span><span style=color:#e79e6d>200</span><span style=color:#c594c5>.</span><span> ..=</span><span style=color:#e79e6d>200</span><span style=color:#c594c5>.</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>number_input_f32</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    AppNumberInputF32</span><span>::</span><span style=color:#dfc479>YOffset</span><span style=color:#c594c5>.</span><span style=color:#69c>label</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                    Some</span><span>(</span><span style=color:#c0c5ce>AppNumberInputF32</span><span>::</span><span style=color:#dfc479>YOffset</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    app_settings</span><span style=color:#c594c5>.</span><span>y_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    NumberInputPrecision</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    -</span><span style=color:#e79e6d>200</span><span style=color:#c594c5>.</span><span> ..=</span><span style=color:#e79e6d>200</span><span style=color:#c594c5>.</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>number_input_f32</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    AppNumberInputF32</span><span>::</span><span style=color:#dfc479>Blur</span><span style=color:#c594c5>.</span><span style=color:#69c>label</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                    Some</span><span>(</span><span style=color:#c0c5ce>AppNumberInputF32</span><span>::</span><span style=color:#dfc479>Blur</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    app_settings</span><span style=color:#c594c5>.</span><span>blur</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    NumberInputPrecision</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>                    0</span><span style=color:#c594c5>.</span><span> ..=</span><span style=color:#e79e6d>100</span><span style=color:#c594c5>.</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>number_input_f32</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    AppNumberInputF32</span><span>::</span><span style=color:#dfc479>Spread</span><span style=color:#c594c5>.</span><span style=color:#69c>label</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                    Some</span><span>(</span><span style=color:#c0c5ce>AppNumberInputF32</span><span>::</span><span style=color:#dfc479>Spread</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    app_settings</span><span style=color:#c594c5>.</span><span>spread</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    NumberInputPrecision</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    -</span><span style=color:#e79e6d>200</span><span style=color:#c594c5>.</span><span> ..=</span><span style=color:#e79e6d>200</span><span style=color:#c594c5>.</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>number_input_i32</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    AppNumberInputI32</span><span>::</span><span style=color:#dfc479>Count</span><span style=color:#c594c5>.</span><span style=color:#69c>label</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                    Some</span><span>(</span><span style=color:#c0c5ce>AppNumberInputI32</span><span>::</span><span style=color:#dfc479>Count</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    app_settings</span><span style=color:#c594c5>.</span><span>count </span><span style=color:#c594c5>as</span><span style=color:#b48ead> i32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    NumberInputPrecision</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>                    1</span><span>..=</span><span style=color:#e79e6d>3</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#69c>number_input_i32</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    AppNumberInputI32</span><span>::</span><span style=color:#dfc479>Samples</span><span style=color:#c594c5>.</span><span style=color:#69c>label</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e5c07b>                    Some</span><span>(</span><span style=color:#c0c5ce>AppNumberInputI32</span><span>::</span><span style=color:#dfc479>Samples</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    app_settings</span><span style=color:#c594c5>.</span><span>samples </span><span style=color:#c594c5>as</span><span style=color:#b48ead> i32</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>                    NumberInputPrecision</span><span>(</span><span style=color:#e79e6d>0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>                    0</span><span>..=</span><span style=color:#e79e6d>15</span></span>
+<span class=giallo-l><span>                )</span></span>
+<span class=giallo-l><span>                --</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>                // Reset button</span></span>
+<span class=giallo-l><span>                @</span><span style=color:#dfc479>FeathersButton</span><span> {</span></span>
+<span class=giallo-l><span>                    @</span><span style=color:#c0c5ce>caption:</span><span style=color:#61afef> bsn!</span><span> { @</span><span style=color:#69c>caption</span><span>(</span><span style=color:#9fc37f>"Reset"</span><span>) }</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span style=color:#69c>                on</span><span>(</span><span style=color:#c0c5ce>on_activate_reset</span><span>)</span></span>
+<span class=giallo-l><span>            ]</span></span>
+<span class=giallo-l><span>        ]</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> get_example_theme</span><span>() -></span><span style=color:#dfc479> ThemeProps</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let mut</span><span style=color:#c0c5ce> props</span><span style=color:#c594c5> =</span><span style=color:#69c> create_dark_theme</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Pane background color is made a little transparent to see the objects behind the setting controls.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>color</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> props</span><span style=color:#c594c5>.</span><span>semantic_base</span><span style=color:#c594c5>.</span><span style=color:#69c>get_mut</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#d19a66>SURFACE_PANE_BODY</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        color</span><span style=color:#c594c5>.</span><span style=color:#69c>set_alpha</span><span>(</span><span style=color:#e79e6d>0.9</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    props</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// --- SYSTEMS ---</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Update the shadow node's `BoxShadow` or the camera's `BoxShadowSamples` on any change to the i32 number inputs.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_value_change_i32_update_shadow</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    value_change:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ValueChange</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>i32</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    number_input_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>AppNumberInputI32</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>FeathersNumberInput</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> app_settings:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppSettings</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> box_shadow_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BoxShadow</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ShadowNode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> samples_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BoxShadowSamples</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera2d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c0c5ce>app_number_input_i32</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> number_input_q</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>value_change</span><span style=color:#c594c5>.</span><span>source) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span style=color:#c0c5ce> app_number_input_i32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputI32</span><span>::</span><span style=color:#dfc479>Count</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>count </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value_change</span><span style=color:#c594c5>.</span><span>value </span><span style=color:#c594c5>as</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                for mut</span><span style=color:#c0c5ce> box_shadow</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> box_shadow_q</span><span> {</span></span>
+<span class=giallo-l><span>                    *</span><span style=color:#c0c5ce>box_shadow</span><span style=color:#c594c5> =</span><span style=color:#69c> BoxShadow</span><span>(</span><span style=color:#69c>generate_shadows</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>app_settings</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputI32</span><span>::</span><span style=color:#dfc479>Samples</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>samples </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value_change</span><span style=color:#c594c5>.</span><span>value </span><span style=color:#c594c5>as</span><span style=color:#b48ead> u32</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>                for mut</span><span style=color:#c0c5ce> samples</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> samples_q</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    samples</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>samples</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>                }</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>value_change</span><span style=color:#c594c5>.</span><span>source)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>NumberInputValue</span><span>::</span><span style=color:#69c>I32</span><span>(</span><span style=color:#c0c5ce>value_change</span><span style=color:#c594c5>.</span><span>value))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Update the shadow node's `BoxShadow` on any change to the f32 number inputs.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_value_change_f32_update_shadow</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    value_change:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ValueChange</span><span style=color:#c0c5ce>&lt;</span><span style=color:#b48ead>f32</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    number_input_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>AppNumberInputF32</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>FeathersNumberInput</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> app_settings:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppSettings</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> box_shadow_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BoxShadow</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ShadowNode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    if let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#c0c5ce>app_number_input_i32</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> number_input_q</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>value_change</span><span style=color:#c594c5>.</span><span>source) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        match</span><span style=color:#c0c5ce> app_number_input_i32</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputF32</span><span>::</span><span style=color:#dfc479>XOffset</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>x_offset </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value_change</span><span style=color:#c594c5>.</span><span>value</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputF32</span><span>::</span><span style=color:#dfc479>YOffset</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>y_offset </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value_change</span><span style=color:#c594c5>.</span><span>value</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputF32</span><span>::</span><span style=color:#dfc479>Blur</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>blur </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value_change</span><span style=color:#c594c5>.</span><span>value</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span style=color:#dfc479>            AppNumberInputF32</span><span>::</span><span style=color:#dfc479>Spread</span><span> => {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>spread </span><span style=color:#c594c5>=</span><span style=color:#c0c5ce> value_change</span><span style=color:#c594c5>.</span><span>value</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>            }</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span style=color:#c594c5>        for mut</span><span style=color:#c0c5ce> box_shadow</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> box_shadow_q</span><span> {</span></span>
+<span class=giallo-l><span>            *</span><span style=color:#c0c5ce>box_shadow</span><span style=color:#c594c5> =</span><span style=color:#69c> BoxShadow</span><span>(</span><span style=color:#69c>generate_shadows</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>app_settings</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>value_change</span><span style=color:#c594c5>.</span><span>source)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert</span><span>(</span><span style=color:#c0c5ce>NumberInputValue</span><span>::</span><span style=color:#69c>F32</span><span>(</span><span style=color:#c0c5ce>value_change</span><span style=color:#c594c5>.</span><span>value))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> Update shape of `ShadowNode` if shape selection has changed</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_value_change_update_shape</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ValueChange</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    new_value_query:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>RadioButtonOptionValue</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Shape</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> app_settings:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppSettings</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> node_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Node</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ShadowNode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#dfc479> Ok</span><span>(</span><span style=color:#69c>RadioButtonOptionValue</span><span>(</span><span style=color:#c0c5ce>shape</span><span>))</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> new_value_query</span><span style=color:#c594c5>.</span><span style=color:#69c>get</span><span>(</span><span style=color:#c0c5ce>event</span><span style=color:#c594c5>.</span><span>value)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    app_settings</span><span style=color:#c594c5>.</span><span>shape </span><span style=color:#c594c5>=</span><span> *</span><span style=color:#c0c5ce>shape;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> node</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> node_q</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_settings</span><span style=color:#c594c5>.</span><span>shape</span><span style=color:#c594c5>.</span><span style=color:#69c>change_node</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> node</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> If the reset button was activated, reset app settings to default values.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>///</span><span style=color:#7f848e> This observer is placed directly on the reset button.</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> on_activate_reset</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    _event:</span><span style=color:#dfc479> On</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Activate</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> app_settings:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>AppSettings</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    settings_panel_q:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Entity</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>SettingsPanel</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> node_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Node</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ShadowNode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> box_shadow_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BoxShadow</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ShadowNode</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> samples_q:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> BoxShadowSamples</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera2d</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span>    *</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5> =</span><span style=color:#dfc479> AppSettings</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Reset the settings panel. It is quicker to do this</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // than to go through every field and setting the fields correctly.</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>(</span><span style=color:#c0c5ce>settings_panel_q</span><span style=color:#c594c5>.</span><span style=color:#69c>entity</span><span>())</span><span style=color:#c594c5>.</span><span style=color:#69c>despawn</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn_scene</span><span>(</span><span style=color:#69c>settings_panel_scene</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>app_settings</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Do a full refresh of the box and its shadows.</span></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> node</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> node_q</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        app_settings</span><span style=color:#c594c5>.</span><span>shape</span><span style=color:#c594c5>.</span><span style=color:#69c>change_node</span><span>(</span><span style=color:#c594c5>&mut</span><span style=color:#c0c5ce> node</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> box_shadow</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> box_shadow_q</span><span> {</span></span>
+<span class=giallo-l><span>        *</span><span style=color:#c0c5ce>box_shadow</span><span style=color:#c594c5> =</span><span style=color:#69c> BoxShadow</span><span>(</span><span style=color:#69c>generate_shadows</span><span>(</span><span style=color:#c594c5>&</span><span style=color:#c0c5ce>app_settings</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    for mut</span><span style=color:#c0c5ce> samples</span><span style=color:#c594c5> in &mut</span><span style=color:#c0c5ce> samples_q</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        samples</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>samples</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> generate_shadows</span><span>(</span><span style=color:#c0c5ce>app_settings:</span><span style=color:#c594c5> &</span><span style=color:#dfc479>AppSettings</span><span>) -></span><span style=color:#dfc479> Vec</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>ShadowStyle</span><span style=color:#c0c5ce>></span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    match</span><span style=color:#c0c5ce> app_settings</span><span style=color:#c594c5>.</span><span>count {</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        1</span><span> =></span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#69c>make_shadow</span><span>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>            BLACK</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>x_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>y_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>spread</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            app_settings</span><span style=color:#c594c5>.</span><span>blur</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        2</span><span> =></span><span style=color:#61afef> vec!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#69c>            make_shadow</span><span>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>                BLUE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>x_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>y_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>spread</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>blur</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            make_shadow</span><span>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>                YELLOW</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                -</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>x_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                -</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>y_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>spread</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>blur</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#e79e6d>        3</span><span> =></span><span style=color:#61afef> vec!</span><span>[</span></span>
+<span class=giallo-l><span style=color:#69c>            make_shadow</span><span>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>                BLUE</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>x_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>y_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>spread</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>blur</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            make_shadow</span><span>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>                YELLOW</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                -</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>x_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                -</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>y_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>spread</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>blur</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>            make_shadow</span><span>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>                RED</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>y_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                -</span><span style=color:#c0c5ce>app_settings</span><span style=color:#c594c5>.</span><span>x_offset</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>spread</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                app_settings</span><span style=color:#c594c5>.</span><span>blur</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            )</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _</span><span> =></span><span style=color:#61afef> vec!</span><span>[]</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> make_shadow</span><span>(</span><span style=color:#c0c5ce>color:</span><span style=color:#dfc479> Color</span><span style=color:#c0c5ce>, x_offset:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>, y_offset:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>, spread:</span><span style=color:#b48ead> f32</span><span style=color:#c0c5ce>, blur:</span><span style=color:#b48ead> f32</span><span>) -></span><span style=color:#dfc479> ShadowStyle</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    ShadowStyle</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        color: color</span><span style=color:#c594c5>.</span><span style=color:#69c>with_alpha</span><span>(</span><span style=color:#e79e6d>0.8</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        x_offset:</span><span style=color:#69c> px</span><span>(</span><span style=color:#c0c5ce>x_offset</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        y_offset:</span><span style=color:#69c> px</span><span>(</span><span style=color:#c0c5ce>y_offset</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        spread_radius:</span><span style=color:#69c> px</span><span>(</span><span style=color:#c0c5ce>spread</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        blur_radius:</span><span style=color:#69c> px</span><span>(</span><span style=color:#c0c5ce>blur</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/UI (User Interface)/box-shadow/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>

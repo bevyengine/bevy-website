@@ -1,0 +1,254 @@
+<!doctype html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1" name=viewport><meta content="Many Lights" property=og:title><meta content=website property=og:type><meta content=https://bevy.org//examples/stress-tests/many-lights/ property=og:url><meta content="https://bevy.org/examples/stress-tests/many-lights/../static/screenshots/Stress Tests/many_lights.png" property=og:image><meta content="Simple benchmark to test rendering many point lights. Run with `WGPU_SETTINGS_PRIO=webgl2` to restrict to uniform buffers and max 256 lights" property=og:description><link rel="shortcut icon" href=/assets/favicon.png type=image/png><link href=/site.css rel=stylesheet><link href=/atom.xml rel=alternate type=application/atom+xml><title>Many Lights</title><script async src=https://plausible.io/js/pa-Y3chmKZU0FVsmsgC432RR.js></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()</script><body><div class=layout><input class=hidden id=mobile-menu-state type=checkbox><header class="layout__header header print:hidden" data-mobile-menu-state-container><div class=header__content><label class=main-menu-backdrop for=mobile-menu-state></label><label class="header__hamburger button-square button-square--header" for=mobile-menu-state><img alt="Three horizontal lines stacked on top of eachother" height=16 src=/assets/icon-hamburger.svg width=20></label><div class=header__left-block><a class=header__logo href=/> <picture class=logo><img alt="Bevy logo" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><div class=header__message>Examples (WebGL2)</div></div><nav class="header__menu main-menu" data-page-menu-switch-state-container role=navigation><div class=main-menu__header><a href=/> <picture class=logo><img alt="Bevy Engine" class=logo height=130 src=/assets/bevy_logo_dark.svg width=520></picture> </a><label class="button-square button-square--header" for=mobile-menu-state><img alt="A saltire or x-cross" height=16 src=/assets/icon-times.svg width=16></label></div><div class=main-menu__content><div class=main-menu__page-menu></div><ul class=main-menu__menu><li class="main-menu__entry main-menu__entry--getting-started"><a class=main-menu__link href=/learn/quick-start/getting-started/> <span>Getting Started</span> </a><li class=main-menu__entry><a class=main-menu__link href=/learn/> <span>Learn</span> </a><li class=main-menu__entry><a class=main-menu__link href=/news/> <span>News</span> </a><li class=main-menu__entry><a class=main-menu__link href=/community/> <span>Community</span> </a><li class=main-menu__entry><a class=main-menu__link href=/foundation/> <span>Foundation</span> </a><li class=main-menu__entry><a class=main-menu__link href=/assets/> <span>Assets</span> </a><li class=main-menu__entry><a class="main-menu__link main-menu__link--active" href=/examples/> <span>Examples</span> </a></ul></div></nav><div class=header__cta-container><a class="button button--pink header__cta" href=/donate>Donate <img alt="heart icon" class=button__icon height=512 src=/assets/heart.svg width=512> </a><a class="header__cta header__cta--github" href=https://github.com/bevyengine/bevy> <img alt="GitHub repo" height=96 src=/assets/github-mark-white.svg width=98> </a></div></div></header><main class=layout__content><div class=container><div class=example><div class=example__header><h2 class=example__title>Stress Tests / Many Lights</h2><a class=example__back href=/examples><i class="icon icon--chevron-left"></i> Back to examples</a><a class=example__github href=https://github.com/bevyengine/bevy/blob/latest/examples/stress_tests/many_lights.rs> <i class="icon icon--github"></i> View in GitHub </a></div><div class="example__canvas bevy-instance"><noscript><aside class="example__callout media-content callout callout--plain callout--warning">Examples require JavaScript to be enabled. Please enable JavaScript to run examples.</aside></noscript><div class=bevy-instance__progress-status data-progress-status><div class=bevy-instance__progress-file data-progress-file></div><div class=bevy-instance__progress-track><div class=bevy-instance__progress-bar data-progress-bar></div></div></div><canvas class=bevy-instance__canvas height=720 id=bevy width=1280></canvas><aside class="example__callout media-content callout callout--plain callout--info">This example is running in WebGL2 and should work in most browsers. You can check the WebGPU example <a href=/examples-webgpu/stress-tests/many-lights/>here</a>.</aside></div><div class="example__explanation media-content"><p>Simple benchmark to test rendering many point lights. Run with <code>WGPU_SETTINGS_PRIO=webgl2</code> to restrict to uniform buffers and max 256 lights.</div><div class="example__code-tabs tabs"><input checked class=tabs__radio id=tab0 name=tabs tabindex=1 type=radio><label class=tabs__label for=tab0><code>many_lights.rs</code></label><div class=tabs__panel tabindex=1><div class="example__code media-content"><pre class=giallo style=color:#abb2bf;background-color:#2b2c2f><code data-lang=rust><span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>f64</span><span>::</span><span style=color:#c0c5ce>consts</span><span>::</span><span style=color:#dfc479>PI</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> bevy</span><span>::{</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera</span><span>::</span><span style=color:#dfc479>ScalingMode</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    color</span><span>::</span><span style=color:#c0c5ce>palettes</span><span>::</span><span style=color:#c0c5ce>css</span><span>::</span><span style=color:#dfc479>DEEP_PINK</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    diagnostic</span><span>::{</span><span style=color:#dfc479>FrameTimeDiagnosticsPlugin</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> LogDiagnosticsPlugin</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    math</span><span>::{</span><span style=color:#dfc479>DVec2</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> DVec3</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    pbr</span><span>::{</span><span style=color:#dfc479>ExtractedPointLight</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> GlobalClusterableObjectMeta</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    prelude</span><span>::*</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    render</span><span>::{</span><span style=color:#dfc479>Render</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderApp</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RenderSystems</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    window</span><span>::{</span><span style=color:#dfc479>PresentMode</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> WindowResolution</span><span>}</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    winit</span><span>::</span><span style=color:#dfc479>WinitSettings</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>use</span><span style=color:#c0c5ce> rand</span><span>::{rng</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> RngExt</span><span>}</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    App</span><span>::</span><span style=color:#69c>new</span><span>()</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_plugins</span><span>((</span></span>
+<span class=giallo-l><span style=color:#dfc479>            DefaultPlugins</span><span style=color:#c594c5>.</span><span style=color:#69c>set</span><span>(</span><span style=color:#dfc479>WindowPlugin</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                primary_window:</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#dfc479>Window</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    resolution: WindowResolution</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>1920</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1080</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>with_scale_factor_override</span><span>(</span><span style=color:#e79e6d>1.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    title:</span><span style=color:#9fc37f> "many_lights"</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    present_mode: PresentMode</span><span>::</span><span style=color:#dfc479>AutoNoVsync</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                    ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>                })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            FrameTimeDiagnosticsPlugin</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            LogDiagnosticsPlugin</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>            LogVisibleLights</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>insert_resource</span><span>(</span><span style=color:#c0c5ce>WinitSettings</span><span>::</span><span style=color:#69c>continuous</span><span>())</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Startup</span><span style=color:#c0c5ce>, setup</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>add_systems</span><span>(</span><span style=color:#dfc479>Update</span><span style=color:#c0c5ce>,</span><span> (</span><span style=color:#c0c5ce>move_camera, print_light_count</span><span>))</span></span>
+<span class=giallo-l><span style=color:#c594c5>        .</span><span style=color:#69c>run</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> setup</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> commands:</span><span style=color:#dfc479> Commands</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> meshes:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Mesh</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> materials:</span><span style=color:#dfc479> ResMut</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Assets</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>StandardMaterial</span><span style=color:#c0c5ce>>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#61afef>    warn!</span><span>(</span><span style=color:#61afef>include_str!</span><span>(</span><span style=color:#9fc37f>"warning_string.txt"</span><span>))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    const</span><span style=color:#d19a66> LIGHT_RADIUS</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.3</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    const</span><span style=color:#d19a66> LIGHT_INTENSITY</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 1000.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    const</span><span style=color:#d19a66> RADIUS</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f32</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 50.0</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    const</span><span style=color:#d19a66> N_LIGHTS</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> usize</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 100_000</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Sphere</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#d19a66>RADIUS</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>mesh</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>ico</span><span>(</span><span style=color:#e79e6d>9</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>unwrap</span><span>()))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Color</span><span>::</span><span style=color:#d19a66>WHITE</span><span>))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        Transform</span><span>::</span><span style=color:#69c>from_scale</span><span>(</span><span style=color:#c0c5ce>Vec3</span><span>::</span><span style=color:#d19a66>NEG_ONE</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> mesh</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> meshes</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#c0c5ce>Cuboid</span><span>::</span><span style=color:#69c>default</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> material</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> materials</span><span style=color:#c594c5>.</span><span style=color:#69c>add</span><span>(</span><span style=color:#dfc479>StandardMaterial</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        base_color:</span><span style=color:#d19a66> DEEP_PINK</span><span style=color:#c594c5>.</span><span style=color:#69c>into</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>    })</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // NOTE: This pattern is good for testing performance of culling as it provides roughly</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // the same number of visible meshes regardless of the viewing angle.</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // NOTE: f64 is used to avoid precision issues that produce visual artifacts in the distribution</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> golden_ratio</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.5</span><span style=color:#b48ead>f64</span><span> * (</span><span style=color:#e79e6d>1.0</span><span style=color:#b48ead>f64</span><span> +</span><span style=color:#e79e6d> 5.0</span><span style=color:#b48ead>f64</span><span style=color:#c594c5>.</span><span style=color:#69c>sqrt</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // Spawn N_LIGHTS many lights</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn_batch</span><span>((</span><span style=color:#e79e6d>0</span><span>..</span><span style=color:#dfc479>N_LIGHTS</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>map</span><span>(</span><span style=color:#c594c5>move |</span><span style=color:#c0c5ce>i</span><span style=color:#c594c5>|</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let mut</span><span style=color:#c0c5ce> rng</span><span style=color:#c594c5> =</span><span style=color:#69c> rng</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> spherical_polar_theta_phi</span><span style=color:#c594c5> =</span><span style=color:#69c> fibonacci_spiral_on_sphere</span><span>(</span><span style=color:#c0c5ce>golden_ratio, i,</span><span style=color:#dfc479> N_LIGHTS</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#c0c5ce> unit_sphere_p</span><span style=color:#c594c5> =</span><span style=color:#69c> spherical_polar_to_cartesian</span><span>(</span><span style=color:#c0c5ce>spherical_polar_theta_phi</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>        (</span></span>
+<span class=giallo-l><span style=color:#dfc479>            PointLight</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                range:</span><span style=color:#d19a66> LIGHT_RADIUS</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                intensity:</span><span style=color:#d19a66> LIGHT_INTENSITY</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                color: Color</span><span>::</span><span style=color:#69c>hsl</span><span>(</span><span style=color:#c0c5ce>rng</span><span style=color:#c594c5>.</span><span style=color:#69c>random_range</span><span>(</span><span style=color:#e79e6d>0.0</span><span>..</span><span style=color:#e79e6d>360.0</span><span>)</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 1.0</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.5</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>            }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Transform</span><span>::</span><span style=color:#69c>from_translation</span><span>((</span><span style=color:#d19a66>RADIUS</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f64</span><span> *</span><span style=color:#c0c5ce> unit_sphere_p</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>as_vec3</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span></span>
+<span class=giallo-l><span>    }))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // camera</span></span>
+<span class=giallo-l><span style=color:#c594c5>    match</span><span style=color:#c0c5ce> std</span><span>::</span><span style=color:#c0c5ce>env</span><span>::</span><span style=color:#69c>args</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>nth</span><span>(</span><span style=color:#e79e6d>1</span><span>)</span><span style=color:#c594c5>.</span><span style=color:#69c>as_deref</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#e5c07b>        Some</span><span>(</span><span style=color:#9fc37f>"orthographic"</span><span>) =></span><span style=color:#c0c5ce> commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Camera3d</span><span>::</span><span style=color:#69c>default</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            Projection</span><span>::</span><span style=color:#69c>from</span><span>(</span><span style=color:#dfc479>OrthographicProjection</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                scaling_mode: ScalingMode</span><span>::</span><span style=color:#dfc479>FixedHorizontal</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>                    viewport_width:</span><span style=color:#e79e6d> 20.0</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>                ..</span><span style=color:#c0c5ce>OrthographicProjection</span><span>::</span><span style=color:#69c>default_3d</span><span>()</span></span>
+<span class=giallo-l><span>            })</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        ))</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        _</span><span> =></span><span style=color:#c0c5ce> commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>(</span><span style=color:#c0c5ce>Camera3d</span><span>::</span><span style=color:#69c>default</span><span>())</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // add one cube, the only one with strong handles</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>    // also serves as a reference point during rotation</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    commands</span><span style=color:#c594c5>.</span><span style=color:#69c>spawn</span><span>((</span></span>
+<span class=giallo-l><span style=color:#69c>        Mesh3d</span><span>(</span><span style=color:#c0c5ce>mesh</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#69c>        MeshMaterial3d</span><span>(</span><span style=color:#c0c5ce>material</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#dfc479>        Transform</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            translation: Vec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#e79e6d>0.0</span><span style=color:#c0c5ce>,</span><span style=color:#d19a66> RADIUS</span><span style=color:#c0c5ce>,</span><span style=color:#e79e6d> 0.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            scale: Vec3</span><span>::</span><span style=color:#69c>splat</span><span>(</span><span style=color:#e79e6d>5.0</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>            ..</span><span style=color:#69c>default</span><span>()</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    ))</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// NOTE: This epsilon value is apparently optimal for optimizing for the average</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// nearest-neighbor distance. See:</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// http://extremelearning.com.au/how-to-evenly-distribute-points-on-a-sphere-more-effectively-than-the-canonical-fibonacci-lattice/</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>// for details.</span></span>
+<span class=giallo-l><span style=color:#c594c5>const</span><span style=color:#d19a66> EPSILON</span><span style=color:#c0c5ce>:</span><span style=color:#b48ead> f64</span><span style=color:#c594c5> =</span><span style=color:#e79e6d> 0.36</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> fibonacci_spiral_on_sphere</span><span>(</span><span style=color:#c0c5ce>golden_ratio:</span><span style=color:#b48ead> f64</span><span style=color:#c0c5ce>, i:</span><span style=color:#b48ead> usize</span><span style=color:#c0c5ce>, n:</span><span style=color:#b48ead> usize</span><span>) -></span><span style=color:#dfc479> DVec2</span><span> {</span></span>
+<span class=giallo-l><span style=color:#dfc479>    DVec2</span><span>::</span><span style=color:#69c>new</span><span>(</span></span>
+<span class=giallo-l><span style=color:#d19a66>        PI</span><span> *</span><span style=color:#e79e6d> 2</span><span style=color:#c594c5>.</span><span> * (</span><span style=color:#c0c5ce>i</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f64</span><span> /</span><span style=color:#c0c5ce> golden_ratio</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>        ops</span><span>::</span><span style=color:#69c>acos</span><span>((</span><span style=color:#e79e6d>1.0</span><span> -</span><span style=color:#e79e6d> 2.0</span><span> * (</span><span style=color:#c0c5ce>i</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f64</span><span> +</span><span style=color:#d19a66> EPSILON</span><span>) / (</span><span style=color:#c0c5ce>n</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f64</span><span> -</span><span style=color:#e79e6d> 1.0</span><span> +</span><span style=color:#e79e6d> 2.0</span><span> *</span><span style=color:#d19a66> EPSILON</span><span>))</span><span style=color:#c594c5> as</span><span style=color:#b48ead> f32</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c594c5>            as</span><span style=color:#b48ead> f64</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>    )</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> spherical_polar_to_cartesian</span><span>(</span><span style=color:#c0c5ce>p:</span><span style=color:#dfc479> DVec2</span><span>) -></span><span style=color:#dfc479> DVec3</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c0c5ce>sin_theta, cos_theta</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> p</span><span style=color:#c594c5>.</span><span>x</span><span style=color:#c594c5>.</span><span style=color:#69c>sin_cos</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span> (</span><span style=color:#c0c5ce>sin_phi, cos_phi</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> p</span><span style=color:#c594c5>.</span><span>y</span><span style=color:#c594c5>.</span><span style=color:#69c>sin_cos</span><span>()</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#dfc479>    DVec3</span><span>::</span><span style=color:#69c>new</span><span>(</span><span style=color:#c0c5ce>cos_theta</span><span> *</span><span style=color:#c0c5ce> sin_phi, sin_theta</span><span> *</span><span style=color:#c0c5ce> sin_phi, cos_phi</span><span>)</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// System for rotating the camera</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> move_camera</span><span>(</span><span style=color:#c0c5ce>time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> camera_transform:</span><span style=color:#dfc479> Single</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&mut</span><span style=color:#dfc479> Transform</span><span style=color:#c0c5ce>,</span><span style=color:#dfc479> With</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Camera</span><span style=color:#c0c5ce>>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    let</span><span style=color:#c0c5ce> delta</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta_secs</span><span>() *</span><span style=color:#e79e6d> 0.15</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_z</span><span>(</span><span style=color:#c0c5ce>delta</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    camera_transform</span><span style=color:#c594c5>.</span><span style=color:#69c>rotate_x</span><span>(</span><span style=color:#c0c5ce>delta</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// System for printing the number of meshes on every tick of the timer</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> print_light_count</span><span>(</span><span style=color:#c0c5ce>time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span><span style=color:#c594c5> mut</span><span style=color:#c0c5ce> timer:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PrintingTimer</span><span style=color:#c0c5ce>>, lights:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>PointLight</span><span style=color:#c0c5ce>></span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    timer</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>tick</span><span>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> timer</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>just_finished</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#61afef>        info!</span><span>(</span><span style=color:#9fc37f>"Lights: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>, lights</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> LogVisibleLights</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Plugin</span><span style=color:#c594c5> for</span><span style=color:#dfc479> LogVisibleLights</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> build</span><span>(</span><span style=color:#c594c5>&self</span><span style=color:#c0c5ce>, app:</span><span style=color:#c594c5> &mut</span><span style=color:#dfc479> App</span><span>) {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        let</span><span style=color:#e5c07b> Some</span><span>(</span><span style=color:#c0c5ce>render_app</span><span>)</span><span style=color:#c594c5> =</span><span style=color:#c0c5ce> app</span><span style=color:#c594c5>.</span><span style=color:#69c>get_sub_app_mut</span><span>(</span><span style=color:#dfc479>RenderApp</span><span>)</span><span style=color:#c594c5> else</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>            return</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>        }</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c0c5ce>        render_app</span><span style=color:#c594c5>.</span><span style=color:#69c>add_systems</span><span>(</span></span>
+<span class=giallo-l><span style=color:#dfc479>            Render</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            print_visible_light_count</span><span style=color:#c594c5>.</span><span style=color:#69c>in_set</span><span>(</span><span style=color:#c0c5ce>RenderSystems</span><span>::</span><span style=color:#dfc479>Prepare</span><span>)</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#8e9aa4>// System for printing the number of meshes on every tick of the timer</span></span>
+<span class=giallo-l><span style=color:#c594c5>fn</span><span style=color:#69c> print_visible_light_count</span><span>(</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    time:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>Time</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c594c5>    mut</span><span style=color:#c0c5ce> timer:</span><span style=color:#dfc479> Local</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>PrintingTimer</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    visible:</span><span style=color:#dfc479> Query</span><span style=color:#c0c5ce>&lt;</span><span style=color:#c594c5>&</span><span style=color:#dfc479>ExtractedPointLight</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    global_clusterable_object_meta:</span><span style=color:#dfc479> Res</span><span style=color:#c0c5ce>&lt;</span><span style=color:#dfc479>GlobalClusterableObjectMeta</span><span style=color:#c0c5ce>>,</span></span>
+<span class=giallo-l><span>) {</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>    timer</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>tick</span><span>(</span><span style=color:#c0c5ce>time</span><span style=color:#c594c5>.</span><span style=color:#69c>delta</span><span>())</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>    if</span><span style=color:#c0c5ce> timer</span><span style=color:#c594c5>.</span><span style=color:#e79e6d>0.</span><span style=color:#69c>just_finished</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // Note that it's not generally a safe assumption that the number of</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // lights equals the number of clusterable objects, since some objects</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // other than lights are clusterable. However, in this specific example,</span></span>
+<span class=giallo-l><span style=color:#8e9aa4>        // the only clusterable objects are lights.</span></span>
+<span class=giallo-l><span style=color:#61afef>        info!</span><span>(</span></span>
+<span class=giallo-l><span style=color:#9fc37f>            "Visible Lights: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>, Rendered Lights: </span><span style=color:#d19a66>{}</span><span style=color:#9fc37f>"</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            visible</span><span style=color:#c594c5>.</span><span style=color:#69c>iter</span><span>()</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span>()</span><span style=color:#c0c5ce>,</span></span>
+<span class=giallo-l><span style=color:#c0c5ce>            global_clusterable_object_meta</span><span style=color:#c594c5>.</span><span>entity_to_index</span><span style=color:#c594c5>.</span><span style=color:#69c>len</span><span>()</span></span>
+<span class=giallo-l><span>        )</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>struct</span><span style=color:#dfc479> PrintingTimer</span><span>(</span><span style=color:#dfc479>Timer</span><span>)</span><span style=color:#c0c5ce>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c594c5>impl</span><span style=color:#dfc479> Default</span><span style=color:#c594c5> for</span><span style=color:#dfc479> PrintingTimer</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>    fn</span><span style=color:#69c> default</span><span>() -></span><span style=color:#c594c5> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c594c5>        Self</span><span>(</span><span style=color:#dfc479>Timer</span><span>::</span><span style=color:#69c>from_seconds</span><span>(</span><span style=color:#e79e6d>1.0</span><span style=color:#c0c5ce>, TimerMode</span><span>::</span><span style=color:#dfc479>Repeating</span><span>))</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div></div></div></div><script type=module>import { progressiveFetch } from '/tools.js';
+  import '/restart-audio-context.js'
+  import init from 'https://bevy-webgl2-examples.pages.dev/Stress Tests/many-lights/wasm_example.js'
+
+  const canvasEl = document.getElementById('bevy');
+
+  let once = false;
+  const observer_callback = (_mutations, _observer) => {
+    if (!once) {
+      // Lock the canvas aspect ratio to prevent the fit_canvas_to_parent setting from creating a feedback loop causing the canvas to grow on resize
+      canvasEl.style.aspectRatio = canvasEl.attributes.width.value / canvasEl.attributes.height.value;
+      once = true;
+    }
+  };
+
+  const observer = new MutationObserver(observer_callback);
+
+  const config = { attributeFilter: ['width', 'height'] };
+
+  observer.observe(canvasEl, config);
+
+  const progressStatusEl = document.querySelector('[data-progress-status]');
+  const progressFileEl = document.querySelector('[data-progress-file]');
+  const progressBarEl = document.querySelector('[data-progress-bar]');
+  let hideProgressTimeoutId;
+
+  async function loadingBarFetch(resource) {
+    return progressiveFetch(resource, {
+      start: ({ filename }) => {
+        progressStatusEl.style.display = 'block';
+        progressFileEl.textContent = filename;
+
+        if (hideProgressTimeoutId) {
+          clearTimeout(hideProgressTimeoutId);
+        }
+      },
+      update: ({ isIndeterminate, loadedPercent }) => {
+        progressBarEl.classList.toggle('bevy-instance__progress-bar--indeterminate', isIndeterminate);
+        progressBarEl.style.width = loadedPercent + '%';
+      },
+      finish: () => {
+        
+        hideProgressTimeoutId = setTimeout(() => {
+          progressStatusEl.style.display = 'none';
+        }, 50);
+      }
+    })
+  }
+  window.bevyLoadingBarFetch = loadingBarFetch;
+
+  
+  init().catch((error) => {
+    if (!error.message.startsWith("Using exceptions for control flow, don't mind me. This isn't actually an error!")) {
+      throw error;
+    }
+  });</script></div></main><footer class=print:hidden><div class=footer__social-container><a class=footer__social href=https://github.com/bevyengine/bevy title=GitHub> <img alt="GitHub logo" height=24 src=/assets/github-mark-white.svg width=24> </a><a class=footer__social href=https://discord.gg/bevy title=Discord> <img alt="Discord logo" height=24 src=/assets/discord.svg width=24> </a><a class=footer__social href=https://bsky.app/profile/bevy.org title=Bluesky> <img alt="Bluesky logo" height=24 src=/assets/bluesky.svg width=24> </a><a class=footer__social href=https://mastodon.social/@bevy title=Mastodon> <img alt="Mastodon logo" height=24 src=/assets/mastodon-logo-purple.svg width=24> </a><a class=footer__social href=https://www.reddit.com/r/bevy/ title=Reddit> <img alt="Reddit logo" height=24 src=/assets/reddit.svg width=24> </a><a class=footer__social href=https://itch.io/games/tag-bevy title=itch.io> <img alt="itch.io logo" height=24 src=/assets/itchio-textless.svg width=24> </a><a title="Bevy news feed" class=footer__social href=/atom.xml> <img alt="Bevy news feed" height=24 src=/assets/feed.svg width=24> </a></div></footer></div><script>const search_params = new URLSearchParams(window.location.search);
+    if (search_params.has("show_drafts") || document.cookie.indexOf("show_drafts") >= 0) {
+      if (search_params.get("show_drafts") === "0") {
+        document.cookie = "show_drafts=;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC";
+      } else {
+        document.cookie = "show_drafts=1;path=/"
+        document.body.classList.add('show_drafts');
+      }
+    }</script>
